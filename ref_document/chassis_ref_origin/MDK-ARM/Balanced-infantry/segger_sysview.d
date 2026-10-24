@@ -1,0 +1,12 @@
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_SYSVIEW.c
+balanced-infantry\segger_sysview.o: D:\SPR\ARM\ARMCC\Bin\..\include\string.h
+balanced-infantry\segger_sysview.o: D:\SPR\ARM\ARMCC\Bin\..\include\stdlib.h
+balanced-infantry\segger_sysview.o: D:\SPR\ARM\ARMCC\Bin\..\include\stdarg.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_SYSVIEW_Int.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_SYSVIEW.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER.h
+balanced-infantry\segger_sysview.o: ..\system_view\Global.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_SYSVIEW_ConfDefaults.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_SYSVIEW_Conf.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_RTT_Conf.h
+balanced-infantry\segger_sysview.o: ..\system_view\SEGGER_RTT.h

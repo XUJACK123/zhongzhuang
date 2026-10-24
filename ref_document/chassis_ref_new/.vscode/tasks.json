@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "make: build",
+      "type": "shell",
+      "command": "make",
+      "args": ["-j32"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "make: test",
+      "type": "shell",
+      "command": "make",
+      "args": ["test"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "make: clean",
+      "type": "shell",
+      "command": "make",
+      "args": ["clean"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "flash: ST-LINK + OpenOCD",
+      "type": "process",
+      "command": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+      "args": [
+        "-s",
+        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts",
+        "-f",
+        "interface/stlink.cfg",
+        "-f",
+        "target/stm32h7x.cfg",
+        "-c",
+        "program ${workspaceFolder}/build/chassis_torque_base.elf verify reset exit"
+      ],
+      "dependsOn": "make: build",
+      "problemMatcher": []
+    }
+  ]
+}

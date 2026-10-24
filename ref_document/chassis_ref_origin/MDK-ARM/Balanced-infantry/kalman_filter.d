@@ -1,0 +1,11 @@
+balanced-infantry\kalman_filter.o: ..\algorithm\kalman_filter.c
+balanced-infantry\kalman_filter.o: ..\algorithm\kalman_filter.h
+balanced-infantry\kalman_filter.o: ../Middlewares/ST/ARM/DSP/Inc/arm_math.h
+balanced-infantry\kalman_filter.o: ../Drivers/CMSIS/Core/Include/cmsis_compiler.h
+balanced-infantry\kalman_filter.o: D:\SPR\ARM\ARMCC\Bin\..\include\stdint.h
+balanced-infantry\kalman_filter.o: ../Drivers/CMSIS/Core/Include/cmsis_armcc.h
+balanced-infantry\kalman_filter.o: D:\SPR\ARM\ARMCC\Bin\..\include\string.h
+balanced-infantry\kalman_filter.o: D:\SPR\ARM\ARMCC\Bin\..\include\math.h
+balanced-infantry\kalman_filter.o: D:\SPR\ARM\ARMCC\Bin\..\include\float.h
+balanced-infantry\kalman_filter.o: D:\SPR\ARM\ARMCC\Bin\..\include\limits.h
+balanced-infantry\kalman_filter.o: D:\SPR\ARM\ARMCC\Bin\..\include\stdlib.h
