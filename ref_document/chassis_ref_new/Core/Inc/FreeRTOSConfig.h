@@ -64,7 +64,8 @@
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 7 )
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)128)
-#define configTOTAL_HEAP_SIZE                    ((size_t)15360)
+/* 四个业务任务的栈及 EKF 矩阵共用 heap_4，给台架任务和后续诊断保留余量。 */
+#define configTOTAL_HEAP_SIZE                    ((size_t)(24 * 1024))
 #define configMAX_TASK_NAME_LEN                  ( 32 )
 #define configUSE_16_BIT_TICKS                   0
 #define configUSE_MUTEXES                        1

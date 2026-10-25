@@ -28,8 +28,8 @@
 #include "chassis_task.h"
 #include "INS_task.h"
 #include "send_task.h"
-#ifdef TEST_MOTOR_ENABLE
-extern void bench_test_task(void const *argument);
+#if TEST_MOTOR_ENABLE
+#include "bench_motor_test.h"
 #endif
 /* USER CODE END Includes */
 
@@ -114,9 +114,9 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(sendTask, send_task, osPriorityLow, 0, 256);
   sendTaskHandle = osThreadCreate(osThread(sendTask), NULL);
 
-#ifdef TEST_MOTOR_ENABLE
+#if TEST_MOTOR_ENABLE
   osThreadDef(benchTestTask, bench_test_task, osPriorityAboveNormal, 0, 1024);
-  (void)osThreadCreate(osThread(benchTestTask), NULL);
+  configASSERT(osThreadCreate(osThread(benchTestTask), NULL) != NULL);
 #endif
 
   /* add threads, ... */

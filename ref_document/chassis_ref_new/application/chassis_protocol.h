@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include "chassis_motor_config.h"
 
 #define CHASSIS_MOTOR_COUNT 6U
 #define CHASSIS_JOINT_TORQUE_LIMIT_NM 54.0f
@@ -23,6 +24,20 @@ typedef enum
 
 typedef struct
 {
+    float position_rad;
+    float speed_rad_s;
+    float torque_nm;
+    uint32_t update_time_ms;
+    uint8_t status;
+    bool valid;
+} motor_feedback_t;
+
+/* 只汇总当前配置要求的电机；非有限反馈不能作为有效控制输入。 */
+bool chassis_feedback_health(const motor_feedback_t motor[CHASSIS_MOTOR_COUNT],
+                             uint32_t now_ms, uint32_t *max_age_ms, bool *joints_enabled);
+
+typedef struct
+{
     int16_t channel[5];
     uint8_t switch_left;
     uint8_t switch_right;
@@ -33,6 +48,20 @@ typedef struct
     uint8_t mouse_right;
     uint16_t keyboard;
 } chassis_dbus_frame_t;
+
+typedef struct
+{
+    uint8_t bus;
+    uint16_t id;
+    uint8_t data[8];
+} chassis_can_frame_t;
+
+/* HAL 无关的真实发送编码，主机测试与固件使用同一实现。 */
+size_t chassis_encode_torques(const float requested[CHASSIS_MOTOR_COUNT],
+                             float applied[CHASSIS_MOTOR_COUNT],
+                             chassis_can_frame_t frames[CHASSIS_MOTOR_COUNT]);
+size_t chassis_encode_joint_command(uint8_t command,
+                                   chassis_can_frame_t frames[CHASSIS_MOTOR_COUNT]);
 
 bool chassis_dbus_decode(const uint8_t frame[18], chassis_dbus_frame_t *decoded);
 bool chassis_torque_vector_valid(const float torque_nm[CHASSIS_MOTOR_COUNT]);

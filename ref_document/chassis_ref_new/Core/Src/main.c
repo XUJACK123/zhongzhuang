@@ -28,6 +28,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "board_indicator.h"
 #include "remote_control.h"
 #include "BMI088driver.h"
 #include "USART7_Receive.h"
@@ -107,6 +108,7 @@ int main(void)
   MX_SPI2_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+  if (!board_indicator_init()) Error_Handler();
   remote_control_init();
   USART7_receive_init();
   /* USER CODE END 2 */

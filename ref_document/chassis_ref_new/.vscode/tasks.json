@@ -2,41 +2,75 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "make: build",
-      "type": "shell",
+      "label": "make: bench",
+      "type": "process",
       "command": "make",
-      "args": ["-j32"],
+      "args": [
+        "-j32",
+        "TEST_MOTOR=1",
+        "BENCH_MOTOR=${input:benchMotor}",
+        "BENCH_CAN_BUS=${input:benchBus}",
+        "BENCH_CAN_ID=${input:benchTx}",
+        "BENCH_RX_ID=${input:benchRx}",
+        "BENCH_TARGET_DEG=${input:benchAngle}"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": ["$gcc"],
+      "problemMatcher": [
+        "$gcc"
+      ],
       "group": {
         "kind": "build",
         "isDefault": true
       }
     },
     {
-      "label": "make: test",
-      "type": "shell",
+      "label": "make: default",
+      "type": "process",
       "command": "make",
-      "args": ["test"],
+      "args": [
+        "-j32",
+        "TEST_MOTOR=0"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": [
+        "$gcc"
+      ]
+    },
+    {
+      "label": "make: test",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "test",
+        "-j8"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
       "label": "make: clean",
-      "type": "shell",
+      "type": "process",
       "command": "make",
-      "args": ["clean"],
+      "args": [
+        "clean"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": []
+      "problemMatcher": [
+        "$gcc"
+      ]
     },
     {
-      "label": "flash: ST-LINK + OpenOCD",
+      "label": "flash: bench (ST-LINK)",
       "type": "process",
       "command": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
       "args": [
@@ -47,10 +81,72 @@
         "-f",
         "target/stm32h7x.cfg",
         "-c",
-        "program ${workspaceFolder}/build/chassis_torque_base.elf verify reset exit"
+        "program {${workspaceFolder}/build/bench/chassis_torque_base.elf} verify reset exit"
       ],
-      "dependsOn": "make: build",
+      "dependsOn": "make: bench",
       "problemMatcher": []
+    },
+    {
+      "label": "flash: default (ST-LINK)",
+      "type": "process",
+      "command": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+      "args": [
+        "-s",
+        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts",
+        "-f",
+        "interface/stlink.cfg",
+        "-f",
+        "target/stm32h7x.cfg",
+        "-c",
+        "program {${workspaceFolder}/build/default/chassis_torque_base.elf} verify reset exit"
+      ],
+      "dependsOn": "make: default",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "benchMotor",
+      "type": "pickString",
+      "description": "选择电机通道（LF/LR/RF/RR=关节，LW/RW=3508）",
+      "options": [
+        "LF",
+        "LR",
+        "RF",
+        "RR",
+        "LW",
+        "RW"
+      ],
+      "default": "LF"
+    },
+    {
+      "id": "benchBus",
+      "type": "pickString",
+      "description": "CAN 总线：0 使用映射表，1/2 指定总线",
+      "options": [
+        "0",
+        "1",
+        "2"
+      ],
+      "default": "0"
+    },
+    {
+      "id": "benchTx",
+      "type": "promptString",
+      "description": "命令 ID：0 使用映射表；关节填实际 CAN ID，3508 固定 0x200",
+      "default": "0"
+    },
+    {
+      "id": "benchRx",
+      "type": "promptString",
+      "description": "反馈 ID：-1 使用映射表；关节填 Master ID，3508 填 0x201..0x204",
+      "default": "-1"
+    },
+    {
+      "id": "benchAngle",
+      "type": "promptString",
+      "description": "相对转角（度），默认 5；负数反向，最大绝对值 15",
+      "default": "5"
     }
   ]
 }

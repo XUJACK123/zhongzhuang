@@ -112,20 +112,22 @@ void chassis_task(void const *argument)
 
     for (;;)
     {
-        const uint32_t now_ms = HAL_GetTick();
         motor_can_snapshot_t motors;
         ins_snapshot_t imu;
         remote_control_snapshot_t remote;
         chassis_command_t command;
         chassis_safety_input_t input = {0};
         uint32_t motor_max_age = 0U;
-        bool motors_valid = true;
+        bool joints_enabled;
 
         motor_can_get_snapshot(&motors);
         INS_get_snapshot(&imu);
         remote_control_get_snapshot(&remote);
+        const uint32_t now_ms = HAL_GetTick(); /* 采样之后取时间，避免 ISR 更新造成负年龄。 */
 
-        const bool down_active = remote.valid && remote.frame.switch_left == RC_SWITCH_DOWN;
+        const bool down_active = remote.valid &&
+                                 age_ms(now_ms, remote.update_time_ms) <= CHASSIS_DBUS_TIMEOUT_MS &&
+                                 remote.frame.switch_left == RC_SWITCH_DOWN;
         if (down_active)
         {
             if (!down_was_active)
@@ -139,18 +141,8 @@ void chassis_task(void const *argument)
         down_was_active = down_active;
         read_command(&command);
 
-        for (size_t i = 0; i < CHASSIS_MOTOR_COUNT; ++i)
-        {
-            const uint32_t motor_age = age_ms(now_ms, motors.motor[i].update_time_ms);
-            if (!motors.motor[i].valid)
-            {
-                motors_valid = false;
-            }
-            if (motor_age > motor_max_age)
-            {
-                motor_max_age = motor_age;
-            }
-        }
+        const bool motors_valid = chassis_feedback_health(motors.motor, now_ms,
+                                                           &motor_max_age, &joints_enabled);
 
         input.now_ms = now_ms;
         input.dbus_valid = remote.valid;
@@ -165,7 +157,7 @@ void chassis_task(void const *argument)
         input.command_sequence = command.sequence;
         input.switch_left = remote.frame.switch_left;
         input.can_tx_ok = can_tx_ok;
-        input.joints_enabled = motor_can_all_joints_enabled();
+        input.joints_enabled = joints_enabled;
 
         if (chassis_safety_step(&safety, &input))
         {

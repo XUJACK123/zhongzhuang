@@ -1,6 +1,7 @@
 #include "chassis_protocol.h"
 
 #include <math.h>
+#include <string.h>
 
 #define DBUS_CHANNEL_OFFSET 1024
 #define DBUS_CHANNEL_MIN (-660)
@@ -19,6 +20,27 @@
 static bool switch_valid(uint8_t value)
 {
     return value == DBUS_SWITCH_UP || value == DBUS_SWITCH_DOWN || value == DBUS_SWITCH_MID;
+}
+
+bool chassis_feedback_health(const motor_feedback_t motor[CHASSIS_MOTOR_COUNT],
+                             uint32_t now_ms, uint32_t *max_age_ms, bool *joints_enabled)
+{
+    if (motor == NULL || max_age_ms == NULL || joints_enabled == NULL) return false;
+    bool valid = chassis_motor_configuration_valid();
+    *max_age_ms = 0U;
+    *joints_enabled = valid;
+    for (size_t i = 0U; i < CHASSIS_MOTOR_COUNT; ++i)
+    {
+        if (!chassis_motor_active(i)) continue;
+        const bool finite = isfinite(motor[i].position_rad) && isfinite(motor[i].speed_rad_s) &&
+                            isfinite(motor[i].torque_nm);
+        if (!motor[i].valid || !finite) valid = false;
+        const uint32_t age = now_ms - motor[i].update_time_ms;
+        if (age > *max_age_ms) *max_age_ms = age;
+        if (i < CHASSIS_MOTOR_LEFT_WHEEL && (!motor[i].valid || !finite || motor[i].status != 1U))
+            *joints_enabled = false;
+    }
+    return valid;
 }
 
 bool chassis_dbus_decode(const uint8_t frame[18], chassis_dbus_frame_t *decoded)
@@ -71,9 +93,15 @@ bool chassis_torque_vector_valid(const float torque_nm[CHASSIS_MOTOR_COUNT])
 
 float chassis_limit_torque(size_t motor_index, float torque_nm)
 {
+#if TEST_MOTOR_ENABLE
+    const float limit = motor_index < CHASSIS_MOTOR_LEFT_WHEEL
+                            ? CHASSIS_BENCH_JOINT_LIMIT_NM
+                            : CHASSIS_BENCH_WHEEL_LIMIT_NM;
+#else
     const float limit = motor_index < CHASSIS_MOTOR_LEFT_WHEEL
                             ? CHASSIS_JOINT_TORQUE_LIMIT_NM
                             : CHASSIS_WHEEL_TORQUE_LIMIT_NM;
+#endif
     if (torque_nm > limit)
     {
         return limit;
@@ -130,17 +158,17 @@ bool chassis_route_can_feedback(uint8_t bus_number, uint32_t identifier,
         return false;
     }
 
-    if (bus_number == 1U)
+    for (size_t i = 0; i < CHASSIS_MOTOR_COUNT; ++i)
     {
-        if (identifier == 0x003U) { *motor_index = CHASSIS_MOTOR_LEFT_FRONT; *is_wheel = false; return true; }
-        if (identifier == 0x004U) { *motor_index = CHASSIS_MOTOR_LEFT_REAR; *is_wheel = false; return true; }
-        if (identifier == 0x201U) { *motor_index = CHASSIS_MOTOR_LEFT_WHEEL; *is_wheel = true; return true; }
-    }
-    else if (bus_number == 2U)
-    {
-        if (identifier == 0x002U) { *motor_index = CHASSIS_MOTOR_RIGHT_FRONT; *is_wheel = false; return true; }
-        if (identifier == 0x001U) { *motor_index = CHASSIS_MOTOR_RIGHT_REAR; *is_wheel = false; return true; }
-        if (identifier == 0x202U) { *motor_index = CHASSIS_MOTOR_RIGHT_WHEEL; *is_wheel = true; return true; }
+        chassis_motor_route_t route;
+        if (!chassis_motor_active(i)) continue;
+        (void)chassis_motor_route(i, &route);
+        if (bus_number == route.bus && identifier == route.rx_id)
+        {
+            *motor_index = i;
+            *is_wheel = route.is_wheel;
+            return true;
+        }
     }
     return false;
 }
@@ -154,4 +182,68 @@ bool chassis_validate_can_feedback(uint8_t bus_number, uint32_t identifier,
         return false;
     }
     return chassis_route_can_feedback(bus_number, identifier, motor_index, is_wheel);
+}
+
+size_t chassis_encode_torques(const float requested[CHASSIS_MOTOR_COUNT],
+                             float applied[CHASSIS_MOTOR_COUNT],
+                             chassis_can_frame_t frames[CHASSIS_MOTOR_COUNT])
+{
+    size_t count = 0U;
+    if (applied == NULL || frames == NULL) return 0U;
+    memset(applied, 0, sizeof(float) * CHASSIS_MOTOR_COUNT);
+    memset(frames, 0, sizeof(*frames) * CHASSIS_MOTOR_COUNT);
+    if (!chassis_torque_vector_valid(requested) || !chassis_motor_configuration_valid()) return 0U;
+    for (size_t i = 0; i < CHASSIS_MOTOR_COUNT; ++i)
+    {
+        chassis_motor_route_t route;
+        if (!chassis_motor_active(i)) continue;
+        (void)chassis_motor_route(i, &route);
+        applied[i] = chassis_limit_torque(i, requested[i]);
+        size_t frame_index = count;
+        if (route.is_wheel)
+        {
+            for (size_t j = 0; j < count; ++j)
+                if (frames[j].bus == route.bus && frames[j].id == route.tx_id) frame_index = j;
+        }
+        if (frame_index == count)
+        {
+            frames[count].bus = route.bus;
+            frames[count++].id = route.tx_id;
+        }
+        uint8_t *data = frames[frame_index].data;
+        if (route.is_wheel)
+        {
+            const uint16_t current = (uint16_t)chassis_wheel_torque_to_current(applied[i]);
+            const size_t offset = 2U * (route.rx_id - 0x201U);
+            data[offset] = (uint8_t)(current >> 8);
+            data[offset + 1U] = (uint8_t)current;
+        }
+        else
+        {
+            const uint16_t torque = (uint16_t)((applied[i] + CHASSIS_DM_TORQUE_MAX) *
+                                               4095.0f / (2.0f * CHASSIS_DM_TORQUE_MAX));
+            /* MIT 的 Kp/Kd 为 0；上位控制器计算力矩，不在电调叠加 PD。 */
+            data[6] = (uint8_t)(torque >> 8);
+            data[7] = (uint8_t)torque;
+        }
+    }
+    return count;
+}
+
+size_t chassis_encode_joint_command(uint8_t command,
+                                   chassis_can_frame_t frames[CHASSIS_MOTOR_COUNT])
+{
+    size_t count = 0U;
+    if (frames == NULL || !chassis_motor_configuration_valid()) return 0U;
+    for (size_t i = 0; i < CHASSIS_MOTOR_LEFT_WHEEL; ++i)
+    {
+        chassis_motor_route_t route;
+        if (!chassis_motor_active(i)) continue;
+        (void)chassis_motor_route(i, &route);
+        frames[count].bus = route.bus;
+        frames[count].id = route.tx_id;
+        memset(frames[count].data, 0xff, 7U);
+        frames[count++].data[7] = command;
+    }
+    return count;
 }

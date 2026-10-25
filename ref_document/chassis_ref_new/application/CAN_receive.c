@@ -7,12 +7,12 @@
 #include "fdcan.h"
 #include "task.h"
 
-#define DM_J8009_POSITION_MIN (-3.14f)
-#define DM_J8009_POSITION_MAX 3.14f
-#define DM_J8009_SPEED_MIN (-45.0f)
-#define DM_J8009_SPEED_MAX 45.0f
-#define DM_J8009_TORQUE_MIN (-54.0f)
-#define DM_J8009_TORQUE_MAX 54.0f
+#define DM_J8009_POSITION_MIN (-CHASSIS_DM_POSITION_MAX)
+#define DM_J8009_POSITION_MAX CHASSIS_DM_POSITION_MAX
+#define DM_J8009_SPEED_MIN (-CHASSIS_DM_SPEED_MAX)
+#define DM_J8009_SPEED_MAX CHASSIS_DM_SPEED_MAX
+#define DM_J8009_TORQUE_MIN (-CHASSIS_DM_TORQUE_MAX)
+#define DM_J8009_TORQUE_MAX CHASSIS_DM_TORQUE_MAX
 
 #define JOINT_INIT_RETRY_LIMIT 3U
 #define JOINT_INIT_PHASE_DELAY_MS 20U
@@ -38,19 +38,6 @@ static float uint_to_float(uint32_t value, float minimum, float maximum, uint8_t
     return (float)value * (maximum - minimum) / (float)((1UL << bits) - 1UL) + minimum;
 }
 
-static uint16_t float_to_uint(float value, float minimum, float maximum, uint8_t bits)
-{
-    if (value > maximum)
-    {
-        value = maximum;
-    }
-    else if (value < minimum)
-    {
-        value = minimum;
-    }
-    return (uint16_t)((value - minimum) * (float)((1UL << bits) - 1UL) / (maximum - minimum));
-}
-
 static bool configure_bus(FDCAN_HandleTypeDef *bus)
 {
     FDCAN_FilterTypeDef filter = {0};
@@ -73,7 +60,19 @@ bool motor_can_init(void)
     memset((void *)&motor_snapshot, 0, sizeof(motor_snapshot));
     memset(wheel_raw, 0, sizeof(wheel_raw));
     motor_can_joint_init_reset();
-    return configure_bus(&hfdcan1) && configure_bus(&hfdcan2);
+    if (!chassis_motor_configuration_valid()) return false;
+    bool used[2] = {false, false};
+    bool ok = true;
+    for (size_t i = 0; i < CHASSIS_MOTOR_COUNT; ++i)
+    {
+        chassis_motor_route_t route;
+        if (!chassis_motor_active(i)) continue;
+        (void)chassis_motor_route(i, &route);
+        used[route.bus - 1U] = true;
+    }
+    if (used[0]) ok &= configure_bus(&hfdcan1);
+    if (used[1]) ok &= configure_bus(&hfdcan2);
+    return ok;
 }
 
 void motor_can_get_snapshot(motor_can_snapshot_t *snapshot)
@@ -92,6 +91,7 @@ static void update_wheel(size_t motor_index, size_t raw_index, const uint8_t dat
     wheel_raw_t *raw = &wheel_raw[raw_index];
     const uint16_t encoder = (uint16_t)((data[0] << 8) | data[1]);
 
+    if (encoder > 8191U) return; /* 异常载荷不刷新在线时间。 */
     raw->last_encoder = raw->encoder;
     raw->encoder = encoder;
     raw->speed_rpm = (int16_t)((data[2] << 8) | data[3]);
@@ -141,7 +141,8 @@ static void process_rx(FDCAN_HandleTypeDef *bus, const FDCAN_RxHeaderTypeDef *he
     uint8_t bus_number;
 
     bus_number = bus == &hfdcan1 ? 1U : (bus == &hfdcan2 ? 2U : 0U);
-    if (!chassis_validate_can_feedback(bus_number,
+    if (header->FDFormat != FDCAN_CLASSIC_CAN ||
+        !chassis_validate_can_feedback(bus_number,
                                        header->Identifier,
                                        header->IdType == FDCAN_STANDARD_ID,
                                        header->RxFrameType == FDCAN_DATA_FRAME,
@@ -153,7 +154,7 @@ static void process_rx(FDCAN_HandleTypeDef *bus, const FDCAN_RxHeaderTypeDef *he
     }
     if (is_wheel)
     {
-        update_wheel(motor_index, bus_number == 1U ? 0U : 1U, data);
+        update_wheel(motor_index, motor_index - CHASSIS_MOTOR_LEFT_WHEEL, data);
     }
     else
     {
@@ -195,73 +196,37 @@ static bool send_frame(FDCAN_HandleTypeDef *bus, uint32_t identifier, const uint
     return HAL_FDCAN_AddMessageToTxFifoQ(bus, &header, data) == HAL_OK;
 }
 
-static bool send_joint_torque(FDCAN_HandleTypeDef *bus, uint32_t identifier, float torque_nm)
+static bool send_frames(const chassis_can_frame_t *frames, size_t count)
 {
-    uint8_t data[8] = {0};
-    const uint16_t encoded = float_to_uint(torque_nm,
-                                           DM_J8009_TORQUE_MIN,
-                                           DM_J8009_TORQUE_MAX,
-                                           12U);
-    data[6] = (uint8_t)(encoded >> 8);
-    data[7] = (uint8_t)encoded;
-    return send_frame(bus, identifier, data);
-}
-
-static bool send_wheel_torque(FDCAN_HandleTypeDef *bus, bool right, float torque_nm)
-{
-    uint8_t data[8] = {0};
-    const int16_t current = chassis_wheel_torque_to_current(torque_nm);
-    const size_t offset = right ? 2U : 0U;
-    data[offset] = (uint8_t)((uint16_t)current >> 8);
-    data[offset + 1U] = (uint8_t)current;
-    return send_frame(bus, 0x200U, data);
+    bool ok = true;
+    for (size_t i = 0; i < count; ++i)
+    {
+        FDCAN_HandleTypeDef *bus = frames[i].bus == 1U ? &hfdcan1 : &hfdcan2;
+        ok &= send_frame(bus, frames[i].id, frames[i].data);
+    }
+    return ok;
 }
 
 bool motor_can_send_torques(const float requested_nm[CHASSIS_MOTOR_COUNT],
                             float applied_nm[CHASSIS_MOTOR_COUNT])
 {
-    bool ok = true;
-
-    if (!chassis_torque_vector_valid(requested_nm) || applied_nm == NULL)
-    {
-        return false;
-    }
-
-    for (size_t i = 0; i < CHASSIS_MOTOR_COUNT; ++i)
-    {
-        applied_nm[i] = chassis_limit_torque(i, requested_nm[i]);
-    }
-
-    ok &= send_joint_torque(&hfdcan1, 0x003U, applied_nm[CHASSIS_MOTOR_LEFT_FRONT]);
-    ok &= send_joint_torque(&hfdcan1, 0x004U, applied_nm[CHASSIS_MOTOR_LEFT_REAR]);
-    ok &= send_joint_torque(&hfdcan2, 0x002U, applied_nm[CHASSIS_MOTOR_RIGHT_FRONT]);
-    ok &= send_joint_torque(&hfdcan2, 0x001U, applied_nm[CHASSIS_MOTOR_RIGHT_REAR]);
-    ok &= send_wheel_torque(&hfdcan1, false, applied_nm[CHASSIS_MOTOR_LEFT_WHEEL]);
-    ok &= send_wheel_torque(&hfdcan2, true, applied_nm[CHASSIS_MOTOR_RIGHT_WHEEL]);
-    return ok;
+    chassis_can_frame_t frames[CHASSIS_MOTOR_COUNT];
+    const size_t count = chassis_encode_torques(requested_nm, applied_nm, frames);
+    return count > 0U && send_frames(frames, count);
 }
 
 bool motor_can_send_zero(void)
 {
-    float zero[CHASSIS_MOTOR_COUNT] = {0};
+    const float zero[CHASSIS_MOTOR_COUNT] = {0};
     float applied[CHASSIS_MOTOR_COUNT];
     return motor_can_send_torques(zero, applied);
 }
 
-static bool send_joint_special(FDCAN_HandleTypeDef *bus, uint32_t identifier, uint8_t command)
-{
-    uint8_t data[8] = {0xffU, 0xffU, 0xffU, 0xffU, 0xffU, 0xffU, 0xffU, command};
-    return send_frame(bus, identifier, data);
-}
-
 static bool send_all_joint_special(uint8_t command)
 {
-    bool ok = true;
-    ok &= send_joint_special(&hfdcan1, 0x003U, command);
-    ok &= send_joint_special(&hfdcan1, 0x004U, command);
-    ok &= send_joint_special(&hfdcan2, 0x002U, command);
-    ok &= send_joint_special(&hfdcan2, 0x001U, command);
-    return ok;
+    chassis_can_frame_t frames[CHASSIS_MOTOR_COUNT];
+    const size_t count = chassis_encode_joint_command(command, frames);
+    return chassis_motor_configuration_valid() && send_frames(frames, count);
 }
 
 void motor_can_joint_init_reset(void)
@@ -271,13 +236,15 @@ void motor_can_joint_init_reset(void)
     joint_init_next_ms = 0U;
 }
 
-bool motor_can_all_joints_enabled(void)
+bool motor_can_required_joints_enabled(void)
 {
     motor_can_snapshot_t snapshot;
     motor_can_get_snapshot(&snapshot);
     for (size_t i = 0; i < CHASSIS_MOTOR_LEFT_WHEEL; ++i)
     {
-        if (!snapshot.motor[i].valid || snapshot.motor[i].status != 1U)
+        if (!chassis_motor_active(i)) continue;
+        if (!snapshot.motor[i].valid || snapshot.motor[i].status != 1U ||
+            HAL_GetTick() - snapshot.motor[i].update_time_ms > 20U)
         {
             return false;
         }
@@ -287,7 +254,7 @@ bool motor_can_all_joints_enabled(void)
 
 bool motor_can_joint_init_step(uint32_t now_ms)
 {
-    if (motor_can_all_joints_enabled())
+    if (motor_can_required_joints_enabled())
     {
         return true;
     }

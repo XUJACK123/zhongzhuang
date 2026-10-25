@@ -2,11 +2,11 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "STM32H723 - ST-LINK + OpenOCD",
+      "name": "台架：单电机慢速测试 (ST-LINK)",
       "type": "cortex-debug",
       "request": "launch",
       "cwd": "${workspaceFolder}",
-      "executable": "${workspaceFolder}/build/chassis_torque_base.elf",
+      "executable": "${workspaceFolder}/build/bench/chassis_torque_base.elf",
       "servertype": "openocd",
       "serverpath": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
       "gdbPath": "C:/Users/xuyue/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
@@ -17,7 +17,28 @@
         "interface/stlink.cfg",
         "target/stm32h7x.cfg"
       ],
-      "preLaunchTask": "make: build",
+      "preLaunchTask": "make: bench",
+      "runToEntryPoint": "main",
+      "rtos": "FreeRTOS",
+      "showDevDebugOutput": "none"
+    },
+    {
+      "name": "正式底座：等待力矩命令 (ST-LINK)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/default/chassis_torque_base.elf",
+      "servertype": "openocd",
+      "serverpath": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+      "gdbPath": "C:/Users/xuyue/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
+      "searchDir": [
+        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+      ],
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32h7x.cfg"
+      ],
+      "preLaunchTask": "make: default",
       "runToEntryPoint": "main",
       "rtos": "FreeRTOS",
       "showDevDebugOutput": "none"
