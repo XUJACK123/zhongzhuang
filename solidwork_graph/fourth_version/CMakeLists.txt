@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(fourth_version)
+find_package(catkin REQUIRED)
+catkin_package()
+find_package(roslaunch)
+# This proxy model uses URDF primitives and has no mesh directory.
+foreach(dir config launch urdf integration)
+  install(DIRECTORY ${dir}/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+endforeach(dir)
+install(FILES MODEL_NOTES.md DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="fourth_version">
+  <!-- Fudan-compatible SIX-DOF proxy model. Geometry is approximate; mass and physical inertia are preserved from the SW export. See MODEL_NOTES.md. -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.00157941787711358 0.00143123804068395 0.0328921137045299" rpy="0 0 0" />
+      <mass value="23.6411640630659" />
+      <inertia ixx="0.0455766740838017" ixy="0.000114328137412016" ixz="-0.000147424506115227" iyy="0.0618163099557787" iyz="-6.661434589751251e-05" izz="0.0780399218706966" />
+    </inertial>
+    <visual>
+      <origin xyz="0.00157941787711358 0.00143123804068395 0.0328921137045299" rpy="0 0 0" />
+      <geometry>
+        <box size="0.32 0.40 0.18" />
+      </geometry>
+      <material name="base_link_color">
+        <color rgba="0.25 0.28 0.32 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.00157941787711358 0.00143123804068395 0.0328921137045299" rpy="0 0 0" />
+      <geometry>
+        <box size="0.32 0.40 0.18" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="lf0_Link">
+    <inertial>
+      <origin xyz="0.0752810006062106 0.013365523561694 0.00178243203061139" rpy="0 0 0" />
+      <mass value="0.65510430638218" />
+      <inertia ixx="0.000424611308499815" ixy="-5.503972975118413e-05" ixz="-5.333474267270862e-06" iyy="0.002300199248356854" iyz="-3.156527782169578e-06" izz="0.00267737655778862" />
+    </inertial>
+    <visual>
+      <origin xyz="0.105 0 -0.0020499999999998" rpy="1.59031765619627 0 1.5707963267949" />
+      <geometry>
+        <box size="0.04 0.025 0.21004001999619" />
+      </geometry>
+      <material name="lf0_Link_color">
+        <color rgba="0.20 0.45 0.75 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.105 0 -0.0020499999999998" rpy="1.59031765619627 0 1.5707963267949" />
+      <geometry>
+        <box size="0.04 0.025 0.21004001999619" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="lf1_Link">
+    <inertial>
+      <origin xyz="0.00107357066443761 0.0784096696853945 0.00996666337546052" rpy="0 0 0" />
+      <mass value="0.190041656335032" />
+      <inertia ixx="0.00134928587618732" ixy="-1.960627353874673e-05" ixz="3.570889202250243e-08" iyy="5.439891414610634e-05" iyz="2.27814254552516e-06" izz="0.00138869614090021" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0.125000000000001 0.0133000000000001" rpy="1.46479513803866 0 3.14159265358979" />
+      <geometry>
+        <box size="0.03 0.022 0.251411137382577" />
+      </geometry>
+      <material name="lf1_Link_color">
+        <color rgba="0.65 0.68 0.72 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.125000000000001 0.0133000000000001" rpy="1.46479513803866 0 3.14159265358979" />
+      <geometry>
+        <box size="0.03 0.022 0.251411137382577" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="l_wheel_Link">
+    <inertial>
+      <origin xyz="-4.72961720075011e-05 0.00120330103844037 0.0105417035612281" rpy="0 0 0" />
+      <mass value="0.186836731538156" />
+      <inertia ixx="0.0001643052292091234" ixy="-1.858038101103027e-07" ixz="-2.939190969892516e-08" iyy="0.0001689776056354666" iyz="7.584922898247151e-07" izz="0.000325324482219904" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.075" length="0.035" />
+      </geometry>
+      <material name="l_wheel_Link_color">
+        <color rgba="0.12 0.12 0.12 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.075" length="0.035" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="rf0_Link">
+    <inertial>
+      <origin xyz="0.0494763630795827 0.0126157251670159 0.00119163688747997" rpy="0 0 0" />
+      <mass value="0.649223655816058" />
+      <inertia ixx="0.0005071288925588518" ixy="-8.264666017839526e-05" ixz="-2.178071029073444e-06" iyy="0.001452573928037722" iyz="-2.466243523828344e-06" izz="0.00165558280621419" />
+    </inertial>
+    <visual>
+      <origin xyz="0.105 0 -0.00574999999999584" rpy="1.62550358863455 0 1.5707963267949" />
+      <geometry>
+        <box size="0.04 0.025 0.21031464523423" />
+      </geometry>
+      <material name="rf0_Link_color">
+        <color rgba="0.20 0.45 0.75 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.105 0 -0.00574999999999584" rpy="1.62550358863455 0 1.5707963267949" />
+      <geometry>
+        <box size="0.04 0.025 0.21031464523423" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="rf1_Link">
+    <inertial>
+      <origin xyz="-0.00101943412766182 -0.0769224359518827 0.0100212160168063" rpy="0 0 0" />
+      <mass value="0.184645451937383" />
+      <inertia ixx="0.001347872094695379" ixy="-1.958619241042844e-05" ixz="-3.570889202261822e-08" iyy="5.404726409578326e-05" iyz="-2.278142545518539e-06" izz="0.00138693880366454" />
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.125000000000001 0.0198000000000008" rpy="1.41370151524879 0 0" />
+      <geometry>
+        <box size="0.03 0.022 0.253116889993538" />
+      </geometry>
+      <material name="rf1_Link_color">
+        <color rgba="0.65 0.68 0.72 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.125000000000001 0.0198000000000008" rpy="1.41370151524879 0 0" />
+      <geometry>
+        <box size="0.03 0.022 0.253116889993538" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="r_wheel_Link">
+    <inertial>
+      <origin xyz="4.85409335781103e-05 -0.00123541483004635 -0.00253067406553018" rpy="0 0 0" />
+      <mass value="0.187589280591433" />
+      <inertia ixx="0.0001644634443315078" ixy="-1.93213836446964e-07" ixz="2.939190969773177e-08" iyy="0.0001693263551841754" iyz="-7.584922898245335e-07" izz="0.0003258313214661549" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.075" length="0.035" />
+      </geometry>
+      <material name="r_wheel_Link_color">
+        <color rgba="0.12 0.12 0.12 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="0.075" length="0.035" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lf0_Joint" type="revolute">
+    <origin xyz="0 0.227699999999995 0" rpy="-1.5707963267949 0 0" />
+    <parent link="base_link" />
+    <child link="lf0_Link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-100" upper="100" effort="30" velocity="1000" />
+  </joint>
+  <joint name="lf1_Joint" type="revolute">
+    <origin xyz="0.21 0 -0.0040999999999996" rpy="0 0 0" />
+    <parent link="lf0_Link" />
+    <child link="lf1_Link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-100" upper="100" effort="30" velocity="1000" />
+  </joint>
+  <joint name="l_wheel_Joint" type="continuous">
+    <origin xyz="0 0.250000000000002 0.0266000000000003" rpy="0 0 0" />
+    <parent link="lf1_Link" />
+    <child link="l_wheel_Link" />
+    <axis xyz="0 0 1" />
+    <limit effort="30" velocity="1000" />
+  </joint>
+  <joint name="rf0_Joint" type="revolute">
+    <origin xyz="0 -0.227699999999995 0" rpy="1.5707963267949 0 0" />
+    <parent link="base_link" />
+    <child link="rf0_Link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-100" upper="100" effort="30" velocity="1000" />
+  </joint>
+  <joint name="rf1_Joint" type="revolute">
+    <origin xyz="0.210000000000001 0 -0.0114999999999917" rpy="0 0 0" />
+    <parent link="rf0_Link" />
+    <child link="rf1_Link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-100" upper="100" effort="30" velocity="1000" />
+  </joint>
+  <joint name="r_wheel_Joint" type="continuous">
+    <origin xyz="0 -0.250000000000002 0.0396000000000015" rpy="0 0 0" />
+    <parent link="rf1_Link" />
+    <child link="r_wheel_Link" />
+    <axis xyz="0 0 1" />
+    <limit effort="30" velocity="1000" />
+  </joint>
+</robot>

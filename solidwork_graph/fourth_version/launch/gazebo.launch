@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
+        args="-file $(find fourth_version)/urdf/fourth_version.urdf -urdf -model fourth_version -z 0.411496554346292 -J lf0_Joint 0.69865982472146 -J rf0_Joint -0.69865982472146"
+        output="screen" />
+</launch>
