@@ -71,3 +71,30 @@ python /path/fourth_version/integration/fudan_train.py --fudan-root /path/fudan_
 ## 查看
 
 ROS 1 环境安装本包后可运行 roslaunch fourth_version display.launch，先由 joint_state_publisher_gui 拖动关节检查轴向。该 launch 已配置站姿初始角及 RViz 显示文件；若所用 joint_state_publisher_gui 版本未采用 zeros 参数，请手动设置上述髋关节角。Gazebo launch 只按站姿生成模型，未配置电机控制器，机器人可能倒下，不等于复旦训练入口。ROS / RViz / Gazebo 启动均未在本机实测。
+
+## 本机 MuJoCo 预览（2026-10-27）
+
+已使用系统 Python 的 MuJoCo 2.3.7 加载当前 URDF，并新增独立预览脚本。
+在本目录执行：
+
+```bash
+/usr/bin/python3 integration/preview_mujoco.py
+```
+
+窗口初始暂停在配置的站姿。鼠标操作视角；空格开始/暂停自由下落；R 复位并暂停。
+没有训练策略或平衡控制器，开始物理步进后倒下是预期现象。
+
+不打开窗口的接触检查与初始外观截图：
+
+```bash
+/usr/bin/python3 integration/preview_mujoco.py --headless --seconds 5 --screenshot preview/initial_stance.png
+```
+
+本机实测导入 7 个机器人刚体和 6 个关节（另有世界刚体和浮动基座自由度），
+5 秒共 2500 步状态保持有限，没有 MuJoCo 仿真警告，最大接触数为 16。
+预览在内存和临时目录中将 URDF 转换为 MJCF，保留 visual/collision，加入浮动基座、
+重力和地面，关闭机器人自碰撞；转换保存使用 MuJoCo 的数值精度。
+地面摩擦为预览设定值，不代表真实标定。原 URDF 与复旦训练配置未修改。
+
+这只验证 MuJoCo 导入及无控制物理步进，不验证 Isaac Gym、平衡控制或 PPO 训练。
+当前检测到 Miniconda 仅有 base 环境，尚未找到 Isaac Gym；因此未启动复旦训练。

@@ -1,0 +1,530 @@
+{
+  "model_kind": "fifty_equivalent_serial_6dof",
+  "source_urdf": "/home/xy/Desktop/zhongzhuang/zhongzhuang/solidwork_graph/fifty_version_with_meshes/urdf/fifty_version_with_meshes.urdf",
+  "source_urdf_sha256": "63d0936ac1ca3d39f7e2b14bfd29684974e0b8f5e7220bfc49a97b65f8035b71",
+  "source_robot_name": "fifty_version_with_meshes",
+  "source_mass_kg": 23.259630515567018,
+  "modified_mass_kg": 23.259630515567018,
+  "base_convention": "origin = hip axis midpoint; X = +1 * old Y (provisional forward); Y = Z x X (left while forward-sign = +1); Z = -old Z (up)",
+  "base_old_to_new_rotation": [
+    [
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      1.0,
+      -0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      -1.0
+    ]
+  ],
+  "base_old_origin_m": [
+    -0.0037022330470280057,
+    0.0,
+    0.1039999999999885
+  ],
+  "zero_pose": "thigh horizontal forward, shin straight down (Fudan formula zero)",
+  "expected_runtime_dof_order": [
+    "rf0_Joint",
+    "rf1_Joint",
+    "r_wheel_Joint",
+    "lf0_Joint",
+    "lf1_Joint",
+    "l_wheel_Joint"
+  ],
+  "default_joint_angles_rad": {
+    "rf0_Joint": 2.0554215512416354,
+    "rf1_Joint": -2.5592683579936746,
+    "r_wheel_Joint": 0.0,
+    "lf0_Joint": -2.055421551241647,
+    "lf1_Joint": 2.559268357993675,
+    "l_wheel_Joint": 0.0
+  },
+  "joint_sign_table": {
+    "rf0_Joint": 1.0,
+    "rf1_Joint": 1.0,
+    "r_wheel_Joint": 1.0,
+    "lf0_Joint": -1.0,
+    "lf1_Joint": -1.0,
+    "l_wheel_Joint": 1.0
+  },
+  "leg_dimensions": {
+    "r": {
+      "thigh_planar_m": 0.2099999999999993,
+      "shin_planar_m": 0.250000000000005,
+      "thigh_lateral_m": 0.011499999999986908,
+      "shin_lateral_m": -0.04459999999999353,
+      "hip_m": [
+        0.0,
+        -0.227697766952964,
+        4.996003610813204e-16
+      ],
+      "knee_m": [
+        0.2099999999999993,
+        -0.2161977669529771,
+        4.579669976578771e-16
+      ],
+      "wheel_m": [
+        0.20999999999999933,
+        -0.26079776695297063,
+        -0.25000000000000455
+      ],
+      "sw_theta1_rad": 2.0554215512416354,
+      "sw_theta2_rad": -0.988472031198778,
+      "rezero_hip_rad": -2.0554215512416354,
+      "rezero_knee_rad": 2.5592683579936746
+    },
+    "l": {
+      "thigh_planar_m": 0.2099999999999949,
+      "shin_planar_m": 0.2500000000000073,
+      "thigh_lateral_m": -0.012045533905933324,
+      "shin_lateral_m": 0.05254999999999132,
+      "hip_m": [
+        0.0,
+        0.227697766952964,
+        -4.996003610813204e-16
+      ],
+      "knee_m": [
+        0.2099999999999949,
+        0.21565223304703068,
+        -5.273559366969494e-16
+      ],
+      "wheel_m": [
+        0.2099999999999949,
+        0.268202233047022,
+        -0.2500000000000079
+      ],
+      "sw_theta1_rad": 2.055421551241647,
+      "sw_theta2_rad": -0.9884720311987785,
+      "rezero_hip_rad": -2.055421551241647,
+      "rezero_knee_rad": 2.559268357993675
+    }
+  },
+  "spawn_height_m": 0.47475137216108476,
+  "wheel_radius_m": 0.06,
+  "wheel_radius_source": "mesh radius about the axle, NOT measured on hardware",
+  "joint_limits_rad": {
+    "rf0_Joint": [
+      1.4554215512416353,
+      2.6554215512416355
+    ],
+    "rf1_Joint": [
+      -3.2592683579936743,
+      -1.8592683579936746
+    ],
+    "r_wheel_Joint": null,
+    "lf0_Joint": [
+      -2.655421551241647,
+      -1.4554215512416468
+    ],
+    "lf1_Joint": [
+      1.859268357993675,
+      3.259268357993675
+    ],
+    "l_wheel_Joint": null
+  },
+  "joint_effort_nm": 30.0,
+  "joint_velocity_rad_s": 1000.0,
+  "joint_damping": {
+    "hip": 0.03,
+    "knee": 0.03,
+    "wheel": 0.002
+  },
+  "joint_frictionloss": {
+    "hip": 0.015,
+    "knee": 0.015,
+    "wheel": 0.001
+  },
+  "mesh_transforms": {
+    "base_link": {
+      "rotation": [
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "translation": [
+        0.0,
+        0.0037022330470280057,
+        0.1039999999999885
+      ],
+      "visual_xyz": [
+        0.0,
+        0.0037022330470280057,
+        0.1039999999999885
+      ],
+      "visual_rpy": [
+        3.141592653589793,
+        -0.0,
+        1.5707963267948966
+      ],
+      "file": "base_link.STL",
+      "sha256": "b371ffde22495d37ccd94b5e58b2c0709e0ac53e895ef1d055a2c0ab1ac1877d",
+      "triangles": 1020702
+    },
+    "l0_link": {
+      "rotation": [
+        [
+          -0.46587677217188894,
+          0.8848496104710121,
+          -4.716035958880778e-15
+        ],
+        [
+          0.8848496104710121,
+          0.46587677217188894,
+          1.46283584640353e-15
+        ],
+        [
+          3.491481338843133e-15,
+          -3.491481338843133e-15,
+          -0.9999999999999999
+        ]
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "visual_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "visual_rpy": [
+        -3.1415926535897896,
+        -3.491481338843133e-15,
+        2.055421551241647
+      ],
+      "file": "l0_link.STL",
+      "sha256": "94e75dbe9fd5e35f830ceb20c4066ad4fb1d3d9431a8f4a6038b3f0c6c01fe5a",
+      "triangles": 16544
+    },
+    "l1_link": {
+      "rotation": [
+        [
+          0.48279787355619047,
+          -0.8757318158486768,
+          4.2014890944169345e-15
+        ],
+        [
+          0.8757318158486768,
+          0.48279787355619047,
+          -6.303244029164039e-15
+        ],
+        [
+          3.4914813388431334e-15,
+          6.722570487708307e-15,
+          1.0
+        ]
+      ],
+      "translation": [
+        -0.3244915552073818,
+        0.15490500929488699,
+        0.0
+      ],
+      "visual_xyz": [
+        -0.3244915552073818,
+        0.15490500929488699,
+        0.0
+      ],
+      "visual_rpy": [
+        6.722570487708307e-15,
+        -3.4914813388431334e-15,
+        1.0669495200428685
+      ],
+      "file": "l1_link.STL",
+      "sha256": "14fa8e66c8ba7330170b596ffbac942b83c8415c23818ee545fd9a6cfdc113dd",
+      "triangles": 22786
+    },
+    "left_wheel": {
+      "rotation": [
+        [
+          0.8757318158486768,
+          -0.48279787355619047,
+          4.743281058821452e-15
+        ],
+        [
+          0.48279787355619047,
+          0.8757318158486768,
+          -1.3719215269122804e-15
+        ],
+        [
+          -3.4914813388431334e-15,
+          3.4914813388431334e-15,
+          1.0
+        ]
+      ],
+      "translation": [
+        -0.23859340356089198,
+        0.045172487240293824,
+        0.0
+      ],
+      "visual_xyz": [
+        -0.23859340356089198,
+        0.045172487240293824,
+        0.0
+      ],
+      "visual_rpy": [
+        3.4914813388431334e-15,
+        3.4914813388431334e-15,
+        0.5038468067520281
+      ],
+      "file": "left_wheel.STL",
+      "sha256": "4d05998ba112306c9f3d59068060d61c5b3d8d49f0cf6e89663104a81f41fed3",
+      "triangles": 38972
+    },
+    "r0_link": {
+      "rotation": [
+        [
+          0.46587677217187873,
+          0.8848496104710175,
+          -4.716035958880762e-15
+        ],
+        [
+          0.8848496104710175,
+          -0.46587677217187873,
+          -1.4628358464035846e-15
+        ],
+        [
+          -3.491481338843133e-15,
+          -3.491481338843133e-15,
+          -0.9999999999999999
+        ]
+      ],
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "visual_xyz": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "visual_rpy": [
+        -3.1415926535897896,
+        3.491481338843133e-15,
+        1.086171102348158
+      ],
+      "file": "r0_link.STL",
+      "sha256": "6bd1e82708f4cb99e883a1a8ff048f14eb9c6fe409fd24781979d3159ac7a94b",
+      "triangles": 18824
+    },
+    "r1_link": {
+      "rotation": [
+        [
+          0.482797873556203,
+          -0.8757318158486699,
+          -1.371921526912228e-15
+        ],
+        [
+          -0.8757318158486699,
+          -0.482797873556203,
+          -4.743281058821467e-15
+        ],
+        [
+          3.491481338843122e-15,
+          3.4914813388431448e-15,
+          -1.0
+        ]
+      ],
+      "translation": [
+        -0.32449155520738837,
+        -0.1549050092948877,
+        0.0
+      ],
+      "visual_xyz": [
+        -0.32449155520738837,
+        -0.1549050092948877,
+        0.0
+      ],
+      "visual_rpy": [
+        3.1415926535897896,
+        -3.491481338843122e-15,
+        -1.0669495200428543
+      ],
+      "file": "r1_link.STL",
+      "sha256": "3ac0d4d7a94b5bec899a563a58e98d35cd0d7a3554dff8ee862ef3e25b115200",
+      "triangles": 21586
+    },
+    "right_wheel": {
+      "rotation": [
+        [
+          0.8757318158486699,
+          0.482797873556203,
+          4.743281058821467e-15
+        ],
+        [
+          0.482797873556203,
+          -0.8757318158486699,
+          -1.371921526912228e-15
+        ],
+        [
+          3.491481338843122e-15,
+          3.4914813388431448e-15,
+          -1.0
+        ]
+      ],
+      "translation": [
+        -0.23859340356089703,
+        0.0451724872402931,
+        0.0
+      ],
+      "visual_xyz": [
+        -0.23859340356089703,
+        0.0451724872402931,
+        0.0
+      ],
+      "visual_rpy": [
+        3.1415926535897896,
+        -3.491481338843122e-15,
+        0.5038468067520424
+      ],
+      "file": "right_wheel.STL",
+      "sha256": "4b3d000df1aa54766e2898366cfd06b6432cce21450aa18de1aca85ad8661c89",
+      "triangles": 38972
+    }
+  },
+  "collision": {
+    "base_link": {
+      "type": "box",
+      "size": [
+        0.6219977140426636,
+        0.43650001287460327,
+        0.44650180637836456
+      ],
+      "origin": [
+        0.0,
+        -0.01254776635692556,
+        -0.04827480977774817
+      ],
+      "source": "mesh AABB in the new link frame, scale 1.00"
+    },
+    "l0_link": {
+      "type": "cylinder",
+      "radius": 0.0234659967944026,
+      "length": 0.2551994975656271,
+      "origin": [
+        0.09859870094805956,
+        0.029657592996954918,
+        -0.0192234730347991
+      ],
+      "rpy": [
+        0.0,
+        1.5707963267948966,
+        0.0
+      ],
+      "source": "trimmed bbox (2-98%) of the STL, cylinder axis = link x"
+    },
+    "l1_link": {
+      "type": "cylinder",
+      "radius": 0.012,
+      "length": 0.2506548762321472,
+      "origin": [
+        -0.21104910969734192,
+        0.1545945405960083,
+        -0.020799999590963125
+      ],
+      "rpy": [
+        0.0,
+        1.5707963267948966,
+        0.0
+      ],
+      "source": "trimmed bbox (2-98%) of the STL, cylinder axis = link x"
+    },
+    "left_wheel": {
+      "type": "cylinder",
+      "radius": 0.06,
+      "length": 0.04710000101476908,
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rpy": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source": "wheel radius parameter, width from the mesh"
+    },
+    "r0_link": {
+      "type": "cylinder",
+      "radius": 0.02482852768152952,
+      "length": 0.25222914293408394,
+      "origin": [
+        0.09893273375928402,
+        -0.030533580109477043,
+        -0.015099996700882912
+      ],
+      "rpy": [
+        0.0,
+        1.5707963267948966,
+        0.0
+      ],
+      "source": "trimmed bbox (2-98%) of the STL, cylinder axis = link x"
+    },
+    "r1_link": {
+      "type": "cylinder",
+      "radius": 0.012,
+      "length": 0.1962127611041069,
+      "origin": [
+        -0.18210062757134438,
+        -0.15362011641263962,
+        -0.01284999935887754
+      ],
+      "rpy": [
+        0.0,
+        1.5707963267948966,
+        0.0
+      ],
+      "source": "trimmed bbox (2-98%) of the STL, cylinder axis = link x"
+    },
+    "right_wheel": {
+      "type": "cylinder",
+      "radius": 0.06,
+      "length": 0.04710000101476908,
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rpy": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "source": "wheel radius parameter, width from the mesh"
+    }
+  },
+  "provisional": {
+    "wheel_radius_m": true,
+    "joint_limits_rad": true,
+    "joint_effort_nm": true,
+    "joint_velocity_rad_s": true,
+    "base_collision_box": true,
+    "forward_direction": true,
+    "base_inertia": true
+  },
+  "validation": {
+    "isaacgym_runtime": "NOT RUN",
+    "mujoco_runtime": "NOT RUN",
+    "fudan_formula_cases": 200
+  }
+}
