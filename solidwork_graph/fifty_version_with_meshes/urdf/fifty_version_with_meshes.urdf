@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="fifty_version_with_meshes">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0211934243451559 0.0785236966164587 0.0185241673922997"
+        rpy="0 0 0" />
+      <mass
+        value="21.2113581068628" />
+      <inertia
+        ixx="0.06096920344241"
+        ixy="9.82947395437317E-05"
+        ixz="-8.72037485187903E-05"
+        iyy="0.0760664100735743"
+        iyz="0.000437325340913271"
+        izz="0.0436410333987116" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="l0_link">
+    <inertial>
+      <origin
+        xyz="-0.0129153191766113 0.0540957257059597 0.00506179099390391"
+        rpy="0 0 0" />
+      <mass
+        value="0.618041120645009" />
+      <inertia
+        ixx="0.00129481922437436"
+        ixy="0.000342379921605666"
+        ixz="-1.34127686927318E-06"
+        iyy="0.000623585473881277"
+        iyz="-3.03092846270886E-06"
+        izz="0.00163464970649352" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/l0_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/l0_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lf0_Joint"
+    type="revolute">
+    <origin
+      xyz="0.223995533905936 0 0.103999999999989"
+      rpy="1.5707963267949 0 1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="l0_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-100"
+      upper="100"
+      effort="30"
+      velocity="1000" />
+  </joint>
+  <link
+    name="l1_link">
+    <inertial>
+      <origin
+        xyz="0.0380502186929406 -0.0717218701008254 -0.0179181638403692"
+        rpy="0 0 0" />
+      <mass
+        value="0.185068685581945" />
+      <inertia
+        ixx="0.00106368543370267"
+        ixy="0.000537020052964299"
+        ixz="-1.06850030625606E-06"
+        iyy="0.000339319539905789"
+        iyz="2.01234309165485E-06"
+        izz="0.00138862860693342" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/l1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/l1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lf1_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.0978341221560943 0.185818418198908 -0.0120455339059343"
+      rpy="-3.14159265358979 0 0" />
+    <parent
+      link="l0_link" />
+    <child
+      link="l1_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-100"
+      upper="100"
+      effort="30"
+      velocity="1000" />
+  </joint>
+  <link
+    name="left_wheel">
+    <inertial>
+      <origin
+        xyz="-0.000790971686823093 0.000587308026134603 -0.00857547133077685"
+        rpy="0 0 0" />
+      <mass
+        value="0.224232794577727" />
+      <inertia
+        ixx="0.000172681197500127"
+        ixy="-2.24652684612745E-06"
+        ixz="-6.21930183991748E-07"
+        iyy="0.000171347144562198"
+        iyz="4.58280444592105E-07"
+        izz="0.000335208594208605" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/left_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.866666666666667 0.909803921568627 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/left_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="l_wheel_Joint"
+    type="continuous">
+    <origin
+      xyz="0.120699468389051 -0.218932953962176 -0.0525499999999903"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="l1_link" />
+    <child
+      link="left_wheel" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="30"
+      velocity="1000" />
+  </joint>
+  <link
+    name="r0_link">
+    <inertial>
+      <origin
+        xyz="0.0121923781622492 0.051334525517201 -0.00232759567468852"
+        rpy="0 0 0" />
+      <mass
+        value="0.649917627348707" />
+      <inertia
+        ixx="0.00130038460018353"
+        ixy="-0.000342365426831065"
+        ixz="1.42060869558708E-06"
+        iyy="0.00062912350949798"
+        iyz="-3.06363729940188E-06"
+        izz="0.0016468878343879" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/r0_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/r0_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rf0_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.231399999999992 0 0.103999999999988"
+      rpy="1.5707963267949 0 -1.5707963267949" />
+    <parent
+      link="base_link" />
+    <child
+      link="r0_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-100"
+      upper="100"
+      effort="30"
+      velocity="1000" />
+  </joint>
+  <link
+    name="r1_link">
+    <inertial>
+      <origin
+        xyz="0.0479558198492149 -0.0904426329999096 0.0118492857463802"
+        rpy="0 0 0" />
+      <mass
+        value="0.146779385778477" />
+      <inertia
+        ixx="0.00105559694920165"
+        ixy="0.000537014023686203"
+        ixz="1.06861096378529E-06"
+        iyy="0.000331211953657074"
+        iyz="-2.01228208529268E-06"
+        izz="0.00138161013214753" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/r1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/r1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rf1_Joint"
+    type="revolute">
+    <origin
+      xyz="0.0978341221560942 0.185818418198913 -0.0114999999999879"
+      rpy="0 0 3.14159265358979" />
+    <parent
+      link="r0_link" />
+    <child
+      link="r1_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-100"
+      upper="100"
+      effort="30"
+      velocity="1000" />
+  </joint>
+  <link
+    name="right_wheel">
+    <inertial>
+      <origin
+        xyz="0.000508981389088919 -0.000843507458737958 -0.00857547133593117"
+        rpy="0 0 0" />
+      <mass
+        value="0.22423279477235" />
+      <inertia
+        ixx="0.000170911824948099"
+        ixy="-2.06800393918537E-06"
+        ixz="4.01537563230166E-07"
+        iyy="0.00017311651711509"
+        iyz="-6.59989170390475E-07"
+        izz="0.00033520859420944" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/right_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://fifty_version_with_meshes/meshes/right_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="r_wheel_Joint"
+    type="continuous">
+    <origin
+      xyz="0.120699468389053 -0.218932953962172 0.0445999999999932"
+      rpy="0 0 0" />
+    <parent
+      link="r1_link" />
+    <child
+      link="right_wheel" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      effort="30"
+      velocity="1000" />
+  </joint>
+</robot>

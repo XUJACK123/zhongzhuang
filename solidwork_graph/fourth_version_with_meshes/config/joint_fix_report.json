@@ -1,0 +1,189 @@
+{
+  "corrections": {
+    "right_large_leg": {
+      "type": "revolute",
+      "axis": "0 0 1"
+    },
+    "right_small_leg": {
+      "type": "revolute",
+      "axis": "0 0 1"
+    },
+    "right_wheel": {
+      "type": "continuous",
+      "axis": "0.0687283917617354 0 -0.997635408436291"
+    },
+    "left_large_leg": {
+      "type": "revolute",
+      "axis": "0 0 1"
+    },
+    "left_small_link": {
+      "type": "revolute",
+      "axis": "0 0 1"
+    },
+    "left_wheel": {
+      "type": "continuous",
+      "axis": "0 0 1"
+    }
+  },
+  "links": 7,
+  "moving_joints": 6,
+  "mesh_files": {
+    "base_link.STL": {
+      "sha256": "1a2e6716c895d4b6b3803b375228209f5c83bc1523d16da5936045c47c248331",
+      "triangles": 1095872,
+      "bbox_m": [
+        [
+          -0.2345000058412552,
+          -0.3109988570213318,
+          -0.23342609405517578
+        ],
+        [
+          0.2345000058412552,
+          0.3109988570213318,
+          0.23807573318481445
+        ]
+      ]
+    },
+    "r0_link.STL": {
+      "sha256": "3bb2aa3742b20b9fa96a3a839c4af3cd68a77c83b49863f5bd4e50da9969f8d1",
+      "triangles": 13762,
+      "bbox_m": [
+        [
+          -0.06916667520999908,
+          -0.04244675859808922,
+          -0.07609999924898148
+        ],
+        [
+          0.14665435254573822,
+          0.23070520162582397,
+          0.05559999495744705
+        ]
+      ]
+    },
+    "r1_link.STL": {
+      "sha256": "b765aaeb608447e40753178cd1f1e13dc96f448786a43855b70f355aaa8f7748",
+      "triangles": 23260,
+      "bbox_m": [
+        [
+          -0.13057847321033478,
+          -0.07828422635793686,
+          -0.015399996191263199
+        ],
+        [
+          0.02882351726293564,
+          0.26099228858947754,
+          0.022099997848272324
+        ]
+      ]
+    },
+    "right_wheel.STL": {
+      "sha256": "fb6175f228006ea0f5b4e8c37861c0ec87083bc0074e32889c50e7f62c706a11",
+      "triangles": 10974,
+      "bbox_m": [
+        [
+          -0.05997896566987038,
+          -0.05999161675572395,
+          -0.018939707428216934
+        ],
+        [
+          0.06024203449487686,
+          0.05987778306007385,
+          0.023182634264230728
+        ]
+      ]
+    },
+    "l0_link.STL": {
+      "sha256": "4294584fc0eda2a517bf45f0cb85efe0dc18b26a7f5cf668d36db6a04092f6c3",
+      "triangles": 14716,
+      "bbox_m": [
+        [
+          -0.06916667520999908,
+          -0.04244675859808922,
+          -0.018000001087784767
+        ],
+        [
+          0.14665435254573822,
+          0.23070520162582397,
+          0.06299999356269836
+        ]
+      ]
+    },
+    "l1_link.STL": {
+      "sha256": "6f47723563151ef043a8b07ed6a9c7471e5a7eda5e7873a50df3bb553e95fa4b",
+      "triangles": 23544,
+      "bbox_m": [
+        [
+          -0.02882351726293564,
+          -0.26099228858947754,
+          -0.015399996191263199
+        ],
+        [
+          0.13057847321033478,
+          0.07828422635793686,
+          0.022099997848272324
+        ]
+      ]
+    },
+    "left_wheel.STL": {
+      "sha256": "74e17309dcd0f11b5b9d9eee742ddfe2f45b893d85971d0ca96792e2ba00adc2",
+      "triangles": 9830,
+      "bbox_m": [
+        [
+          -0.05998334661126137,
+          -0.05987778306007385,
+          -0.00699999975040555
+        ],
+        [
+          0.059902582317590714,
+          0.05999161675572395,
+          0.0279999990016222
+        ]
+      ]
+    }
+  },
+  "joint_motion_tests": {
+    "right_large_leg": {
+      "angle_rad": 0.2,
+      "sample_vertex_motion_m": 0.048119705736389906
+    },
+    "right_small_leg": {
+      "angle_rad": 0.2,
+      "sample_vertex_motion_m": 0.056082272097376915
+    },
+    "right_wheel": {
+      "angle_rad": 0.2,
+      "sample_vertex_motion_m": 0.011980010557553178
+    },
+    "left_large_leg": {
+      "angle_rad": 0.2,
+      "sample_vertex_motion_m": 0.048119705736389906
+    },
+    "left_small_link": {
+      "angle_rad": 0.2,
+      "sample_vertex_motion_m": 0.056082272097376915
+    },
+    "left_wheel": {
+      "angle_rad": 0.2,
+      "sample_vertex_motion_m": 0.011980010606148537
+    }
+  },
+  "runtime_tested": false,
+  "mass_kg": 25.694605322711844,
+  "all_link_data_and_zero_pose_unchanged": true,
+  "source_hashes": {
+    "urdf\\fourth_version_with_meshes.urdf": "f02ab4269256532c8c1413d3cad9b50f3655b75b3d485137af68b311321497e3",
+    "urdf\\fourth_version_with_meshes.csv": "e214617aa09e5cf2d178c9fabf09a3360298acb306b970e39a37b5cf28b1ed3d",
+    "config\\joint_names_fourth_version_with_meshes.yaml": "f6290e815235669241e479da79d1f8359b5a1f95c1d9bc9eebdc1d3dd4d97fd5",
+    "launch\\display.launch": "ec0afd1916330ea86cdb94efc9f848f7402afc0635019906ea3fcaec7c44cf99"
+  },
+  "output_files": [
+    "urdf\\fourth_version_with_meshes.urdf",
+    "urdf\\fourth_version_with_meshes.csv",
+    "config\\joint_names_fourth_version_with_meshes.yaml",
+    "launch\\display.launch",
+    "config\\display.rviz",
+    "JOINT_FIX_NOTES.md"
+  ],
+  "backup_directory": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\solidwork_graph\\fourth_version_with_meshes\\backups\\before_joint_fix_20261027_141545",
+  "post_install_validation_passed": true
+}

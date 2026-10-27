@@ -1,0 +1,30 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Fixed Frame: base_link
+    Background Color: 48; 48; 48
+  Displays:
+    - Class: rviz/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 0.1
+    - Class: rviz/RobotModel
+      Name: RobotModel
+      Enabled: true
+      Robot Description: robot_description
+      Visual Enabled: true
+      Collision Enabled: false
+    - Class: rviz/TF
+      Name: TF
+      Enabled: true
+      Show Axes: true
+      Show Names: false
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 1.8
+      Pitch: 0.5
+      Yaw: 0.8

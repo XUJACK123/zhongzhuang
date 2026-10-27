@@ -1,0 +1,548 @@
+{
+  "package": "fifty_version_with_meshes",
+  "purpose": "convert SolidWorks fixed joints into the articulated structure used by fudan / fourth_version",
+  "corrections": {
+    "lf0_Joint": {
+      "export_name": "l0_joint",
+      "type": "revolute",
+      "axis": "0 0 1",
+      "effort": 30.0,
+      "velocity": 1000.0,
+      "lower": -100.0,
+      "upper": 100.0
+    },
+    "lf1_Joint": {
+      "export_name": "l1_joint",
+      "type": "revolute",
+      "axis": "0 0 1",
+      "effort": 30.0,
+      "velocity": 1000.0,
+      "lower": -100.0,
+      "upper": 100.0
+    },
+    "l_wheel_Joint": {
+      "export_name": "left_wheel",
+      "type": "continuous",
+      "axis": "0 0 1",
+      "effort": 30.0,
+      "velocity": 1000.0,
+      "lower": null,
+      "upper": null
+    },
+    "rf0_Joint": {
+      "export_name": "r0_joint",
+      "type": "revolute",
+      "axis": "0 0 1",
+      "effort": 30.0,
+      "velocity": 1000.0,
+      "lower": -100.0,
+      "upper": 100.0
+    },
+    "rf1_Joint": {
+      "export_name": "ri_joint",
+      "type": "revolute",
+      "axis": "0 0 1",
+      "effort": 30.0,
+      "velocity": 1000.0,
+      "lower": -100.0,
+      "upper": 100.0
+    },
+    "r_wheel_Joint": {
+      "export_name": "right_wheel",
+      "type": "continuous",
+      "axis": "0 0 1",
+      "effort": 30.0,
+      "velocity": 1000.0,
+      "lower": null,
+      "upper": null
+    }
+  },
+  "axis_in_base_frame_at_zero_pose": {
+    "lf0_Joint": [
+      1.0,
+      0.0,
+      -0.0
+    ],
+    "lf1_Joint": [
+      -1.0,
+      -0.0,
+      0.0
+    ],
+    "l_wheel_Joint": [
+      1.0,
+      0.0,
+      -0.0
+    ],
+    "rf0_Joint": [
+      -1.0,
+      0.0,
+      -0.0
+    ],
+    "rf1_Joint": [
+      -1.0,
+      0.0,
+      -0.0
+    ],
+    "r_wheel_Joint": [
+      -1.0,
+      0.0,
+      -0.0
+    ]
+  },
+  "links": 7,
+  "moving_joints": 6,
+  "total_mass_kg": 23.259630516,
+  "mesh_files": {
+    "base_link.STL": {
+      "sha256": "b371ffde22495d37ccd94b5e58b2c0709e0ac53e895ef1d055a2c0ab1ac1877d",
+      "triangles": 1020702,
+      "bbox_m": [
+        [
+          -0.2345,
+          -0.310999,
+          -0.070976
+        ],
+        [
+          0.202,
+          0.310999,
+          0.375526
+        ]
+      ]
+    },
+    "l0_link.STL": {
+      "sha256": "94e75dbe9fd5e35f830ceb20c4066ad4fb1d3d9431a8f4a6038b3f0c6c01fe5a",
+      "triangles": 16544,
+      "bbox_m": [
+        [
+          -0.128676,
+          -0.042448,
+          -0.068696
+        ],
+        [
+          0.078673,
+          0.23046,
+          0.063004
+        ]
+      ]
+    },
+    "l1_link.STL": {
+      "sha256": "14fa8e66c8ba7330170b596ffbac942b83c8415c23818ee545fd9a6cfdc113dd",
+      "triangles": 22786,
+      "bbox_m": [
+        [
+          -0.028998,
+          -0.250059,
+          -0.03005
+        ],
+        [
+          0.152695,
+          0.07691,
+          0.00745
+        ]
+      ]
+    },
+    "left_wheel.STL": {
+      "sha256": "4d05998ba112306c9f3d59068060d61c5b3d8d49f0cf6e89663104a81f41fed3",
+      "triangles": 38972,
+      "bbox_m": [
+        [
+          -0.05992,
+          -0.059996,
+          -0.0481
+        ],
+        [
+          0.059975,
+          0.059857,
+          0.01
+        ]
+      ]
+    },
+    "r0_link.STL": {
+      "sha256": "6bd1e82708f4cb99e883a1a8ff048f14eb9c6fe409fd24781979d3159ac7a94b",
+      "triangles": 18824,
+      "bbox_m": [
+        [
+          -0.078673,
+          -0.042448,
+          -0.0761
+        ],
+        [
+          0.128676,
+          0.23046,
+          0.0556
+        ]
+      ]
+    },
+    "r1_link.STL": {
+      "sha256": "3ac0d4d7a94b5bec899a563a58e98d35cd0d7a3554dff8ee862ef3e25b115200",
+      "triangles": 21586,
+      "bbox_m": [
+        [
+          -0.028998,
+          -0.250059,
+          0.0046
+        ],
+        [
+          0.152655,
+          0.07691,
+          0.0211
+        ]
+      ]
+    },
+    "right_wheel.STL": {
+      "sha256": "4b3d000df1aa54766e2898366cfd06b6432cce21450aa18de1aca85ad8661c89",
+      "triangles": 38972,
+      "bbox_m": [
+        [
+          -0.059956,
+          -0.06,
+          -0.0481
+        ],
+        [
+          0.059946,
+          0.059816,
+          0.01
+        ]
+      ]
+    }
+  },
+  "wheel_face_normal_evidence": {
+    "left_wheel": {
+      "dominant_normal": [
+        -0.0,
+        0.0,
+        -1.0
+      ],
+      "area": 0.03396631238955113,
+      "groups": [
+        [
+          [
+            -0.0,
+            0.0,
+            -1.0
+          ],
+          0.03396631238955113
+        ],
+        [
+          [
+            -0.44,
+            -0.9,
+            -0.0
+          ],
+          0.000951328880527576
+        ],
+        [
+          [
+            -0.93,
+            0.37,
+            0.0
+          ],
+          0.0009384254832027709
+        ]
+      ]
+    },
+    "right_wheel": {
+      "dominant_normal": [
+        -0.0,
+        -0.0,
+        -1.0
+      ],
+      "area": 0.03396631252778769,
+      "groups": [
+        [
+          [
+            -0.0,
+            -0.0,
+            -1.0
+          ],
+          0.03396631252778769
+        ],
+        [
+          [
+            -0.75,
+            -0.66,
+            -0.0
+          ],
+          0.0010278471748913966
+        ],
+        [
+          [
+            -0.2,
+            0.98,
+            0.0
+          ],
+          0.0007591277638647463
+        ]
+      ]
+    }
+  },
+  "joint_motion_tests": {
+    "lf0_Joint": {
+      "angle_rad": 0.2,
+      "max_sample_vertex_motion_m": 0.04812
+    },
+    "lf1_Joint": {
+      "angle_rad": 0.2,
+      "max_sample_vertex_motion_m": 0.056082
+    },
+    "l_wheel_Joint": {
+      "angle_rad": 0.2,
+      "max_sample_vertex_motion_m": 0.01198
+    },
+    "rf0_Joint": {
+      "angle_rad": 0.2,
+      "max_sample_vertex_motion_m": 0.04812
+    },
+    "rf1_Joint": {
+      "angle_rad": 0.2,
+      "max_sample_vertex_motion_m": 0.056082
+    },
+    "r_wheel_Joint": {
+      "angle_rad": 0.2,
+      "max_sample_vertex_motion_m": 0.01198
+    }
+  },
+  "csv_changes": [
+    {
+      "row": "l0_joint",
+      "column": "Joint Name",
+      "before": "l0_joint",
+      "after": "lf0_Joint"
+    },
+    {
+      "row": "l0_joint",
+      "column": "Joint Type",
+      "before": "fixed",
+      "after": "revolute"
+    },
+    {
+      "row": "l0_joint",
+      "column": "Joint Axis Z",
+      "before": "0",
+      "after": "1"
+    },
+    {
+      "row": "l0_joint",
+      "column": "Limit Effort",
+      "before": "",
+      "after": "30"
+    },
+    {
+      "row": "l0_joint",
+      "column": "Limit Velocity",
+      "before": "",
+      "after": "1000"
+    },
+    {
+      "row": "l0_joint",
+      "column": "Limit Lower",
+      "before": "",
+      "after": "-100"
+    },
+    {
+      "row": "l0_joint",
+      "column": "Limit Upper",
+      "before": "",
+      "after": "100"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Joint Name",
+      "before": "l1_joint",
+      "after": "lf1_Joint"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Joint Type",
+      "before": "fixed",
+      "after": "revolute"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Joint Axis Z",
+      "before": "0",
+      "after": "1"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Limit Effort",
+      "before": "",
+      "after": "30"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Limit Velocity",
+      "before": "",
+      "after": "1000"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Limit Lower",
+      "before": "",
+      "after": "-100"
+    },
+    {
+      "row": "l1_joint",
+      "column": "Limit Upper",
+      "before": "",
+      "after": "100"
+    },
+    {
+      "row": "left_wheel",
+      "column": "Joint Name",
+      "before": "left_wheel",
+      "after": "l_wheel_Joint"
+    },
+    {
+      "row": "left_wheel",
+      "column": "Joint Type",
+      "before": "fixed",
+      "after": "continuous"
+    },
+    {
+      "row": "left_wheel",
+      "column": "Joint Axis Z",
+      "before": "0",
+      "after": "1"
+    },
+    {
+      "row": "left_wheel",
+      "column": "Limit Effort",
+      "before": "",
+      "after": "30"
+    },
+    {
+      "row": "left_wheel",
+      "column": "Limit Velocity",
+      "before": "",
+      "after": "1000"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Joint Name",
+      "before": "r0_joint",
+      "after": "rf0_Joint"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Joint Type",
+      "before": "fixed",
+      "after": "revolute"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Joint Axis Z",
+      "before": "0",
+      "after": "1"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Limit Effort",
+      "before": "",
+      "after": "30"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Limit Velocity",
+      "before": "",
+      "after": "1000"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Limit Lower",
+      "before": "",
+      "after": "-100"
+    },
+    {
+      "row": "r0_joint",
+      "column": "Limit Upper",
+      "before": "",
+      "after": "100"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Joint Name",
+      "before": "ri_joint",
+      "after": "rf1_Joint"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Joint Type",
+      "before": "fixed",
+      "after": "revolute"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Joint Axis Z",
+      "before": "0",
+      "after": "1"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Limit Effort",
+      "before": "",
+      "after": "30"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Limit Velocity",
+      "before": "",
+      "after": "1000"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Limit Lower",
+      "before": "",
+      "after": "-100"
+    },
+    {
+      "row": "ri_joint",
+      "column": "Limit Upper",
+      "before": "",
+      "after": "100"
+    },
+    {
+      "row": "right_wheel",
+      "column": "Joint Name",
+      "before": "right_wheel",
+      "after": "r_wheel_Joint"
+    },
+    {
+      "row": "right_wheel",
+      "column": "Joint Type",
+      "before": "fixed",
+      "after": "continuous"
+    },
+    {
+      "row": "right_wheel",
+      "column": "Joint Axis Z",
+      "before": "0",
+      "after": "1"
+    },
+    {
+      "row": "right_wheel",
+      "column": "Limit Effort",
+      "before": "",
+      "after": "30"
+    },
+    {
+      "row": "right_wheel",
+      "column": "Limit Velocity",
+      "before": "",
+      "after": "1000"
+    }
+  ],
+  "controller_joint_names": [
+    "rf0_Joint",
+    "rf1_Joint",
+    "r_wheel_Joint",
+    "lf0_Joint",
+    "lf1_Joint",
+    "l_wheel_Joint"
+  ],
+  "runtime_tested": false,
+  "link_data_and_zero_pose_unchanged": true,
+  "backup_directory": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\solidwork_graph\\fifty_version_with_meshes\\backups\\before_joint_fix_20261027_224822",
+  "problems": [],
+  "post_install_validation_passed": true
+}
