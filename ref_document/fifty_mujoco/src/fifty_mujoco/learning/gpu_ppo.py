@@ -28,6 +28,15 @@ from ..config import Config
 from ..control.mixed_pd import PdGains
 from ..envs.warp_env import WarpEnvOptions, WarpVecEnv
 from .actor_critic import ActorCriticSequence, NetworkDims
+from .checkpoint import (
+    CHECKPOINT_FORMAT,
+    CheckpointManager,
+    load_checkpoint,
+    model_fingerprint,
+    restore_rng_state,
+    rng_state,
+    save_checkpoint,
+)
 
 
 @dataclass
@@ -75,11 +84,15 @@ class GpuPpoConfig:
     progress_path: Path | None = None
     #: Write the checkpoint (and a ``history.json``) every N updates.  A 3-hour
     #: unattended run must survive a crash, so 0 ("only at the end") is unsafe.
-    save_every: int = 100
-    #: Keep the checkpoint with the best ``best_metric_key`` as ``model_best.pt``.
-    #: Without this a 3-hour run lost an 18 s standing policy because only
-    #: ``model_last`` was kept and the policy later collapsed.
+    #: 25 is the value the experiment baseline in progress.md §5.5 / §13.1 fixes;
+    #: retention (``checkpoint_keep``) bounds the disk cost.
+    save_every: int = 25
+    #: Gate for logging ``best``; the *ordering* used to pick ``model_best.pt``
+    #: lives in :data:`fifty_mujoco.learning.checkpoint.DEFAULT_BEST_ORDER`
+    #: (alive fraction -> P10 survival -> median survival -> height -> vx).
     best_metric_key: str = "eval_t_fall_median"
+    #: Number of numbered ``model_update_*.pt`` snapshots to retain.
+    checkpoint_keep: int = 5
     #: Stop after this many consecutive evaluations that survive the whole eval
     #: window (0 disables).
     stop_on_survive: int = 0
@@ -195,9 +208,17 @@ class GpuPpoTrainer:
         self.history: list[dict[str, Any]] = []
         self.start_time = time.perf_counter()
         self.total_env_steps = 0
+        self.update_count = 0
         self.best_metric = float("-inf")
         self.best_update = 0
         self._survive_streak = 0
+        self.checkpoints: CheckpointManager | None = None
+        if self.cfg.save_path is not None:
+            self.checkpoints = CheckpointManager(
+                Path(self.cfg.save_path).parent, keep=self.cfg.checkpoint_keep
+            )
+            if self.checkpoints.best_metrics is not None:
+                self.best_update = self.checkpoints.best_update
 
     # ------------------------------------------------------------- inference
     def _resolve_gains(self, config: Config) -> PdGains | None:
@@ -357,9 +378,11 @@ class GpuPpoTrainer:
     def evaluate(self, steps: int | None = None) -> dict[str, float]:
         """Deterministic rollout: mean action, no exploration noise.
 
-        Returns the metrics that describe the *skill* rather than the noise
-        tolerance: how long every env survives, the worst tilt, whether the
-        stance height is held, and the forward-velocity error.
+        This is the *training* signal.  Acceptance uses
+        :func:`fifty_mujoco.evaluation.stand_eval.run_stand_eval`, which keeps
+        per-episode first-failure statistics on the CPU model.  Samples taken
+        after an automatic reset are excluded here as well: the spawn pose must
+        never be averaged in as if the robot were still standing.
         """
         env = self.eval_env
         if env is None:
@@ -370,10 +393,14 @@ class GpuPpoTrainer:
         env.commands[:] = torch.tensor(
             [0.0, 0.0, env.nominal_height], device=self.device
         )
+        env._refresh_command_channels()
         env.drain_stats()  # clear the counters, we want only this window
         first_fall = torch.full((n,), float(steps), device=self.device)
         alive = torch.ones(n, dtype=torch.bool, device=self.device)
-        heights, ups, verrs = [], [], []
+        height_err = torch.zeros(n, device=self.device)
+        vx_err = torch.zeros(n, device=self.device)
+        tilt_max = torch.zeros(n, device=self.device)
+        counts = torch.zeros(n, device=self.device)
         for k in range(steps):
             with torch.no_grad():
                 mean, _ = self.policy.act_inference(
@@ -384,29 +411,34 @@ class GpuPpoTrainer:
             first_fall = torch.where(
                 newly, torch.full_like(first_fall, float(k + 1)), first_fall
             )
-            alive = alive & ~done
+            # keep only the samples that still belong to the running episode
+            mask = alive & ~done
             rotation = env._quat_to_mat(env.qpos[:, 3:7])
             lin_body = torch.einsum(
                 "bij,bj->bi", rotation.transpose(1, 2), env.qvel[:, 0:3]
             )
-            heights.append(float(env.qpos[:, 2].mean()))
-            ups.append(float(rotation[:, 2, 2].mean()))
-            verrs.append(float((env.commands[:, 0] - lin_body[:, 0]).abs().mean()))
+            height_err += torch.where(mask, (env.qpos[:, 2] - env.commands[:, 2]).abs(), torch.zeros_like(height_err))
+            vx_err += torch.where(mask, (env.commands[:, 0] - lin_body[:, 0]).abs(), torch.zeros_like(vx_err))
+            tilt = torch.rad2deg(torch.acos(rotation[:, 2, 2].clamp(-1.0, 1.0)))
+            tilt_max = torch.maximum(tilt_max, torch.where(mask, tilt, torch.zeros_like(tilt)))
+            counts += mask.to(torch.float32)
+            alive = alive & ~done
         episodes = env.drain_stats()
         seconds = first_fall * env.dt
+        count = counts.clamp_min(1.0)
         return {
             # mean episode length observed inside the window: the honest
             # "how long does it stay up" number
             "eval_episode_len": float(episodes["length_mean"]),
             "eval_t_fall_median": float(seconds.median()),
+            "eval_t_fall_p10": float(torch.quantile(seconds, 0.1)),
+            "eval_t_fall_min": float(seconds.min()),
             "eval_t_fall_mean": float(seconds.mean()),
-            # mean time-to-fall, the number the CLI reports as "survival"
             "eval_survival_s": float(seconds.mean()),
             "eval_alive_frac": float(alive.to(torch.float32).mean()),
-            "eval_height_min": min(heights),
-            "eval_height_final": heights[-1],
-            "eval_up_min": min(ups),
-            "eval_vx_mae": float(np.mean(verrs)),
+            "eval_height_mae": float((height_err / count).mean()),
+            "eval_vx_mae": float((vx_err / count).mean()),
+            "eval_tilt_max_deg": float(tilt_max.max()),
             "eval_steps": steps,
         }
 
@@ -424,8 +456,9 @@ class GpuPpoTrainer:
             eval_txt = (
                 f" | eval ep {record['eval_episode_len']:4.2f}s"
                 f" fall {record['eval_t_fall_median']:4.2f}s"
-                f" h {record['eval_height_final']:.3f}"
-                f" up {record['eval_up_min']:+.2f}"
+                f" p10 {record['eval_t_fall_p10']:4.2f}s"
+                f" h±{record['eval_height_mae']:.3f}"
+                f" tilt {record['eval_tilt_max_deg']:4.1f}"
                 f" vx±{record['eval_vx_mae']:.2f}"
             )
         return (
@@ -532,12 +565,13 @@ class GpuPpoTrainer:
                 **eval_metrics,
             }
             self.history.append(record)
+            self.update_count = update
             metric = eval_metrics.get(self.cfg.best_metric_key)
             if metric is not None and metric > self.best_metric:
                 self.best_metric = float(metric)
                 self.best_update = update
-                if self.cfg.save_path is not None:
-                    self.save(Path(self.cfg.save_path).with_name("model_best.pt"))
+                if self.checkpoints is not None and eval_metrics:
+                    self.checkpoints.maybe_save_best(update, self._checkpoint_payload(), eval_metrics)
             record["best_metric"] = self.best_metric
             record["best_update"] = self.best_update
             if verbose:
@@ -558,7 +592,7 @@ class GpuPpoTrainer:
                 and update % self.cfg.save_every == 0
                 and self.cfg.save_path is not None
             ):
-                self.save(Path(self.cfg.save_path))
+                self.save(Path(self.cfg.save_path), numbered=True)
                 with open(
                     Path(self.cfg.save_path).with_name("history.json"), "w", encoding="utf-8"
                 ) as handle:
@@ -596,41 +630,87 @@ class GpuPpoTrainer:
         }
 
     # -------------------------------------------------------------- utilities
-    def save(self, path: Path) -> None:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        # Store the config with plain strings: torch>=2.6 loads with
-        # ``weights_only=True`` by default and refuses ``pathlib.Path``.
+    def _checkpoint_payload(self) -> dict[str, Any]:
+        """Everything needed to resume *or* to trace what produced the weights."""
         cfg_dict = {
             key: (str(value) if isinstance(value, Path) else value)
             for key, value in vars(self.cfg).items()
         }
         cfg_dict["callback"] = None
-        torch.save(
-            {
-                "policy": self.policy.state_dict(),
-                "dims": vars(self.policy.dims),
-                "cfg": cfg_dict,
-                "history": self.history,
-                "env_steps": self.total_env_steps,
-                "updates": len(self.history),  # completed updates
-                "stage": "gpu-ppo",
-                # everything the deployment side needs next to the weights
-                "pd_gains": {
-                    "leg_kp": self.env.gains.leg_kp,
-                    "leg_kd": self.env.gains.leg_kd,
-                    "wheel_kd": self.env.gains.wheel_kd,
-                    "leg_torque_limit_nm": self.env.gains.torque_limit_nm,
-                    "wheel_torque_limit_nm": self.env.gains.wheel_torque_limit_nm,
-                },
-                "spawn_z_m": self.env.spawn_z,
+        return {
+            "format": CHECKPOINT_FORMAT,
+            "policy": self.policy.state_dict(),
+            "optimizer": self.optimizer.state_dict(),
+            "dims": vars(self.policy.dims),
+            "cfg": cfg_dict,
+            "history": self.history,
+            "env_steps": self.total_env_steps,
+            "update": self.update_count,
+            "stage": "gpu-ppo",
+            "learning_rate": self.learning_rate,
+            "rng": rng_state(),
+            "fingerprint": model_fingerprint(),
+            "eval_version": "stand_eval/v1",
+            # everything the deployment side needs next to the weights
+            "pd_gains": {
+                "leg_kp": self.env.gains.leg_kp,
+                "leg_kd": self.env.gains.leg_kd,
+                "wheel_kd": self.env.gains.wheel_kd,
+                "leg_torque_limit_nm": self.env.gains.torque_limit_nm,
+                "wheel_torque_limit_nm": self.env.gains.wheel_torque_limit_nm,
+                "leg_position_scale": self.env.gains.leg_position_scale,
+                "wheel_velocity_scale": self.env.gains.wheel_velocity_scale,
             },
-            path,
-        )
+            "spawn_z_m": self.env.spawn_z,
+            "best_update": self.best_update,
+        }
 
-    def load(self, path: Path) -> None:
-        payload = torch.load(path, map_location=self.device, weights_only=False)
+    def save(self, path: Path, numbered: bool = False) -> None:
+        """Atomic save; ``numbered`` also writes an immutable snapshot."""
+        payload = self._checkpoint_payload()
+        if numbered and self.checkpoints is not None:
+            self.checkpoints.save_numbered(self.update_count, payload)
+        save_checkpoint(path, payload)
+        if self.checkpoints is not None:
+            self.checkpoints.save_last(self.update_count, payload)
+
+    def load(self, path: Path, resume: bool = True) -> dict[str, Any]:
+        """Load a checkpoint.
+
+        ``resume=True`` restores the optimiser, learning rate, update counter,
+        history and RNG state (same experiment).  ``resume=False`` only loads
+        the weights (a new experiment initialised from these weights): reusing
+        the old optimiser state and the old evaluation scores would be wrong.
+        """
+        payload = load_checkpoint(path, map_location=self.device)
         self.policy.load_state_dict(payload["policy"])
+        if not resume:
+            return {
+                "resumed": False,
+                "update": 0,
+                "fingerprint_match": None,
+            }
+        if payload.get("optimizer") is not None:
+            self.optimizer.load_state_dict(payload["optimizer"])
+        self.learning_rate = float(payload.get("learning_rate", self.cfg.lr))
+        for group in self.optimizer.param_groups:
+            group["lr"] = self.learning_rate
         self.history = payload.get("history", [])
+        self.total_env_steps = int(payload.get("env_steps", 0))
+        self.update_count = int(payload.get("update", 0))
+        self.best_update = int(payload.get("best_update", 0))
+        restore_rng_state(payload.get("rng"))
+        fingerprint = payload.get("fingerprint")
+        match = None
+        if fingerprint is not None:
+            current = model_fingerprint()
+            match = fingerprint == current
+        return {
+            "resumed": True,
+            "update": self.update_count,
+            "env_steps": self.total_env_steps,
+            "fingerprint_match": match,
+        }
 
 
 def plot_progress(history: list[dict[str, Any]], path: Path, title: str = "") -> Path:

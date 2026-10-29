@@ -1,0 +1,222 @@
+{
+  "episodes": 4,
+  "steps": 600,
+  "policy_dt_s": 0.01,
+  "window_s": 6.0,
+  "episode_limit_s": 7.0,
+  "successes": 0,
+  "success_rate": 0.0,
+  "survival_min_s": 0.46,
+  "survival_p10_s": 0.532,
+  "survival_median_s": 0.71,
+  "survival_mean_s": 0.6499999999999999,
+  "height_mae_m": 0.031510658637063385,
+  "vx_mae_m_s": 0.28789085182300495,
+  "tilt_p95_deg": 80.6007853384536,
+  "tilt_max_deg": 92.31141364749719,
+  "torque_saturation_fraction": 0.15714285714285714,
+  "drift_max_m": 0.1503933966638616,
+  "reasons": {
+    "tilt": 4
+  },
+  "command": {
+    "vx": 0.0,
+    "wz": 0.0,
+    "height": 0.4647513721610852
+  },
+  "feasibility": [
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.001306173483476454,
+      "root_z": 0.47615754564456164
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    }
+  ],
+  "criteria": {
+    "checks": {
+      "success_rate": {
+        "value": 0.0,
+        "threshold": 0.95,
+        "passed": false
+      },
+      "vx_mae": {
+        "value": 0.28789085182300495,
+        "threshold": 0.03,
+        "passed": false
+      },
+      "height_mae": {
+        "value": 0.031510658637063385,
+        "threshold": 0.02,
+        "passed": false
+      },
+      "tilt_p95": {
+        "value": 80.6007853384536,
+        "threshold": 10.0,
+        "passed": false
+      },
+      "tilt_max": {
+        "value": 92.31141364749719,
+        "threshold": 15.0,
+        "passed": false
+      },
+      "torque_saturation": {
+        "value": 0.15714285714285714,
+        "threshold": 0.05,
+        "passed": false
+      }
+    },
+    "passed": false,
+    "successes": 0
+  },
+  "status": "failed",
+  "episodes_detail": [
+    {
+      "seed": 1000,
+      "survived_s": 0.72,
+      "survived_steps": 72,
+      "success": false,
+      "reason": "tilt",
+      "height_mae_m": 0.03510793220764917,
+      "height_final_m": 0.31482455515401814,
+      "vx_mae_m_s": 0.3386165583681259,
+      "wz_mae_rad_s": 0.2806411004089324,
+      "tilt_p95_deg": 80.3244381457015,
+      "tilt_max_deg": 92.31141364749719,
+      "torque_saturation_fraction": 0.1527777777777778,
+      "longest_saturation_s": 0.09,
+      "drift_m": 0.13405426656768388,
+      "scenario": {
+        "seed": 1000,
+        "pitch_deg": 0.08554295190025085,
+        "roll_deg": 0.41536738802531836,
+        "leg_delta_rad": -0.0011623281071098425,
+        "vx_m_s": -0.02967520574553212
+      }
+    },
+    {
+      "seed": 1001,
+      "survived_s": 0.46,
+      "survived_steps": 46,
+      "success": false,
+      "reason": "tilt",
+      "height_mae_m": 0.021804708548975243,
+      "height_final_m": 0.4968155042455316,
+      "vx_mae_m_s": 0.12534732465711151,
+      "wz_mae_rad_s": 0.14416100878098123,
+      "tilt_p95_deg": 40.89145984123418,
+      "tilt_max_deg": 41.10742929537854,
+      "torque_saturation_fraction": 0.0,
+      "longest_saturation_s": 0.0,
+      "drift_m": 0.1503933966638616,
+      "scenario": {
+        "seed": 1001,
+        "pitch_deg": 0.4503797142798036,
+        "roll_deg": -1.937198128718674,
+        "leg_delta_rad": -0.012492416924722815,
+        "vx_m_s": 0.035789006454112496
+      }
+    },
+    {
+      "seed": 1002,
+      "survived_s": 0.7000000000000001,
+      "survived_steps": 70,
+      "success": false,
+      "reason": "tilt",
+      "height_mae_m": 0.03312470601176386,
+      "height_final_m": 0.32580946511953346,
+      "vx_mae_m_s": 0.32427958030681464,
+      "wz_mae_rad_s": 0.3006418611039951,
+      "tilt_p95_deg": 76.04589673972004,
+      "tilt_max_deg": 88.97289946281306,
+      "torque_saturation_fraction": 0.15714285714285714,
+      "longest_saturation_s": 0.09,
+      "drift_m": 0.11287226309408407,
+      "scenario": {
+        "seed": 1002,
+        "pitch_deg": -0.4767153620675364,
+        "roll_deg": -0.5712426493162122,
+        "leg_delta_rad": 0.009904492682727643,
+        "vx_m_s": -0.011050808089508847
+      }
+    },
+    {
+      "seed": 1003,
+      "survived_s": 0.72,
+      "survived_steps": 72,
+      "success": false,
+      "reason": "tilt",
+      "height_mae_m": 0.03600528777986525,
+      "height_final_m": 0.29968781625637697,
+      "vx_mae_m_s": 0.3633199439599677,
+      "wz_mae_rad_s": 0.2687047942130173,
+      "tilt_p95_deg": 80.6007853384536,
+      "tilt_max_deg": 92.01053298180511,
+      "torque_saturation_fraction": 0.125,
+      "longest_saturation_s": 0.04,
+      "drift_m": 0.1243770944663074,
+      "scenario": {
+        "seed": 1003,
+        "pitch_deg": -1.2489705269254663,
+        "roll_deg": -0.9731767591247116,
+        "leg_delta_rad": -0.00021282691244594795,
+        "vx_m_s": 0.016079155748418533
+      }
+    }
+  ],
+  "stage": "LQR-teacher",
+  "teacher": {
+    "class": "LqrTeacher",
+    "parameters": {
+      "total_mass_kg": 23.259630515567018,
+      "wheel_radius_m": 0.06,
+      "wheel_inertia_kg_m2": 0.010335426227135115,
+      "com_above_axle_m": 0.31847488574306027,
+      "leg_length_m": 0.4067457526817395,
+      "source": "mjcf_equivalent_serial_model",
+      "status": "provisional"
+    },
+    "wheel_gain": [
+      [
+        -2.204764639929923,
+        -27.555609866219296,
+        -2.6891947672199077
+      ]
+    ],
+    "gains": {
+      "q_velocity": 8.0,
+      "q_pitch": 40.0,
+      "q_pitch_rate": 2.0,
+      "r_wheel_torque": 1.0,
+      "leg_length_kp": 2500.0,
+      "leg_length_kd": 120.0,
+      "leg_angle_kp": 45.0,
+      "leg_angle_kd": 3.0,
+      "leg_angle_from_pitch": 1.0,
+      "max_wheel_torque_nm": 5.0,
+      "max_leg_torque_nm": 30.0,
+      "max_leg_force_n": 400.0
+    },
+    "gain_overrides": null,
+    "saturation_last_sample": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "gate": "section 11.6: 64 scenarios, >= 61 continuous 60 s successes",
+    "usable_for_demonstrations": false
+  },
+  "note": "the teacher did not pass; demonstrations must NOT be collected from it (section 11.6) - fix the model/mapping/gains first"
+}

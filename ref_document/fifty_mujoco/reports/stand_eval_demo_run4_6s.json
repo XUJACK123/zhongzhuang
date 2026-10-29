@@ -1,0 +1,283 @@
+{
+  "episodes": 8,
+  "steps": 600,
+  "policy_dt_s": 0.01,
+  "window_s": 6.0,
+  "episode_limit_s": 7.0,
+  "successes": 8,
+  "success_rate": 1.0,
+  "survival_min_s": 6.0,
+  "survival_p10_s": 6.0,
+  "survival_median_s": 6.0,
+  "survival_mean_s": 6.0,
+  "height_mae_m": 0.04406641965318768,
+  "vx_mae_m_s": 0.20128119952473458,
+  "tilt_p95_deg": 8.18990027636616,
+  "tilt_max_deg": 8.56691512183511,
+  "torque_saturation_fraction": 0.005,
+  "drift_max_m": 1.2525492203983017,
+  "reasons": {},
+  "command": {
+    "vx": 0.0,
+    "wz": 0.0,
+    "height": 0.4647513721610852
+  },
+  "feasibility": [
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.001306173483476454,
+      "root_z": 0.47615754564456164
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    },
+    {
+      "penetration_fixed_m": 0.0,
+      "root_z": 0.4747513721610852
+    }
+  ],
+  "criteria": {
+    "checks": {
+      "success_rate": {
+        "value": 1.0,
+        "threshold": 0.95,
+        "passed": true
+      },
+      "vx_mae": {
+        "value": 0.20128119952473458,
+        "threshold": 0.03,
+        "passed": false
+      },
+      "height_mae": {
+        "value": 0.04406641965318768,
+        "threshold": 0.02,
+        "passed": false
+      },
+      "tilt_p95": {
+        "value": 8.18990027636616,
+        "threshold": 10.0,
+        "passed": true
+      },
+      "tilt_max": {
+        "value": 8.56691512183511,
+        "threshold": 15.0,
+        "passed": true
+      },
+      "torque_saturation": {
+        "value": 0.005,
+        "threshold": 0.05,
+        "passed": true
+      }
+    },
+    "passed": false,
+    "successes": 8
+  },
+  "status": "failed",
+  "episodes_detail": [
+    {
+      "seed": 1000,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.04413617487612463,
+      "height_final_m": 0.5079143486696899,
+      "vx_mae_m_s": 0.2009495786015567,
+      "wz_mae_rad_s": 0.08796610203837432,
+      "tilt_p95_deg": 7.82309903109692,
+      "tilt_max_deg": 8.12341219191532,
+      "torque_saturation_fraction": 0.0033333333333333335,
+      "longest_saturation_s": 0.02,
+      "drift_m": 1.1582088058616085,
+      "scenario": {
+        "seed": 1000,
+        "pitch_deg": 0.08554295190025085,
+        "roll_deg": 0.41536738802531836,
+        "leg_delta_rad": -0.0011623281071098425,
+        "vx_m_s": -0.02967520574553212
+      }
+    },
+    {
+      "seed": 1001,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.04414361942370897,
+      "height_final_m": 0.5083965116054313,
+      "vx_mae_m_s": 0.2028244188231896,
+      "wz_mae_rad_s": 0.0924994484336331,
+      "tilt_p95_deg": 7.8673793900482165,
+      "tilt_max_deg": 8.157705554819447,
+      "torque_saturation_fraction": 0.005,
+      "longest_saturation_s": 0.03,
+      "drift_m": 1.2379882984687645,
+      "scenario": {
+        "seed": 1001,
+        "pitch_deg": 0.4503797142798036,
+        "roll_deg": -1.937198128718674,
+        "leg_delta_rad": -0.012492416924722815,
+        "vx_m_s": 0.035789006454112496
+      }
+    },
+    {
+      "seed": 1002,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.044162022828433706,
+      "height_final_m": 0.5079100652936585,
+      "vx_mae_m_s": 0.19824480946207346,
+      "wz_mae_rad_s": 0.0900964382727925,
+      "tilt_p95_deg": 7.818702989770924,
+      "tilt_max_deg": 8.113314934737252,
+      "torque_saturation_fraction": 0.0033333333333333335,
+      "longest_saturation_s": 0.02,
+      "drift_m": 1.153640819257684,
+      "scenario": {
+        "seed": 1002,
+        "pitch_deg": -0.4767153620675364,
+        "roll_deg": -0.5712426493162122,
+        "leg_delta_rad": 0.009904492682727643,
+        "vx_m_s": -0.011050808089508847
+      }
+    },
+    {
+      "seed": 1003,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.044144649775231005,
+      "height_final_m": 0.5087048597236938,
+      "vx_mae_m_s": 0.19694280385564353,
+      "wz_mae_rad_s": 0.08932312141642182,
+      "tilt_p95_deg": 7.803533485333367,
+      "tilt_max_deg": 8.11711858026532,
+      "torque_saturation_fraction": 0.0033333333333333335,
+      "longest_saturation_s": 0.02,
+      "drift_m": 1.1624250521592758,
+      "scenario": {
+        "seed": 1003,
+        "pitch_deg": -1.2489705269254663,
+        "roll_deg": -0.9731767591247116,
+        "leg_delta_rad": -0.00021282691244594795,
+        "vx_m_s": 0.016079155748418533
+      }
+    },
+    {
+      "seed": 1004,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.04414140895613221,
+      "height_final_m": 0.5075698694776185,
+      "vx_mae_m_s": 0.20577391139518936,
+      "wz_mae_rad_s": 0.0922434843918797,
+      "tilt_p95_deg": 8.18990027636616,
+      "tilt_max_deg": 8.56691512183511,
+      "torque_saturation_fraction": 0.005,
+      "longest_saturation_s": 0.03,
+      "drift_m": 1.2109240740059994,
+      "scenario": {
+        "seed": 1004,
+        "pitch_deg": -1.99647818903714,
+        "roll_deg": -1.4793947514894743,
+        "leg_delta_rad": -0.014460905388056347,
+        "vx_m_s": -0.011934536305276258
+      }
+    },
+    {
+      "seed": 1005,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.04396152991021528,
+      "height_final_m": 0.508140476040802,
+      "vx_mae_m_s": 0.20425681641581844,
+      "wz_mae_rad_s": 0.08511412075688762,
+      "tilt_p95_deg": 7.782369153452509,
+      "tilt_max_deg": 8.072581389044444,
+      "torque_saturation_fraction": 0.0033333333333333335,
+      "longest_saturation_s": 0.02,
+      "drift_m": 1.2525492203983017,
+      "scenario": {
+        "seed": 1005,
+        "pitch_deg": -1.671123307728425,
+        "roll_deg": 1.7222481695544145,
+        "leg_delta_rad": -0.008508638865289183,
+        "vx_m_s": 0.013855804862049861
+      }
+    },
+    {
+      "seed": 1006,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.04406120703660259,
+      "height_final_m": 0.5080380370575598,
+      "vx_mae_m_s": 0.19992925186308247,
+      "wz_mae_rad_s": 0.08556990164105867,
+      "tilt_p95_deg": 7.791746797318056,
+      "tilt_max_deg": 8.103856630072265,
+      "torque_saturation_fraction": 0.0033333333333333335,
+      "longest_saturation_s": 0.02,
+      "drift_m": 1.1594390742489786,
+      "scenario": {
+        "seed": 1006,
+        "pitch_deg": -0.6523142657087022,
+        "roll_deg": 0.4034277751986193,
+        "leg_delta_rad": -0.008086748023632979,
+        "vx_m_s": -0.026242755530442686
+      }
+    },
+    {
+      "seed": 1007,
+      "survived_s": 6.0,
+      "survived_steps": 600,
+      "success": true,
+      "reason": "",
+      "height_mae_m": 0.043780744419053066,
+      "height_final_m": 0.5089377468710546,
+      "vx_mae_m_s": 0.2013280057813231,
+      "wz_mae_rad_s": 0.08367492052496829,
+      "tilt_p95_deg": 7.794661133672877,
+      "tilt_max_deg": 8.07962223962689,
+      "torque_saturation_fraction": 0.0033333333333333335,
+      "longest_saturation_s": 0.02,
+      "drift_m": 1.188222038515052,
+      "scenario": {
+        "seed": 1007,
+        "pitch_deg": -1.715100250156457,
+        "roll_deg": 1.263921380711773,
+        "leg_delta_rad": 0.005717140516746291,
+        "vx_m_s": -0.030340475517235156
+      }
+    }
+  ],
+  "policy_source": "checkpoint:runs\\demo_run4\\model_best.pt"
+}

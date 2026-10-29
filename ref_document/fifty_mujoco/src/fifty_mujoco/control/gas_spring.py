@@ -116,6 +116,19 @@ def spring_force(params: SpringParams, length: float, length_rate: float = 0.0) 
     return float(min(max(force, params.force_min_n), params.force_max_n))
 
 
+def reference_force(params: SpringParams) -> float:
+    """Static force at the design reference length, no damping and no friction.
+
+    This is the *model* reference the critic sees, never the instantaneous
+    force.  Without a stiffness model the force is the constant reference
+    force, so the two channels coincide by construction rather than by
+    accident.
+    """
+    if params.length_ref_m is None:
+        return float(params.force_ref_n)
+    return spring_force(params, float(params.length_ref_m), 0.0)
+
+
 def check_stroke(params: SpringParams, length: float) -> dict[str, Any]:
     """Stroke check with an explicit 'unverified' state instead of a silent pass."""
     if params.length_min_m is None or params.length_max_m is None:

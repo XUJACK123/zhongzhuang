@@ -87,7 +87,14 @@ def spring_features(
     length_scale: float = 5.0,
     force_scale: float = 1.0 / 300.0,
 ) -> np.ndarray:
-    """8 privileged spring numbers, right then left (doc 12.7)."""
+    """8 privileged spring numbers, right then left (doc 12.7).
+
+    ``reference_forces`` is the static force at the design reference length and
+    ``actual_forces`` is the instantaneous ``F(l, dl/dt)``.  They are separate
+    channels on purpose: feeding the same value twice would hide a model error
+    from the critic, and feeding a constant would pretend the spring never
+    moves.  The order, units and scaling here are the CPU/GPU contract.
+    """
     features = np.concatenate(
         [
             np.asarray(lengths, dtype=float) * length_scale,

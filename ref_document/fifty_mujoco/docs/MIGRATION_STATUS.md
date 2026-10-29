@@ -373,3 +373,128 @@ uv run pytest
 **两个待修缺陷**：① 前向塑性漂移 0.21 m/s（奖励里没有 vx 误差项惩罚到 0，
 或 `hold_bias` 给了恒定前倾）；② 10 s 后高度缓慢下沉导致腿擦地。
 二者都不是物理/契约问题，需要在奖励与终止上继续调。
+
+---
+
+## 2026-10-29 追加：训练闭环修复、独立评估、checkpoint、教师原型、STEP 结构审计
+
+本节记录**在不含 GPU 的 Windows 机器上**完成并实测的内容。执行环境：Windows，
+Python 3.12.12（uv），mujoco 3.17.0，torch 2.15.0+cpu，numpy 2.5.4。
+**没有运行 MuJoCo Warp/CUDA**，因此 GPU 侧改动只算"代码已改"，不算验证。
+
+### 1. 修好的契约缺陷（doc §5.1–5.3）
+
+| 缺陷 | 修复 | 回归 |
+|---|---|---|
+| 自动 reset 后返回的 obs 仍是终止前观测 | CPU：`step()` 先算 obs/privileged/reward/终止，再重置并重算新 episode 的 obs/privileged/history | `tests/test_env_contract_reset.py` |
+| terminal history 缺最新一帧 | 先 `push_history`，再快照 `terminal_obs` / `terminal_history`；断言 `terminal_history[-1] == terminal_obs[3:28]` | 同上 |
+| `dones` 在 reset 后仍为 True | `step()` 先复制 `dones` 再 reset；`_reset_env` 清零 dones/time_outs | 同上 |
+| GPU `reset` 的 `ctrl[ids][:, idx] = 0` 写进临时副本 | 改为 `ctrl[ids.unsqueeze(1), idx.unsqueeze(0)] = 0` | `tests/test_warp_env.py`（CUDA，本机 skip） |
+| 命令改动看不到 | 新增 `set_commands` + 每环境 `resample_timer`；只改 obs 6:9 与最新历史帧，不推进物理、不重算加速度 | `test_set_commands_is_visible_immediately` 等 |
+| CPU/GPU 弹簧特权特征不一致 | 统一为 `length*5, rate, F(l_ref)/300, F(l,dl/dt)/300`；GPU 每个物理子步按当前长度更新弹簧力 | `test_spring_features_keep_reference_and_actual_force_apart`（CPU）+ CUDA 对拍（未执行） |
+| timeout bootstrap 用错 history | `RolloutStorage` 增加 `terminal_history`，CPU runner 用它算 `V(terminal)` | `tests/test_checkpoint.py`、storage 层 |
+
+CPU/GPU **逐字段对拍没有执行**：本机无 CUDA。`test_warp_env.py` 新增的 5 项
+（reset 置零、terminal 对齐、弹簧特征、命令刷新、图重放）全部 skip。
+
+### 2. 独立站立评估器（`evaluate-stand`）
+
+- 64 个与训练不同的种子（默认 1000–1063），每个环境独立扰动：pitch/roll ≤ 2°、
+  腿角 ≤ 0.02 rad、初速 ≤ 0.05 m/s，并检查穿地后抬高，**不剔除失败场景**。
+- episode 上限自动抬到窗口之上（6000 步 → 上限 63 s），避免 20 s 超时冒充 60 s。
+- 统计一律在 reset **之前**取样（环境新增 `infos["step_stats"]`），失败后不再计入
+  姿态/高度均值；输出 success rate、存活 min/P10/median、vx/height MAE、倾角
+  P95/max、力矩饱和占比与最长连续饱和、漂移、逐 episode 明细。
+
+**实测（本机 CPU）**：
+
+| 运行 | 窗口 | 结果 |
+|---|---|---|
+| `demo_run4/model_best.pt`，8 seeds | 6 s | 8/8 存活，vx MAE **0.2013**，height MAE 0.0441，tilt P95 8.19°，饱和 0.5% → `reports/stand_eval_demo_run4_6s.json` |
+| 零动作对照，2 seeds | 0.6 s | 0/2，0.28 s 因 tilt 终止（评估器确实能判失败） |
+| `demo_run4/model_best.pt`，64 seeds | 60 s | **未完成**：跑到一半按用户要求停止并清理本机 Python 环境，没有留下报告。必须在训练机上重跑 |
+
+vx MAE 0.2013 与历史记录的 0.212 同量级，说明新评估器复现了旧结论而不是"变好"。
+**60 s、64 独立初态的验收结论目前仍为空缺**，不得用 6 s 结果替代。
+
+> 已修缺陷：`evaluate-stand` / `evaluate-lqr` / `step-audit` 的 `--json` 参数原先只打印
+> 路径、根本不写文件（写文件只发生在默认路径分支）。现已统一走 `_report_path()`，
+> 上表两份报告就是修复后重新生成的。
+>
+> 同时改了默认报告命名：`stand_eval.json` → `stand_eval_<policy>_<steps>_<UTC 时间>.json`，
+> 避免后一次评估覆盖前一次（progress.md §16.3）。`evaluate-lqr` 保留固定名
+> `lqr_teacher_eval.json` 作为"当前教师门槛结论"，历史结论写进 progress.md §18.4。
+
+### 3. 版本化 checkpoint（`learning/checkpoint.py`）
+
+`model_update_XXXXXX.pt` 编号快照（同号重写会变成 `_r2`，不覆盖）、`model_last.pt`、
+按有序指标（存活率 → P10 存活 → 中位存活 → 高度 → 速度）挑出的 `model_best.pt`、
+`release/<version>/` 不可覆盖发布目录；payload 含 policy/optimizer/lr/update/RNG/
+config/MJCF 指纹/评估版本；写入先写 `.tmp` 再 `os.replace`。
+`train-gpu --resume` 续跑同一实验，`--init-from` 只加载权重（不继承旧 optimizer
+与旧评分）。`tests/test_checkpoint.py` 8 项通过。
+
+`--save-every` 的默认值由 **100 改为 25**，与 progress.md §5.5/§13.1 的"每 25 updates 保存"
+一致；磁盘占用由 `--checkpoint-keep`（默认 5）限制。这一改动属于文档与实现的默认值对齐，
+**不是**一次训练结论。
+
+### 4. LQR 教师原型（`control/lqr_teacher.py` + `teacher_adapter.py`）
+
+**2026-10-29 决定：该路线暂停**，LQR 不再作为教师模型使用。下面的实测是暂停依据，
+文件保留为诊断工具（`evaluate-lqr`），示教/BC/PPO 微调随之推迟。
+
+结构：轮摆 LQR（由 MJCF 质量/几何在线求解，Riccati 迭代）负责速度/俯仰通道，
+腿长与腿角为 PD + 重力前馈，4 路虚拟输出经**模型实际腿 Jacobian** 转成 6 维关节
+力矩，再用混合 PD 的精确反解变成动作；饱和通道单独标记，不产生"看似可达"的标签。
+
+**实测：未通过门槛**。600 步（6 s）× 4 seed：0/4 成功，存活 0.46–0.71 s，
+终止原因全为 tilt。`reports/lqr_teacher_eval.json` 明确写
+`usable_for_demonstrations = false`。因此**不得**据此外采集示教，
+§11.6 的门槛仍然关闭；下一步应按 §11.3 路径 B 对完整接触模型线性化，或先做
+腿角/腿长耦合的结构修正。
+
+### 5. STEP 装配结构 + 圆柱轴线审计（`assets/step_audit.py`）
+
+工具**只用 Python 标准库**（不需要 numpy / mujoco / torch），入口两种：
+`uv run python -m fifty_mujoco.cli step-audit`，或裸解释器直接
+`python tools/step_audit_standalone.py`。整轮 6–8 s。
+
+对 `26英雄整车总装2.0.STEP`（264,168,116 B，SHA-256 `ffe77c10…a055`）解析出：
+284 PRODUCT、758 实例、**758/758 实例变换**、根装配 4 个子装配，髋关节子装配
+1 个实例、DM-8009 4 个实例、1BKB0.45-75 气弹簧 4 个零件实例；圆柱面 23,945 个，
+**20,219 个归属到具体零件**（其余 3,726 个的实体不在 representation item 中，为已知缺口）。
+
+复现 `progress.md` §6.3 的 G01–G07（最大偏差 1e-6 mm），并补出零件名与轴半径；
+由 G01/G02 的共同膝点推出平面机构三点（YZ，mm）：髋 (70.050, 2.417)、
+膝 (−88.922, 139.632)、轮 (−220.598, −72.880)，髋→膝 210.000、膝→轮 250.000。
+
+技术要点（不处理就会得到错误结果）：DATA 段必须按 latin-1 + `\X2\` 转义解码；
+带变换的关系是**复合实体**；几何 rep 与命名 rep 不是同一对象；
+rep 关系构成单一连通块，**不能**用并查集归属名字（第一次尝试把整个模型命名成一个零件）。
+G08（弹簧上下销）跨零件，依赖未验证的变换约定，工具明确输出 `unmeasured_cross_part`。
+
+结果见 `docs/STEP_GEOMETRY_AUDIT.md` 与 `reports/step_geometry_audit.json`，
+**未在 SolidWorks 复核**，质量/材料不在 STEP 中。
+
+### 6. 本机执行边界与测试基线
+
+**执行环境是一次性的**：为了跑 CPU 回归，本次在 `ref_document/fifty_mujoco/.venv`
+装了 mujoco/torch(cpu)/onnx 等依赖；按用户要求，任务结束时已删除该 venv（754 MB）、
+生成的 `assets/corrected`、`assets/mjcf`、缓存目录，并清理了本机上 uv 缓存中由本次
+下载的包（约 713 MB）。**本机现在没有任何 mujoco/torch 安装**，重跑需要在训练机或
+重新 `uv sync`。
+
+删除前的测试结果 `uv run pytest -q`：
+
+- 通过：新增 11 项环境契约、8 项 checkpoint、5 项评估器、8 项教师、4 项 STEP 解析，
+  以及原有资产/几何/学习管线测试（含 ONNX 往返）。
+- 失败 2 项：`tests/test_audit.py` 的 `source_hashes_unchanged`。原因是本仓库
+  在 Windows 检出时对源 URDF 做了 CRLF 行尾转换（`core.autocrlf`），文件字节
+  变化导致 SHA-256 与冻结记录不符；这不是内容被修改。修复方式是把该文件标为
+  `-text` 或重新冻结哈希，本次未改动。
+- 跳过 8 项：`tests/test_warp_env.py` 全部（无 CUDA），因此 **GPU 侧修复没有任何
+  执行证据**。
+
+本轮新发现的问题（默认值分歧、报告覆盖、CRLF 哈希、LQR 结构性问题、GPU 图捕获分配等）
+统一列在 `progress.md` §18.9，不在此重复。
+

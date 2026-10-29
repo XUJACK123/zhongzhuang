@@ -34,6 +34,7 @@ import torch
 
 from ..config import Config
 from ..contracts import names
+from ..control.gas_spring import reference_force
 from ..control.mixed_pd import PdGains
 from ..control.spawn import load_spawn_spec, resolve_spawn_height
 from ..envs.cpu_env import FiftyCpuEnv
@@ -41,6 +42,10 @@ from ..mdp import rewards as reward_lib
 from ..mdp import terminations as term_lib
 
 LEG, WHEEL = list(names.POLICY_LEG_INDICES), list(names.POLICY_WHEEL_INDICES)
+
+#: Spring feature scaling, identical to ``mdp.observations.spring_features``.
+SPRING_LENGTH_SCALE = 5.0
+SPRING_FORCE_SCALE = 1.0 / 300.0
 
 
 @dataclass
@@ -184,6 +189,9 @@ class WarpVecEnv:
         self.spring_ctrl_idx = torch.tensor(
             [self.cpu.spring_motor_ids[spring.name] for spring in self.springs], device=dev
         )
+        self.spring_ten_idx = torch.tensor(
+            [self.cpu.tendon_ids[spring.name] for spring in self.springs], device=dev, dtype=torch.long
+        )
         self.body_ids = torch.tensor(
             [self.cpu.body_ids[name] for name in names.LINK_NAMES], device=dev
         )
@@ -222,6 +230,38 @@ class WarpVecEnv:
             [float(self.cpu.spring_state()[s.name]["force_n"]) for s in self.springs],
             dtype=torch.float32, device=dev,
         )
+        # Batched gas-spring model (same F(l, dl/dt) law as ``control.gas_spring``).
+        # The force must be recomputed every physics sub-step, exactly like the
+        # CPU env does; a constant force would make the two backends disagree
+        # whenever the leg moves.
+        if self.spring_count:
+            def _col(fn) -> torch.Tensor:
+                return torch.tensor(
+                    [float(fn(spring)) for spring in self.springs],
+                    dtype=torch.float32,
+                    device=dev,
+                )
+
+            self.spring_f0 = _col(lambda s: s.force_ref_n)
+            self.spring_k = _col(lambda s: s.stiffness_n_per_m)
+            self.spring_l_ref = _col(lambda s: s.length_ref_m if s.length_ref_m is not None else 0.0)
+            self.spring_has_stiffness = _col(
+                lambda s: 1.0 if (s.stiffness_n_per_m and s.length_ref_m is not None) else 0.0
+            )
+            self.spring_damping = _col(lambda s: s.damping_n_s_per_m)
+            self.spring_friction = _col(lambda s: s.friction_n)
+            self.spring_smoothing = _col(
+                lambda s: s.velocity_smoothing_m_s if s.velocity_smoothing_m_s else 1.0
+            )
+            self.spring_force_min = _col(lambda s: s.force_min_n)
+            self.spring_force_max = _col(lambda s: s.force_max_n)
+            self.spring_ref_force = torch.tensor(
+                [reference_force(spring) for spring in self.springs],
+                dtype=torch.float32,
+                device=dev,
+            )
+        else:
+            self.spring_ref_force = torch.zeros(0, dtype=torch.float32, device=dev)
 
         lower = np.full(6, -np.inf, dtype=np.float32)
         upper = np.full(6, np.inf, dtype=np.float32)
@@ -296,6 +336,60 @@ class WarpVecEnv:
         if len(self.springs):
             self.ctrl_row[self.spring_ctrl_idx] = self.spring_force
         self.action_in = torch.zeros_like(self.actions)
+
+        # ------------------------------------------- spawn-state obs / privileged
+        # The reset state is fixed, so its observation is constant except for the
+        # command channels, which are patched per env inside the masked reset.
+        # The privileged offsets below follow ``mdp.observations.privileged``:
+        # 0:3 lin_vel, 3:28 obs, 28:34 a(t-1), 34:40 a(t-2), 40:46 acc,
+        # 46:123 heights, 123:129 torque, 129 mass, 130:133 com,
+        # 133:139 default bias, 139 friction, 140 restitution, 141: springs.
+        spawn_rotation = self._quat_to_mat(self.spawn_row[3:7].reshape(1, 4))[0]
+        self.spawn_obs_base = torch.zeros(self.num_obs, dtype=torch.float32, device=dev)
+        self.spawn_obs_base[3:6] = -spawn_rotation[2, :]
+        self.spawn_privileged = torch.zeros(
+            self.num_privileged_obs, dtype=torch.float32, device=dev
+        )
+        self.spawn_privileged[3 : 3 + self.num_obs] = self.spawn_obs_base
+        self.spawn_privileged[46:123] = float(
+            np.clip(self.spawn_z - 0.5, -1.0, 1.0)
+        ) * 5.0
+        self.spawn_privileged[139] = 1.0
+        self.spawn_privileged[140] = 0.5
+        if self.spring_count:
+            state = self.cpu.spring_state()
+            lengths = np.array(
+                [float(state[spring.name]["length_m"]) for spring in self.springs], dtype=np.float32
+            )
+            forces = np.array(
+                [float(state[spring.name]["force_n"]) for spring in self.springs], dtype=np.float32
+            )
+            self.spawn_spring_length = torch.tensor(lengths, device=dev)
+            self.spawn_privileged[names.BASE_PRIVILEGED_DIM :] = torch.tensor(
+                np.concatenate(
+                    [
+                        lengths * SPRING_LENGTH_SCALE,
+                        np.zeros_like(lengths),
+                        self.spring_ref_force.cpu().numpy() * SPRING_FORCE_SCALE,
+                        forces * SPRING_FORCE_SCALE,
+                    ]
+                ),
+                dtype=torch.float32,
+                device=dev,
+            )
+        else:
+            self.spawn_spring_length = torch.zeros(0, dtype=torch.float32, device=dev)
+        #: full tendon-length row at the spawn pose (spring columns patched)
+        self.ten_row = torch.zeros(self.ten_length.shape[1], dtype=torch.float32, device=dev)
+        if self.spring_count:
+            self.ten_row[self.spring_ten_idx] = self.spawn_spring_length
+        self.ten_prev_length = self.spawn_spring_length.repeat(self.num_envs, 1)
+        self.ten_obs_length = self.spawn_spring_length.repeat(self.num_envs, 1)
+        self.spring_actual_force = torch.zeros_like(self.ten_prev_length)
+        #: Commands drawn outside the captured graph and consumed by the next
+        #: episode reset, so relaxing them costs no RNG call inside the graph.
+        self.command_pool = torch.zeros((self.num_envs, 3), dtype=torch.float32, device=dev)
+
         self.reward = torch.zeros(self.num_envs, dtype=torch.float32, device=dev)
         self.stat_episodes = torch.zeros((), dtype=torch.float32, device=dev)
         self.stat_return_sum = torch.zeros((), dtype=torch.float32, device=dev)
@@ -337,7 +431,9 @@ class WarpVecEnv:
         n = ids.numel()
         self.qpos[ids] = self.spawn_row
         self.qvel[ids] = 0.0
-        self.ctrl[ids][:, self.ctrl_idx] = 0.0
+        # ``ctrl[ids][:, idx] = 0`` would write into the temporary copy produced by
+        # the first advanced index and silently leave the real control untouched.
+        self.ctrl[ids.unsqueeze(1), self.ctrl_idx.unsqueeze(0)] = 0.0
         self.actions[ids] = 0.0
         self.previous_actions[ids] = 0.0
         self.previous_previous_actions[ids] = 0.0
@@ -351,15 +447,22 @@ class WarpVecEnv:
         self._running_length[ids] = 0.0
         self.dones[ids] = False
         self.time_outs[ids] = False
+        if self.spring_count:
+            self.ten_length[ids] = self.ten_row
+            self.ten_prev_length[ids] = self.spawn_spring_length
+            self.ten_obs_length[ids] = self.spawn_spring_length
+            self.spring_actual_force[ids] = self.spring_force
         if resample_commands and self.options.fixed_command is None:
             noise = torch.rand((n, 3), generator=self.generator, device=self.device) * 2.0 - 1.0
             command = self.command_mean + noise * self.command_half
             command[:, 2] = self.nominal_height + command[:, 2]
             self.commands[ids] = command
+            self.command_pool[ids] = command
         elif resample_commands:
             self.commands[ids] = torch.as_tensor(
                 self.options.fixed_command, dtype=torch.float32, device=self.device
             )
+            self.command_pool[ids] = self.commands[ids]
         if self.options.randomize_initial:
             half = torch.rand((n, 6), generator=self.generator, device=self.device) - 0.5
             rng = torch.tensor([0.06, 0.06, 0.0, 0.06, 0.06, 0.0], device=self.device)
@@ -371,16 +474,33 @@ class WarpVecEnv:
         return self.obs[ids].clone(), self.privileged[ids].clone()
 
     def resample_commands(self) -> None:
-        """New commands for every env; call outside the captured graph."""
+        """New commands for every env; call outside the captured graph.
+
+        The pool is what the *next* episode reset consumes, so a finished env
+        gets a fresh command without a random draw inside the graph.  The
+        observation command channels are refreshed immediately (doc 5.2): the
+        next action must not run on the previous command.
+        """
         if self.options.fixed_command is not None:
             self.commands[:] = torch.as_tensor(
                 self.options.fixed_command, dtype=torch.float32, device=self.device
             )
+            self.command_pool.copy_(self.commands)
+            self._refresh_command_channels()
             return
         noise = torch.rand((self.num_envs, 3), generator=self.generator, device=self.device)
         command = self.command_mean + (noise * 2.0 - 1.0) * self.command_half
         command[:, 2] = self.nominal_height + command[:, 2]
+        self.command_pool.copy_(command)
         self.commands.copy_(command)
+        self._refresh_command_channels()
+
+    def _refresh_command_channels(self) -> None:
+        """Rewrite the command channels in place, without touching physics/history."""
+        scaled = self.commands * self.command_scale
+        self.obs[:, 6:9] = scaled
+        self.history[:, -1, 6:9] = scaled
+        self.privileged[:, 9:12] = scaled
 
     # ---------------------------------------------------------- observations
     def _compute_observation(self, ids: torch.Tensor | slice | None = None) -> None:
@@ -432,10 +552,23 @@ class WarpVecEnv:
             ones * 0.5,
         ]
         if self.spring_count:
-            length = self.ten_length[sel]
-            rate = torch.zeros_like(length)
+            length = self.ten_length[sel][:, self.spring_ten_idx]
+            rate = (length - self.ten_obs_length[sel]) / self.dt
+            actual = self._spring_forces(length, rate)
+            self.ten_obs_length[sel] = length
+            self.spring_actual_force[sel] = actual
+            # Same field order and scaling as ``mdp.observations.spring_features``:
+            # length*5, length rate, reference force/300, actual force/300.
             parts.append(
-                torch.cat([length, rate, self.spring_force.expand(n, -1), self.spring_force.expand(n, -1)], 1)
+                torch.cat(
+                    [
+                        length * SPRING_LENGTH_SCALE,
+                        rate,
+                        self.spring_ref_force.expand(n, -1) * SPRING_FORCE_SCALE,
+                        actual * SPRING_FORCE_SCALE,
+                    ],
+                    1,
+                )
             )
         self.privileged[sel] = torch.cat(parts, 1)
 
@@ -446,6 +579,15 @@ class WarpVecEnv:
         return self.privileged.clone()
 
     # ------------------------------------------------------------------- step
+    def _spring_forces(self, length: torch.Tensor, rate: torch.Tensor) -> torch.Tensor:
+        """Batched ``control.gas_spring.spring_force`` (same law and clamping)."""
+        force = self.spring_f0 + self.spring_has_stiffness * self.spring_k * (
+            self.spring_l_ref - length
+        )
+        force = force - self.spring_damping * rate
+        force = force - self.spring_friction * torch.tanh(rate / self.spring_smoothing)
+        return torch.max(torch.min(force, self.spring_force_max), self.spring_force_min)
+
     def _write_controls(self, actions: torch.Tensor) -> None:
         """Batched ``decode_action`` + ``compute_torques`` (same law as the CPU env)."""
         position = self.qpos[:, self.qpos_idx]
@@ -458,6 +600,15 @@ class WarpVecEnv:
         # ``self.torques = torque`` would silently freeze the value.
         self.torques.copy_(torque)
         self.ctrl[:, self.ctrl_idx] = torque
+        if self.spring_count:
+            # The gas spring is a physical element: its force follows the current
+            # length every sub-step (doc 5.3), never a value written once at reset.
+            length = self.ten_length[:, self.spring_ten_idx]
+            rate = (length - self.ten_prev_length) / self.timestep
+            force = self._spring_forces(length, rate)
+            self.ten_prev_length.copy_(length)
+            self.spring_actual_force.copy_(force)
+            self.ctrl[:, self.spring_ctrl_idx] = force
 
     def step(self, actions: torch.Tensor) -> tuple[
         torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, dict[str, Any], torch.Tensor
@@ -505,9 +656,35 @@ class WarpVecEnv:
         self._masked_reset_and_history()
 
     def _masked_reset_and_history(self) -> None:
-        """Reset done envs and push history without any host round-trip."""
+        """Snapshot terminals, push history and reset done envs without a host sync.
+
+        Order matters (doc 5.1): the newest history frame must be the terminal
+        observation when the episode ends, and the observation returned for the
+        next policy step must describe the *reset* state, not the state the
+        episode died in.
+        """
         done = self.dones
         mask_q = done.unsqueeze(1)
+
+        # 1) append the new observation to the history for every env ...
+        appended = torch.cat([self.history[:, 1:], self.obs[:, None, :]], 1)
+        # 2) ... then snapshot it: terminal history ends with the terminal obs.
+        self.terminal_history.copy_(
+            torch.where(done[:, None], appended.reshape(self.num_envs, -1), self.terminal_history)
+        )
+        self.terminal_privileged.copy_(
+            torch.where(mask_q, self.privileged, self.terminal_privileged)
+        )
+
+        # 3) the finished envs draw their new command from the pre-sampled pool.
+        self.commands.copy_(torch.where(mask_q, self.command_pool, self.commands))
+        command_channels = self.commands * self.command_scale
+        spawn_obs = self.spawn_obs_base.expand_as(self.obs).clone()
+        spawn_obs[:, 6:9] = command_channels
+        spawn_priv = self.spawn_privileged.expand_as(self.privileged).clone()
+        spawn_priv[:, 9:12] = command_channels
+        spawn_history = spawn_obs[:, None, :].expand_as(self.history)
+
         self.qpos.copy_(torch.where(mask_q, self.spawn_row.expand_as(self.qpos), self.qpos))
         self.qvel.copy_(torch.where(mask_q, torch.zeros_like(self.qvel), self.qvel))
         self.ctrl.copy_(torch.where(mask_q, self.ctrl_row.expand_as(self.ctrl), self.ctrl))
@@ -525,6 +702,25 @@ class WarpVecEnv:
         self.joint_acceleration.copy_(
             torch.where(mask_q, torch.zeros_like(self.actions), self.joint_acceleration)
         )
+        if self.spring_count:
+            self.ten_length.copy_(
+                torch.where(mask_q, self.ten_row.expand_as(self.ten_length), self.ten_length)
+            )
+            self.ten_prev_length.copy_(
+                torch.where(
+                    mask_q, self.spawn_spring_length.expand_as(self.ten_prev_length), self.ten_prev_length
+                )
+            )
+            self.ten_obs_length.copy_(
+                torch.where(
+                    mask_q, self.spawn_spring_length.expand_as(self.ten_obs_length), self.ten_obs_length
+                )
+            )
+            self.spring_actual_force.copy_(
+                torch.where(
+                    mask_q, self.spring_force.expand_as(self.spring_actual_force), self.spring_actual_force
+                )
+            )
         self.episode_return.copy_(
             torch.where(done, torch.zeros_like(self.episode_return), self.episode_return)
         )
@@ -533,13 +729,11 @@ class WarpVecEnv:
         self._running_length.copy_(
             torch.where(done, torch.zeros_like(self._running_length), self._running_length)
         )
-        self.history.copy_(
-            torch.where(
-                done[:, None, None],
-                self.obs[:, None, :].expand(-1, self.history_length, -1),
-                torch.cat([self.history[:, 1:], self.obs[:, None, :]], 1),
-            )
-        )
+        # 4) the returned observation / privileged / history of a finished env is
+        #    the reset state, so the next action is taken from the spawn pose.
+        self.obs.copy_(torch.where(mask_q, spawn_obs, self.obs))
+        self.privileged.copy_(torch.where(mask_q, spawn_priv, self.privileged))
+        self.history.copy_(torch.where(done[:, None, None], spawn_history, appended))
         self.episode_length.copy_(self._running_length)
 
     #: Buffers that must survive the graph warm-up steps untouched.
@@ -554,6 +748,7 @@ class WarpVecEnv:
         "torques",
         "joint_acceleration",
         "commands",
+        "command_pool",
         "episode_length",
         "episode_return",
         "tilt_time",
@@ -563,6 +758,9 @@ class WarpVecEnv:
         "terminal_history",
         "dones",
         "time_outs",
+        "ten_prev_length",
+        "ten_obs_length",
+        "spring_actual_force",
     )
 
     def _snapshot(self) -> dict[str, torch.Tensor]:
@@ -570,6 +768,7 @@ class WarpVecEnv:
         saved["qpos"] = self.qpos.clone()
         saved["qvel"] = self.qvel.clone()
         saved["ctrl"] = self.ctrl.clone()
+        saved["ten_length"] = self.ten_length.clone()
         return saved
 
     def _restore(self, saved: dict[str, torch.Tensor]) -> None:
@@ -578,6 +777,7 @@ class WarpVecEnv:
         self.qpos.copy_(saved["qpos"])
         self.qvel.copy_(saved["qvel"])
         self.ctrl.copy_(saved["ctrl"])
+        self.ten_length.copy_(saved["ten_length"])
 
     def capture(self, warmup: int = 3) -> bool:
         """Capture one policy step into a CUDA graph.
@@ -724,16 +924,8 @@ class WarpVecEnv:
 
         # device-side episode bookkeeping: no host reads inside the graph
         mask = self.dones.to(torch.float32)
-        self.terminal_privileged.copy_(
-            torch.where(self.dones[:, None], self.privileged, self.terminal_privileged)
-        )
-        self.terminal_history.copy_(
-            torch.where(
-                self.dones[:, None],
-                self.history.reshape(self.num_envs, -1),
-                self.terminal_history,
-            )
-        )
+        # the terminal observation/history snapshots happen in
+        # ``_masked_reset_and_history`` *after* the new frame is appended.
         self.stat_episodes.add_(mask.sum())
         self.stat_return_sum.add_((self.episode_return * mask).sum())
         self.stat_length_sum.add_((self._running_length * mask).sum())

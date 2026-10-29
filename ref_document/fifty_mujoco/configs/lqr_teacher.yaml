@@ -1,0 +1,101 @@
+# LQR teacher prototype (progress.md section 11).
+#
+# STATUS: provisional prototype.  Nothing in this file is a measured or
+# validated robot parameter, and no result produced with it may be quoted as
+# "the LQR works".  The gate in section 11.6 (64 independent scenarios x 60 s,
+# >= 61 successes) is open until `evaluate-lqr` writes a passing report.
+#
+# The gains are used by `fifty_mujoco.control.lqr_teacher.LqrTeacher`.  Every
+# entry carries the same record fields the physical-parameter table requires
+# (section 16.2).
+
+meta:
+  name: lqr_teacher
+  version: 1
+  model_kind: equivalent_serial_6dof
+  state_order:
+    - vx_body_m_s
+    - pitch_rad
+    - pitch_rate_rad_s
+  output_order:
+    - right_leg_horizontal_torque_nm
+    - left_leg_horizontal_torque_nm
+    - right_wheel_torque_nm
+    - left_wheel_torque_nm
+  notes: >
+    The wheeled-pendulum LQR covers the (velocity, pitch, pitch-rate) channel;
+    the leg length and leg angle loops are PD with gravity feed-forward and are
+    NOT part of the Riccati solution.  The reference HKU gains are deliberately
+    not imported: their mass, geometry and 2 ms period belong to another robot.
+
+gains:
+  # wheeled inverted pendulum, discrete LQR solved from the MJCF parameters
+  q_velocity:
+    value: 8.0
+    unit: "1"
+    status: provisional
+    source: "hand pass in simulation"
+  q_pitch:
+    value: 40.0
+    unit: "1"
+    status: provisional
+    source: "hand pass in simulation"
+  q_pitch_rate:
+    value: 2.0
+    unit: "1"
+    status: provisional
+    source: "hand pass in simulation"
+  r_wheel_torque:
+    value: 1.0
+    unit: "1"
+    status: provisional
+    source: "hand pass in simulation"
+  # leg length loop
+  leg_length_kp:
+    value: 2500.0
+    unit: N/m
+    status: provisional
+    source: "hand pass in simulation"
+  leg_length_kd:
+    value: 120.0
+    unit: N.s/m
+    status: provisional
+    source: "hand pass in simulation"
+  # leg angle loop
+  leg_angle_kp:
+    value: 45.0
+    unit: N.m/rad
+    status: provisional
+    source: "hand pass in simulation"
+  leg_angle_kd:
+    value: 3.0
+    unit: N.m.s/rad
+    status: provisional
+    source: "hand pass in simulation"
+  leg_angle_from_pitch:
+    value: 1.0
+    unit: "1"
+    status: provisional
+    source: "world-vertical leg target: body-frame target = -pitch"
+  # safety envelope, from the configured motor limits
+  max_wheel_torque_nm:
+    value: 5.0
+    unit: N.m
+    status: configured
+    source: configs/robot.yaml joints.effort_nm.wheel
+  max_leg_torque_nm:
+    value: 30.0
+    unit: N.m
+    status: configured
+    source: configs/robot.yaml joints.effort_nm.leg
+  max_leg_force_n:
+    value: 400.0
+    unit: N
+    status: provisional
+    source: "below the 300 N reference spring plus the 30 N.m joint limit"
+
+workspace:
+  command_vx_m_s: [-0.15, 0.15]
+  command_wz_rad_s: [-0.15, 0.15]
+  status: provisional
+  source: "section 11.6 first-stage work space"

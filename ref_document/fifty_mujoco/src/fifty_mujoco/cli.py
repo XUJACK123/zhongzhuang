@@ -24,7 +24,7 @@ import numpy as np
 
 from . import __version__
 from .config import Config, load_configs
-from .paths import PROJECT_ROOT, assets_dir, reports_dir
+from .paths import DEFAULT_WORKSPACE_ROOT, PROJECT_ROOT, assets_dir, reports_dir
 
 
 # --------------------------------------------------------------------------- utils
@@ -37,6 +37,24 @@ def _write_report(payload: dict[str, Any], name: str) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return path
+
+
+def _write_json(payload: dict[str, Any], path: str | Path) -> Path:
+    """Write an explicitly requested report path (``--json``).
+
+    ``--json`` used to only *print* the path and never write the file, so an
+    evaluation could look finished while leaving no evidence behind.
+    """
+    target = Path(path)
+    if not target.is_absolute():
+        target = Path.cwd() / target
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return target
+
+
+def _report_path(payload: dict[str, Any], explicit: str | None, default_name: str) -> Path:
+    return _write_json(payload, explicit) if explicit else _write_report(payload, default_name)
 
 
 def _print_checks(title: str, checks: dict[str, Any]) -> None:
@@ -558,11 +576,22 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
         max_std=args.max_std,
         adaptive_lr=not args.no_adaptive_lr,
         stop_on_survive=args.stop_on_survive,
+        checkpoint_keep=args.checkpoint_keep,
         progress_path=run_dir / "progress.log",
         save_path=run_dir / "model_last.pt",
     )
     (run_dir / "progress.log").write_text("", encoding="utf-8")
     trainer = GpuPpoTrainer(config, cfg)
+    if args.resume:
+        loaded = trainer.load(Path(args.resume), resume=True)
+        print(f"  resume from {args.resume}: update {loaded['update']}, "
+              f"fingerprint match {loaded['fingerprint_match']}")
+        if loaded["fingerprint_match"] is False:
+            print("  WARNING: the model or config hash changed since that checkpoint; "
+                  "this is a different experiment, not a continuation")
+    elif args.init_from:
+        loaded = trainer.load(Path(args.init_from), resume=False)
+        print(f"  initialised from {args.init_from} (weights only, fresh optimiser)")
     # Start the clock *after* environment construction + CUDA-graph capture,
     # otherwise ~15 s of setup is silently taken out of the requested budget.
     deadline = time.perf_counter() + args.minutes * 60.0
@@ -579,10 +608,16 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
         print(
             f"  final eval (deterministic, {final_eval['eval_steps']} steps): "
             f"survival {final_eval['eval_survival_s']:.2f}s "
+            f"p10 {final_eval['eval_t_fall_p10']:.2f}s "
             f"alive {final_eval['eval_alive_frac']*100:.0f}% "
-            f"height {final_eval['eval_height_final']:.3f} m "
-            f"up {final_eval['eval_up_min']:+.3f} "
+            f"h±{final_eval['eval_height_mae']:.3f} m "
+            f"tilt {final_eval['eval_tilt_max_deg']:.1f} deg "
             f"vx±{final_eval['eval_vx_mae']:.3f}",
+            flush=True,
+        )
+        print(
+            "  note: this short deterministic window is a training signal only; "
+            "acceptance is `evaluate-stand` (64 seeds x 60 s, CPU model)",
             flush=True,
         )
     report = {
@@ -613,6 +648,163 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
     print(f"  elapsed   : {result['elapsed_s']:.1f} s ({report['sps']:,.0f} env-steps/s)")
     print(f"  checkpoint: {run_dir / 'model_last.pt'}")
     print(f"  report    : {path}")
+    return 0
+
+
+def cmd_evaluate_stand(args: argparse.Namespace, config: Config) -> int:
+    """Independent acceptance evaluation (doc 14.2), CPU model only."""
+    from .evaluation.stand_eval import (
+        OnnxPolicy,
+        TorchPolicy,
+        make_scenarios,
+        run_stand_eval,
+        zero_policy,
+    )
+
+    if args.zero_policy:
+        policy = zero_policy
+        source = "zero-policy"
+    elif args.onnx:
+        policy = OnnxPolicy(args.onnx)
+        source = f"onnx:{args.onnx}"
+    elif args.checkpoint:
+        policy = TorchPolicy.from_checkpoint(args.checkpoint, device=args.device)
+        source = f"checkpoint:{args.checkpoint}"
+    else:
+        print("  need --checkpoint, --onnx or --zero-policy")
+        return 2
+
+    scenarios = make_scenarios(base_seed=args.seed_base, count=args.episodes)
+    report = run_stand_eval(config, policy, steps=args.steps, scenarios=scenarios)
+    report["policy_source"] = source
+    report["generated_at"] = _now()
+    report["seeds"] = [scenario.seed for scenario in scenarios]
+    # Never overwrite another run's evidence (progress.md §16.3): the default
+    # name carries the policy, the window and the timestamp.
+    if args.onnx or args.checkpoint:
+        stem = Path(args.onnx or args.checkpoint).stem
+    else:
+        stem = "zero_policy"
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    default_name = f"stand_eval_{stem}_{args.steps}steps_{stamp}.json"
+    path = _report_path(report, args.json, default_name)
+
+    criteria = report["criteria"]["checks"]
+    print(f"  policy   : {source}")
+    print(f"  window   : {report['steps']} steps = {report['window_s']:.1f} s per episode, "
+          f"episode limit {report['episode_limit_s']:.1f} s")
+    print(f"  episodes : {report['episodes']} (seeds {args.seed_base}..{args.seed_base + args.episodes - 1})")
+    print(f"  success  : {report['successes']}/{report['episodes']} = {report['success_rate']*100:.1f}%")
+    print(f"  survival : min {report['survival_min_s']:.2f}s  p10 {report['survival_p10_s']:.2f}s  "
+          f"median {report['survival_median_s']:.2f}s")
+    print(f"  reasons  : {report['reasons']}")
+    for name, check in criteria.items():
+        flag = "PASS" if check["passed"] else "FAIL"
+        print(f"  {flag} {name:20s} {check['value']:.4f}  (limit {check['threshold']})")
+    print(f"  status   : {report['status']}")
+    print(f"  report   : {path}")
+    return 0 if report["criteria"]["passed"] else 1
+
+
+def cmd_evaluate_lqr(args: argparse.Namespace, config: Config) -> int:
+    """Section 11.6 gate: the teacher is judged like a policy, and cannot pass silently."""
+    import yaml
+
+    from .control.lqr_teacher import LqrTeacher
+    from .evaluation.lqr_suite import evaluate_teacher
+
+    gains: dict[str, float] = {}
+    if args.config_file:
+        payload = yaml.safe_load(Path(args.config_file).read_text(encoding="utf-8")) or {}
+        gains = {
+            name: float(entry["value"])
+            for name, entry in (payload.get("gains") or {}).items()
+            if isinstance(entry, dict) and "value" in entry
+        }
+    for item in args.set or []:
+        name, _, value = item.partition("=")
+        gains[name.strip()] = float(value)
+
+    teacher = LqrTeacher(config, gains)
+    report = evaluate_teacher(
+        config,
+        teacher,
+        steps=args.steps,
+        episodes=args.episodes,
+        seed_base=args.seed_base,
+    )
+    report["generated_at"] = _now()
+    report["gain_overrides"] = gains
+    # Canonical gate file on purpose: this path always holds the *latest*
+    # teacher verdict; every historical verdict is recorded in progress.md.
+    path = _report_path(report, args.json, "lqr_teacher_eval.json")
+    print(f"  window   : {report['steps']} steps = {report['window_s']:.1f} s")
+    print(f"  episodes : {report['episodes']}")
+    print(f"  success  : {report['successes']}/{report['episodes']} = {report['success_rate']*100:.1f}%")
+    print(f"  survival : min {report['survival_min_s']:.2f}s  median {report['survival_median_s']:.2f}s")
+    print(f"  reasons  : {report['reasons']}")
+    params = report["teacher"]["parameters"] or {}
+    print(f"  params   : mass {params.get('total_mass_kg')} kg, com above axle "
+          f"{params.get('com_above_axle_m')} m, wheel r {params.get('wheel_radius_m')} m")
+    print(f"  gain K   : {report['teacher']['wheel_gain']}")
+    print(f"  status   : {report['status']}  usable_for_demonstrations="
+          f"{report['teacher']['usable_for_demonstrations']}")
+    print(f"  report   : {path}")
+    return 0 if report["criteria"]["passed"] else 1
+
+
+def _step_candidates() -> list[Path]:
+    """The two documented locations: inside the workspace and the external CAD drop."""
+    names = ("26英雄整车总装2.0.STEP", "26英雄整车总装.STEP")
+    roots = [
+        DEFAULT_WORKSPACE_ROOT / "solidwork_graph",
+        DEFAULT_WORKSPACE_ROOT.parents[1] / "solidwork_graph",
+    ]
+    return [root / name for root in roots for name in names]
+
+
+def cmd_step_audit(args: argparse.Namespace, config: Config) -> int:
+    """S2: STEP assembly structure and cylinder-axis candidates (stdlib only)."""
+    from .assets.step_audit import audit_step, summarize
+
+    path = Path(args.step) if args.step else next(
+        (candidate for candidate in _step_candidates() if candidate.is_file()), None
+    )
+    if path is None or not path.is_file():
+        print("  STEP not found; pass --step explicitly. Candidates:")
+        for candidate in _step_candidates():
+            print(f"    {candidate}")
+        return 2
+    report = audit_step(path, with_geometry=not args.no_geometry)
+    report["generated_at"] = _now()
+    summary = summarize(report, needles=args.match or ("髋", "hip", "spring", "弹簧", "DM8009"))
+    report["summary"] = summary
+    out = _report_path(report, args.json, "step_geometry_audit.json")
+    counts = report["counts"]
+    print(f"  file      : {path.name} ({report['source']['bytes']:,} bytes)")
+    print(f"  products  : {counts.get('PRODUCT')}")
+    print(f"  instances : {counts.get('NEXT_ASSEMBLY_USAGE_OCCURRENCE')} "
+          f"(transforms parsed: {sum(1 for i in report['instances'] if 'transform_mm' in i)})")
+    print(f"  roots     : {report['assembly']['roots']}")
+    geometry = report.get("geometry") or {}
+    if geometry:
+        diagnostics = geometry["diagnostics"]
+        print(f"  cylinders : {diagnostics['cylinders']} "
+              f"(attributed to a part: {diagnostics['attributed_cylinders']})")
+        print("  axis pairs:")
+        for entry in geometry["measurements"]:
+            distance = entry.get("distance_mm")
+            value = f"{distance:10.3f} mm" if distance is not None else "  unmeasured"
+            parts = ", ".join(entry.get("candidate_parts") or []) or "-"
+            print(f"      {value}  {entry['label']}  [{entry['status']}]  {parts}")
+        for entry in geometry.get("cross_part", []):
+            print(f"      {'unmeasured':>13}  {entry['label']}  [{entry['status']}]")
+    for needle, matches in summary["matches"].items():
+        print(f"  match {needle!r}: {len(matches)} instance(s)")
+        for entry in matches[:3]:
+            print(f"      {entry['parent']} -> {entry['child']}")
+    print(f"  status    : {report['status']}")
+    print(f"  report    : {out}")
     return 0
 
 
@@ -648,12 +840,14 @@ def cmd_export(args: argparse.Namespace, config: Config) -> int:
         policy.load_state_dict(payload["policy"])
         policy.eval()
         extra_meta = {
-            "update_count": payload.get("updates"),
+            "update_count": payload.get("update", payload.get("updates")),
             "stage": payload.get("stage", "gpu-ppo"),
             "env_steps": payload.get("env_steps"),
             "trainer_cfg": payload.get("cfg"),
             "pd_gains": payload.get("pd_gains"),
             "spawn_z_m": payload.get("spawn_z_m"),
+            "fingerprint": payload.get("fingerprint"),
+            "eval_version": payload.get("eval_version"),
         }
         source = "gpu-trainer"
     else:
@@ -832,8 +1026,9 @@ def build_parser() -> argparse.ArgumentParser:
     gpu.add_argument(
         "--save-every",
         type=int,
-        default=100,
-        help="checkpoint + history.json every N updates (0 = only at the end)",
+        default=25,
+        help="checkpoint + history.json every N updates (0 = only at the end); "
+        "default matches the experiment baseline in progress.md",
     )
     gpu.add_argument("--entropy-coef", type=float, default=0.005, help="entropy bonus")
     gpu.add_argument("--max-std", type=float, default=1.0, help="clamp on the action std")
@@ -852,6 +1047,67 @@ def build_parser() -> argparse.ArgumentParser:
     gpu.add_argument("--name", default=None)
     gpu.add_argument("--plot", default=None)
     gpu.add_argument("--no-plot", action="store_true")
+    gpu.add_argument(
+        "--resume",
+        default=None,
+        help="continue the same experiment (optimiser, lr, update counter, RNG)",
+    )
+    gpu.add_argument(
+        "--init-from",
+        default=None,
+        help="load only the network weights into a new experiment (fresh optimiser)",
+    )
+    gpu.add_argument(
+        "--checkpoint-keep",
+        type=int,
+        default=5,
+        help="numbered model_update_*.pt snapshots to retain",
+    )
+
+    stand = subparsers.add_parser(
+        "evaluate-stand",
+        help="independent 60 s standing evaluation (per-episode first failure)",
+    )
+    stand.add_argument("--checkpoint", default=None, help="GPU/CPU trainer checkpoint (.pt)")
+    stand.add_argument("--onnx", default=None, help="exported ONNX actor")
+    stand.add_argument("--steps", type=int, default=6000, help="policy steps per episode (6000 = 60 s)")
+    stand.add_argument("--episodes", type=int, default=64, help="number of independent scenarios")
+    stand.add_argument("--seed-base", type=int, default=1000, help="first evaluation seed")
+    stand.add_argument("--device", default="cpu")
+    stand.add_argument("--json", default=None, help="write the full report to this path")
+    stand.add_argument(
+        "--zero-policy",
+        action="store_true",
+        help="control run: hold the spawn pose (no policy at all)",
+    )
+
+    lqr = subparsers.add_parser(
+        "evaluate-lqr",
+        help="LQR teacher standalone gate (section 11.6)",
+    )
+    lqr.add_argument("--config-file", default=str(PROJECT_ROOT / "configs" / "lqr_teacher.yaml"))
+    lqr.add_argument("--set", action="append", help="gain override, e.g. --set q_pitch=60")
+    lqr.add_argument("--steps", type=int, default=6000)
+    lqr.add_argument("--episodes", type=int, default=64)
+    lqr.add_argument("--seed-base", type=int, default=1000)
+    lqr.add_argument("--json", default=None)
+
+    step = subparsers.add_parser(
+        "step-audit",
+        help="S2: STEP assembly structure (products, instances, transforms)",
+    )
+    step.add_argument(
+        "--step",
+        default=None,
+        help="STEP path (default: search the workspace and the external CAD drop)",
+    )
+    step.add_argument("--json", default=None)
+    step.add_argument("--match", action="append", help="extra name substring to look for")
+    step.add_argument(
+        "--no-geometry",
+        action="store_true",
+        help="skip cylinder-axis extraction (structure only, much faster on huge files)",
+    )
 
     export = subparsers.add_parser("export", help="P10: export the actor+encoder to ONNX")
     export.add_argument("--checkpoint", required=True)
@@ -891,7 +1147,11 @@ def main(argv: list[str] | None = None) -> int:
         "smoke": cmd_smoke,
         "benchmark": cmd_benchmark,
         "train": cmd_train,
-        "train-gpu": cmd_train_gpu,        "export": cmd_export,
+        "train-gpu": cmd_train_gpu,
+        "evaluate-stand": cmd_evaluate_stand,
+        "evaluate-lqr": cmd_evaluate_lqr,
+        "step-audit": cmd_step_audit,
+        "export": cmd_export,
         "play": cmd_play,
         "render": cmd_render,
         "doctor": cmd_doctor,

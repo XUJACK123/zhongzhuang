@@ -10,12 +10,15 @@
 | P2 正立初始化 | SpawnSpec、根四元数、轮底离地、顶部标记、无穿地 | ✅ CPU仿真通过（8/8） | `reports/spawn_report.json` |
 | P3 安装几何与力模型 | 气弹簧两端安装点、行程、力方向、虚功 | ⚠️ **接口通过（9/9），关卡未关闭** | `reports/spring_report.json`；锚点借自复旦，行程未实测 |
 | P4 电机与被动力组合 | 六通道方向/单位、A/B/C 组合、断使能仍有被动支撑 | ✅ CPU仿真通过（12 + 3） | `reports/joint_test.json`、`reports/spring_sweep.json` |
-| P5 接触与策略契约 | 25/125/149、PD、五帧历史、terminal/reset | ✅ CPU仿真通过（4 + 12） | `reports/contact_test.json`、`reports/contract_test.json` |
+| P5 接触与策略契约 | 25/125/149、PD、五帧历史、terminal/reset | ✅ CPU仿真通过（4 + 12）；**2026-10-29 重开修复后重跑** | `reports/contact_test.json`、`reports/contract_test.json`、`tests/test_env_contract_reset.py` |
 | P6 教师复现 | ONNX 权重恢复、原模型复现、通道语义 | ⚠️ **权重恢复通过，迁移失败** | `reports/teacher_report.json`、`reports/teacher_eval.json` |
-| P7 GPU 后端 | mjlab + MuJoCo Warp、CPU/GPU 对拍 | ⚠️ **仅物理批量通过，端到端未通过** | `reports/gpu_smoke.json` |
-| P8 训练冒烟 | 多环境、完整 PPO 更新、保存/恢复 | ✅ 训练工程通过 | `runs/*`、`tests/test_learning_pipeline.py` |
+| P7 GPU 后端 | mjlab + MuJoCo Warp、CPU/GPU 对拍 | ⚠️ **仅物理批量通过，端到端未通过**；2026-10-29 的 GPU 侧重置/终端/弹簧特征修复**未在 CUDA 上执行** | `reports/gpu_smoke.json` |
+| P8 训练冒烟 | 多环境、完整 PPO 更新、保存/恢复 | ✅ 训练工程通过 | `runs/*`、`tests/test_learning_pipeline.py`、`tests/test_checkpoint.py` |
 | P9 正式迁移训练 | critic 预热 → 教师辅助 → 独立 PPO | ⏳ 未开始（教师阶段已被证据否决） | — |
 | P10 导出与回放 | ONNX 数值对拍、普通 MuJoCo 独立回放 | ✅ 训练工程通过 | `runs/export/*.onnx` + `play` |
+| 新增：独立站立评估 | 64 独立初态 × 60 s、逐环境首次失败、不混入 reset 状态 | 🟡 **评估器已实现并实测（CPU）**；demo_run4 在 6 s 窗口 8/8 存活、vx MAE 0.201（`reports/stand_eval_demo_run4_6s.json`）；**64×60 s 未跑完，门槛仍空缺** | `tests/test_stand_eval.py` |
+| 新增：LQR 教师 | 当前模型 LQR/PD 教师 + 动作适配 | ⏸ **路线暂停**（用户决定不用作教师）；原型 6 s 内 0/4 失败，保留为诊断工具 | `reports/lqr_teacher_eval.json`、`tests/test_lqr_teacher.py` |
+| 新增：STEP 结构与轴线 | 产品/实例/变换、圆柱归属、同零件两轴距离、平面机构三点 | 🟡 **G01–G07 复现且带零件名；平面三点已推出**；未在 SolidWorks 复核、无质量信息 | `docs/STEP_GEOMETRY_AUDIT.md`、`reports/step_geometry_audit.json`、`tools/step_audit_standalone.py` |
 
 ## 命令与关卡的对应
 
@@ -36,6 +39,10 @@ evaluate-teacher  P6
 smoke             P7
 benchmark         P8
 train             P8/P9
+train-gpu         P9（--resume / --init-from 为 2026-10-29 新增）
+evaluate-stand    独立站立验收（2026-10-29 新增，CPU）
+evaluate-lqr      LQR 教师门槛（2026-10-29 新增）
+step-audit        S2 STEP 装配结构审计（2026-10-29 新增）
 export            P10
 play              P10
 ```

@@ -118,3 +118,117 @@ def test_illegal_contact_is_zero_when_standing(config, height):
     env.step(torch.zeros((4, 6), device=env.device))
     torch.cuda.synchronize()
     assert float(env._illegal_contact_count().sum()) == pytest.approx(0.0)
+
+
+def _tilted(env, index: int = 0) -> None:
+    import torch
+
+    angle = torch.tensor(1.4)  # ~80 deg
+    env.qpos[index, 3:7] = torch.tensor(
+        [torch.cos(angle / 2), torch.sin(angle / 2), 0.0, 0.0], device=env.device
+    )
+
+
+def test_reset_zeroes_motor_control_and_returns_the_spawn_observation(config, height):
+    """The advanced-index write is chained in the old reset and never lands."""
+    import torch
+
+    from fifty_mujoco.envs.warp_env import WarpEnvOptions, WarpVecEnv
+
+    env = WarpVecEnv(
+        config,
+        WarpEnvOptions(num_envs=2, device="cuda:0", seed=11, fixed_command=(0.0, 0.0, height)),
+    )
+    actions = torch.ones((2, 6), device=env.device) * 0.5
+    env.step(actions)
+    env.reset()
+    torch.cuda.synchronize()
+    assert torch.allclose(env.ctrl[:, env.ctrl_idx], torch.zeros_like(env.ctrl[:, env.ctrl_idx]))
+    assert torch.allclose(env.obs[:, 3:6], torch.tensor([0.0, 0.0, -1.0], device=env.device).expand(2, 3), atol=1e-3)
+    assert torch.allclose(env.obs[:, 19:25], torch.zeros((2, 6), device=env.device))
+    for index in range(2):
+        for frame in env.history[index]:
+            assert torch.allclose(frame, env.obs[index])
+
+
+def test_terminal_snapshot_matches_the_terminal_frame(config, height):
+    """terminal_history must end with the observation terminal_privileged embeds."""
+    import torch
+
+    from fifty_mujoco.envs.warp_env import WarpEnvOptions, WarpVecEnv
+
+    env = WarpVecEnv(
+        config,
+        WarpEnvOptions(num_envs=1, device="cuda:0", seed=13, fixed_command=(0.0, 0.0, height)),
+    )
+    _tilted(env)
+    for _ in range(40):
+        _obs, _priv, _rew, done, _infos, _hist = env.step(
+            torch.zeros((1, 6), device=env.device)
+        )
+        torch.cuda.synchronize()
+        if bool(done[0]):
+            terminal_hist = env.terminal_history[0].reshape(5, 25)
+            terminal_priv = env.terminal_privileged[0]
+            assert torch.allclose(terminal_hist[-1], terminal_priv[3 : 3 + 25], atol=1e-5)
+            return
+    pytest.fail("the forced tilt never terminated on the GPU env")
+
+
+def test_spring_features_match_the_cpu_definition(config, height):
+    """Same fields, unit and scaling as ``mdp.observations.spring_features``."""
+    import torch
+
+    from fifty_mujoco.control.gas_spring import reference_force
+    from fifty_mujoco.contracts import names
+    from fifty_mujoco.envs.fifty_env import EnvOptions, FiftyVecEnv
+    from fifty_mujoco.envs.warp_env import WarpEnvOptions, WarpVecEnv
+
+    command = (0.0, 0.0, height)
+    cpu = FiftyVecEnv(config, EnvOptions(num_envs=1, seed=1, fixed_command=command))
+    gpu = WarpVecEnv(
+        config, WarpEnvOptions(num_envs=1, device="cuda:0", seed=1, fixed_command=command)
+    )
+    actions = torch.zeros((1, 6), device=gpu.device)
+    for step in range(8):
+        actions[0, 1] = 0.05 * np.sin(step / 3.0)
+        actions[0, 4] = -actions[0, 1]
+        row = actions.cpu().numpy()
+        cpu.step(row)
+        gpu.step(actions)
+    torch.cuda.synchronize()
+    if gpu.spring_count == 0:
+        pytest.skip("no gas spring on this model")
+    lengths, rates, forces, _ = cpu._spring_state(0)
+    expected = np.concatenate(
+        [
+            lengths * 5.0,
+            rates,
+            np.array([reference_force(spring) for spring in cpu.springs]) / 300.0,
+            forces / 300.0,
+        ]
+    )
+    gpu_part = gpu.privileged[0, names.BASE_PRIVILEGED_DIM :].cpu().numpy()
+    # rates come from a finite difference on the GPU, so only the length and
+    # force channels are compared tightly here.
+    count = gpu.spring_count
+    assert np.allclose(gpu_part[:count], expected[:count], atol=1e-4)
+    assert np.allclose(gpu_part[2 * count : 3 * count], expected[2 * count : 3 * count], atol=1e-4)
+    assert np.allclose(gpu_part[3 * count : 4 * count], expected[3 * count : 4 * count], atol=5e-2)
+
+
+def test_command_refresh_is_immediate(config, height):
+    """``resample_commands`` must be visible before the next physics step."""
+    import torch
+
+    from fifty_mujoco.envs.warp_env import WarpEnvOptions, WarpVecEnv
+
+    env = WarpVecEnv(
+        config, WarpEnvOptions(num_envs=2, device="cuda:0", seed=17, fixed_command=(0.1, 0.0, height))
+    )
+    env.resample_commands()
+    torch.cuda.synchronize()
+    expected = env.commands * env.command_scale
+    assert torch.allclose(env.obs[:, 6:9], expected, atol=1e-6)
+    assert torch.allclose(env.history[:, -1, 6:9], expected, atol=1e-6)
+    assert torch.allclose(env.privileged[:, 9:12], expected, atol=1e-6)

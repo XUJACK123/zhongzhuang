@@ -13,6 +13,7 @@ import numpy as np
 import torch
 
 from ..config import Config
+from ..contracts import names
 from ..envs.fifty_env import EnvOptions, FiftyVecEnv
 from .actor_critic import ActorCriticSequence, NetworkDims
 from .ppo import Ppo, PpoConfig
@@ -216,9 +217,11 @@ class OnPolicyRunner:
             next_obs, next_priv, reward, done, infos, next_history = env.step(actions.cpu().numpy())
 
             terminal_privileged = np.zeros_like(privileged)
+            terminal_history = np.zeros((self.env.num_envs, names.HISTORY_DIM))
             if "terminal_obs" in infos:
                 ids = infos["reset_env_ids"]
                 terminal_privileged[ids] = infos["terminal_obs"]
+                terminal_history[ids] = infos["terminal_history"]
             storage.add(
                 obs_t,
                 hist_t,
@@ -231,6 +234,7 @@ class OnPolicyRunner:
                 mu,
                 sigma,
                 terminal_privileged=torch.as_tensor(np.asarray(terminal_privileged), dtype=torch.float32, device=self.runner_cfg.device),
+                terminal_history=torch.as_tensor(np.asarray(terminal_history), dtype=torch.float32, device=self.runner_cfg.device),
                 timeouts=torch.as_tensor(infos["time_outs"].astype(np.float32), device=self.runner_cfg.device),
             )
             rewards_log.append(reward)
@@ -245,7 +249,7 @@ class OnPolicyRunner:
         )
         terminal_values = self.ppo.value_of(
             storage.terminal_privileged.reshape(-1, self.env.num_privileged_obs),
-            storage.history.reshape(storage.num_steps * storage.num_envs, -1),
+            storage.terminal_history_flat(),
         ).reshape(storage.num_steps, storage.num_envs)
         storage.compute_returns(last_values, self.ppo_cfg.gamma, self.ppo_cfg.lam, terminal_values)
         return {

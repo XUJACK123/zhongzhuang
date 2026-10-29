@@ -32,6 +32,11 @@ class RolloutStorage:
         self.mu = torch.zeros(num_steps, num_envs, num_actions, device=device)
         self.sigma = torch.zeros(num_steps, num_envs, num_actions, device=device)
         self.terminal_privileged = torch.zeros(num_steps, num_envs, num_privileged, device=device)
+        #: History that ends with the terminal observation (not the history of
+        #: the step *before* it): the critic encodes the history, so a
+        #: misaligned terminal history would bootstrap a timeout from the wrong
+        #: latent.
+        self.terminal_history = torch.zeros(num_steps, num_envs, num_history, device=device)
         self.timeouts = torch.zeros(num_steps, num_envs, device=device)
         self.step = 0
 
@@ -48,6 +53,7 @@ class RolloutStorage:
         mu,
         sigma,
         terminal_privileged=None,
+        terminal_history=None,
         timeouts=None,
     ) -> None:
         step = self.step
@@ -63,6 +69,8 @@ class RolloutStorage:
         self.sigma[step] = sigma
         if terminal_privileged is not None:
             self.terminal_privileged[step] = terminal_privileged
+        if terminal_history is not None:
+            self.terminal_history[step] = terminal_history
         if timeouts is not None:
             self.timeouts[step] = timeouts
         self.step += 1
@@ -102,6 +110,10 @@ class RolloutStorage:
         self.advantages = self.returns - self.values
         if normalize and self.advantages.numel() > 1:
             self.advantages = (self.advantages - self.advantages.mean()) / (self.advantages.std() + 1e-8)
+
+    def terminal_history_flat(self) -> torch.Tensor:
+        """``(steps*envs, 125)`` terminal histories for the value bootstrap."""
+        return self.terminal_history.reshape(-1, self.terminal_history.shape[-1])
 
     def mini_batches(self, num_mini_batches: int, generator: torch.Generator | None = None):
         batch = self.num_steps * self.num_envs

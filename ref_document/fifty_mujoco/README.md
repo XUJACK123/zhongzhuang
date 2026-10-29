@@ -12,6 +12,16 @@ ONNX 导出与独立回放。
 P3 ⚠️ 接口通过但行程未实测、P6 ⚠️ 权重恢复通过但教师不可迁移、P7 ⚠️ 物理批量已上 GPU
 但端到端训练未验证；P9（正式训练）未开始。详见 `docs/PHASES.md`。
 
+**2026-10-29 补充（S1/S2/S4 软件部分）**：重置/历史/终止/命令/特权特征契约已修复并有
+CPU 回归；新增独立评估器 `evaluate-stand`（64 独立初态 × 60 s，逐环境首次失败统计）、
+版本化 checkpoint（编号快照 + 原子写 + best 排序 + resume）、STEP 审计（装配结构 +
+**圆柱轴线提取**，G01–G07 可复现并带零件名）。GPU 侧同批修复**未在 CUDA 上执行**，
+`tests/test_warp_env.py` 在本机全部 skip。
+
+**LQR 教师路线暂停**（2026-10-29 决定）：原型 6 s 内 0/4 失败，且属结构性问题；
+`control/lqr_teacher.py` 与 `evaluate-lqr` 保留为诊断工具，不再作为示教/预训练前置。
+当前主线改为 STEP 机构建模（`docs/STEP_GEOMETRY_AUDIT.md`）。
+
 ## 快速开始
 
 ```bash
@@ -45,6 +55,28 @@ uv run python -m fifty_mujoco.cli smoke --backend mjlab
 uv run python -m fifty_mujoco.cli doctor --device cuda:0
 ```
 
+评估与检查（新增）：
+
+```bash
+# 独立的 60 s 站立验收：64 个与训练不同的初态，逐环境首次失败统计
+uv run python -m fifty_mujoco.cli evaluate-stand --checkpoint runs/demo_run4/model_best.pt \
+    --steps 6000 --episodes 64
+uv run python -m fifty_mujoco.cli evaluate-stand --onnx runs/export/model_best.onnx
+uv run python -m fifty_mujoco.cli evaluate-stand --zero-policy --steps 60 --episodes 2  # 对照
+
+# STEP 装配结构与圆柱轴线审计（不需要 numpy / mujoco / torch）
+python tools/step_audit_standalone.py
+uv run python -m fifty_mujoco.cli step-audit            # 完整环境下的等价入口
+uv run python -m fifty_mujoco.cli step-audit --no-geometry
+
+# LQR 教师门槛（路线已暂停，仅作诊断）
+uv run python -m fifty_mujoco.cli evaluate-lqr --steps 600 --episodes 4
+
+# 训练检查点：--resume 继续同一实验，--init-from 只加载权重
+uv run python -m fifty_mujoco.cli train-gpu ... --resume runs/<run>/model_last.pt
+uv run python -m fifty_mujoco.cli train-gpu ... --init-from runs/<run>/model_best.pt
+```
+
 ## 目录
 
 ```text
@@ -57,16 +89,21 @@ src/fifty_mujoco/
   contracts/  关节顺序、符号、维度契约（25 / 125 / 141+8 / 152）
   control/    spawn、gas_spring、spring_audit、mixed_pd
   mdp/        observations、rewards、terminations、commands
-  envs/       cpu_env（单环境）、fifty_env（向量化 + 历史 + 延迟）
-  learning/   actor_critic、storage、ppo、runner（三阶段状态机）
+  envs/       cpu_env（单环境）、fifty_env（向量化 + 历史 + 延迟）、warp_env（GPU）
+  learning/   actor_critic、storage、ppo、runner（三阶段状态机）、
+              gpu_ppo（GPU PPO）、checkpoint（编号快照/原子写/best/resume）
+  control/    spawn、gas_spring、spring_audit、mixed_pd、
+              lqr_teacher（教师原型）、teacher_adapter（教师动作↔关节力矩）
   transfer/   teacher（ONNX→PyTorch）、export（ONNX + 对拍）
   evaluation/ render、channel_suite、spring_suite、contact_suite、contract_suite、
-              teacher_eval、gpu_smoke、benchmark、playback
+              teacher_eval、gpu_smoke、benchmark、playback、
+              stand_eval（独立站立评估）、lqr_suite（教师门槛）
+  assets/     …、step_audit（STEP 装配结构审计）
   cli.py      子命令入口
 reports/      每个关卡的 JSON 报告
 runs/         训练输出、export/ ONNX + manifest
 tests/        pytest 套件
-docs/         MIGRATION_STATUS.md、PHASES.md
+docs/         MIGRATION_STATUS.md、PHASES.md、STEP_GEOMETRY_AUDIT.md
 ```
 
 ## 源包只读

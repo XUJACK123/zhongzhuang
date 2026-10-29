@@ -6,10 +6,22 @@ Protocol (doc section 5.6)::
     get_privileged_observations() -> privileged
     reset()                       -> obs, privileged
     step(actions)                 -> obs, privileged, rewards, dones, infos, history
+    set_commands(values)          -> refresh the command channels, no physics
 
 Every physics sub-step refreshes the gas-spring geometry, the (delayed) action,
 the PD torque and the motor limit.  Rewards, terminations and observations are
 all computed after the last sub-step, from the same state.
+
+Step order (doc 5.1) is fixed:
+
+1. build the action, advance physics,
+2. compute the new obs / privileged / reward / termination,
+3. append the new observation to the history,
+4. snapshot the terminal observation and *its* history (last frame == terminal
+   observation) for the timeout bootstrap,
+5. reset the finished envs and refill their history with the new initial frame,
+6. return the reset observation for the next policy inference and the terminal
+   snapshot separately in ``infos``.
 """
 
 from __future__ import annotations
@@ -22,7 +34,7 @@ import numpy as np
 
 from ..config import Config
 from ..contracts import names
-from ..control.gas_spring import load_springs, spring_force, spring_geometry
+from ..control.gas_spring import load_springs, reference_force, spring_force, spring_geometry
 from ..control.mixed_pd import PdGains, compute_torques, decode_action
 from ..control.spawn import SpawnSpec, load_spawn_spec, resolve_spawn_height
 from ..envs.cpu_env import FiftyCpuEnv
@@ -89,6 +101,12 @@ class FiftyVecEnv:
 
         self.springs = load_springs(config) if config.gas_spring_configured else []
         self.spring_count = len(self.springs)
+        #: Static force at the design reference length, per spring.  Kept apart
+        #: from the instantaneous force so the critic feature vector never mixes
+        #: "what the model asks for" with "what the spring currently delivers".
+        self.spring_reference_forces = np.array(
+            [reference_force(spring) for spring in self.springs], dtype=float
+        )
         self.num_obs = names.ACTOR_OBS_DIM
         self.num_privileged_obs, self.critic_input_dim = names.privileged_dim(self.spring_count)
         self.num_actions = names.NUM_ACTIONS
@@ -129,6 +147,18 @@ class FiftyVecEnv:
         self.episode_reward_terms: dict[str, float] = {}
         self.spring_lengths = np.zeros((n, max(1, self.spring_count)))
         self.spring_forces = np.zeros((n, max(1, self.spring_count)))
+        self.termination_reason = np.full(n, "", dtype=object)
+        #: Per-step quantities captured *before* the reset, so an evaluator never
+        #: scores the spawn state of the next episode as if it were the failure.
+        self.step_stats = {
+            "height": np.zeros(n),
+            "tilt_deg": np.zeros(n),
+            "lin_vel_body": np.zeros((n, 3)),
+            "ang_vel_body": np.zeros((n, 3)),
+            "root_xy": np.zeros((n, 2)),
+            "torque": np.zeros((n, self.num_actions)),
+            "alive": np.zeros(n, dtype=bool),
+        }
 
         self.delay_buffer = np.zeros((n, max(1, self.options.action_delay_steps), self.num_actions))
         self.delay_index = np.zeros(n, dtype=int)
@@ -236,17 +266,22 @@ class FiftyVecEnv:
         self.previous_previous_actions[index] = 0.0
         self.previous_joint_velocity[index] = 0.0
         self.motor_torques[index] = 0.0
+        self.joint_acceleration[index] = 0.0
         self.episode_length[index] = 0.0
         self.tilt_fail_time[index] = 0.0
         self.height_fail_time[index] = 0.0
         self.episode_returns[index] = 0.0
         self.delay_buffer[index] = 0.0
         self.delay_index[index] = 0
+        self.dones[index] = False
+        self.time_outs[index] = False
+        self.termination_reason[index] = ""
         mujoco.mj_forward(self.model, data)
 
         if self.options.fixed_command is None:
             command = sample_commands(1, self.nominal_height, self.options.command_ranges, self.rng)
             self.commands.values[index] = command.values[0]
+        self.commands.resample_timer[index] = self.options.command_ranges.resample_time_s
 
         self._compute_observation(index)
         obs_lib.fill_history(self.history, np.array([index]), self.obs)
@@ -260,8 +295,44 @@ class FiftyVecEnv:
         ids = np.arange(self.num_envs) if env_ids is None else np.asarray(env_ids, dtype=int)
         for index in ids:
             self._reset_env(int(index))
-        self._compute_privileged()
+        self._compute_privileged(ids)
         return self.obs[ids].copy(), self.privileged[ids].copy()
+
+    # ---------------------------------------------------------------- commands
+    def set_commands(self, values: np.ndarray, env_ids: np.ndarray | None = None) -> None:
+        """Overwrite commands and refresh the observation immediately.
+
+        The refresh does not advance physics, does not shift the history and
+        does not recompute the joint acceleration: only the command channels
+        (obs 6:9 and the newest history frame) change, so the very next action
+        already sees the new command.
+        """
+        ids = np.arange(self.num_envs) if env_ids is None else np.asarray(env_ids, dtype=int)
+        values = np.asarray(values, dtype=float)
+        if values.ndim == 1:
+            values = np.tile(values, (ids.size, 1))
+        if values.shape != (ids.size, 3):
+            raise ValueError(f"commands must be (N, 3), got {values.shape}")
+        self.commands.values[ids] = values
+        self._refresh_command_channels(ids)
+
+    def _refresh_command_channels(self, ids: np.ndarray) -> None:
+        scaled = self.commands.values[ids] * obs_lib.COMMAND_SCALE
+        self.obs[ids, 6:9] = scaled
+        self.history[ids, -1, 6:9] = scaled
+        self._compute_privileged(ids)
+
+    def _resample_expired_commands(self, index: int) -> None:
+        """Per-env command resampling on the *episode* clock (doc 5.2)."""
+        if self.options.fixed_command is not None:
+            return
+        self.commands.resample_timer[index] -= self.dt
+        if self.commands.resample_timer[index] > 0.0:
+            return
+        command = sample_commands(1, self.nominal_height, self.options.command_ranges, self.rng)
+        self.commands.values[index] = command.values[0]
+        self.commands.resample_timer[index] = self.options.command_ranges.resample_time_s
+        self._refresh_command_channels(np.array([index]))
 
     # -------------------------------------------------------------- observation
     def _compute_observation(self, index: int) -> None:
@@ -284,8 +355,10 @@ class FiftyVecEnv:
         ) / self.dt
         self.previous_joint_velocity[index] = velocity
 
-    def _compute_privileged(self) -> None:
-        for index in range(self.num_envs):
+    def _compute_privileged(self, env_ids: np.ndarray | None = None) -> None:
+        ids = np.arange(self.num_envs) if env_ids is None else np.asarray(env_ids, dtype=int)
+        for index in ids:
+            index = int(index)
             data = self.data[index]
             _ang_vel, lin_vel = self._base_velocity(index)
             heights = np.full(77, float(np.clip(data.qpos[2] - 0.5, -1.0, 1.0)) * 5.0)
@@ -305,7 +378,9 @@ class FiftyVecEnv:
             )
             if self.spring_count:
                 lengths, rates, forces, _ = self._spring_state(index)
-                extra = obs_lib.spring_features(lengths, rates, forces, forces)
+                extra = obs_lib.spring_features(
+                    lengths, rates, self.spring_reference_forces, forces
+                )
                 self.privileged[index] = np.concatenate([base, extra])
             else:
                 self.privileged[index] = base
@@ -345,7 +420,10 @@ class FiftyVecEnv:
         self._compute_privileged()
         rewards, infos = self._compute_rewards_and_terminations()
 
-        env_ids = np.nonzero(self.dones)[0]
+        # Snapshot ``dones`` before the reset clears it: the learner needs the
+        # done flags of *this* step, not of the state it is about to start.
+        dones = self.dones.copy()
+        env_ids = np.nonzero(dones)[0]
         if env_ids.size:
             infos["terminal_obs"] = self.terminal_obs[env_ids].copy()
             infos["terminal_history"] = self.terminal_history[env_ids].copy()
@@ -356,7 +434,7 @@ class FiftyVecEnv:
             self.obs.copy(),
             self.privileged.copy(),
             rewards,
-            self.dones.copy(),
+            dones,
             infos,
             obs_lib.flatten_history(self.history),
         )
@@ -382,6 +460,14 @@ class FiftyVecEnv:
                 limit = self.config.joint_limits[name]
                 if limit is not None:
                     lower[k], upper[k] = limit
+
+            self.step_stats["height"][index] = float(data.qpos[2])
+            self.step_stats["tilt_deg"][index] = term_lib.tilt_angle_deg(rotation)
+            self.step_stats["lin_vel_body"][index] = lin_vel
+            self.step_stats["ang_vel_body"][index] = ang_vel
+            self.step_stats["root_xy"][index] = data.qpos[0:2]
+            self.step_stats["torque"][index] = self.motor_torques[index]
+            self.step_stats["alive"][index] = True
 
             terms = {
                 "tracking_lin_vel": reward_lib.tracking_lin_vel(command[0], lin_vel[0]),
@@ -442,19 +528,39 @@ class FiftyVecEnv:
 
             self.dones[index] = bool(failed or timeout)
             self.time_outs[index] = bool(timeout and not failed)
+            if failed:
+                if term_lib.orientation_failed(rotation, self.termination):
+                    reason = "tilt"
+                elif term_lib.height_failed(float(data.qpos[2]), self.nominal_height, self.termination):
+                    reason = "height"
+                elif illegal:
+                    reason = "illegal_contact"
+                else:
+                    reason = "nonfinite"
+            elif timeout:
+                reason = "time_out"
+            else:
+                reason = ""
+            self.termination_reason[index] = reason
+
+            # History first, then the terminal snapshot: the newest history frame
+            # and the terminal observation must come from the same instant.
+            obs_lib.push_history(self.history, self.obs, np.array([index]))
             if self.dones[index]:
                 # Value bootstrap must use the state *before* the reset.
                 self.terminal_obs[index] = self.privileged[index]
                 self.terminal_history[index] = obs_lib.flatten_history(self.history[index])
 
-            if failed:
-                self.episode_returns[index] = self.episode_returns[index]
+            # Command resampling runs on the episode clock, never for an env
+            # that is about to be reset (its command is drawn in ``_reset_env``).
             if not self.dones[index]:
-                obs_lib.push_history(self.history, self.obs, np.array([index]))
+                self._resample_expired_commands(index)
 
         infos["time_outs"] = self.time_outs.copy()
         infos["terminations"] = terminations
+        infos["termination_reason"] = list(self.termination_reason)
         infos["episode_returns"] = self.episode_returns.copy()
+        infos["step_stats"] = {key: value.copy() for key, value in self.step_stats.items()}
         return rewards, infos
 
     # ------------------------------------------------------------------ helpers
