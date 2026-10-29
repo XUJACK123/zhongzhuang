@@ -1,0 +1,75 @@
+# Passive gas spring schema (doc section 12.2).
+#
+# STATUS: `reference_300n`.  One spring per side, data transferred from the
+# Fudan model, NOT measured on this robot:
+#   * force          : constant 300 N per side (Fudan `d.ctrl = 300` on the
+#                      tendon motors `Left_loop1_motor` / `Right_loop1_motor`)
+#   * anchors        : Fudan sites `right_lf0_qitanhuang` / `right_lf1_qitanhuang`
+#                      (left: `left_*`), expressed as offsets from the hip / knee
+#                      joint origin in the assembly pose.  That description is
+#                      independent of link geometry, so it transfers to this
+#                      robot even though the two CAD parts differ.
+#   * stroke         : UNKNOWN -> no stroke limit is enforced; `spring-audit`
+#                      reports the achieved length, but P3 cannot pass without
+#                      the real min/max length.
+#   * compensation   : off.  Fudan's analytic 300*1.23 hip moment is NOT copied
+#                      (unverified compensation, doc 11.3 / 12.6).
+#
+# `force_n > 0` means "push the two anchors apart" (gas spring).  MuJoCo tendon
+# motors act as cables (positive ctrl shortens a tendon), so the runtime writes
+# `ctrl = -force_n`; `spring-audit` re-verifies this every run.
+gas_springs:
+  kind: passive_gas_spring
+  backend: spatial_tendon_motor
+  compensation_mode: "off"
+  profile: reference_300n
+  reference_experiment_force_n: 300.0
+  actual_count_verified: true
+  actual_count_per_side: 1
+  feature_order: [gas_right, gas_left]
+  transfer_source: >-
+    ref_document/fudan_rl_wheel_leg-main/mujoco/assert_now/infantry_binglian_yuntai/
+    infantry_V2/meshes/mjmodel.xml (sites 114-121 / 133-140, tendons 195-205,
+    actuators 219-220); runtime constant in mujoco/python_tools/onnx_mj_binglian.py:106-110
+  transfer_rule: >-
+    anchor = joint_origin + (Fudan anchor position at its q=0 assembly pose minus
+    the same joint origin), i.e. the offset is copied in base coordinates.
+    Link-local numbers would mix in the different CAD link frames and knee angles.
+  springs:
+    - name: gas_right
+      side: right
+      # Solved so that, in the assembly stance, the anchor sits at the Fudan position
+      # relative to the hip joint: 15.5 mm forward, 8 mm inboard, 44.5 mm down.
+      anchor_a: { body: r0_link, xyz_m: [0.032155, -0.034447, 0.008] }
+      # Relative to the knee joint: 5 mm forward, 5 mm inboard, 46 mm down.
+      anchor_b: { body: r1_link, xyz_m: [0.042698, 0.01783, 0.005] }
+      length_min_m: null
+      length_max_m: null
+      length_ref_m: null
+      force_ref_n: 300.0
+      stiffness_n_per_m: 0.0
+      damping_n_s_per_m: 0.0
+      friction_n: 0.0
+      velocity_smoothing_m_s: null
+      force_min_n: 0.0
+      force_max_n: 300.0
+      parameter_status: reference_300n
+      stroke_status: unverified
+      source: fudan_tendon_motor_300N
+    - name: gas_left
+      side: left
+      anchor_a: { body: l0_link, xyz_m: [0.032155, 0.034447, 0.008] }
+      anchor_b: { body: l1_link, xyz_m: [0.042698, -0.01783, 0.005] }
+      length_min_m: null
+      length_max_m: null
+      length_ref_m: null
+      force_ref_n: 300.0
+      stiffness_n_per_m: 0.0
+      damping_n_s_per_m: 0.0
+      friction_n: 0.0
+      velocity_smoothing_m_s: null
+      force_min_n: 0.0
+      force_max_n: 300.0
+      parameter_status: reference_300n
+      stroke_status: unverified
+      source: fudan_tendon_motor_300N

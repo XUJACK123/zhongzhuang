@@ -1,0 +1,69 @@
+{
+  "stage": "P4",
+  "status": "passed",
+  "duration_s": 1.0,
+  "combinations": {
+    "A_springs_off_motors_off": {
+      "springs": false,
+      "motors": false,
+      "start_height_m": 0.4747513721610853,
+      "final_height_m": 0.23496272142023558,
+      "min_height_m": 0.22225437070406173,
+      "up_dot": 0.9784970982633661,
+      "torque_rms_nm": 0.0,
+      "saturation_fraction": 0.0,
+      "max_spring_force_n": 0.0
+    },
+    "B_springs_on_motors_off": {
+      "springs": true,
+      "motors": false,
+      "start_height_m": 0.4747513721610853,
+      "final_height_m": 0.3108681370550839,
+      "min_height_m": 0.30884818035439204,
+      "up_dot": 0.0003317131648456172,
+      "torque_rms_nm": 0.0,
+      "saturation_fraction": 0.0,
+      "max_spring_force_n": 300.0
+    },
+    "C_springs_on_motors_on": {
+      "springs": true,
+      "motors": true,
+      "start_height_m": 0.4747513721610853,
+      "final_height_m": 0.3108741522012537,
+      "min_height_m": 0.3080446049631027,
+      "up_dot": 0.00030451329719172643,
+      "torque_rms_nm": 3.7825354618719116,
+      "saturation_fraction": 0.0,
+      "max_spring_force_n": 300.0
+    },
+    "D_springs_off_motors_on": {
+      "springs": false,
+      "motors": true,
+      "start_height_m": 0.4747513721610853,
+      "final_height_m": 0.33662911468995604,
+      "min_height_m": 0.33662911468995604,
+      "up_dot": 0.751173722446436,
+      "torque_rms_nm": 5.10716021686233,
+      "saturation_fraction": 0.0,
+      "max_spring_force_n": 0.0
+    }
+  },
+  "checks": {
+    "passive_force_without_motors": {
+      "pass_motor_off_force_n": 300.0,
+      "no_motor_force_n": 0.0,
+      "passed": true
+    },
+    "springs_improve_height_without_motors": {
+      "with_springs_m": 0.3108681370550839,
+      "without_springs_m": 0.23496272142023558,
+      "passed": true
+    },
+    "motors_can_hold_with_springs": {
+      "final_height_m": 0.3108741522012537,
+      "passed": true,
+      "note": "PD-only hold on a balancing robot; not a standing-policy check"
+    }
+  },
+  "note": "A is an ablation only; B is the phase-1 training default; C is an experiment"
+}

@@ -1,0 +1,35 @@
+{
+  "run_id": "build-assets-20261028T154143Z",
+  "date": "2026-10-28T15:41:43+00:00",
+  "package_version": "0.1.0",
+  "source_urdf_hash": "63d0936ac1ca3d39f7e2b14bfd29684974e0b8f5e7220bfc49a97b65f8035b71",
+  "corrected_asset_hash": "652569a4efedbf7e793446ba75176585982f1fa601b28a03377d6e1b7d5fbadf",
+  "model_xml_hash": {
+    "visual": "22ec515c280ec8e51005199022a1f4147fc05654cdce00848a17ce4caad1c370",
+    "train": "6fb772d0accc96e293ee049f63de3637854dff8ae609a883e2346f00fe10da89"
+  },
+  "spawn_spec_hash": "3ccae7a7762ecc58ab277cd0e7ffffbb413ff916cb77d73a7dddf415273f3a05",
+  "policy_contract_hash": "623b341a2d4807b3615282faa9b2a4aa9d2953c46955e94d2338f41424eb9434",
+  "physics_dt_s": 0.005,
+  "policy_dt_s": 0.01,
+  "spring_backend": "spatial_tendon_motor",
+  "spring_count": 2,
+  "spring_parameter_source": "missing (configs/gas_spring.yaml has null anchors)",
+  "compensation_mode": "off",
+  "actor_obs_dim": 25,
+  "history_dim": 125,
+  "action_dim": 6,
+  "privileged_schema": 149,
+  "critic_input_dim": 152,
+  "validation_level": "static checks + CPU geometry/spawn only",
+  "passed_gates": [
+    "P1"
+  ],
+  "unresolved_items": [
+    "gas-spring anchors, stroke and force unknown (P3/P4 unpassed)",
+    "wheel radius provisional",
+    "rotor armature unknown",
+    "motor torque limit provisional",
+    "no observation/reward/PPO/teacher code yet (P4-P10)"
+  ]
+}

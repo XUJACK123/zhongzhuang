@@ -1,0 +1,154 @@
+{
+  "stage": "P2",
+  "status": "passed",
+  "profile": "geometry_only",
+  "xml_path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/assets/mjcf/fifty_train.xml",
+  "xml_sha256": "6fb772d0accc96e293ee049f63de3637854dff8ae609a883e2346f00fe10da89",
+  "spawn_z_m": 0.4747513721610853,
+  "checks": {
+    "quaternion_norm": {
+      "value": 1.0,
+      "error": 0.0,
+      "passed": true
+    },
+    "base_up_dot": {
+      "value": 1.0,
+      "passed": true
+    },
+    "projected_gravity": {
+      "value": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "error_vs_minus_z": 0.0,
+      "passed": true
+    },
+    "top_marker_above_wheel_axle": {
+      "marker_world_m": [
+        0.05674710124731064,
+        0.07860518017337757,
+        0.7462770851280158
+      ],
+      "marker_z_m": 0.7462770851280158,
+      "max_wheel_axle_z_m": 0.07000000000000148,
+      "passed": true,
+      "marker_source": "spawn.top_marker_local_m or corrected base mesh top vertex"
+    },
+    "wheel_clearance": {
+      "per_wheel_m": {
+        "right_wheel": 0.010000000000000023,
+        "left_wheel": 0.01000000000000148
+      },
+      "expected_m": 0.01,
+      "passed": true
+    },
+    "left_right_wheel_height": {
+      "delta_m": 1.457167719820518e-15,
+      "passed": true
+    },
+    "no_ground_penetration": {
+      "lowest_robot_point_m": 0.010000000000000023,
+      "contacts": 0,
+      "passed": true
+    },
+    "source_rotation_applied_once": {
+      "root_quat_wxyz": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "identity_expected": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "passed": true
+    }
+  },
+  "frames": {
+    "root_position_m": [
+      0.0,
+      0.0,
+      0.4747513721610853
+    ],
+    "root_quat_wxyz": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "hips_world_m": {
+      "rf0_Joint": [
+        0.0,
+        -0.227697766952964,
+        0.4747513721610853
+      ],
+      "lf0_Joint": [
+        0.0,
+        0.227697766952964,
+        0.4747513721610853
+      ]
+    },
+    "wheel_axles_world_m": {
+      "right_wheel": [
+        0.022865346232957592,
+        -0.2607977669529719,
+        0.07000000000000009
+      ],
+      "left_wheel": [
+        0.022865346232955858,
+        0.26820223304702334,
+        0.07000000000000148
+      ]
+    },
+    "wheel_bottoms_world_z_m": {
+      "right_wheel": 0.010000000000000023,
+      "left_wheel": 0.01000000000000148
+    },
+    "lowest_robot_point_m": 0.010000000000000023,
+    "top_marker_world_m": [
+      0.05674710124731064,
+      0.07860518017337757,
+      0.7462770851280158
+    ]
+  },
+  "joint_pose": {
+    "default_angles_rad": {
+      "rf0_Joint": 2.0554215512416354,
+      "rf1_Joint": -2.5592683579936746,
+      "r_wheel_Joint": 0.0,
+      "lf0_Joint": -2.055421551241647,
+      "lf1_Joint": 2.559268357993675,
+      "l_wheel_Joint": 0.0
+    },
+    "limits_rad": {
+      "rf0_Joint": [
+        1.4554215512416353,
+        2.6554215512416355
+      ],
+      "rf1_Joint": [
+        -3.2592683579936743,
+        -1.8592683579936746
+      ],
+      "r_wheel_Joint": null,
+      "lf0_Joint": [
+        -2.655421551241647,
+        -1.4554215512416468
+      ],
+      "lf1_Joint": [
+        1.859268357993675,
+        3.259268357993675
+      ],
+      "l_wheel_Joint": null
+    }
+  },
+  "gas_spring": {
+    "configured": true,
+    "status": "configured",
+    "lengths_m": null,
+    "note": "no passive spring force exists in this model; P3/P4 remain unpassed"
+  }
+}

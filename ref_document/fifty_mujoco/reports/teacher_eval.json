@@ -1,0 +1,195 @@
+{
+  "stage": "P6",
+  "status": "failed",
+  "teacher": {
+    "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fudan_rl_wheel_leg-main/mujoco/actor/yuntai/上台阶3_angz+.onnx",
+    "inputs": {
+      "obs": [
+        "batch",
+        25
+      ],
+      "obs_history": [
+        "batch",
+        125
+      ]
+    },
+    "outputs": [
+      "actions"
+    ],
+    "matched_tensors": 14,
+    "unmatched_tensors": [],
+    "samples": 256,
+    "max_abs_error": 1.1444091796875e-05,
+    "max_rel_error": 0.0010137581266462803,
+    "tolerances": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    },
+    "passed": true,
+    "note": "critic and optimisers do not exist in the ONNX file and are not invented"
+  },
+  "seconds_per_episode": 10.0,
+  "commands": {
+    "stand": {
+      "command": [
+        0.0,
+        0.0
+      ],
+      "mean_survival_s": 0.49000000000000027,
+      "tracking_vx_rmse": 0.7268716868524602,
+      "mean_up_dot": 0.8279640695093076,
+      "episodes": [
+        {
+          "command": [
+            0.0,
+            0.0
+          ],
+          "survival_s": 0.49000000000000027,
+          "tracking_vx_rmse": 0.7268716868524602,
+          "mean_up_dot": 0.8279640695093076,
+          "final_height_m": 0.4747513721610853
+        },
+        {
+          "command": [
+            0.0,
+            0.0
+          ],
+          "survival_s": 0.49000000000000027,
+          "tracking_vx_rmse": 0.7268716868524602,
+          "mean_up_dot": 0.8279640695093076,
+          "final_height_m": 0.4747513721610853
+        }
+      ]
+    },
+    "forward": {
+      "command": [
+        0.3,
+        0.0
+      ],
+      "mean_survival_s": 0.3000000000000001,
+      "tracking_vx_rmse": 0.3777468627341177,
+      "mean_up_dot": 0.8140671761719933,
+      "episodes": [
+        {
+          "command": [
+            0.3,
+            0.0
+          ],
+          "survival_s": 0.3000000000000001,
+          "tracking_vx_rmse": 0.3777468627341177,
+          "mean_up_dot": 0.8140671761719933,
+          "final_height_m": 0.4747513721610853
+        },
+        {
+          "command": [
+            0.3,
+            0.0
+          ],
+          "survival_s": 0.3000000000000001,
+          "tracking_vx_rmse": 0.3777468627341177,
+          "mean_up_dot": 0.8140671761719933,
+          "final_height_m": 0.4747513721610853
+        }
+      ]
+    },
+    "backward": {
+      "command": [
+        -0.3,
+        0.0
+      ],
+      "mean_survival_s": 0.3000000000000001,
+      "tracking_vx_rmse": 0.8518689425059273,
+      "mean_up_dot": 0.8519886377435791,
+      "episodes": [
+        {
+          "command": [
+            -0.3,
+            0.0
+          ],
+          "survival_s": 0.3000000000000001,
+          "tracking_vx_rmse": 0.8518689425059273,
+          "mean_up_dot": 0.8519886377435791,
+          "final_height_m": 0.4747513721610853
+        },
+        {
+          "command": [
+            -0.3,
+            0.0
+          ],
+          "survival_s": 0.3000000000000001,
+          "tracking_vx_rmse": 0.8518689425059273,
+          "mean_up_dot": 0.8519886377435791,
+          "final_height_m": 0.4747513721610853
+        }
+      ]
+    },
+    "turn_left": {
+      "command": [
+        0.0,
+        0.3
+      ],
+      "mean_survival_s": 0.3000000000000001,
+      "tracking_vx_rmse": 0.5667942268461897,
+      "mean_up_dot": 0.8322781434605737,
+      "episodes": [
+        {
+          "command": [
+            0.0,
+            0.3
+          ],
+          "survival_s": 0.3000000000000001,
+          "tracking_vx_rmse": 0.5667942268461897,
+          "mean_up_dot": 0.8322781434605737,
+          "final_height_m": 0.4747513721610853
+        },
+        {
+          "command": [
+            0.0,
+            0.3
+          ],
+          "survival_s": 0.3000000000000001,
+          "tracking_vx_rmse": 0.5667942268461897,
+          "mean_up_dot": 0.8322781434605737,
+          "final_height_m": 0.4747513721610853
+        }
+      ]
+    },
+    "turn_right": {
+      "command": [
+        0.0,
+        -0.3
+      ],
+      "mean_survival_s": 0.5400000000000003,
+      "tracking_vx_rmse": 0.7307682597893767,
+      "mean_up_dot": 0.8016912004468635,
+      "episodes": [
+        {
+          "command": [
+            0.0,
+            -0.3
+          ],
+          "survival_s": 0.5400000000000003,
+          "tracking_vx_rmse": 0.7307682597893767,
+          "mean_up_dot": 0.8016912004468635,
+          "final_height_m": 0.4747513721610853
+        },
+        {
+          "command": [
+            0.0,
+            -0.3
+          ],
+          "survival_s": 0.5400000000000003,
+          "tracking_vx_rmse": 0.7307682597893767,
+          "mean_up_dot": 0.8016912004468635,
+          "final_height_m": 0.4747513721610853
+        }
+      ]
+    }
+  },
+  "gate": "standing survival on the target model",
+  "notes": [
+    "target stance height 0.4648 m vs the teacher's training height range ~0.17-0.33 m",
+    "channel order is still not proven; a failure here is not proof that the weights are wrong",
+    "no camera/gimbal degrees of freedom are modelled"
+  ]
+}

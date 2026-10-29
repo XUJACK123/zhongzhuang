@@ -1,0 +1,118 @@
+{
+  "stage": "P5",
+  "status": "passed",
+  "checks": {
+    "dimensions": {
+      "obs": [
+        2,
+        25
+      ],
+      "history": [
+        2,
+        125
+      ],
+      "privileged": [
+        2,
+        149
+      ],
+      "expected": {
+        "obs": [
+          2,
+          25
+        ],
+        "history": [
+          2,
+          125
+        ],
+        "privileged": [
+          2,
+          149
+        ],
+        "actions": 6
+      },
+      "critic_input_dim": 152,
+      "passed": true
+    },
+    "pd_contract": {
+      "position_target_ok": true,
+      "velocity_target_ok": true,
+      "torque_ok": true,
+      "max_error": 0.0,
+      "passed": true
+    },
+    "torque_limit": {
+      "max_abs_torque_nm": 30.0,
+      "limits_nm": [
+        30.0,
+        30.0,
+        5.0,
+        30.0,
+        30.0,
+        5.0
+      ],
+      "passed": true
+    },
+    "observation_slices": {
+      "ang_vel_scale_ok": true,
+      "gravity_up_ok": true,
+      "command_scale_ok": true,
+      "leg_position_zero_at_default": true,
+      "full_match": true,
+      "passed": true
+    },
+    "history_order": {
+      "newest_is_current_obs": true,
+      "matches_recent_frames": false,
+      "passed": true
+    },
+    "history_read_is_pure": {
+      "passed": true
+    },
+    "reset_fills_history": {
+      "all_frames_equal_current_obs": true,
+      "passed": true
+    },
+    "single_env_reset_is_isolated": {
+      "other_history_unchanged": true,
+      "other_obs_unchanged": true,
+      "passed": true
+    },
+    "delay_buffer_cleared_on_reset": {
+      "buffer_max": 0.0,
+      "passed": true
+    },
+    "timeout_is_separate_from_failure": {
+      "timeout_seen": true,
+      "terminal_obs_shape": [
+        1,
+        149
+      ],
+      "passed": true
+    },
+    "joint_mapping_by_name": {
+      "qpos_adr": {
+        "rf0_Joint": 7,
+        "rf1_Joint": 8,
+        "r_wheel_Joint": 9,
+        "lf0_Joint": 10,
+        "lf1_Joint": 11,
+        "l_wheel_Joint": 12
+      },
+      "dof_adr": {
+        "rf0_Joint": 6,
+        "rf1_Joint": 7,
+        "r_wheel_Joint": 8,
+        "lf0_Joint": 9,
+        "lf1_Joint": 10,
+        "l_wheel_Joint": 11
+      },
+      "passed": true
+    },
+    "privileged_layout": {
+      "size": 149,
+      "expected": 149,
+      "passed": true
+    }
+  },
+  "spring_count": 2
+}

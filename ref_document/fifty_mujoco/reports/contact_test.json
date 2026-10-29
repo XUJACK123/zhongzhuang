@@ -1,0 +1,47 @@
+{
+  "stage": "P5",
+  "status": "passed",
+  "total_mass_kg": 23.259630515567018,
+  "checks": {
+    "dual_wheel_load": {
+      "wheel_normal_force_n": [
+        56.21583840013415,
+        61.197431957435285,
+        60.543105087215686,
+        55.461041288304635
+      ],
+      "total_vertical_n": 235.94716648538417,
+      "weight_n": 228.17697535771245,
+      "ratio": 1.0340533531724243,
+      "settled_height_m": 0.22454216291541387,
+      "passed": true,
+      "note": "vertical-slider support (no weight carried by the pin); mean of the last 100 steps"
+    },
+    "drop": {
+      "start_height_m": 0.7747513721610852,
+      "final_height_m": 0.22838512872203987,
+      "peak_contact_force_n": 2437.2415446833907,
+      "finite": true,
+      "passed": true,
+      "note": "no controller: falling over after landing is expected"
+    },
+    "rolling": {
+      "mean_wheel_rad_s": {
+        "+2.0": 1.6639903065048995,
+        "+0.0": 0.3154037098484752,
+        "-2.0": -1.0283182444226677
+      },
+      "window_s": 0.075,
+      "passed": true,
+      "note": "free base, gas springs off, first 0.1 s; travel distance is excluded because it is dominated by the uncontrolled tip-over"
+    },
+    "fallen_pose_detected": {
+      "illegal_bodies": [
+        "base_link",
+        "r0_link",
+        "r1_link"
+      ],
+      "passed": true
+    }
+  }
+}

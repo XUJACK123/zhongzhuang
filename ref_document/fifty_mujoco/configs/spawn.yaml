@@ -1,0 +1,27 @@
+# Initial pose contract (doc section 10.4).
+#
+# The root quaternion is already in the training frame, so [1,0,0,0] (wxyz) is
+# correct and no further source->training rotation may be applied by the XML,
+# the entity config or the reset path.
+spawn:
+  frame: training_base
+  root_quat_wxyz: [1.0, 0.0, 0.0, 0.0]
+  root_xy_m: [0.0, 0.0]
+  root_z_mode: wheel_clearance
+  wheel_clearance_m: 0.010
+  joint_pose_source: corrected_robot.default_joint_angles_rad
+  random_yaw: false
+  random_roll_pitch: false
+  initial_linear_velocity_m_s: [0.0, 0.0, 0.0]
+  initial_angular_velocity_rad_s: [0.0, 0.0, 0.0]
+  # Structural top marker on base_link, taken from the corrected base mesh
+  # (highest CAD vertex). `null` means: read it from the corrected geometry
+  # report produced by `build-assets`; do not invent an arbitrary +Z point.
+  top_marker_local_m: null
+
+checks:
+  min_base_up_dot: 0.999
+  projected_gravity_tolerance: 1.0e-6
+  wheel_clearance_tolerance_m: 0.001
+  quaternion_norm_tolerance: 1.0e-8
+  left_right_wheel_delta_tolerance_m: 0.001

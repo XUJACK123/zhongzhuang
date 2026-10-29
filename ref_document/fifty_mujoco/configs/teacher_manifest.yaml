@@ -1,0 +1,34 @@
+{
+  "teacher": {
+    "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fudan_rl_wheel_leg-main/mujoco/actor/yuntai/\u4e0a\u53f0\u96363_angz+.onnx",
+    "inputs": {
+      "obs": [
+        "batch",
+        25
+      ],
+      "obs_history": [
+        "batch",
+        125
+      ]
+    },
+    "outputs": [
+      "actions"
+    ],
+    "matched_tensors": 14,
+    "unmatched_tensors": [],
+    "samples": 256,
+    "max_abs_error": 1.1444091796875e-05,
+    "max_rel_error": 0.0010137581266462803,
+    "tolerances": {
+      "atol": 1e-05,
+      "rtol": 0.0001
+    },
+    "passed": true,
+    "note": "critic and optimisers do not exist in the ONNX file and are not invented"
+  },
+  "weights_sha256": "2e0907d67d314e5fb12358231089b951033aa6b7d76b60aa8c6e7a330d3549f5",
+  "frozen": true,
+  "channel_order": null,
+  "channel_contract_status": "unverified",
+  "note": "The teacher channel order is not proven by weight matching. `evaluate-teacher` must reproduce the original robot before the teacher loss is trusted."
+}

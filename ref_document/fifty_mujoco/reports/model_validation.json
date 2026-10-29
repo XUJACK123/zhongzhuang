@@ -1,0 +1,323 @@
+{
+  "stage": "P1",
+  "status": "passed",
+  "models": {
+    "visual": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/assets/mjcf/fifty_visual.xml",
+      "nmesh": 7
+    },
+    "train": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/assets/mjcf/fifty_train.xml",
+      "nmesh": 0
+    }
+  },
+  "spawn_z_m": 0.47475137216108526,
+  "wheel_axes_z_m": {
+    "right_wheel": -0.40475137216108525,
+    "left_wheel": -0.40475137216108364
+  },
+  "checks": {
+    "model_dimensions": {
+      "passed": true,
+      "nq": 13,
+      "nv": 12,
+      "nu": 8,
+      "ntendon": 2,
+      "nbody": 8,
+      "expected": {
+        "nq": 13,
+        "nv": 12,
+        "nu": 8,
+        "ntendon": 2,
+        "nbody": 8
+      },
+      "note": "nu counts actuators, not policy actions (policy stays 6)"
+    },
+    "fk_parity_train": {
+      "samples": 200,
+      "worst_position_error_m": 2.255941018298854e-16,
+      "worst_rotation_error_deg": 2.9575586669421963e-06,
+      "worst_case": {
+        "sample": 4,
+        "link": "right_wheel",
+        "q": {
+          "rf0_Joint": 1.7956212070105306,
+          "rf1_Joint": -2.07346815711342,
+          "r_wheel_Joint": 1.624787336181849,
+          "lf0_Joint": -2.1758526677759815,
+          "lf1_Joint": 2.303136675248016,
+          "l_wheel_Joint": 0.5843415549356936
+        }
+      },
+      "passed": true
+    },
+    "fk_parity_visual": {
+      "samples": 20,
+      "worst_position_error_m": 2.255941018298854e-16,
+      "worst_rotation_error_deg": 2.091309789151873e-06,
+      "worst_case": {
+        "sample": 4,
+        "link": "right_wheel",
+        "q": {
+          "rf0_Joint": 1.7956212070105306,
+          "rf1_Joint": -2.07346815711342,
+          "r_wheel_Joint": 1.624787336181849,
+          "lf0_Joint": -2.1758526677759815,
+          "lf1_Joint": 2.303136675248016,
+          "l_wheel_Joint": 0.5843415549356936
+        }
+      },
+      "passed": true
+    },
+    "wheel_geometry": {
+      "passed": true,
+      "per_wheel": {
+        "right_wheel": {
+          "visual_offset_m": 1.61006264013088e-15,
+          "collision_offset_m": 0.0,
+          "joint_axis_dot_link_z": 1.0,
+          "collision_radius_m": 0.06,
+          "passed": true
+        },
+        "left_wheel": {
+          "visual_offset_m": 1.767661942163674e-15,
+          "collision_offset_m": 0.0,
+          "joint_axis_dot_link_z": 1.0,
+          "collision_radius_m": 0.06,
+          "passed": true
+        }
+      }
+    },
+    "physical_parity_visual_vs_train": {
+      "passed": true,
+      "bodies": {
+        "base_link": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 2.1211358106862798e-05,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        },
+        "r0_link": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 6.49917627348707e-07,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        },
+        "r1_link": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 1.4677938577847697e-07,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        },
+        "right_wheel": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 2.2423279477235e-07,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        },
+        "l0_link": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 6.180411206450091e-07,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        },
+        "l1_link": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 1.8506868558194498e-07,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        },
+        "left_wheel": {
+          "mass_delta_kg": 0.0,
+          "mass_tolerance_kg": 2.24232794577727e-07,
+          "ipos_delta_m": 0.0,
+          "inertia_delta": 0.0,
+          "mass_matches_corrected_urdf": true,
+          "passed": true
+        }
+      },
+      "joints": {
+        "rf0_Joint": {
+          "axis_delta": 0.0,
+          "range_delta": 0.0,
+          "limited_equal": true,
+          "passed": true
+        },
+        "rf1_Joint": {
+          "axis_delta": 0.0,
+          "range_delta": 0.0,
+          "limited_equal": true,
+          "passed": true
+        },
+        "r_wheel_Joint": {
+          "axis_delta": 0.0,
+          "range_delta": 0.0,
+          "limited_equal": true,
+          "passed": true
+        },
+        "lf0_Joint": {
+          "axis_delta": 0.0,
+          "range_delta": 0.0,
+          "limited_equal": true,
+          "passed": true
+        },
+        "lf1_Joint": {
+          "axis_delta": 0.0,
+          "range_delta": 0.0,
+          "limited_equal": true,
+          "passed": true
+        },
+        "l_wheel_Joint": {
+          "axis_delta": 0.0,
+          "range_delta": 0.0,
+          "limited_equal": true,
+          "passed": true
+        }
+      },
+      "total_mass_kg": 23.259630515567018
+    },
+    "inertia": {
+      "passed": true,
+      "per_link": {
+        "base_link": {
+          "corrected_principal_moments": [
+            0.04363468415308538,
+            0.06096903111347275,
+            0.07607293164813779
+          ],
+          "compiled_principal_moments": [
+            0.04363468415308534,
+            0.06096903111347273,
+            0.07607293164813778
+          ],
+          "valid": true,
+          "note": "ok"
+        },
+        "r0_link": {
+          "corrected_principal_moments": [
+            0.0004853103993615888,
+            0.0014441625214254299,
+            0.0016469230232823916
+          ],
+          "compiled_principal_moments": [
+            0.00048531039936158913,
+            0.0014441625214254307,
+            0.0016469230232823932
+          ],
+          "valid": true,
+          "note": "ok"
+        },
+        "r1_link": {
+          "corrected_principal_moments": [
+            4.566028816302194e-05,
+            0.0013411447288788386,
+            0.0013816140179643938
+          ],
+          "compiled_principal_moments": [
+            4.566028816302199e-05,
+            0.0013411447288788393,
+            0.0013816140179643951
+          ],
+          "valid": true,
+          "note": "ok"
+        },
+        "right_wheel": {
+          "corrected_principal_moments": [
+            0.0001696707103859283,
+            0.00017435392138714763,
+            0.00033521230449955306
+          ],
+          "compiled_principal_moments": [
+            0.00016967071038592835,
+            0.00017435392138714763,
+            0.0003352123044995532
+          ],
+          "valid": true,
+          "note": "ok"
+        },
+        "l0_link": {
+          "corrected_principal_moments": [
+            0.0004797578844944398,
+            0.001438612694936897,
+            0.0016346838253178207
+          ],
+          "compiled_principal_moments": [
+            0.0004797578844944399,
+            0.0014386126949368972,
+            0.001634683825317821
+          ],
+          "valid": true,
+          "note": "ok"
+        },
+        "l1_link": {
+          "corrected_principal_moments": [
+            5.375866216716438e-05,
+            0.0013492424224637463,
+            0.0013886324959109678
+          ],
+          "compiled_principal_moments": [
+            5.375866216716438e-05,
+            0.0013492424224637461,
+            0.001388632495910968
+          ],
+          "valid": true,
+          "note": "ok"
+        },
+        "left_wheel": {
+          "corrected_principal_moments": [
+            0.00016967071038541384,
+            0.0001743539213867984,
+            0.00033521230449871773
+          ],
+          "compiled_principal_moments": [
+            0.00016967071038541393,
+            0.0001743539213867985,
+            0.00033521230449871795
+          ],
+          "valid": true,
+          "note": "ok"
+        }
+      }
+    },
+    "spawn_geometry": {
+      "root_z_m": 0.47475137216108526,
+      "expected_root_z_m": 0.47475137216108526,
+      "wheel_lowest_points_m": [
+        0.009999999999999967,
+        0.01000000000000148
+      ],
+      "min_wheel_clearance_m": 0.009999999999999967,
+      "expected_clearance_m": 0.01,
+      "lowest_robot_point_m": 0.009999999999999967,
+      "contacts_at_spawn": 0,
+      "passed": true
+    },
+    "total_mass": {
+      "passed": true,
+      "compiled_kg": 23.259630515567018,
+      "urdf_kg": 23.259630515567014,
+      "tolerance_note": "MuJoCo body_mass is float32"
+    },
+    "gas_spring": {
+      "passed": true,
+      "status": "generated_reference_300n",
+      "tendon_count": 2,
+      "profile": "reference_300n",
+      "stroke_verified": false,
+      "note": "P3 still needs measured anchors + stroke; reference_300n is not calibrated"
+    }
+  },
+  "corrected_asset_report": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/assets/corrected/transform_report.json"
+}

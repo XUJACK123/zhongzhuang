@@ -1,0 +1,39 @@
+{
+  "onnx": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/export/model_last.onnx",
+  "onnx_sha256": "809621fc11477a2716ae191e13c233fa076dfe8a9f325ef548ed414918136f56",
+  "obs_dim": 25,
+  "history_dim": 125,
+  "action_dim": 6,
+  "critic_input_dim": 152,
+  "note": "The ONNX contains actor+encoder only. Default joint angles, PD gains, action scales, spawn pose and gas-spring settings must be shipped next to it.",
+  "checkpoint": "runs/run_20261028_152238/model_last.pt",
+  "update_count": 2,
+  "stage": "INDEPENDENT_PPO",
+  "verification": {
+    "samples": 256,
+    "max_abs_error": 6.705522537231445e-08,
+    "passed": true
+  },
+  "default_joint_angles_rad": {
+    "rf0_Joint": 2.0554215512416354,
+    "rf1_Joint": -2.5592683579936746,
+    "r_wheel_Joint": 0.0,
+    "lf0_Joint": -2.055421551241647,
+    "lf1_Joint": 2.559268357993675,
+    "l_wheel_Joint": 0.0
+  },
+  "pd_gains": {
+    "leg_kp": 20.0,
+    "leg_kd": 1.0,
+    "wheel_kp": 0.0,
+    "wheel_kd": 0.2,
+    "torque_limit_nm": 30.0,
+    "wheel_torque_limit_nm": 5.0,
+    "torque_scale": 1.0,
+    "leg_position_scale": 0.5,
+    "wheel_velocity_scale": 10.0
+  },
+  "spawn_z_m": 0.4747513721610853,
+  "spring_profile": "reference_300n",
+  "spring_count": 2
+}

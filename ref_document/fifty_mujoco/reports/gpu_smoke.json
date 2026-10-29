@@ -1,0 +1,56 @@
+{
+  "stage": "P7",
+  "status": "partial",
+  "backend": "mjlab_available",
+  "num_envs": 16,
+  "gpu": {
+    "mjlab_import": true,
+    "mj_spec_bodies": 8,
+    "mj_spec_joints": 7,
+    "mj_spec_actuators": 8,
+    "mjw_batch": {
+      "device": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "nworld": 1024,
+      "steps": 100,
+      "wall_s": 3.1926880229984818,
+      "env_steps_per_s": 32073.287230810867,
+      "finite": true,
+      "height_min_m": 0.31087759137153625,
+      "height_max_m": 0.31087765097618103,
+      "height_start_m": 0.4747513721610853,
+      "passed": true
+    }
+  },
+  "checks": {
+    "cpu_batch": {
+      "num_envs": 16,
+      "steps": 20,
+      "wall_s": 0.23239185300008103,
+      "policy_steps_per_s": 86.06153676132969,
+      "env_steps_per_s": 1376.984588181275,
+      "finite": true,
+      "reset_events": 0,
+      "passed": true
+    },
+    "mjlab_spec": {
+      "passed": true,
+      "bodies": 8,
+      "joints": 7,
+      "actuators": 8
+    },
+    "mjw_batch": {
+      "device": "NVIDIA GeForce RTX 5060 Laptop GPU",
+      "nworld": 1024,
+      "steps": 100,
+      "wall_s": 3.1926880229984818,
+      "env_steps_per_s": 32073.287230810867,
+      "finite": true,
+      "height_min_m": 0.31087759137153625,
+      "height_max_m": 0.31087765097618103,
+      "height_start_m": 0.4747513721610853,
+      "passed": true
+    }
+  },
+  "note": "GPU physics batch verified through mujoco_warp (32073 env-steps/s at 1024 worlds). PD, observations and rewards still run in NumPy, and no ManagerBasedRlEnv was built, so end-to-end GPU training is NOT verified: the GPU training gate stays unpassed.",
+  "passed": false
+}

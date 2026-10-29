@@ -1,0 +1,868 @@
+{
+  "stage": "P0",
+  "status": "passed",
+  "checks": {
+    "joint_origin_alignment": {
+      "max_error_m": 1.77510956901594e-15,
+      "passed": true
+    },
+    "joint_axis_parallel": {
+      "max_deviation_from_parallel": 0.0,
+      "passed": true,
+      "note": "sign per joint is a frame convention, recorded in frame_signs"
+    },
+    "transform_derivation_consistency": {
+      "max_error_m": 5.647850449853784e-17,
+      "passed": true,
+      "note": "link frames legitimately differ from the CAD export; only the composition is checked"
+    },
+    "source_hashes_unchanged": {
+      "passed": true
+    },
+    "defects_reproduced": {
+      "passed": true,
+      "note": "audit reproduces the known visual/inertia defects; P1 must remove them",
+      "defect_count": 8
+    }
+  },
+  "findings": {
+    "visual_offsets": {
+      "correct": false,
+      "offending_links": [
+        "l1_link",
+        "left_wheel",
+        "r1_link",
+        "right_wheel"
+      ],
+      "max_offset_m": 0.3595696473641212,
+      "intentionally_corrected_links": [
+        "base_link"
+      ],
+      "note": "P0 records the defect; P1 must remove it. The base link correction is deliberate."
+    },
+    "inertial_origin_rotation": {
+      "identity": false,
+      "per_link_deg": {
+        "base_link": 201.24611797498102,
+        "r0_link": 190.4545845537105,
+        "r1_link": 190.09756781506235,
+        "right_wheel": 182.30024269827143,
+        "l0_link": 215.10244438365376,
+        "l1_link": 61.13170445196529,
+        "left_wheel": 28.868295548034794
+      },
+      "note": "non-zero rpy here means the inertia is rotated through the inertial frame as well"
+    }
+  },
+  "defects": [
+    {
+      "link": "base_link",
+      "training_urdf_visual_xyz_m": [
+        0.0,
+        0.00370223304702801,
+        0.103999999999989
+      ],
+      "parameters_json_visual_xyz_m": [
+        0.0,
+        0.0037022330470280057,
+        0.1039999999999885
+      ],
+      "recomputed_visual_xyz_m": [
+        0.0,
+        -0.0037022330470280057,
+        -0.1039999999999885
+      ],
+      "offset_vs_recomputed_m": [
+        0.0,
+        0.007404466094056016,
+        0.2079999999999775
+      ],
+      "offset_norm_m": 0.20813175182592558,
+      "intentional_correction": true
+    },
+    {
+      "link": "l0_link",
+      "training_urdf_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        4.440892098500626e-16,
+        2.42861286636753e-16,
+        0.0
+      ],
+      "offset_vs_recomputed_m": [
+        -4.440892098500626e-16,
+        -2.42861286636753e-16,
+        0.0
+      ],
+      "offset_norm_m": 5.061588988174682e-16,
+      "intentional_correction": false
+    },
+    {
+      "link": "l1_link",
+      "training_urdf_visual_xyz_m": [
+        -0.324491555207382,
+        0.154905009294887,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.3244915552073818,
+        0.15490500929488699,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        3.0531133177191805e-16,
+        -1.942890293094024e-16,
+        6.38378239159465e-16
+      ],
+      "offset_vs_recomputed_m": [
+        -0.32449155520738227,
+        0.1549050092948872,
+        -6.38378239159465e-16
+      ],
+      "offset_norm_m": 0.35956964736411595,
+      "intentional_correction": false
+    },
+    {
+      "link": "left_wheel",
+      "training_urdf_visual_xyz_m": [
+        -0.238593403560892,
+        0.0451724872402938,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.23859340356089198,
+        0.045172487240293824,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        5.551115123125783e-16,
+        9.43689570931383e-16,
+        -1.3877787807814457e-15
+      ],
+      "offset_vs_recomputed_m": [
+        -0.23859340356089256,
+        0.04517248724029286,
+        1.3877787807814457e-15
+      ],
+      "offset_norm_m": 0.242831970354493,
+      "intentional_correction": false
+    },
+    {
+      "link": "r0_link",
+      "training_urdf_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        -4.579669976578771e-16,
+        2.2898349882893854e-16,
+        0.0
+      ],
+      "offset_vs_recomputed_m": [
+        4.579669976578771e-16,
+        -2.2898349882893854e-16,
+        0.0
+      ],
+      "offset_norm_m": 5.120226691072501e-16,
+      "intentional_correction": false
+    },
+    {
+      "link": "r1_link",
+      "training_urdf_visual_xyz_m": [
+        -0.324491555207388,
+        -0.154905009294888,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.32449155520738837,
+        -0.1549050092948877,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        -3.3306690738754696e-16,
+        5.551115123125783e-17,
+        6.661338147750939e-16
+      ],
+      "offset_vs_recomputed_m": [
+        -0.32449155520738765,
+        -0.15490500929488807,
+        -6.661338147750939e-16
+      ],
+      "offset_norm_m": 0.3595696473641212,
+      "intentional_correction": false
+    },
+    {
+      "link": "right_wheel",
+      "training_urdf_visual_xyz_m": [
+        -0.238593403560897,
+        0.0451724872402931,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.23859340356089703,
+        0.0451724872402931,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        6.938893903907228e-16,
+        -1.6653345369377348e-16,
+        1.4432899320127035e-15
+      ],
+      "offset_vs_recomputed_m": [
+        -0.2385934035608977,
+        0.04517248724029327,
+        -1.4432899320127035e-15
+      ],
+      "offset_norm_m": 0.2428319703544981,
+      "intentional_correction": false
+    },
+    {
+      "link": "inertial",
+      "issue": "inertial/origin/rpy is non-zero in the training URDF; the inertia rotation is applied twice (once to the tensor, once through the inertial frame)"
+    }
+  ],
+  "sources": {
+    "source_urdf": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/solidwork_graph/fifty_version_with_meshes/urdf/fifty_version_with_meshes.urdf",
+      "sha256": "63d0936ac1ca3d39f7e2b14bfd29684974e0b8f5e7220bfc49a97b65f8035b71",
+      "sha256_matches_parameters_json": true
+    },
+    "training_urdf": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/solidwork_graph/fifty_version_training/urdf/fifty_training.urdf",
+      "sha256": "1baeee9248bd42dd0ef8b91bd8abaf2b0ef2083cd8d3e2dec2b8124ce1ab9bd8"
+    },
+    "parameters_json": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/solidwork_graph/fifty_version_training/config/model_parameters.json",
+      "sha256": "77d7d267b6cf3a8f90e24871296243743c9dc3793c9c860ccbb5fd11bb14cbc7"
+    },
+    "gas_spring_config": {
+      "configured": true,
+      "springs": [
+        "gas_right",
+        "gas_left"
+      ]
+    }
+  },
+  "meshes": {
+    "base_link": {
+      "file": "base_link.STL",
+      "triangles": 1020702,
+      "bytes": 51035184,
+      "sha256": "b371ffde22495d37ccd94b5e58b2c0709e0ac53e895ef1d055a2c0ab1ac1877d",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    },
+    "l0_link": {
+      "file": "l0_link.STL",
+      "triangles": 16544,
+      "bytes": 827284,
+      "sha256": "94e75dbe9fd5e35f830ceb20c4066ad4fb1d3d9431a8f4a6038b3f0c6c01fe5a",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    },
+    "l1_link": {
+      "file": "l1_link.STL",
+      "triangles": 22786,
+      "bytes": 1139384,
+      "sha256": "14fa8e66c8ba7330170b596ffbac942b83c8415c23818ee545fd9a6cfdc113dd",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    },
+    "left_wheel": {
+      "file": "left_wheel.STL",
+      "triangles": 38972,
+      "bytes": 1948684,
+      "sha256": "4d05998ba112306c9f3d59068060d61c5b3d8d49f0cf6e89663104a81f41fed3",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    },
+    "r0_link": {
+      "file": "r0_link.STL",
+      "triangles": 18824,
+      "bytes": 941284,
+      "sha256": "6bd1e82708f4cb99e883a1a8ff048f14eb9c6fe409fd24781979d3159ac7a94b",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    },
+    "r1_link": {
+      "file": "r1_link.STL",
+      "triangles": 21586,
+      "bytes": 1079384,
+      "sha256": "3ac0d4d7a94b5bec899a563a58e98d35cd0d7a3554dff8ee862ef3e25b115200",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    },
+    "right_wheel": {
+      "file": "right_wheel.STL",
+      "triangles": 38972,
+      "bytes": 1948684,
+      "sha256": "4b3d000df1aa54766e2898366cfd06b6432cce21450aa18de1aca85ad8661c89",
+      "recorded_sha256_matches": true,
+      "recorded_triangles_matches": true
+    }
+  },
+  "joint_trees": {
+    "source": {
+      "name": "fifty_version_with_meshes",
+      "root": "base_link",
+      "links": [
+        "base_link",
+        "l0_link",
+        "l1_link",
+        "left_wheel",
+        "r0_link",
+        "r1_link",
+        "right_wheel"
+      ],
+      "joints": [
+        {
+          "name": "lf0_Joint",
+          "type": "revolute",
+          "parent": "base_link",
+          "child": "l0_link",
+          "origin_xyz": [
+            0.223995533905936,
+            0.0,
+            0.103999999999989
+          ],
+          "origin_rpy": [
+            1.5707963267949,
+            0.0,
+            1.5707963267949
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "lf1_Joint",
+          "type": "revolute",
+          "parent": "l0_link",
+          "child": "l1_link",
+          "origin_xyz": [
+            -0.0978341221560943,
+            0.185818418198908,
+            -0.0120455339059343
+          ],
+          "origin_rpy": [
+            -3.14159265358979,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "l_wheel_Joint",
+          "type": "continuous",
+          "parent": "l1_link",
+          "child": "left_wheel",
+          "origin_xyz": [
+            0.120699468389051,
+            -0.218932953962176,
+            -0.0525499999999903
+          ],
+          "origin_rpy": [
+            3.14159265358979,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "rf0_Joint",
+          "type": "revolute",
+          "parent": "base_link",
+          "child": "r0_link",
+          "origin_xyz": [
+            -0.231399999999992,
+            0.0,
+            0.103999999999988
+          ],
+          "origin_rpy": [
+            1.5707963267949,
+            0.0,
+            -1.5707963267949
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "rf1_Joint",
+          "type": "revolute",
+          "parent": "r0_link",
+          "child": "r1_link",
+          "origin_xyz": [
+            0.0978341221560942,
+            0.185818418198913,
+            -0.0114999999999879
+          ],
+          "origin_rpy": [
+            0.0,
+            0.0,
+            3.14159265358979
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "r_wheel_Joint",
+          "type": "continuous",
+          "parent": "r1_link",
+          "child": "right_wheel",
+          "origin_xyz": [
+            0.120699468389053,
+            -0.218932953962172,
+            0.0445999999999932
+          ],
+          "origin_rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    "training": {
+      "name": "fifty_training",
+      "root": "base_link",
+      "links": [
+        "base_link",
+        "r0_link",
+        "r1_link",
+        "right_wheel",
+        "l0_link",
+        "l1_link",
+        "left_wheel"
+      ],
+      "joints": [
+        {
+          "name": "rf0_Joint",
+          "type": "revolute",
+          "parent": "base_link",
+          "child": "r0_link",
+          "origin_xyz": [
+            0.0,
+            -0.227697766952964,
+            0.0
+          ],
+          "origin_rpy": [
+            -1.5707963267949,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "rf1_Joint",
+          "type": "revolute",
+          "parent": "r0_link",
+          "child": "r1_link",
+          "origin_xyz": [
+            0.209999999999999,
+            0.0,
+            0.0114999999999869
+          ],
+          "origin_rpy": [
+            0.0,
+            0.0,
+            1.5707963267949
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "r_wheel_Joint",
+          "type": "continuous",
+          "parent": "r1_link",
+          "child": "right_wheel",
+          "origin_xyz": [
+            0.250000000000005,
+            0.0,
+            -0.0445999999999935
+          ],
+          "origin_rpy": [
+            0.0,
+            0.0,
+            -1.5707963267949
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "lf0_Joint",
+          "type": "revolute",
+          "parent": "base_link",
+          "child": "l0_link",
+          "origin_xyz": [
+            0.0,
+            0.227697766952964,
+            0.0
+          ],
+          "origin_rpy": [
+            1.5707963267949,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "lf1_Joint",
+          "type": "revolute",
+          "parent": "l0_link",
+          "child": "l1_link",
+          "origin_xyz": [
+            0.209999999999995,
+            0.0,
+            0.0120455339059333
+          ],
+          "origin_rpy": [
+            0.0,
+            0.0,
+            -1.5707963267949
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "l_wheel_Joint",
+          "type": "continuous",
+          "parent": "l1_link",
+          "child": "left_wheel",
+          "origin_xyz": [
+            0.250000000000007,
+            0.0,
+            -0.0525499999999913
+          ],
+          "origin_rpy": [
+            3.14159265358979,
+            0.0,
+            1.5707963267949
+          ],
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ]
+    },
+    "declaration_order_matches_contract": true,
+    "mass_source_kg": 23.259630515567014,
+    "mass_training_kg": 23.259630515567014
+  },
+  "joint_correspondence": {
+    "rf0_Joint": {
+      "origin_error_m": 4.996003610813204e-16,
+      "axis_dot": -1.0,
+      "axis_angle_deg": 180.0
+    },
+    "rf1_Joint": {
+      "origin_error_m": 7.510691584075473e-16,
+      "axis_dot": -1.0,
+      "axis_angle_deg": 180.0
+    },
+    "r_wheel_Joint": {
+      "origin_error_m": 1.5664082319591336e-15,
+      "axis_dot": -1.0,
+      "axis_angle_deg": 180.0
+    },
+    "lf0_Joint": {
+      "origin_error_m": 4.996003610813204e-16,
+      "axis_dot": -1.0,
+      "axis_angle_deg": 180.0
+    },
+    "lf1_Joint": {
+      "origin_error_m": 7.713104172907411e-16,
+      "axis_dot": 1.0,
+      "axis_angle_deg": 0.0
+    },
+    "l_wheel_Joint": {
+      "origin_error_m": 1.77510956901594e-15,
+      "axis_dot": 1.0,
+      "axis_angle_deg": 0.0
+    }
+  },
+  "frame_signs": {
+    "rf0_Joint": -1.0,
+    "rf1_Joint": -1.0,
+    "r_wheel_Joint": -1.0,
+    "lf0_Joint": -1.0,
+    "lf1_Joint": 1.0,
+    "l_wheel_Joint": 1.0
+  },
+  "link_frame_alignment": {
+    "base_link": {
+      "recomposition_error_m": 0.0,
+      "rotation_error_deg": 0.0,
+      "frame_rotation_vs_source_deg": 180.0
+    },
+    "r0_link": {
+      "recomposition_error_m": 2.5423498110064424e-32,
+      "rotation_error_deg": 0.0,
+      "frame_rotation_vs_source_deg": 180.0
+    },
+    "r1_link": {
+      "recomposition_error_m": 1.3877787807814457e-17,
+      "rotation_error_deg": 1.2074182697257333e-06,
+      "frame_rotation_vs_source_deg": 180.0
+    },
+    "right_wheel": {
+      "recomposition_error_m": 2.42861286636753e-17,
+      "rotation_error_deg": 0.0,
+      "frame_rotation_vs_source_deg": 180.0
+    },
+    "l0_link": {
+      "recomposition_error_m": 2.0023043060577978e-32,
+      "rotation_error_deg": 1.2074182697257333e-06,
+      "frame_rotation_vs_source_deg": 180.0
+    },
+    "l1_link": {
+      "recomposition_error_m": 2.7755575615628914e-17,
+      "rotation_error_deg": 1.7075472925031877e-06,
+      "frame_rotation_vs_source_deg": 61.131704451965405
+    },
+    "left_wheel": {
+      "recomposition_error_m": 5.647850449853784e-17,
+      "rotation_error_deg": 1.7075472925031877e-06,
+      "frame_rotation_vs_source_deg": 28.868295548034812
+    }
+  },
+  "visual_transform_defects": [
+    {
+      "link": "base_link",
+      "training_urdf_visual_xyz_m": [
+        0.0,
+        0.00370223304702801,
+        0.103999999999989
+      ],
+      "parameters_json_visual_xyz_m": [
+        0.0,
+        0.0037022330470280057,
+        0.1039999999999885
+      ],
+      "recomputed_visual_xyz_m": [
+        0.0,
+        -0.0037022330470280057,
+        -0.1039999999999885
+      ],
+      "offset_vs_recomputed_m": [
+        0.0,
+        0.007404466094056016,
+        0.2079999999999775
+      ],
+      "offset_norm_m": 0.20813175182592558,
+      "intentional_correction": true
+    },
+    {
+      "link": "l0_link",
+      "training_urdf_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        4.440892098500626e-16,
+        2.42861286636753e-16,
+        0.0
+      ],
+      "offset_vs_recomputed_m": [
+        -4.440892098500626e-16,
+        -2.42861286636753e-16,
+        0.0
+      ],
+      "offset_norm_m": 5.061588988174682e-16,
+      "intentional_correction": false
+    },
+    {
+      "link": "l1_link",
+      "training_urdf_visual_xyz_m": [
+        -0.324491555207382,
+        0.154905009294887,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.3244915552073818,
+        0.15490500929488699,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        3.0531133177191805e-16,
+        -1.942890293094024e-16,
+        6.38378239159465e-16
+      ],
+      "offset_vs_recomputed_m": [
+        -0.32449155520738227,
+        0.1549050092948872,
+        -6.38378239159465e-16
+      ],
+      "offset_norm_m": 0.35956964736411595,
+      "intentional_correction": false
+    },
+    {
+      "link": "left_wheel",
+      "training_urdf_visual_xyz_m": [
+        -0.238593403560892,
+        0.0451724872402938,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.23859340356089198,
+        0.045172487240293824,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        5.551115123125783e-16,
+        9.43689570931383e-16,
+        -1.3877787807814457e-15
+      ],
+      "offset_vs_recomputed_m": [
+        -0.23859340356089256,
+        0.04517248724029286,
+        1.3877787807814457e-15
+      ],
+      "offset_norm_m": 0.242831970354493,
+      "intentional_correction": false
+    },
+    {
+      "link": "r0_link",
+      "training_urdf_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        -4.579669976578771e-16,
+        2.2898349882893854e-16,
+        0.0
+      ],
+      "offset_vs_recomputed_m": [
+        4.579669976578771e-16,
+        -2.2898349882893854e-16,
+        0.0
+      ],
+      "offset_norm_m": 5.120226691072501e-16,
+      "intentional_correction": false
+    },
+    {
+      "link": "r1_link",
+      "training_urdf_visual_xyz_m": [
+        -0.324491555207388,
+        -0.154905009294888,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.32449155520738837,
+        -0.1549050092948877,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        -3.3306690738754696e-16,
+        5.551115123125783e-17,
+        6.661338147750939e-16
+      ],
+      "offset_vs_recomputed_m": [
+        -0.32449155520738765,
+        -0.15490500929488807,
+        -6.661338147750939e-16
+      ],
+      "offset_norm_m": 0.3595696473641212,
+      "intentional_correction": false
+    },
+    {
+      "link": "right_wheel",
+      "training_urdf_visual_xyz_m": [
+        -0.238593403560897,
+        0.0451724872402931,
+        0.0
+      ],
+      "parameters_json_visual_xyz_m": [
+        -0.23859340356089703,
+        0.0451724872402931,
+        0.0
+      ],
+      "recomputed_visual_xyz_m": [
+        6.938893903907228e-16,
+        -1.6653345369377348e-16,
+        1.4432899320127035e-15
+      ],
+      "offset_vs_recomputed_m": [
+        -0.2385934035608977,
+        0.04517248724029327,
+        -1.4432899320127035e-15
+      ],
+      "offset_norm_m": 0.2428319703544981,
+      "intentional_correction": false
+    }
+  ],
+  "missing_inputs": {
+    "gas_spring_anchor_geometry": false,
+    "gas_spring_force_and_stroke": false,
+    "wheel_radius_measured": true,
+    "rotor_armature": true,
+    "motor_torque_limit": true,
+    "base_inertia_verified": true,
+    "real_joint_limits": true
+  }
+}

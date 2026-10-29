@@ -1,0 +1,160 @@
+# Single source of truth for the robot's physical and control parameters.
+#
+# Every entry carries a `status`:
+#   provisional  - derived from CAD/mesh only, not verified against hardware
+#   datasheet    - from a component datasheet
+#   measured     - measured on the real robot
+# Nothing marked `provisional` may be reported as a verified physical model.
+robot:
+  name: fifty
+  mjcf_model_name: fifty
+  model_kind: equivalent_serial_6dof
+  source_package: solidwork_graph/fifty_version_with_meshes
+  training_package: solidwork_graph/fifty_version_training
+  source_urdf: solidwork_graph/fifty_version_with_meshes/urdf/fifty_version_with_meshes.urdf
+  training_urdf: solidwork_graph/fifty_version_training/urdf/fifty_training.urdf
+  parameters_json: solidwork_graph/fifty_version_training/config/model_parameters.json
+
+base:
+  # Training base frame: origin = hip-axis midpoint, X forward, Y left, Z up.
+  #
+  # The G1 package recorded [[0,1,0],[1,0,0],[0,0,-1]] = Rz(90) * Rx(180).
+  # That extra 180 deg roll about the lateral axis turned the CAD assembly
+  # (chassis upright, legs stowed UP) into "legs down, chassis upside down".
+  # The joint chain and the default angles below are kept exactly as G1 left
+  # them (they give a correct deployed leg pose), so the correction is applied
+  # to the base link only, through `base.mesh_correction`.
+  source_rotation:
+    - [0.0, 1.0, 0.0]
+    - [1.0, 0.0, 0.0]
+    - [0.0, 0.0, -1.0]
+  source_origin_m: [-0.0037022330470280057, 0.0, 0.1039999999999885]
+  # Extra rotation applied to base_link only, expressed in the training frame.
+  # Rx(180) flips the chassis upright and keeps its front along +X; the hip
+  # mounting points stay on +/-Y because the chassis is left/right symmetric.
+  # Ry(180) would keep the front/back mirrored instead; switch if the rendered
+  # chassis faces backwards.
+  mesh_correction:
+    base_link:
+      - [1.0, 0.0, 0.0]
+      - [0.0, -1.0, 0.0]
+      - [0.0, 0.0, -1.0]
+    note: >-
+      Evidence: rendering fifty_version_with_meshes at q=0 with +Z up shows the
+      chassis upright with the gimbal on top and both legs stowed upward, while
+      the G1 chain places the legs correctly downward. The 180 deg roll in the
+      recorded base rotation therefore belongs to the legs, not to the chassis.
+
+joints:
+  order:
+    - rf0_Joint
+    - rf1_Joint
+    - r_wheel_Joint
+    - lf0_Joint
+    - lf1_Joint
+    - l_wheel_Joint
+  group:
+    rf0_Joint: hip
+    rf1_Joint: knee
+    r_wheel_Joint: wheel
+    lf0_Joint: hip
+    lf1_Joint: knee
+    l_wheel_Joint: wheel
+  default_angles_rad:
+    rf0_Joint: 2.0554215512416354
+    rf1_Joint: -2.5592683579936746
+    r_wheel_Joint: 0.0
+    lf0_Joint: -2.055421551241647
+    lf1_Joint: 2.559268357993675
+    l_wheel_Joint: 0.0
+  limits_rad:
+    rf0_Joint: [1.4554215512416353, 2.6554215512416355]
+    rf1_Joint: [-3.2592683579936743, -1.8592683579936746]
+    r_wheel_Joint: null
+    lf0_Joint: [-2.655421551241647, -1.4554215512416468]
+    lf1_Joint: [1.859268357993675, 3.259268357993675]
+    l_wheel_Joint: null
+  effort_nm:
+    hip: 30.0
+    knee: 30.0
+    # The Fudan asset limits the wheel joints to 5 N.m; 30 N.m on a wheel with
+    # ~1.7e-4 kg m^2 makes the 5 ms velocity loop numerically unstable.
+    wheel: 5.0
+  velocity_rad_s: 1000.0
+  damping:
+    hip: 0.03
+    knee: 0.03
+    wheel: 0.002
+  frictionloss:
+    hip: 0.015
+    knee: 0.015
+    wheel: 0.001
+  armature:
+    hip: 0.0
+    knee: 0.0
+    # Reflected rotor inertia of the geared wheel drive.  The source URDF has no
+    # armature at all; with I_wheel ~ 3.4e-4 kg m^2 a 5 ms velocity loop is
+    # numerically unstable.  The value is PROVISIONAL (no vendor data yet).
+    wheel: 0.01
+  status:
+    default_angles_rad: provisional
+    limits_rad: provisional
+    effort_nm: provisional
+    velocity_rad_s: provisional
+    armature: provisional
+    joint_damping: provisional
+    joint_frictionloss: provisional
+    wheel_torque_limit: fudan_asset
+    base_inertia: provisional
+
+geometry:
+  wheel_radius_m: 0.06
+  wheel_radius_status: provisional
+  wheel_radius_source: mesh radius about the axle, NOT measured on hardware
+  base_collision_scale: 1.0
+  leg_cylinder_radius_fraction: 0.15
+  leg_cylinder_radius_min_m: 0.012
+  leg_cylinder_radius_max_m: 0.05
+  mesh_trim_lower: 0.02
+  mesh_trim_upper: 0.98
+  mesh_subdir: meshes
+  wheel_link_partition: unverified
+
+contact:
+  self_collision: false
+  friction: [1.0, 0.005, 0.0001]
+  solref: [0.02, 1.0]
+  solimp: [0.9, 0.95, 0.001]
+  ground_friction: [1.0, 0.005, 0.0001]
+  status: provisional
+
+simulation:
+  timestep_s: 0.005
+  integrator: implicitfast
+  cone: elliptic
+  gravity: [0.0, 0.0, -9.81]
+
+control:
+  # Target-robot baseline (migration target), distinct from the teacher config.
+  leg_position_scale: 0.5
+  wheel_velocity_scale: 10.0
+  leg_kp: 20.0
+  leg_kd: 1.0
+  wheel_kp: 0.0
+  wheel_kd: 0.2
+  torque_limit_nm: 30.0
+  policy_dt_s: 0.01
+  compensation_mode: "off"
+  status: provisional
+
+provisional_notes:
+  - The G1 recorded base rotation included an erroneous 180 deg roll (Rz(90)*Rx(180))
+    that left the chassis upside down; `base.mesh_correction` fixes base_link only.
+    The underlying chassis link frame is therefore non-canonical and must be
+    revisited when the real robot's front direction is confirmed.
+  - wheel_radius_m is the mesh radius about the axle and may be missing the tyre.
+  - joint limits are provisional boxes around the assembly pose, not the real five-bar feasible set.
+  - joint velocity limit 1000 rad/s is a placeholder, not a motor rating.
+  - rotor equivalent inertia (armature) is unknown and set to zero.
+  - base inertia is unverified; base_link carries 91% of the mass.
+  - forward direction (source +Y) is provisional.

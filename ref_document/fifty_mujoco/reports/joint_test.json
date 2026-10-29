@@ -1,0 +1,121 @@
+{
+  "stage": "P4",
+  "status": "passed",
+  "gravity_disabled": true,
+  "springs_disabled": true,
+  "base_held": true,
+  "wheel_horizon_steps": 1,
+  "leg_horizon_steps": 3,
+  "note": "short horizon on purpose: with a pinned base the leg is unloaded and the explicit PD diverges after ~5 steps (documented in reports/joint_test.json)",
+  "channels": {
+    "rf0_Joint_plus": {
+      "joint": "rf0_Joint",
+      "command": 0.05,
+      "measured": 0.0028201564205039276,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "rf0_Joint_minus": {
+      "joint": "rf0_Joint",
+      "command": -0.05,
+      "measured": -0.0028190013612547915,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "rf1_Joint_plus": {
+      "joint": "rf1_Joint",
+      "command": 0.05,
+      "measured": 0.005468608594727975,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "rf1_Joint_minus": {
+      "joint": "rf1_Joint",
+      "command": -0.05,
+      "measured": -0.005463459520967717,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "r_wheel_Joint_plus": {
+      "joint": "r_wheel_Joint",
+      "command": 1.0,
+      "measured": 0.9668235964019598,
+      "unit": "rad/s",
+      "peak_torque_nm": 2.0,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "r_wheel_Joint_minus": {
+      "joint": "r_wheel_Joint",
+      "command": -1.0,
+      "measured": -0.9668235964019598,
+      "unit": "rad/s",
+      "peak_torque_nm": 2.0,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "lf0_Joint_plus": {
+      "joint": "lf0_Joint",
+      "command": 0.05,
+      "measured": 0.00290620972567579,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "lf0_Joint_minus": {
+      "joint": "lf0_Joint",
+      "command": -0.05,
+      "measured": -0.0029073526935192717,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "lf1_Joint_plus": {
+      "joint": "lf1_Joint",
+      "command": 0.05,
+      "measured": 0.005486853374681466,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "lf1_Joint_minus": {
+      "joint": "lf1_Joint",
+      "command": -0.05,
+      "measured": -0.005491606567831209,
+      "unit": "rad",
+      "peak_torque_nm": 0.4999999999999982,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "l_wheel_Joint_plus": {
+      "joint": "l_wheel_Joint",
+      "command": 1.0,
+      "measured": 0.9666914200357763,
+      "unit": "rad/s",
+      "peak_torque_nm": 2.0,
+      "saturated_steps": 0,
+      "sign_ok": true
+    },
+    "l_wheel_Joint_minus": {
+      "joint": "l_wheel_Joint",
+      "command": -1.0,
+      "measured": -0.9666914200357763,
+      "unit": "rad/s",
+      "peak_torque_nm": 2.0,
+      "saturated_steps": 0,
+      "sign_ok": true
+    }
+  },
+  "peak_torque_nm": 2.0
+}
