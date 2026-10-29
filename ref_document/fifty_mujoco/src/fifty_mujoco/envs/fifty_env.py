@@ -147,6 +147,9 @@ class FiftyVecEnv:
         self.episode_reward_terms: dict[str, float] = {}
         self.spring_lengths = np.zeros((n, max(1, self.spring_count)))
         self.spring_forces = np.zeros((n, max(1, self.spring_count)))
+        self.spring_rates = np.zeros((n, max(1, self.spring_count)))
+        self.spring_prev_length = np.zeros((n, max(1, self.spring_count)))
+        self.spring_obs_prev_length = np.zeros((n, max(1, self.spring_count)))
         self.termination_reason = np.full(n, "", dtype=object)
         #: Per-step quantities captured *before* the reset, so an evaluator never
         #: scores the spawn state of the next episode as if it were the failure.
@@ -180,13 +183,35 @@ class FiftyVecEnv:
         return position, velocity
 
     def _base_velocity(self, index: int) -> tuple[np.ndarray, np.ndarray]:
-        """Body-frame (angular, linear) velocity of the base link origin."""
+        """Body-frame (angular, linear) velocity of the base link origin.
+
+        Read from ``qvel`` rather than from ``data.cvel``/``mj_objectVelocity``
+        for two reasons the CPU/GPU parity suite exposed:
+
+        * ``mj_step`` ends with time integration, so ``cvel`` still describes the
+          state *before* that integration - one 5 ms physics sub-step stale;
+        * ``mj_objectVelocity`` returns the velocity of the body **centre of
+          mass**, not of the body frame origin, and its local angular part did
+          not match ``cvel`` to better than 0.6 %.
+
+        For a free joint MuJoCo stores the linear part in the world frame and
+        the angular part in the body frame, which is exactly what
+        ``WarpVecEnv`` reads (``envs/warp_env.py``).
+        """
         data = self.data[index]
-        velocity = np.zeros(6)
-        mujoco.mj_objectVelocity(
-            self.model, data, mujoco.mjtObj.mjOBJ_BODY, self.single.body_ids["base_link"], velocity, 1
-        )
-        return velocity[:3].copy(), velocity[3:].copy()
+        body = int(self.single.body_ids["base_link"])
+        joint = int(self.model.body_jntadr[body])
+        if joint < 0:  # pragma: no cover - the base always carries the free joint
+            velocity = np.zeros(6)
+            mujoco.mj_objectVelocity(
+                self.model, data, mujoco.mjtObj.mjOBJ_BODY, body, velocity, 1
+            )
+            return velocity[:3].copy(), velocity[3:].copy()
+        dof = int(self.model.jnt_dofadr[joint])
+        qvel = np.asarray(data.qvel[dof : dof + 6], dtype=float)
+        rotation = self._base_rotation(index)
+        linear_body = rotation.T @ qvel[:3]
+        return qvel[3:6].copy(), linear_body
 
     def _base_rotation(self, index: int) -> np.ndarray:
         data = self.data[index]
@@ -208,17 +233,27 @@ class FiftyVecEnv:
         return result
 
     def _spring_state(self, index: int) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-        """lengths, rates, forces, generalized joint torque (6,) at the current state."""
+        """lengths, per-sub-step rates, forces, generalized joint torque (6,).
+
+        ``rate`` is a backward difference over one *physics sub-step*, which is
+        the definition ``WarpVecEnv._apply_controls`` uses for the spring force.
+        The privileged feature is a different rate (over one policy step) and is
+        computed in :meth:`_compute_privileged`, exactly like the GPU does.
+        """
         lengths = np.zeros(self.spring_count)
         rates = np.zeros(self.spring_count)
         forces = np.zeros(self.spring_count)
         joint_torque = np.zeros(6)
+        dt = float(self.model.opt.timestep)
         for k, spring in enumerate(self.springs):
             proxy = _SlotView(self.single, self.data[index])
             geometry = spring_geometry(proxy, spring)
-            force = spring_force(spring, geometry["length_m"], geometry["length_rate_m_s"])
-            lengths[k] = geometry["length_m"]
-            rates[k] = geometry["length_rate_m_s"]
+            length = float(geometry["length_m"])
+            rate = (length - float(self.spring_prev_length[index, k])) / dt
+            self.spring_prev_length[index, k] = length
+            force = spring_force(spring, length, rate)
+            lengths[k] = length
+            rates[k] = rate
             forces[k] = force
             joint_torque += geometry["jacobian"][6:] * force
         return lengths, rates, forces, joint_torque
@@ -247,6 +282,9 @@ class FiftyVecEnv:
             data.ctrl[self.single.joint_motor_ids[joint_name]] = float(value)
 
         if self.spring_count:
+            # ``spring_rates`` deliberately keeps the *policy-step* rate that
+            # ``_compute_privileged`` stores; the per-sub-step rate only feeds
+            # the force and must not be exposed as the privileged feature.
             self.spring_lengths[index, : self.spring_count] = lengths
             self.spring_forces[index, : self.spring_count] = forces
             for k, spring in enumerate(self.springs):
@@ -277,6 +315,18 @@ class FiftyVecEnv:
         self.time_outs[index] = False
         self.termination_reason[index] = ""
         mujoco.mj_forward(self.model, data)
+
+        if self.spring_count:
+            # Seed the spring cache with the spawn pose: a zero ``prev_length``
+            # would turn the first sub-step into a 200 m/s rate and a huge force.
+            for k, spring in enumerate(self.springs):
+                geometry = spring_geometry(_SlotView(self.single, data), spring)
+                length = float(geometry["length_m"])
+                self.spring_prev_length[index, k] = length
+                self.spring_obs_prev_length[index, k] = length
+                self.spring_lengths[index, k] = length
+                self.spring_rates[index, k] = 0.0
+                self.spring_forces[index, k] = spring_force(spring, length, 0.0)
 
         if self.options.fixed_command is None:
             command = sample_commands(1, self.nominal_height, self.options.command_ranges, self.rng)
@@ -377,9 +427,19 @@ class FiftyVecEnv:
                 restitution=0.5,
             )
             if self.spring_count:
-                lengths, rates, forces, _ = self._spring_state(index)
+                lengths = self.spring_lengths[index, : self.spring_count]
+                # Privileged rate is over one *policy* step, not one physics
+                # sub-step: ``WarpVecEnv._compute_privileged`` divides the
+                # step's length change by the policy dt, and the critic must see
+                # the same feature from either backend.
+                rate = (lengths - self.spring_obs_prev_length[index, : self.spring_count]) / self.dt
+                self.spring_obs_prev_length[index, : self.spring_count] = lengths
+                self.spring_rates[index, : self.spring_count] = rate
                 extra = obs_lib.spring_features(
-                    lengths, rates, self.spring_reference_forces, forces
+                    lengths,
+                    rate,
+                    self.spring_reference_forces,
+                    self.spring_forces[index, : self.spring_count],
                 )
                 self.privileged[index] = np.concatenate([base, extra])
             else:
@@ -409,8 +469,27 @@ class FiftyVecEnv:
 
         for _ in range(self.decimation):
             for index in range(self.num_envs):
+                # Control acts on the state *before* the sub-step, and ``mj_step``
+                # only refreshes ``xpos``/``site_xpos`` after this point. Without
+                # the explicit refresh the spring geometry (site positions,
+                # Jacobian) would be one sub-step behind ``WarpVecEnv``, which
+                # reads ``ten_length`` from the same instant.
+                mujoco.mj_kinematics(self.model, self.data[index])
+                mujoco.mj_comPos(self.model, self.data[index])
                 self._write_controls(index, applied[index])
                 mujoco.mj_step(self.model, self.data[index])
+
+        # ``mj_step`` ends with integration, so every derived array (xpos,
+        # xquat, xanchor, cvel, cdof) still describes the state *before* the
+        # last integration - 5 ms stale. The observation, the privileged
+        # features and the reward all read those arrays (leg anchor points,
+        # spring site positions, velocities), so refresh them once here. Without
+        # this the CPU and the GPU disagree on the first observation channels by
+        # up to ~1 rad/s, which is what ``gpu-parity`` caught.
+        for index in range(self.num_envs):
+            mujoco.mj_kinematics(self.model, self.data[index])
+            mujoco.mj_comPos(self.model, self.data[index])
+            mujoco.mj_fwdVelocity(self.model, self.data[index])
 
         for index in range(self.num_envs):
             self._compute_observation(index)

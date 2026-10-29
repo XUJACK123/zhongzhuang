@@ -1,0 +1,382 @@
+{
+  "tool": "stage-plan",
+  "generated_at": "2026-10-29T16:04:02+00:00",
+  "meta": {
+    "schema": 1,
+    "generated_at": "2026-10-29",
+    "status": "provisional",
+    "evidence": "not_run",
+    "documents": [
+      "progress.md §13.1",
+      "progress.md §13.4",
+      "progress.md §13.5",
+      "progress.md §14.2"
+    ],
+    "gate_source": "fifty_mujoco.evaluation.stand_eval.THRESHOLDS"
+  },
+  "baseline": {
+    "num_envs": {
+      "value": 8192,
+      "default": 2048,
+      "implemented_by": "--num-envs",
+      "note": "reduce every comparison group together if the machine cannot hold 8192"
+    },
+    "steps_per_env": {
+      "value": 32,
+      "default": 24,
+      "implemented_by": "--steps",
+      "note": null
+    },
+    "epochs": {
+      "value": 3,
+      "default": 5,
+      "implemented_by": "--epochs",
+      "note": null
+    },
+    "minibatches": {
+      "value": 2,
+      "default": 4,
+      "implemented_by": "--minibatches",
+      "note": null
+    },
+    "learning_rate": {
+      "value": 0.0015,
+      "default": 0.001,
+      "implemented_by": "--lr",
+      "note": null
+    },
+    "gamma": {
+      "value": 0.99,
+      "default": 0.99,
+      "implemented_by": "GpuPpoConfig.gamma",
+      "note": null
+    },
+    "lam": {
+      "value": 0.95,
+      "default": 0.95,
+      "implemented_by": "GpuPpoConfig.lam",
+      "note": null
+    },
+    "clip": {
+      "value": 0.2,
+      "default": 0.2,
+      "implemented_by": "GpuPpoConfig.clip",
+      "note": null
+    },
+    "entropy_coef": {
+      "value": 0.005,
+      "default": 0.005,
+      "implemented_by": "--entropy-coef",
+      "note": null
+    },
+    "init_std_per_channel": {
+      "value": [
+        0.4,
+        0.4,
+        0.1,
+        0.4,
+        0.4,
+        0.1
+      ],
+      "default": [
+        0.4,
+        0.4,
+        0.1,
+        0.4,
+        0.4,
+        0.1
+      ],
+      "implemented_by": "GpuPpoConfig.init_std_per_channel",
+      "note": null
+    },
+    "min_std_per_channel": {
+      "value": [
+        0.1,
+        0.1,
+        0.02,
+        0.1,
+        0.1,
+        0.02
+      ],
+      "default": [
+        0.1,
+        0.1,
+        0.02,
+        0.1,
+        0.1,
+        0.02
+      ],
+      "implemented_by": "GpuPpoConfig.min_std_per_channel",
+      "note": null
+    },
+    "max_std": {
+      "value": 1.0,
+      "default": 1.0,
+      "implemented_by": "--max-std",
+      "note": null
+    },
+    "adaptive_lr": {
+      "value": true,
+      "default": true,
+      "implemented_by": "GpuPpoConfig.adaptive_lr",
+      "note": "turning it off stalled training in the historical runs; disable with --no-adaptive-lr"
+    },
+    "eval_every": {
+      "value": 50,
+      "default": 50,
+      "implemented_by": "--eval-every",
+      "note": null
+    },
+    "eval_steps": {
+      "value": 600,
+      "default": 300,
+      "implemented_by": "--eval-steps",
+      "note": null
+    },
+    "save_every": {
+      "value": 25,
+      "default": 25,
+      "implemented_by": "--save-every",
+      "note": null
+    },
+    "checkpoint_keep": {
+      "value": 5,
+      "default": 5,
+      "implemented_by": "--checkpoint-keep",
+      "note": null
+    },
+    "stop_on_survive": {
+      "value": 2,
+      "default": 0,
+      "implemented_by": "--stop-on-survive",
+      "note": "0 disables early stop; the baseline wants two consecutive successes"
+    },
+    "updates_budget": {
+      "value": 1500,
+      "default": 100000,
+      "implemented_by": "--updates",
+      "note": "experiment budget, not a promise that 1500 updates is enough"
+    },
+    "seeds": {
+      "value": [
+        0,
+        1,
+        2
+      ],
+      "default": 0,
+      "implemented_by": "--seed",
+      "note": "one run per seed; report every seed, never the best one"
+    }
+  },
+  "stages": [
+    {
+      "id": 1,
+      "name": "stand",
+      "task": {
+        "vx_m_s": [
+          0.0,
+          0.0
+        ],
+        "wz_rad_s": [
+          0.0,
+          0.0
+        ],
+        "height": "nominal"
+      },
+      "keep_standing_fraction": 1.0,
+      "prerequisite": null,
+      "gate": "stand",
+      "blocked_by": null
+    },
+    {
+      "id": 2,
+      "name": "slow_straight",
+      "task": {
+        "vx_m_s": [
+          -0.15,
+          0.15
+        ],
+        "wz_rad_s": [
+          0.0,
+          0.0
+        ],
+        "height": "nominal"
+      },
+      "keep_standing_fraction": 0.4,
+      "prerequisite": 1,
+      "gate": "command_tracking",
+      "blocked_by": null
+    },
+    {
+      "id": 3,
+      "name": "slow_turn",
+      "task": {
+        "vx_m_s": [
+          0.0,
+          0.0
+        ],
+        "wz_rad_s": [
+          -0.15,
+          0.15
+        ],
+        "height": "nominal"
+      },
+      "keep_standing_fraction": 0.4,
+      "prerequisite": 2,
+      "gate": "command_tracking",
+      "blocked_by": null
+    },
+    {
+      "id": 4,
+      "name": "extended_speed",
+      "task": {
+        "vx_m_s": [
+          -0.3,
+          0.3
+        ],
+        "wz_rad_s": [
+          -0.3,
+          0.3
+        ],
+        "height": "nominal"
+      },
+      "keep_standing_fraction": 0.3,
+      "prerequisite": 3,
+      "gate": "command_tracking",
+      "blocked_by": null
+    },
+    {
+      "id": 5,
+      "name": "combined_commands",
+      "task": {
+        "vx_m_s": [
+          -0.3,
+          0.3
+        ],
+        "wz_rad_s": [
+          -0.3,
+          0.3
+        ],
+        "height": "nominal",
+        "segmented": true
+      },
+      "keep_standing_fraction": 0.2,
+      "prerequisite": 4,
+      "gate": "command_tracking",
+      "blocked_by": null
+    },
+    {
+      "id": 6,
+      "name": "height_changes",
+      "task": {
+        "height": "within_verified_spring_range"
+      },
+      "keep_standing_fraction": null,
+      "prerequisite": 5,
+      "gate": "command_tracking",
+      "blocked_by": "the spring stroke and the closed-chain feasible set are still unknowns (configs/mechanism.yaml: unknowns)"
+    },
+    {
+      "id": 7,
+      "name": "perturbations_and_terrain",
+      "task": {
+        "push_disturbance": true,
+        "ground_changes": true
+      },
+      "keep_standing_fraction": null,
+      "prerequisite": 6,
+      "gate": "robustness",
+      "blocked_by": "needs a nominal system that already passes stage 5"
+    }
+  ],
+  "randomization": {
+    "command_sampling": {
+      "implemented": true,
+      "where": "envs/warp_env.py: WarpEnvOptions.command_ranges",
+      "cli_exposed": false,
+      "blocked_by": null
+    },
+    "initial_state": {
+      "implemented": true,
+      "where": "envs/warp_env.py: WarpEnvOptions.randomize_initial",
+      "cli_exposed": false,
+      "blocked_by": null
+    },
+    "action_delay": {
+      "implemented": false,
+      "where": null,
+      "cli_exposed": null,
+      "blocked_by": "envs/warp_env.py raises NotImplementedError for action_delay_steps != 0; the CPU env has a ring buffer"
+    },
+    "mass_and_payload": {
+      "implemented": false,
+      "where": null,
+      "cli_exposed": null,
+      "blocked_by": "no weighing data; total mass 23.26 kg is a CAD statistic (progress.md §16.2)"
+    },
+    "ground_friction": {
+      "implemented": false,
+      "where": null,
+      "cli_exposed": null,
+      "blocked_by": "contact friction is a single provisional tuple; no measured range"
+    },
+    "joint_friction": {
+      "implemented": false,
+      "where": null,
+      "cli_exposed": null,
+      "blocked_by": "frictionloss/damping are provisional and not parameterised per env"
+    },
+    "gas_spring": {
+      "implemented": false,
+      "where": null,
+      "cli_exposed": null,
+      "blocked_by": "constant 300 N placeholder; no stroke or force curve"
+    },
+    "observation_noise": {
+      "implemented": false,
+      "where": null,
+      "cli_exposed": null,
+      "blocked_by": "no real log to derive the noise model from"
+    }
+  },
+  "gates": {
+    "stand": {
+      "source": "fifty_mujoco.evaluation.stand_eval.THRESHOLDS",
+      "keys": [
+        "success_rate_min",
+        "vx_mae_max",
+        "height_mae_max",
+        "tilt_p95_max_deg",
+        "tilt_max_max_deg",
+        "torque_saturation_max"
+      ],
+      "command": "fifty-mujoco evaluate-stand --checkpoint <ckpt> --steps 6000 --episodes 64 --seed-base 1000"
+    },
+    "command_tracking": {
+      "implemented": false,
+      "blocked_by": "no segmented-command evaluator exists yet (progress.md §14.3)",
+      "source": "fifty_mujoco.evaluation.stand_eval.THRESHOLDS",
+      "keys": [
+        "height_mae_max",
+        "tilt_p95_max_deg",
+        "tilt_max_max_deg"
+      ],
+      "planned_targets": {
+        "vx_mae_max_m_s": 0.05,
+        "wz_mae_max_rad_s": 0.05,
+        "success_rate_min": 0.95,
+        "transition_window_s": 1.0
+      }
+    },
+    "robustness": {
+      "implemented": false,
+      "blocked_by": "stage 7 is blocked; nothing to gate yet"
+    }
+  },
+  "train_gpu_commands": [
+    "fifty-mujoco train-gpu --num-envs 8192 --steps 32 --epochs 3 --minibatches 2 --lr 0.0015 --eval-steps 600 --stop-on-survive 2 --updates 1500 --seed 0",
+    "fifty-mujoco train-gpu --num-envs 8192 --steps 32 --epochs 3 --minibatches 2 --lr 0.0015 --eval-steps 600 --stop-on-survive 2 --updates 1500 --seed 1",
+    "fifty-mujoco train-gpu --num-envs 8192 --steps 32 --epochs 3 --minibatches 2 --lr 0.0015 --eval-steps 600 --stop-on-survive 2 --updates 1500 --seed 2"
+  ],
+  "evidence": "not_run: this file describes a plan, not a training result"
+}

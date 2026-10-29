@@ -152,7 +152,17 @@ THRESHOLDS: dict[str, float] = {
 
 def _apply_scenario(env: FiftyVecEnv, index: int, scenario: Scenario) -> dict[str, Any]:
     """Set the perturbed initial state and verify it is physically feasible."""
-    data = env.data[index]
+    return _apply_scenario_to_data(env.model, env.data[index], env.single, scenario)
+
+
+def _apply_scenario_to_data(model, data, single, scenario: Scenario) -> dict[str, Any]:
+    """Same disturbance, applied to one ``MjData``.
+
+    Kept separate from :func:`_apply_scenario` because the GPU evaluator seeds a
+    scratch CPU ``MjData`` with the scenario (including the penetration check,
+    which needs collision detection) and only then copies the result into the
+    warp state.
+    """
     quat = np.asarray(data.qpos[3:7], dtype=float)
     pitch = np.radians(scenario.pitch_deg)
     roll = np.radians(scenario.roll_deg)
@@ -167,12 +177,12 @@ def _apply_scenario(env: FiftyVecEnv, index: int, scenario: Scenario) -> dict[st
 
     if scenario.leg_delta_rad:
         for joint_name in names.LEG_JOINTS:
-            data.qpos[env.single.qpos_adr[joint_name]] += scenario.leg_delta_rad
+            data.qpos[single.qpos_adr[joint_name]] += scenario.leg_delta_rad
 
     if scenario.vx_m_s:
         data.qvel[0] = scenario.vx_m_s  # free joint: world +X
 
-    mujoco.mj_forward(env.model, data)
+    mujoco.mj_forward(model, data)
     penetration = 0.0
     for contact_index in range(int(data.ncon)):
         distance = float(data.contact[contact_index].dist)
@@ -182,7 +192,7 @@ def _apply_scenario(env: FiftyVecEnv, index: int, scenario: Scenario) -> dict[st
         # Lift the robot just enough to remove the overlap; the disturbance is
         # kept, the infeasible part is not.
         data.qpos[2] += penetration + 1e-4
-        mujoco.mj_forward(env.model, data)
+        mujoco.mj_forward(model, data)
     return {
         "penetration_fixed_m": penetration,
         "root_z": float(data.qpos[2]),
@@ -204,6 +214,53 @@ def _quat_mul(a: np.ndarray, b: np.ndarray) -> np.ndarray:
 
 
 def run_stand_eval(
+    config: Config,
+    policy: PolicyFn,
+    *,
+    steps: int = 6000,
+    scenarios: Sequence[Scenario] | None = None,
+    command: tuple[float, float, float] | None = None,
+    settle_s: float = 1.0,
+    torque_epsilon: float = 1e-3,
+    backend: str = "cpu",
+    device: str = "cuda:0",
+) -> dict[str, Any]:
+    """Run the acceptance window on one of the two physics backends.
+
+    ``cpu`` is the reference implementation: one ``MjData`` per scenario, per-env
+    reason strings, and an independent physics engine from training.
+
+    ``warp`` runs the identical window on ``WarpVecEnv``. It is roughly 200x
+    faster (64 scenarios x 6000 steps: 6.6 s against ~25 min), which is what
+    makes the 60 s gate affordable after every training run. The two must agree;
+    ``tests/test_stand_eval.py`` pins that on a short window.
+    """
+    chosen = list(scenarios or make_scenarios())
+    if backend == "cpu":
+        return _run_stand_eval_cpu(
+            config,
+            policy,
+            steps=steps,
+            scenarios=chosen,
+            command=command,
+            settle_s=settle_s,
+            torque_epsilon=torque_epsilon,
+        )
+    if backend == "warp":
+        return _run_stand_eval_warp(
+            config,
+            policy,
+            steps=steps,
+            scenarios=chosen,
+            command=command,
+            settle_s=settle_s,
+            torque_epsilon=torque_epsilon,
+            device=device,
+        )
+    raise ValueError(f"unknown backend {backend!r}; expected 'cpu' or 'warp'")
+
+
+def _run_stand_eval_cpu(
     config: Config,
     policy: PolicyFn,
     *,
@@ -339,12 +396,39 @@ def run_stand_eval(
 
     survival = np.array([episode.survived_s for episode in episodes], dtype=float)
     successes = np.array([episode.success for episode in episodes], dtype=bool)
-    summary = {
+    return _summarize(
+        episodes,
+        steps=steps,
+        dt=dt,
+        episode_length_s=episode_length_s,
+        command=command,
+        height=height,
+        feasibility=feasibility,
+        backend="cpu",
+    )
+
+
+def _summarize(
+    episodes: Sequence[EpisodeResult],
+    *,
+    steps: int,
+    dt: float,
+    episode_length_s: float,
+    command: tuple[float, float, float] | None,
+    height: float,
+    feasibility: Sequence[dict[str, Any]],
+    backend: str,
+) -> dict[str, Any]:
+    """One summary definition for both backends, so the gate cannot drift."""
+    survival = np.array([episode.survived_s for episode in episodes], dtype=float)
+    successes = np.array([episode.success for episode in episodes], dtype=bool)
+    summary: dict[str, Any] = {
         "episodes": len(episodes),
         "steps": int(steps),
         "policy_dt_s": float(dt),
         "window_s": float(steps * dt),
         "episode_limit_s": float(episode_length_s),
+        "backend": backend,
         "successes": int(successes.sum()),
         "success_rate": float(successes.mean()) if episodes else float("nan"),
         "survival_min_s": float(survival.min()) if episodes else float("nan"),
@@ -362,8 +446,12 @@ def run_stand_eval(
         else float("nan"),
         "drift_max_m": float(np.max([e.drift_m for e in episodes])) if episodes else float("nan"),
         "reasons": _reason_counts([episode.reason for episode in episodes if episode.reason]),
-        "command": {"vx": 0.0 if command is None else command[0], "wz": 0.0 if command is None else command[1], "height": height},
-        "feasibility": feasibility,
+        "command": {
+            "vx": 0.0 if command is None else command[0],
+            "wz": 0.0 if command is None else command[1],
+            "height": height,
+        },
+        "feasibility": list(feasibility),
     }
     summary["criteria"] = _criteria(summary, list(episodes), successes)
     summary["status"] = "passed" if summary["criteria"]["passed"] else "failed"
@@ -465,3 +553,254 @@ class OnnxPolicy:
             feeds[self.inputs[1]] = history.astype(np.float32)
         output = self.session.run(None, feeds)[0]
         return np.asarray(output, dtype=float).reshape(obs.shape[0], -1)
+
+
+# --------------------------------------------------------------------- warp backend
+def _run_stand_eval_warp(
+    config: Config,
+    policy: PolicyFn,
+    *,
+    steps: int,
+    scenarios: Sequence[Scenario],
+    command: tuple[float, float, float] | None,
+    settle_s: float,
+    torque_epsilon: float,
+    device: str,
+) -> dict[str, Any]:
+    """The same acceptance window on ``WarpVecEnv``.
+
+    The metrics are accumulated with the same rules as the CPU path, and the
+    per-step state is taken from the env's terminal snapshot when an episode
+    ends, so the failure that actually happened is scored - not the reset pose.
+    """
+    import torch
+
+    from ..control.spawn import load_spawn_spec, resolve_spawn_height
+    from ..envs.cpu_env import FiftyCpuEnv
+    from ..envs.warp_env import WarpEnvOptions, WarpVecEnv
+    from ..paths import assets_dir
+
+    scenarios = list(scenarios)
+    n = len(scenarios)
+    dt = float(config.robot["control"]["policy_dt_s"])
+    window_s = steps * dt
+    episode_length_s = window_s + max(1.0, window_s * 0.05)
+
+    probe = FiftyCpuEnv(assets_dir() / "mjcf" / "fifty_train.xml", config)
+    nominal = resolve_spawn_height(probe, load_spawn_spec(config))[0] - float(
+        config.spawn["spawn"]["wheel_clearance_m"]
+    )
+    height = nominal if command is None else float(command[2])
+    vx = 0.0 if command is None else float(command[0])
+    wz = 0.0 if command is None else float(command[1])
+
+    env = WarpVecEnv(
+        config,
+        WarpEnvOptions(
+            num_envs=n,
+            device=device,
+            seed=scenarios[0].seed if scenarios else 0,
+            fixed_command=(vx, wz, height),
+            episode_length_s=episode_length_s,
+        ),
+    )
+
+    # Seed each world through a scratch MjData: the disturbance (including the
+    # penetration check, which needs collision detection) is then identical to
+    # the CPU path instead of being reimplemented in tensor maths.
+    scratch = env.cpu
+    spawn = env.spawn_row.detach().cpu().numpy().astype(np.float64)
+    feasibility: list[dict[str, Any]] = []
+    for index, scenario in enumerate(scenarios):
+        mujoco.mj_resetData(scratch.model, scratch.data)
+        scratch.data.qpos[:] = spawn
+        scratch.data.qvel[:] = 0.0
+        feasibility.append(
+            _apply_scenario_to_data(scratch.model, scratch.data, scratch, scenario)
+        )
+        env.qpos[index] = torch.as_tensor(
+            scratch.data.qpos, dtype=env.qpos.dtype, device=env.device
+        )
+        env.qvel[index] = torch.as_tensor(
+            scratch.data.qvel, dtype=env.qvel.dtype, device=env.device
+        )
+    env._compute_observation()
+    env.history.copy_(env.obs[:, None, :].expand_as(env.history))
+    env._compute_privileged()
+
+    # Without a captured graph one policy step costs ~100 ms of host time (about
+    # 120 kernel launches, latency-bound), which would wipe out the speed-up:
+    # 6000 steps would take ten minutes instead of seconds.
+    graph_captured = False
+    capture = getattr(env, "capture", None)
+    if capture is not None:
+        try:
+            graph_captured = bool(capture())
+        except Exception:  # pragma: no cover - capture is best effort here
+            graph_captured = False
+
+    if hasattr(policy, "bind") and not getattr(policy, "supports_warp_backend", False):
+        raise ValueError(
+            f"{type(policy).__name__} reads the simulator directly and is not supported on"
+            " the warp backend; use --backend cpu"
+        )
+    if hasattr(policy, "reset"):
+        policy.reset()
+
+    limits = env.gains.limits()
+    alive = np.ones(n, dtype=bool)
+    survived_steps = np.zeros(n, dtype=int)
+    reasons = np.full(n, "", dtype=object)
+    height_abs_err = np.zeros(n)
+    vx_abs_err = np.zeros(n)
+    wz_abs_err = np.zeros(n)
+    counted = np.zeros(n)
+    counted_after = np.zeros(n)
+    height_abs_err_after = np.zeros(n)
+    vx_abs_err_after = np.zeros(n)
+    tilt_values: list[list[float]] = [[] for _ in range(n)]
+    saturated_steps = np.zeros(n)
+    current_run = np.zeros(n)
+    longest_run = np.zeros(n)
+    drift = np.zeros(n)
+    last_height = np.zeros(n)
+    root_start = np.zeros((n, 2))
+    tilt_limit = float(env.termination.max_tilt_deg)
+    height_limit = float(env.termination.height_ratio) * float(env.nominal_height)
+
+    obs_t, hist_t = env.get_observations()
+    # The drift reference is the seeded (perturbed) root position, not the spawn.
+    stats0 = _warp_step_stats(env, np.zeros(n, dtype=bool))
+    root_start[:] = stats0["root_xy"]
+    last_height[:] = stats0["height"]
+
+    for step in range(steps):
+        actions = np.asarray(
+            policy(obs_t.detach().cpu().numpy(), hist_t.detach().cpu().numpy()), dtype=float
+        )
+        if actions.shape != (n, names.NUM_ACTIONS):
+            raise ValueError(
+                f"policy returned {actions.shape}, expected {(n, names.NUM_ACTIONS)}"
+            )
+        out = env.step(torch.as_tensor(actions, dtype=torch.float32, device=env.device))
+        obs_t, _priv, _reward, done_t, _info, hist_t = out
+        dones = done_t.detach().cpu().numpy().astype(bool)
+        time_outs = env.time_outs.detach().cpu().numpy().astype(bool)
+        stats = _warp_step_stats(env, dones)
+
+        mask = alive
+        counted[mask] += 1.0
+        last_height[mask] = stats["height"][mask]
+        height_abs_err[mask] += np.abs(stats["height"][mask] - height)
+        vx_abs_err[mask] += np.abs(stats["lin_vel_body"][mask, 0])
+        wz_abs_err[mask] += np.abs(stats["ang_vel_body"][mask, 2])
+        if (step + 1) * dt > settle_s:
+            counted_after[mask] += 1.0
+            height_abs_err_after[mask] += np.abs(stats["height"][mask] - height)
+            vx_abs_err_after[mask] += np.abs(stats["lin_vel_body"][mask, 0])
+        for index in np.nonzero(mask)[0]:
+            tilt_values[index].append(float(stats["tilt_deg"][index]))
+        saturated = np.abs(stats["torque"]) >= (limits - torque_epsilon)
+        saturated_steps[mask] += saturated[mask].any(axis=1)
+        current_run = np.where(saturated.any(axis=1) & mask, current_run + 1, 0.0)
+        longest_run = np.maximum(longest_run, current_run)
+
+        newly = dones & alive
+        for index in np.nonzero(newly)[0]:
+            # The warp env reports dones but not a reason string; derive it from
+            # the terminal state so the report stays comparable.
+            if time_outs[index]:
+                reasons[index] = "timeout"
+            elif stats["tilt_deg"][index] >= tilt_limit:
+                reasons[index] = "tilt"
+            elif stats["height"][index] < height_limit:
+                reasons[index] = "height"
+            else:
+                reasons[index] = "other"
+        survived_steps[alive] = step + 1
+        drift[alive] = [
+            float(np.linalg.norm(stats["root_xy"][i] - root_start[i]))
+            for i in np.nonzero(alive)[0]
+        ]
+        alive = alive & ~dones
+
+    episodes: list[EpisodeResult] = []
+    for index in range(n):
+        count = max(1.0, counted[index])
+        count_after = max(1.0, counted_after[index])
+        tilts = np.asarray(tilt_values[index]) if tilt_values[index] else np.zeros(1)
+        episodes.append(
+            EpisodeResult(
+                seed=scenarios[index].seed,
+                survived_s=float(survived_steps[index] * dt),
+                survived_steps=int(survived_steps[index]),
+                success=bool(survived_steps[index] >= steps),
+                reason=str(reasons[index]),
+                height_mae=float(height_abs_err_after[index] / count_after)
+                if counted_after[index] > 0
+                else float(height_abs_err[index] / count),
+                height_final=float(last_height[index]),
+                vx_mae=float(vx_abs_err_after[index] / count_after)
+                if counted_after[index] > 0
+                else float(vx_abs_err[index] / count),
+                wz_mae=float(wz_abs_err[index] / count),
+                tilt_p95_deg=float(np.percentile(tilts, 95)),
+                tilt_max_deg=float(tilts.max()),
+                torque_saturation_fraction=float(saturated_steps[index] / count),
+                longest_saturation_s=float(longest_run[index] * dt),
+                drift_m=float(drift[index]),
+                scenario=scenarios[index],
+            )
+        )
+
+    summary = _summarize(
+        episodes,
+        steps=steps,
+        dt=dt,
+        episode_length_s=episode_length_s,
+        command=command,
+        height=height,
+        feasibility=feasibility,
+        backend="warp",
+    )
+    summary["reason_source"] = "derived_from_terminal_state"
+    summary["cuda_graph"] = graph_captured
+    summary["note"] = (
+        "warp backend: reasons are derived from the terminal state because"
+        " WarpVecEnv does not report a termination string"
+    )
+    return summary
+
+
+def _warp_step_stats(env, dones: np.ndarray) -> dict[str, np.ndarray]:
+    """Per-env state for the step that just finished, in the terminal snapshot."""
+    import torch
+
+    mask = torch.as_tensor(dones, dtype=torch.bool, device=env.device).unsqueeze(1)
+    qpos = torch.where(mask, env.terminal_qpos, env.qpos).detach().cpu().numpy().astype(np.float64)
+    qvel = torch.where(mask, env.terminal_qvel, env.qvel).detach().cpu().numpy().astype(np.float64)
+    torque = (
+        torch.where(mask, env.terminal_torques, env.torques).detach().cpu().numpy().astype(np.float64)
+    )
+    quat = qpos[:, 3:7]
+    quat = quat / np.linalg.norm(quat, axis=1, keepdims=True)
+    w, x, y, z = quat[:, 0], quat[:, 1], quat[:, 2], quat[:, 3]
+    rot = np.empty((qpos.shape[0], 3, 3))
+    rot[:, 0, 0] = 1.0 - 2.0 * (y * y + z * z)
+    rot[:, 0, 1] = 2.0 * (x * y - w * z)
+    rot[:, 0, 2] = 2.0 * (x * z + w * y)
+    rot[:, 1, 0] = 2.0 * (x * y + w * z)
+    rot[:, 1, 1] = 1.0 - 2.0 * (x * x + z * z)
+    rot[:, 1, 2] = 2.0 * (y * z - w * x)
+    rot[:, 2, 0] = 2.0 * (x * z - w * y)
+    rot[:, 2, 1] = 2.0 * (y * z + w * x)
+    rot[:, 2, 2] = 1.0 - 2.0 * (x * x + y * y)
+    lin_body = np.einsum("nji,nj->ni", rot, qvel[:, 0:3])
+    return {
+        "height": qpos[:, 2],
+        "tilt_deg": np.degrees(np.arccos(np.clip(rot[:, 2, 2], -1.0, 1.0))),
+        "lin_vel_body": lin_body,
+        "ang_vel_body": qvel[:, 3:6],
+        "root_xy": qpos[:, 0:2],
+        "torque": torque,
+    }

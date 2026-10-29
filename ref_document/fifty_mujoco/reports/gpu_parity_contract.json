@@ -1,0 +1,338 @@
+{
+  "tool": "gpu-parity",
+  "schema": 1,
+  "generated_at": "2026-10-29T16:41:24+00:00",
+  "device": "cuda:0",
+  "num_envs": 4,
+  "steps": 24,
+  "fixed_command": [
+    0.0,
+    0.0,
+    0.4647513721610853
+  ],
+  "seed": 7,
+  "fields": {
+    "obs": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 6,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "privileged": {
+      "max_abs_error": 0.0002548026861910746,
+      "tolerance": 0.005,
+      "worst_step": 7,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "privileged_spring": {
+      "max_abs_error": 7.123391504437748e-06,
+      "tolerance": 0.005,
+      "worst_step": 22,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "reward": {
+      "max_abs_error": 2.6918779651583652e-05,
+      "tolerance": 0.0001,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 6,
+      "first_step_exceeding": null,
+      "passed": true
+    }
+  },
+  "field_groups": {
+    "obs.ang_vel": {
+      "max_abs_error": 1.8568626587472936e-05,
+      "tolerance": 0.002,
+      "worst_step": 5,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.projected_gravity": {
+      "max_abs_error": 4.652039183317136e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.leg_pos": {
+      "max_abs_error": 6.6236849538547915e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.joint_vel": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 6,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.last_action": {
+      "max_abs_error": 2.738428495074885e-08,
+      "tolerance": 0.002,
+      "worst_step": 8,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].ang_vel": {
+      "max_abs_error": 1.8568626587472936e-05,
+      "tolerance": 0.002,
+      "worst_step": 9,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].projected_gravity": {
+      "max_abs_error": 3.472907223134314e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].leg_pos": {
+      "max_abs_error": 4.594793876488978e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].joint_vel": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 10,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].last_action": {
+      "max_abs_error": 2.738428495074885e-08,
+      "tolerance": 0.002,
+      "worst_step": 12,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].ang_vel": {
+      "max_abs_error": 1.8568626587472936e-05,
+      "tolerance": 0.002,
+      "worst_step": 8,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].projected_gravity": {
+      "max_abs_error": 3.6524411908267496e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].leg_pos": {
+      "max_abs_error": 5.136537220007398e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].joint_vel": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 9,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].last_action": {
+      "max_abs_error": 2.738428495074885e-08,
+      "tolerance": 0.002,
+      "worst_step": 11,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].ang_vel": {
+      "max_abs_error": 1.8568626587472936e-05,
+      "tolerance": 0.002,
+      "worst_step": 7,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].projected_gravity": {
+      "max_abs_error": 3.93194102910055e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].leg_pos": {
+      "max_abs_error": 5.649285942155302e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].joint_vel": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 8,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].last_action": {
+      "max_abs_error": 2.738428495074885e-08,
+      "tolerance": 0.002,
+      "worst_step": 10,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].ang_vel": {
+      "max_abs_error": 1.8568626587472936e-05,
+      "tolerance": 0.002,
+      "worst_step": 6,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].projected_gravity": {
+      "max_abs_error": 4.0486156059893474e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].leg_pos": {
+      "max_abs_error": 6.152744504550611e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].joint_vel": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 7,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].last_action": {
+      "max_abs_error": 2.738428495074885e-08,
+      "tolerance": 0.002,
+      "worst_step": 9,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].ang_vel": {
+      "max_abs_error": 1.8568626587472936e-05,
+      "tolerance": 0.002,
+      "worst_step": 5,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].projected_gravity": {
+      "max_abs_error": 4.652039183317136e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].leg_pos": {
+      "max_abs_error": 6.6236849538547915e-06,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].joint_vel": {
+      "max_abs_error": 5.9191681660068773e-05,
+      "tolerance": 0.002,
+      "worst_step": 6,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].last_action": {
+      "max_abs_error": 2.738428495074885e-08,
+      "tolerance": 0.002,
+      "worst_step": 8,
+      "first_step_exceeding": null,
+      "passed": true
+    }
+  },
+  "termination_flag_mismatches": 0,
+  "forced_reset": {
+    "reached": true,
+    "post_reset_obs": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "note": "the observation returned for a finished env must describe the reset state, not the state the episode died in (§18.1)"
+  },
+  "graph_replay": {
+    "captured": true,
+    "comparison": {
+      "graph_replay_obs": {
+        "max_abs_error": 1.0728836059570312e-06,
+        "tolerance": 1e-05,
+        "worst_step": 9,
+        "first_step_exceeding": null,
+        "passed": true
+      },
+      "graph_replay_qpos": {
+        "max_abs_error": 3.5762786865234375e-07,
+        "tolerance": 1e-06,
+        "worst_step": 6,
+        "first_step_exceeding": null,
+        "passed": true
+      }
+    }
+  },
+  "failures": [],
+  "status": "passed"
+}

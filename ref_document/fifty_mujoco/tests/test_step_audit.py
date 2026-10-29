@@ -23,6 +23,7 @@ import pytest
 from fifty_mujoco.assets.step_audit import (
     _line_distance,
     _planar_candidates,
+    _shared_axis_nodes,
     audit_step,
     decode_step_string,
     split_top_level,
@@ -160,3 +161,55 @@ def test_planar_candidates_needs_a_shared_joint():
 def test_missing_file_is_reported(tmp_path):
     with pytest.raises(FileNotFoundError):
         audit_step(tmp_path / "nope.step")
+
+
+def _part(name: str, rep: int, groups: list[tuple[float, float, float, int]]) -> dict:
+    return {
+        "rep": rep,
+        "candidate_parts": [name],
+        "cylinder_count": sum(group[3] for group in groups),
+        "dominant_axes": [
+            {"origin_mm": [0.0, y, z], "max_radius_mm": radius, "count": count, "axis": [-1.0, 0.0, 0.0]}
+            for y, z, radius, count in groups
+        ],
+    }
+
+
+def test_shared_axis_nodes_need_two_parts_on_the_same_point():
+    selected = [
+        _part("thigh", 1, [(70.049989, 2.417291, 43.0, 3), (-88.921958, 139.632159, 31.0, 5)]),
+        _part("shin", 2, [(-88.921958, 139.632159, 29.0, 6), (-220.597818, -72.880117, 23.5, 2)]),
+        _part("bolt", 3, [(-88.921958, 139.632159, 19.5, 23)]),
+    ]
+    result = _shared_axis_nodes(selected)
+    assert result["status"] == "shared_datum_candidates"
+    # hip and wheel appear in one part only; the knee is shared by all three
+    assert len(result["shared_nodes"]) == 1
+    node = result["shared_nodes"][0]
+    assert node["part_count"] == 3
+    assert node["point_mm"] == pytest.approx([-88.921958, 139.632159], abs=1e-6)
+    assert node["spread_mm"] == pytest.approx(0.0, abs=1e-9)
+    assert [part["part"] for part in node["parts"]] == ["thigh", "shin", "bolt"]
+
+
+def test_shared_axis_nodes_are_ordered_and_tolerant():
+    selected = [
+        _part("a", 1, [(0.0, 0.0, 10.0, 2), (50.0, 0.0, 9.0, 2)]),
+        _part("b", 2, [(0.0, 0.0004, 8.0, 2), (50.0, 0.0, 9.0, 2)]),
+        _part("c", 3, [(0.0, 0.0, 7.0, 2)]),
+    ]
+    result = _shared_axis_nodes(selected)
+    assert [node["part_count"] for node in result["shared_nodes"]] == [3, 2]
+    # a point that is 0.4 microns off still counts, and the spread is reported
+    assert result["shared_nodes"][0]["spread_mm"] == pytest.approx(0.0004, abs=1e-9)
+    # a tolerance tighter than the offset must split the cluster
+    strict = _shared_axis_nodes(selected, tolerance_mm=1e-6)
+    assert [node["part_count"] for node in strict["shared_nodes"]] == [2, 2]
+    assert strict["shared_nodes"][0]["point_mm"] == pytest.approx([0.0, 0.0], abs=1e-9)
+    assert strict["shared_nodes"][1]["point_mm"] == pytest.approx([50.0, 0.0], abs=1e-9)
+
+
+def test_shared_axis_nodes_report_absent_geometry():
+    result = _shared_axis_nodes([])
+    assert result["status"] == "no_geometry"
+    assert result["shared_nodes"] == []

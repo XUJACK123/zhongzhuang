@@ -157,7 +157,10 @@ def _unit(a: Vec3, fallback: Vec3 = (0.0, 0.0, 1.0)) -> Vec3:
     return _scale(a, 1.0 / length) if length > 1e-12 else fallback
 
 
-def _round(a: Vec3, digits: int = 6) -> list[float]:
+def _round(a: Vec3, digits: int = 9) -> list[float]:
+    # 9 decimals of a millimetre is 1 pm: below the double-precision noise of the
+    # STEP text, so lengths derived from these coordinates are not corrupted by
+    # the report's own formatting.
     return [round(value, digits) + 0.0 for value in a]
 
 
@@ -680,9 +683,9 @@ def _measure_pair(
         "rep": rep_a,
         "candidate_parts": names_a[:3],
         "status": "measured_same_part" if names_a else "measured_same_rep_unnamed",
-        "distance_mm": round(geometry["distance_mm"], 6),
+        "distance_mm": round(geometry["distance_mm"], 9),
         "along_axis_mm": (
-            round(geometry["along_axis_mm"], 6)
+            round(geometry["along_axis_mm"], 9)
             if geometry["along_axis_mm"] == geometry["along_axis_mm"]
             else None
         ),
@@ -759,9 +762,9 @@ def _planar_candidates(measurements: Sequence[dict[str, Any]]) -> dict[str, Any]
             "wheel": wheel_point,
         },
         "link_lengths_mm": {
-            "thigh_hip_to_knee": round(distance(hip_point, knee_point), 6),
-            "shin_knee_to_wheel": round(distance(knee_point, wheel_point), 6),
-            "hip_to_wheel_chord": round(distance(hip_point, wheel_point), 6),
+            "thigh_hip_to_knee": round(distance(hip_point, knee_point), 9),
+            "shin_knee_to_wheel": round(distance(knee_point, wheel_point), 9),
+            "hip_to_wheel_chord": round(distance(hip_point, wheel_point), 9),
         },
         "evidence": (
             "the knee coordinate is measured independently inside the thigh (G01) and "
@@ -771,6 +774,113 @@ def _planar_candidates(measurements: Sequence[dict[str, Any]]) -> dict[str, Any]
             "the zero pose is the assembly pose, not a controller zero",
             "sign conventions and the direction of positive rotation are still unknown",
             "this is a 2-link + linkage projection; it is not yet the closed-chain constraint set",
+        ],
+    }
+
+
+def _shared_axis_nodes(
+    selected: Sequence[dict[str, Any]],
+    tolerance_mm: float = 1e-3,
+    min_parts: int = 2,
+) -> dict[str, Any]:
+    """Axis points that coincide across *different* parts.
+
+    Two separate facts have to stay separate here:
+
+    * a **cross-part distance** needs the assembly transform, whose convention is
+      unverified - that is why :func:`_measure_pair` refuses it;
+    * a **coincident point** between two parts needs no transform at all. If part
+      A and part B both have a bore whose axis passes through the same ``(Y, Z)``
+      to within a micron, then those two parts were exported in one datum and the
+      coincidence is the joint between them.
+
+    The result is evidence for building a planar mechanism graph. It is still
+    ``cad_extracted``: coincidence identifies where a joint sits, not which body
+    is rigidly attached to which - that remains a CAD question.
+    """
+    points: list[dict[str, Any]] = []
+    for part in selected:
+        names = part.get("candidate_parts") or [f"<rep {part.get('rep')}>"]
+        for group in part.get("dominant_axes", []):
+            origin = group["origin_mm"]
+            points.append(
+                {
+                    "part": names[0],
+                    "rep": part.get("rep"),
+                    "y": float(origin[1]),
+                    "z": float(origin[2]),
+                    "radius_mm": float(group["max_radius_mm"]),
+                    "coaxial_count": int(group["count"]),
+                }
+            )
+    if not points:
+        return {
+            "status": "no_geometry",
+            "tolerance_mm": tolerance_mm,
+            "shared_nodes": [],
+        }
+
+    # Leader clustering: a grid/rounding key would split a node that straddles a
+    # cell boundary, which is exactly the case this function exists to find.
+    clusters: list[list[dict[str, Any]]] = []
+    for point in points:
+        for cluster in clusters:
+            head = cluster[0]
+            if math.hypot(point["y"] - head["y"], point["z"] - head["z"]) <= tolerance_mm:
+                cluster.append(point)
+                break
+        else:
+            clusters.append([point])
+
+    nodes: list[dict[str, Any]] = []
+    for cluster in clusters:
+        by_part: dict[str, dict[str, Any]] = {}
+        for point in cluster:
+            entry = by_part.setdefault(
+                point["part"],
+                {"part": point["part"], "rep": point.get("rep"), "max_radius_mm": 0.0, "coaxial_count": 0},
+            )
+            entry["max_radius_mm"] = max(entry["max_radius_mm"], point["radius_mm"])
+            entry["coaxial_count"] = max(entry["coaxial_count"], point["coaxial_count"])
+        if len(by_part) < min_parts:
+            continue
+        ys = [point["y"] for point in cluster]
+        zs = [point["z"] for point in cluster]
+        spread = max(
+            math.hypot(point["y"] - ys[0], point["z"] - zs[0]) for point in cluster
+        )
+        nodes.append(
+            {
+                "point_mm": [round(sum(ys) / len(ys), 9), round(sum(zs) / len(zs), 9)],
+                "spread_mm": round(spread, 9),
+                "part_count": len(by_part),
+                "parts": sorted(
+                    by_part.values(), key=lambda item: item["max_radius_mm"], reverse=True
+                ),
+            }
+        )
+    nodes.sort(
+        key=lambda item: (
+            -item["part_count"],
+            -max(part["max_radius_mm"] for part in item["parts"]),
+        )
+    )
+    return {
+        "status": "shared_datum_candidates",
+        "tolerance_mm": tolerance_mm,
+        "min_parts": min_parts,
+        "points_considered": len(points),
+        "clusters": len(clusters),
+        "shared_nodes": nodes,
+        "evidence": (
+            "parts whose bore axes coincide to within the tolerance were exported in one "
+            "coordinate datum; the coincidence locates a joint without needing the assembly "
+            "transform"
+        ),
+        "caveats": [
+            "a shared point says where a joint is, not which body is rigidly attached to which",
+            "parts that do not appear here may still be in another datum; absence is not evidence",
+            "coincident coordinates are cad_extracted, never a hardware measurement",
         ],
     }
 
@@ -1020,6 +1130,7 @@ def audit_step(
             ][:80],
             "selected_parts": selected,
             "mechanism_candidates": _planar_candidates(measurements),
+            "shared_axis_nodes": _shared_axis_nodes(selected),
             "measurements": measurements,
             "cross_part": cross_part,
             "verification": {

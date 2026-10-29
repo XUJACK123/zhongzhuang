@@ -1,0 +1,47 @@
+# Keep the frozen source assets byte-exact.
+#
+# P0 (progress.md §18.9 item 4) froze SHA-256 over the URDF/STL sources. A
+# checkout that rewrites line endings changes those bytes without changing the
+# model, which made `tests/test_audit.py::test_source_hashes_unchanged` fail on
+# Windows even though nothing had been edited. `-text` disables the conversion
+# in both directions, so the hash in `model_parameters.json` keeps its meaning.
+#
+# Note: this directory is not a git repository yet in this workspace, so the
+# attributes take effect when one is initialised and the files are checked out
+# again. The current checkout was verified byte-identical by hashing directly.
+
+# CAD / mesh sources
+solidwork_graph/**                -text
+ref_document/fifty_mujoco/assets/** -text
+ref_document/chassis_ref_new/**   -text
+ref_document/chassis_ref_origin/** -text
+ref_document/chassis_of_hero/**   -text
+ref_document/fudan_rl_wheel_leg-main/** -text
+ref_document/mjlab_upkie-main/**  -text
+ref_document/KYU_Balancing_2026/** -text
+ref_document/XYEGA_RM2026_WheelLeg_Infatry_RLdeploy-main/** -text
+
+# by extension, wherever they live
+*.STEP -text
+*.step -text
+*.stp  -text
+*.STL  -text
+*.stl  -text
+*.dae  -text
+*.obj  -text
+*.urdf -text
+*.srdf -text
+*.sdf  -text
+*.png  -text
+*.jpg  -text
+*.mp4  -text
+*.onnx -text
+*.pt   -text
+
+# The generated reports are evidence: normalise them so a diff means a change.
+ref_document/fifty_mujoco/reports/** text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.py text eol=lf
+*.json text eol=lf

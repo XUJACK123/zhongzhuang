@@ -652,7 +652,11 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
 
 
 def cmd_evaluate_stand(args: argparse.Namespace, config: Config) -> int:
-    """Independent acceptance evaluation (doc 14.2), CPU model only."""
+    """Independent acceptance evaluation (doc 14.2).
+
+    ``--backend cpu`` is the reference (independent physics, per-env reasons);
+    ``--backend warp`` runs the same window on the training backend ~200x faster.
+    """
     from .evaluation.stand_eval import (
         OnnxPolicy,
         TorchPolicy,
@@ -675,7 +679,14 @@ def cmd_evaluate_stand(args: argparse.Namespace, config: Config) -> int:
         return 2
 
     scenarios = make_scenarios(base_seed=args.seed_base, count=args.episodes)
-    report = run_stand_eval(config, policy, steps=args.steps, scenarios=scenarios)
+    report = run_stand_eval(
+        config,
+        policy,
+        steps=args.steps,
+        scenarios=scenarios,
+        backend=args.backend,
+        device=args.device,
+    )
     report["policy_source"] = source
     report["generated_at"] = _now()
     report["seeds"] = [scenario.seed for scenario in scenarios]
@@ -691,6 +702,7 @@ def cmd_evaluate_stand(args: argparse.Namespace, config: Config) -> int:
 
     criteria = report["criteria"]["checks"]
     print(f"  policy   : {source}")
+    print(f"  backend  : {report.get('backend', 'cpu')}")
     print(f"  window   : {report['steps']} steps = {report['window_s']:.1f} s per episode, "
           f"episode limit {report['episode_limit_s']:.1f} s")
     print(f"  episodes : {report['episodes']} (seeds {args.seed_base}..{args.seed_base + args.episodes - 1})")
@@ -806,6 +818,106 @@ def cmd_step_audit(args: argparse.Namespace, config: Config) -> int:
     print(f"  status    : {report['status']}")
     print(f"  report    : {out}")
     return 0
+
+
+def cmd_gpu_parity(args: argparse.Namespace, config: Config) -> int:
+    from datetime import datetime, timezone
+
+    from .evaluation.parity_suite import run_parity_suite, summarize as summarize_parity
+
+    report = run_parity_suite(
+        config,
+        num_envs=args.num_envs,
+        steps=args.steps,
+        seed=args.seed,
+        device=args.device,
+        check_graph=not args.no_graph,
+    )
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    out = _report_path(report, args.json, f"gpu_parity_{stamp}.json")
+    print("CPU/GPU contract parity (field by field):")
+    for line in summarize_parity(report).splitlines():
+        print(f"  {line}")
+    print(f"  report : {out}")
+    return 0 if report["status"] == "passed" else 1
+
+
+def cmd_stage_plan(args: argparse.Namespace, config: Config) -> int:
+    from datetime import datetime, timezone
+
+    from .learning.stages import describe, load_training_stages, planned_commands
+
+    stages = load_training_stages()
+    seeds = list(args.seeds) if getattr(args, "seeds", None) else None
+    selected = [
+        stage
+        for stage in stages.stages
+        if args.stage is None or stage.id == args.stage
+    ]
+    commands = planned_commands(stages, seeds)
+    report = {
+        "tool": "stage-plan",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "meta": dict(stages.meta),
+        "baseline": {
+            key: {
+                "value": entry.value,
+                "default": entry.default,
+                "implemented_by": entry.implemented_by,
+                "note": entry.note,
+            }
+            for key, entry in stages.baseline.items()
+        },
+        "stages": [
+            {
+                "id": stage.id,
+                "name": stage.name,
+                "task": dict(stage.task),
+                "keep_standing_fraction": stage.keep_standing_fraction,
+                "prerequisite": stage.prerequisite,
+                "gate": stage.gate,
+                "blocked_by": stage.blocked_by,
+            }
+            for stage in selected
+        ],
+        "randomization": {
+            key: {
+                "implemented": entry.implemented,
+                "where": entry.where,
+                "cli_exposed": entry.cli_exposed,
+                "blocked_by": entry.blocked_by,
+            }
+            for key, entry in stages.randomization.items()
+        },
+        "gates": {key: dict(value) for key, value in stages.gates.items()},
+        "train_gpu_commands": commands,
+        "evidence": "not_run: this file describes a plan, not a training result",
+    }
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    out = _report_path(report, args.json, f"training_stages_plan_{stamp}.json")
+    print(describe(stages))
+    print("train-gpu commands (baseline, one per seed):")
+    for command in commands:
+        print(f"  {command}")
+    print(f"report         : {out}")
+    return 0
+
+
+def cmd_mechanism_check(args: argparse.Namespace, config: Config) -> int:
+    from datetime import datetime, timezone
+
+    from .mechanism.check import mechanism_report, summarize as summarize_mechanism
+
+    report = mechanism_report(
+        allow_inferred=bool(getattr(args, "allow_inferred_topology", False))
+    )
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    out = _report_path(report, args.json, f"mechanism_check_{stamp}.json")
+    print("mechanism geometry (cad_extracted, not measured):")
+    for line in summarize_mechanism(report).splitlines():
+        print(f"  {line}")
+    print(f"  report : {out}")
+    return 0 if report["passed"] else 1
 
 
 def cmd_export(args: argparse.Namespace, config: Config) -> int:
@@ -1073,7 +1185,16 @@ def build_parser() -> argparse.ArgumentParser:
     stand.add_argument("--steps", type=int, default=6000, help="policy steps per episode (6000 = 60 s)")
     stand.add_argument("--episodes", type=int, default=64, help="number of independent scenarios")
     stand.add_argument("--seed-base", type=int, default=1000, help="first evaluation seed")
-    stand.add_argument("--device", default="cpu")
+    stand.add_argument("--device", default="cpu", help="policy device; with --backend warp this is also the physics device")
+    stand.add_argument(
+        "--backend",
+        default="cpu",
+        choices=["cpu", "warp"],
+        help=(
+            "physics backend: cpu is the independent reference (~25 min for 64x60 s);"
+            " warp runs on WarpVecEnv (~6.6 s) and must give the same verdict"
+        ),
+    )
     stand.add_argument("--json", default=None, help="write the full report to this path")
     stand.add_argument(
         "--zero-policy",
@@ -1108,6 +1229,43 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="skip cylinder-axis extraction (structure only, much faster on huge files)",
     )
+
+    mechanism = subparsers.add_parser(
+        "mechanism-check",
+        help="S2: planar mechanism geometry, FK/IK and loop closure",
+    )
+    mechanism.add_argument("--json", default=None)
+    mechanism.add_argument(
+        "--allow-inferred-topology",
+        action="store_true",
+        help=(
+            "evaluate the candidate body assignments (requires reading the CAD mates"
+            " before anything downstream uses the result)"
+        ),
+    )
+
+    stage_plan = subparsers.add_parser(
+        "stage-plan",
+        help="S5: print the curriculum/randomisation plan and the baseline train command",
+    )
+    stage_plan.add_argument("--stage", type=int, default=None, help="only report this stage id")
+    stage_plan.add_argument(
+        "--seeds",
+        type=int,
+        nargs="+",
+        default=None,
+        help="seeds to emit commands for (default: the baseline seed list)",
+    )
+
+    parity = subparsers.add_parser(
+        "gpu-parity", help="S1: CPU/GPU contract parity, field by field"
+    )
+    parity.add_argument("--num-envs", type=int, default=4)
+    parity.add_argument("--steps", type=int, default=24)
+    parity.add_argument("--seed", type=int, default=7)
+    parity.add_argument("--device", default="cuda:0")
+    parity.add_argument("--no-graph", action="store_true", help="skip the CUDA-graph replay check")
+    parity.add_argument("--json", default=None)
 
     export = subparsers.add_parser("export", help="P10: export the actor+encoder to ONNX")
     export.add_argument("--checkpoint", required=True)
@@ -1151,6 +1309,9 @@ def main(argv: list[str] | None = None) -> int:
         "evaluate-stand": cmd_evaluate_stand,
         "evaluate-lqr": cmd_evaluate_lqr,
         "step-audit": cmd_step_audit,
+        "mechanism-check": cmd_mechanism_check,
+        "stage-plan": cmd_stage_plan,
+        "gpu-parity": cmd_gpu_parity,
         "export": cmd_export,
         "play": cmd_play,
         "render": cmd_render,

@@ -1,0 +1,45 @@
+{
+  "stage": "environment",
+  "date": "2026-10-29T16:18:07+00:00",
+  "python": "3.12.13",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "packages": {
+    "numpy": "2.5.4",
+    "mujoco": "3.17.0",
+    "torch": "2.11.0+cu128",
+    "warp": "1.12.0",
+    "mjlab": "1.3.0",
+    "onnxruntime": "1.31.1"
+  },
+  "gpu": {
+    "torch_cuda_available": true,
+    "device_count": 1,
+    "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+    "memory_total_mib": 7707.7,
+    "tensor_sum": 1031.114990234375
+  },
+  "checks": {
+    "mujoco_cpu": {
+      "passed": true
+    },
+    "mujoco_can_load_model": {
+      "passed": true,
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/assets/mjcf/fifty_train.xml"
+    },
+    "torch_gpu": {
+      "passed": true
+    },
+    "warp": {
+      "passed": true,
+      "version": "1.12.0",
+      "devices": [
+        "cpu",
+        "cuda:0"
+      ]
+    },
+    "mjlab": {
+      "passed": true,
+      "version": "1.3.0"
+    }
+  }
+}

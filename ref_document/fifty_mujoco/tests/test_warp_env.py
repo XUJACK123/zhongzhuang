@@ -199,22 +199,16 @@ def test_spring_features_match_the_cpu_definition(config, height):
     torch.cuda.synchronize()
     if gpu.spring_count == 0:
         pytest.skip("no gas spring on this model")
-    lengths, rates, forces, _ = cpu._spring_state(0)
-    expected = np.concatenate(
-        [
-            lengths * 5.0,
-            rates,
-            np.array([reference_force(spring) for spring in cpu.springs]) / 300.0,
-            forces / 300.0,
-        ]
-    )
-    gpu_part = gpu.privileged[0, names.BASE_PRIVILEGED_DIM :].cpu().numpy()
-    # rates come from a finite difference on the GPU, so only the length and
-    # force channels are compared tightly here.
     count = gpu.spring_count
-    assert np.allclose(gpu_part[:count], expected[:count], atol=1e-4)
-    assert np.allclose(gpu_part[2 * count : 3 * count], expected[2 * count : 3 * count], atol=1e-4)
-    assert np.allclose(gpu_part[3 * count : 4 * count], expected[3 * count : 4 * count], atol=5e-2)
+    cpu_part = cpu.get_privileged_observations()[0, names.BASE_PRIVILEGED_DIM :]
+    gpu_part = gpu.privileged[0, names.BASE_PRIVILEGED_DIM :].cpu().numpy()
+    # Both backends now define the block identically - length from the current
+    # geometry, rate over one policy step, force from the per-sub-step rate - so
+    # all four channels per spring are comparable, not just length and force.
+    assert np.allclose(cpu_part, gpu_part, atol=5e-3)
+    assert np.allclose(cpu_part[:count], cpu.spring_lengths[0, :count] * 5.0, atol=1e-9)
+    expected_reference = np.array([reference_force(spring) for spring in cpu.springs]) / 300.0
+    assert np.allclose(cpu_part[2 * count : 3 * count], expected_reference, atol=1e-9)
 
 
 def test_command_refresh_is_immediate(config, height):

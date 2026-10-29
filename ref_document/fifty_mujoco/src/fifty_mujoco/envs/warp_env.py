@@ -313,6 +313,12 @@ class WarpVecEnv:
         self.tilt_time = torch.zeros(self.num_envs, dtype=torch.float32, device=dev)
         self.height_time = torch.zeros(self.num_envs, dtype=torch.float32, device=dev)
         self.terminal_privileged = torch.zeros_like(self.privileged)
+        # Terminal *physics* snapshot: the masked reset overwrites qpos/qvel/ctrl
+        # inside the same step, so an evaluator cannot otherwise see the state
+        # that actually failed (doc 5.1/§14.2: score the failure, not the reset).
+        self.terminal_qpos = torch.zeros_like(self.qpos)
+        self.terminal_qvel = torch.zeros_like(self.qvel)
+        self.terminal_torques = torch.zeros_like(self.torques)
         self.terminal_history = torch.zeros(
             (self.num_envs, names.HISTORY_DIM), dtype=torch.float32, device=dev
         )
@@ -666,6 +672,12 @@ class WarpVecEnv:
         done = self.dones
         mask_q = done.unsqueeze(1)
 
+        # 0) keep the state the episode died in, before the reset masks overwrite
+        #    it: an evaluator must report the failure, not the spawn pose.
+        self.terminal_qpos.copy_(torch.where(mask_q, self.qpos, self.terminal_qpos))
+        self.terminal_qvel.copy_(torch.where(mask_q, self.qvel, self.terminal_qvel))
+        self.terminal_torques.copy_(torch.where(mask_q, self.torques, self.terminal_torques))
+
         # 1) append the new observation to the history for every env ...
         appended = torch.cat([self.history[:, 1:], self.obs[:, None, :]], 1)
         # 2) ... then snapshot it: terminal history ends with the terminal obs.
@@ -756,6 +768,9 @@ class WarpVecEnv:
         "_running_length",
         "terminal_privileged",
         "terminal_history",
+        "terminal_qpos",
+        "terminal_qvel",
+        "terminal_torques",
         "dones",
         "time_outs",
         "ten_prev_length",

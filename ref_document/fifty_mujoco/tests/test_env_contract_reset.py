@@ -187,19 +187,26 @@ def test_spring_features_keep_reference_and_actual_force_apart(config, standing_
     for _ in range(10):
         env.step(np.array([[0.3, 0.0, 0.0, 0.3, 0.0, 0.0]]))
 
-    lengths, rates, forces, _ = env._spring_state(0)
     count = env.spring_count
-    expected = np.concatenate(
-        [
-            lengths * 5.0,
-            rates,
-            np.array([reference_force(spring) for spring in env.springs]) / 300.0,
-            forces / 300.0,
-        ]
+    # The privileged rate is defined over one *policy* step, so capture the
+    # previous length across a step instead of re-deriving it afterwards.
+    before = env.spring_lengths[0, :count].copy()
+    env.step(np.array([[0.3, 0.0, 0.0, 0.3, 0.0, 0.0]]))
+    assert np.allclose(
+        env.spring_rates[0, :count],
+        (env.spring_lengths[0, :count] - before) / env.dt,
+        atol=1e-12,
     )
+
     spring_part = env.get_privileged_observations()[0, names.BASE_PRIVILEGED_DIM :]
     assert spring_part.size == names.GAS_SPRING_FEATURES_PER_SPRING * count
-    assert np.allclose(spring_part, expected, atol=1e-6)
+    assert np.allclose(spring_part[:count], env.spring_lengths[0, :count] * 5.0, atol=1e-9)
+    assert np.allclose(spring_part[count : 2 * count], env.spring_rates[0, :count], atol=1e-9)
+    expected_reference = np.array([reference_force(spring) for spring in env.springs]) / 300.0
+    assert np.allclose(spring_part[2 * count : 3 * count], expected_reference, atol=1e-9)
+    assert np.allclose(
+        spring_part[3 * count : 4 * count], env.spring_forces[0, :count] / 300.0, atol=1e-9
+    )
     # A pure constant-force model makes the two channels coincide by definition;
     # as soon as stiffness/damping/friction exist they must not be conflated.
     if any(spring.stiffness_n_per_m or spring.damping_n_s_per_m or spring.friction_n for spring in env.springs):

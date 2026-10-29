@@ -1,0 +1,252 @@
+# Training curriculum, domain randomisation and stage gates.
+#
+# WHY THIS FILE EXISTS
+#   progress.md §13.4/§13.5 describe the curriculum and the randomisation order in
+#   prose, and §13.1 lists the baseline numbers. Prose cannot be validated, so the
+#   same content lives here and `stage-plan` turns it into `train-gpu` arguments.
+#
+# WHAT IT IS NOT
+#   Nothing in this file has been run. `status: provisional` applies to every
+#   entry: these are planned settings, not a report of a training run.
+#
+# THE RULE THAT KEEPS DOCUMENT AND CODE IN SYNC
+#   * `baseline` entries name the CLI flag or the dataclass field that implements
+#     them; `tests/test_training_stages.py` compares the declared value with the
+#     real default, so "the doc says 25 but the code defaults to 100" cannot come
+#     back silently (progress.md §18.8).
+#   * `gates` carry NO numbers. They reference `THRESHOLDS` in
+#     `evaluation/stand_eval.py`, which stays the single source of truth.
+#   * every randomisation entry states whether it is implemented, and where.
+#     `implemented: false` must come with `blocked_by`.
+meta:
+  schema: 1
+  generated_at: "2026-10-29"
+  status: provisional
+  evidence: not_run
+  documents: ["progress.md §13.1", "progress.md §13.4", "progress.md §13.5", "progress.md §14.2"]
+  gate_source: fifty_mujoco.evaluation.stand_eval.THRESHOLDS
+
+# ---------------------------------------------------------------------------
+# §13.1 baseline. `default` is what the code does today; `value` is what the
+# baseline experiment should use. Where they differ, the run must pass the flag
+# explicitly - and `stage-plan` prints exactly that command.
+baseline:
+  num_envs:
+    value: 8192
+    default: 2048
+    implemented_by: "--num-envs"
+    note: "reduce every comparison group together if the machine cannot hold 8192"
+  steps_per_env:
+    value: 32
+    default: 24
+    implemented_by: "--steps"
+  epochs:
+    value: 3
+    default: 5
+    implemented_by: "--epochs"
+  minibatches:
+    value: 2
+    default: 4
+    implemented_by: "--minibatches"
+  learning_rate:
+    value: 0.0015
+    default: 0.001
+    implemented_by: "--lr"
+  gamma:
+    value: 0.99
+    default: 0.99
+    implemented_by: "GpuPpoConfig.gamma"
+  lam:
+    value: 0.95
+    default: 0.95
+    implemented_by: "GpuPpoConfig.lam"
+  clip:
+    value: 0.2
+    default: 0.2
+    implemented_by: "GpuPpoConfig.clip"
+  entropy_coef:
+    value: 0.005
+    default: 0.005
+    implemented_by: "--entropy-coef"
+  init_std_per_channel:
+    value: [0.4, 0.4, 0.1, 0.4, 0.4, 0.1]
+    default: [0.4, 0.4, 0.1, 0.4, 0.4, 0.1]
+    implemented_by: "GpuPpoConfig.init_std_per_channel"
+  min_std_per_channel:
+    value: [0.1, 0.1, 0.02, 0.1, 0.1, 0.02]
+    default: [0.1, 0.1, 0.02, 0.1, 0.1, 0.02]
+    implemented_by: "GpuPpoConfig.min_std_per_channel"
+  max_std:
+    value: 1.0
+    default: 1.0
+    implemented_by: "--max-std"
+  adaptive_lr:
+    value: true
+    default: true
+    implemented_by: "GpuPpoConfig.adaptive_lr"
+    note: "turning it off stalled training in the historical runs; disable with --no-adaptive-lr"
+  eval_every:
+    value: 50
+    default: 50
+    implemented_by: "--eval-every"
+  eval_steps:
+    value: 600
+    default: 300
+    implemented_by: "--eval-steps"
+  save_every:
+    value: 25
+    default: 25
+    implemented_by: "--save-every"
+  checkpoint_keep:
+    value: 5
+    default: 5
+    implemented_by: "--checkpoint-keep"
+  stop_on_survive:
+    value: 2
+    default: 0
+    implemented_by: "--stop-on-survive"
+    note: "0 disables early stop; the baseline wants two consecutive successes"
+  updates_budget:
+    value: 1500
+    default: 100000
+    implemented_by: "--updates"
+    note: "experiment budget, not a promise that 1500 updates is enough"
+  seeds:
+    value: [0, 1, 2]
+    default: 0
+    implemented_by: "--seed"
+    note: "one run per seed; report every seed, never the best one"
+
+# ---------------------------------------------------------------------------
+# §13.4 curriculum. Each stage keeps a regression evaluation of the stages
+# before it, so "learned to walk, forgot to stand" shows up immediately.
+stages:
+  - id: 1
+    name: stand
+    task:
+      vx_m_s: [0.0, 0.0]
+      wz_rad_s: [0.0, 0.0]
+      height: nominal
+    keep_standing_fraction: 1.0
+    prerequisite: null
+    gate: stand
+    note: "small initial perturbation only; this is the stage the current assets were tuned for"
+  - id: 2
+    name: slow_straight
+    task:
+      vx_m_s: [-0.15, 0.15]
+      wz_rad_s: [0.0, 0.0]
+      height: nominal
+    keep_standing_fraction: 0.4
+    prerequisite: 1
+    gate: command_tracking
+    note: "about 40% of each batch stays at vx=0 so the standing skill is not overwritten"
+  - id: 3
+    name: slow_turn
+    task:
+      vx_m_s: [0.0, 0.0]
+      wz_rad_s: [-0.15, 0.15]
+      height: nominal
+    keep_standing_fraction: 0.4
+    prerequisite: 2
+    gate: command_tracking
+    note: "confirm the yaw sign against the wheel channels before trusting the reward"
+  - id: 4
+    name: extended_speed
+    task:
+      vx_m_s: [-0.3, 0.3]
+      wz_rad_s: [-0.3, 0.3]
+      height: nominal
+    keep_standing_fraction: 0.3
+    prerequisite: 3
+    gate: command_tracking
+  - id: 5
+    name: combined_commands
+    task:
+      vx_m_s: [-0.3, 0.3]
+      wz_rad_s: [-0.3, 0.3]
+      height: nominal
+      segmented: true
+    keep_standing_fraction: 0.2
+    prerequisite: 4
+    gate: command_tracking
+    note: "piecewise-constant commands with random durations; never a per-step jump"
+  - id: 6
+    name: height_changes
+    task:
+      height: within_verified_spring_range
+    prerequisite: 5
+    gate: command_tracking
+    blocked_by: "the spring stroke and the closed-chain feasible set are still unknowns (configs/mechanism.yaml: unknowns)"
+  - id: 7
+    name: perturbations_and_terrain
+    task:
+      push_disturbance: true
+      ground_changes: true
+    prerequisite: 6
+    gate: robustness
+    blocked_by: "needs a nominal system that already passes stage 5"
+
+# ---------------------------------------------------------------------------
+# §13.5 randomisation, ordered by physical evidence. `implemented` is a fact
+# about the code in this checkout, not an intention.
+randomization:
+  command_sampling:
+    implemented: true
+    cli_exposed: false
+    where: "envs/warp_env.py: WarpEnvOptions.command_ranges"
+    note: "sampled per episode; the CLI does not expose the ranges yet"
+  initial_state:
+    implemented: true
+    cli_exposed: false
+    where: "envs/warp_env.py: WarpEnvOptions.randomize_initial"
+  action_delay:
+    implemented: false
+    where: null
+    blocked_by: "envs/warp_env.py raises NotImplementedError for action_delay_steps != 0; the CPU env has a ring buffer"
+    note: "one policy step is 10 ms; a 5 ms delay has to be applied at the physics sub-step, not per step"
+  mass_and_payload:
+    implemented: false
+    blocked_by: "no weighing data; total mass 23.26 kg is a CAD statistic (progress.md §16.2)"
+  ground_friction:
+    implemented: false
+    blocked_by: "contact friction is a single provisional tuple; no measured range"
+  joint_friction:
+    implemented: false
+    blocked_by: "frictionloss/damping are provisional and not parameterised per env"
+  gas_spring:
+    implemented: false
+    blocked_by: "constant 300 N placeholder; no stroke or force curve"
+  observation_noise:
+    implemented: false
+    blocked_by: "no real log to derive the noise model from"
+
+# ---------------------------------------------------------------------------
+# Gates. Keys only, never numbers: the thresholds live in stand_eval.THRESHOLDS.
+gates:
+  stand:
+    source: fifty_mujoco.evaluation.stand_eval.THRESHOLDS
+    keys:
+      - success_rate_min
+      - vx_mae_max
+      - height_mae_max
+      - tilt_p95_max_deg
+      - tilt_max_max_deg
+      - torque_saturation_max
+    command: "fifty-mujoco evaluate-stand --checkpoint <ckpt> --steps 6000 --episodes 64 --seed-base 1000"
+  command_tracking:
+    implemented: false
+    blocked_by: "no segmented-command evaluator exists yet (progress.md §14.3)"
+    source: fifty_mujoco.evaluation.stand_eval.THRESHOLDS
+    keys:
+      - height_mae_max
+      - tilt_p95_max_deg
+      - tilt_max_max_deg
+    planned_targets:
+      vx_mae_max_m_s: 0.05
+      wz_mae_max_rad_s: 0.05
+      success_rate_min: 0.95
+      transition_window_s: 1.0
+  robustness:
+    implemented: false
+    blocked_by: "stage 7 is blocked; nothing to gate yet"

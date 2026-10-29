@@ -7,8 +7,10 @@
 > **2026-10-29 第一次更新只改文档**；**同日第二次推进（§18）修改了软件并实测**：
 > 环境/评估/checkpoint 修复在 CPU 上回归通过，GPU 侧同批修改未在 CUDA 上执行。
 > **第三次推进（§18.11）改为 STEP 路线**，G01–G07 可复现并推出平面机构三点；
-> **LQR 教师已停用（理由见 §19）**，当前进度与下一步见 §20。
-> 三次都没有训练新策略、导出新权重或驱动真机。
+> **LQR 教师已停用（理由见 §19）**；当前进度与下一步见 §20。
+> **第四次推进（§21，2026-10-29 晚，Linux）完成了 §20.4 第 1–3 项**：`configs/mechanism.yaml`、
+> 平面 FK/IK 与闭链自检、`configs/training_stages.yaml` 与参数清单，全部有测试与报告。
+> 四次都没有训练新策略、导出新权重或驱动真机。
 
 ## 0. 当前结论与阅读顺序
 
@@ -44,6 +46,8 @@
 | §18 | 2026-10-29 三次推进的**执行记录**：契约修复、评估器、checkpoint、LQR 原型（未通过）、STEP 轴线提取、设置对齐、新问题清单 |
 | §19 | **决策记录：为什么不再用 LQR 作教师**、保留了什么、什么条件下重开 |
 | §20 | **当前进度快照与下一步**（按"是否需要环境"排序） |
+| §21 | 2026-10-29 第四次推进的**执行记录**：§20.4 第 1–3 项（mechanism.yaml、平面 FK/IK、课程与参数清单） |
+| §22 | 2026-10-30 第五次推进的**执行记录**：§20.4 第 4 项（GPU 逐字段对拍、两个 CPU 侧缺陷、64×60 s 验收） |
 
 ### 0.1 本次采用的路线与历史方案的关系
 
@@ -1365,12 +1369,12 @@ mjlab 1.3.0，onnxruntime 1.31.1
 |---|---|---|
 | `docs/STEP_GEOMETRY_AUDIT.md` | 来源、装配树、轴线、测量截图、候选值与待确认项 | 🟡 已生成**装配结构与轴线候选**（G01–G07 可复现 + 平面三点）；SolidWorks 复核、弹簧锚点、质量仍缺 |
 | `reports/step_geometry_audit.json` | STEP 哈希、单位、实体/实例路径、变换、误差与状态 | ✅ 已生成（`structure_and_axis_candidates`；23,945 圆柱中 20,219 个已归属；758/758 变换） |
-| `configs/mechanism.yaml` | 实际拓扑、尺寸、零位、方向、工作分支和可行范围 | ❌ 未创建（必须先有 CAD 量测） |
-| `docs/PHYSICAL_PARAMETER_CHECKLIST.md` | 电机/弹簧/质量/摩擦数据表与来源 | ❌ 未创建 |
+| `configs/mechanism.yaml` | 实际拓扑、尺寸、零位、方向、工作分支和可行范围 | 🟡 已创建（2026-10-29 晚）：8 个铰点、14 条长度、两个固连变体全部标 `cad_extracted` / `candidate_inferred`；零位、方向、弹簧锚点、质量仍缺 |
+| `docs/PHYSICAL_PARAMETER_CHECKLIST.md` | 电机/弹簧/质量/摩擦数据表与来源 | ✅ 已创建（2026-10-29 晚）：17 项已登记参数 + P0/P1/P2 待取清单 + 两张待填表 |
 | `configs/lqr_teacher.yaml` | 教师状态、周期、K/Q/R、工作区与版本 | ✅ 已创建（全部 `provisional`） |
 | `reports/lqr_teacher_eval.json` | 教师独立测试、失败与饱和记录 | ✅ 已生成（**未通过**，`usable_for_demonstrations=false`） |
 | `datasets/lqr_demonstrations/<version>/` | 按 episode 划分的示教及 manifest | ❌ 未创建（教师未过门槛，按 §11.6 不允许） |
-| `configs/training_stages.yaml` | 课程、奖励、命令、随机化与阶段门槛 | ❌ 未创建（§13.4/§13.5 仍是文字计划） |
+| `configs/training_stages.yaml` | 课程、奖励、命令、随机化与阶段门槛 | ✅ 已创建（2026-10-29 晚）：7 阶段 + 8 类随机化（其中 6 类标 `implemented: false` 并写明 `blocked_by`）+ 18 项基线，每项与 argparse 默认值逐项对拍 |
 | `runs/<experiment>_seed<seed>/` | 配置、history、编号快照、best、last、评估 | 🟡 目录约定已有实现（`CheckpointManager`），但历史 `runs/*` 不符合，新 run 未启动 |
 | `reports/policy_eval_<run>_<version>.json` | 全场景与逐 episode 评估，不覆盖别的运行 | 🟡 站立评估会按 `stand_eval_<policy>_<steps>_<时间>.json` 写；命令跟踪无入口 |
 | `docs/LQR_TRAINING_COMPARISON.md` | R0/R1/R2/R3 的样本、耗时、成功率与局限 | ❌ 未创建（未训练） |
@@ -1603,6 +1607,11 @@ policy/optimizer/lr/update/RNG/config/MJCF 指纹/评估版本；写入先 `.tmp
 4. **`tests/test_audit.py` 的 2 项哈希检查在本仓库必然失败**（未修）。原因是 Windows 检出把
    源 URDF 转成 CRLF，字节变了但内容没变。修法二选一：对该文件标 `-text`（`.gitattributes`），
    或重新冻结 SHA-256 并记录"行尾归一"这一事实。**这会削弱 P0 的来源冻结证据，必须明确选一条。**
+   - **2026-10-29 晚已处理（§21）**：选择 `-text` 路线，新增 `zhongzhuang/.gitattributes`
+     对 `solidwork_graph/**`、`assets/**` 与常见 CAD/网格扩展名关闭行尾转换；在 Linux 检出上
+     直接哈希核对，源 URDF 为 LF 且与 `model_parameters.json` 记录一致，`tests/test_audit.py`
+     7 项全部通过。**限制**：当前工作区还没有 `.git` 目录，attribute 文件只在将来 init 并重新
+     检出时生效；本次结论来自实际字节核对，不是来自 git 行为。
 5. **LQR 教师结构性问题**（未修）。腿角参考从 0 rad 改为"相对装配姿态 + 俯仰补偿"后仍是
    0/4 成功，说明问题不只是零位：4 路 LQR + 腿长/腿角 PD + 力矩反解这套结构在当前
    等效串联模型上不足以支撑。下一步应做 §11.3 路径 B 的完整接触模型线性化，而不是继续调 Q/R。
@@ -1784,15 +1793,18 @@ policy/optimizer/lr/update/RNG/config/MJCF 指纹/评估版本；写入先 `.tmp
 | 独立站立评估器 | `evaluation/stand_eval.py` + `reports/stand_eval_demo_run4_6s.json` | CPU 实测（6 s 窗口） |
 | 版本化 checkpoint / resume / release | `learning/checkpoint.py` + `tests/test_checkpoint.py` 8 项 | CPU 回归 |
 | STEP 装配结构与圆柱轴线 | G01–G07 复现 + 平面三点；`docs/STEP_GEOMETRY_AUDIT.md` | 几何提取（`cad_extracted`） |
+| STEP 跨零件共享铰点 + 8 铰点平面图 | `reports/step_geometry_audit.json: geometry.shared_axis_nodes`；`docs/STEP_GEOMETRY_AUDIT.md` §6.5 | 几何提取（`cad_extracted`） |
+| `configs/mechanism.yaml` + 平面 FK/IK + 闭链自检 | `mechanism/` 新包；`reports/mechanism_check_20261029_160019.json`；残差 ≤1.0e-12 m；测试 24 项 | CPU 实测 + 几何提取 |
+| `configs/training_stages.yaml` 与参数清单 | `learning/stages.py`、`docs/PHYSICAL_PARAMETER_CHECKLIST.md`、`cli stage-plan`；测试 13 项 | 配置校验（未训练） |
 | 文档设置与实现对齐 | progress.md §13.1/§14.2/§16.2、§18.8 | — |
 
 ### 20.3 未完成或被阻塞
 
 | 事项 | 阻塞原因 |
 |---|---|
-| GPU 侧契约逐字段对拍、CUDA 图重放 | 本机无 CUDA（且按要求不装 mujoco/torch） |
-| 64 独立初态 × 60 s 验收 | 同上；曾跑到一半被叫停，无报告 |
-| 闭链模型、FK/IK/Jacobian | 需要先确认"谁与谁同轴、哪两个零件固连" |
+| GPU 侧契约逐字段对拍、CUDA 图重放 | **已完成（§22.2–22.3）**：`cli gpu-parity` + `reports/gpu_parity_contract.json`，obs/privileged/history/reward/终止/重置/图重放全部通过；过程中修掉两个 CPU 侧缺陷 |
+| 64 独立初态 × 60 s 验收 | **已完成（§22.5）**：`reports/stand_eval_demo_run4_64x60s.json`，0/64 通过、中位 7.91 s、全部 tilt |
+| 闭链模型、FK/IK/Jacobian | **平面部分已完成（§21）**：两连杆解析 IK/FK、两条传动链解析 FK、通用距离约束求解器；仍缺三维、Jacobian 解析形式与可用的关节限位 |
 | 质量/质心/惯量、弹簧力与行程、摩擦 | 需要称重、厂商资料或台架实测 |
 | 训练对照（R0/H0） | 需要 GPU 预算 + 可信模型 |
 
@@ -1808,3 +1820,265 @@ policy/optimizer/lr/update/RNG/config/MJCF 指纹/评估版本；写入先 `.tmp
 | 6 | 修复后环境上重跑纯 PPO（R0），与 demo_run4 热启动（H0）对比 | 是（GPU） | 同预算下比较 60 s 成功率与漂移 |
 
 第 1–3 项是当前唯一能立刻推进且能验证的部分；第 4 项之后都需要机器或实物。
+
+**状态（2026-10-29 晚，详见 §21）：第 1–3 项已完成并有测试与报告。** 第 4–6 项未做：
+本轮没有跑训练、没有跑 64×60 s 验收、没有动 SolidWorks。
+
+---
+
+## 21. 2026-10-29 第四次推进：§20.4 第 1–3 项（离线部分）
+
+> 本节记录在本 **Linux** 机器上完成并实测的工作。与 §18 的 Windows 推进不同：这次没有删除
+> 虚拟环境，所有结论都有可复跑的命令与报告。
+
+### 21.1 执行环境与边界
+
+| 项目 | 值 |
+|---|---|
+| 系统 | Linux |
+| 工程 | `/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco`（uv 项目） |
+| 解释器 | `.venv/bin/python` 3.12（mujoco 3.17.0、mujoco_warp 3.8.1、warp-lang 1.12.0、torch 2.11.0+cu128、mjlab 1.3.0、onnxruntime 1.31.1） |
+| 测试基线（改动前） | **138 passed，0 failed，0 skipped**（`tests/test_warp_env.py` 这次实际执行，没有 skip） |
+| 测试基线（改动后） | **181 passed，0 failed，0 skipped** |
+| 未做 | 没有训练、没有 `evaluate-stand`、没有 SolidWorks、没有连硬件、没有改 MJCF |
+
+`0 skipped` 这一点纠正了 §18.7 的一个隐含误差：那条"GPU 侧无执行证据"是**当时那台机器**的限制，
+本机的 CUDA 路径是通的。但这不等于 GPU 契约对拍已完成（§20.4 第 4 项仍为空缺）。
+
+### 21.2 本轮交付
+
+| # | 交付物 | 证据 |
+|---|---|---|
+| 1 | STEP 审计升级：新增跨零件共享节点检测 + 坐标精度 1e-6 → 1e-9 mm | `assets/step_audit.py`、`reports/step_geometry_audit.json`、`tests/test_step_audit.py` 新增 3 项 |
+| 2 | `configs/mechanism.yaml`（8 铰点 / 14 条长度 / 8 个刚体候选 / 2 个固连变体） | `tests/test_mechanism_config.py` 12 项 |
+| 3 | 新包 `src/fifty_mujoco/mechanism/`：`loader` `planar` `leg` `pose` `transmission` `check` | `tests/test_planar_mechanism.py` 12 项 |
+| 4 | 平面 FK/IK + 闭链自检：两连杆解析 IK、通用距离约束求解器、两条传动链的解析 FK | 同上 |
+| 5 | CLI `mechanism-check`、`stage-plan` | `tests/test_cli.py` 命令清单已同步 |
+| 6 | `configs/training_stages.yaml` + `learning/stages.py` | `tests/test_training_stages.py` 13 项 |
+| 7 | `docs/PHYSICAL_PARAMETER_CHECKLIST.md` | — |
+| 8 | `zhongzhuang/.gitattributes`（P0 字节冻结） | `tests/test_audit.py` 7 项通过 |
+| 9 | `docs/STEP_GEOMETRY_AUDIT.md` 新增 §6.5（共享基准与两条闭链） | — |
+
+复跑命令：
+
+```bash
+cd ref_document/fifty_mujoco
+.venv/bin/python -m pytest -q                     # 181 passed
+.venv/bin/python -m fifty_mujoco.cli mechanism-check
+.venv/bin/python -m fifty_mujoco.cli mechanism-check --allow-inferred-topology
+.venv/bin/python -m fifty_mujoco.cli stage-plan
+.venv/bin/python tools/step_audit_standalone.py --step <STEP 路径>
+```
+
+生成的真实报告：`reports/step_geometry_audit.json`、`reports/mechanism_check_20261029_160019.json`、
+`reports/training_stages_plan_20261029_160402.json`。
+
+### 21.3 验收（对应 §20.4 的完成判据）
+
+| 判据 | 实测 | 结论 |
+|---|---|---|
+| `mechanism.yaml` 存在，每项有 source 与 status | 加载器强制校验；`measured`/`validated` 缺 `method`+`date` 直接报错 | 通过 |
+| 给定关节角能算出轮端位置 | 两连杆解析 IK/FK，552 个可达目标往返误差 **1.3e-16 m** | 通过 |
+| 闭合残差 < 1e-9 m | 静态闭合（杆长 vs 坐标）**4.8e-10 mm**；闭链残差 **4.8e-13 m**（`link_a_on_shin`）/ **1.0e-12 m**（`link_a_on_thigh`）；CAD 复现 **3.9e-13 m** | 通过 |
+| 对已知三点复核 | 髋-膝 210.000000、膝-轮 250.000000、髋-轮弦 300.242981 mm，全部复算一致 | 通过 |
+| 课程/随机化/门槛可从配置加载 | `stage-plan` 输出 7 阶段、8 类随机化、18 项基线，并生成 3 条 `train-gpu` 命令 | 通过 |
+| 参数表可逐项填写 | `docs/PHYSICAL_PARAMETER_CHECKLIST.md`：17 项已登记 + P0/P1/P2 待取 + 电机/弹簧两张待填表 | 通过 |
+
+门槛与代码的唯一性：`training_stages.yaml` 的 `gates` 只写 `stand_eval.THRESHOLDS` 的键名，
+测试禁止出现裸数字；`baseline` 的 18 项里有 14 项由 `--flag` 承载，测试逐项比对 argparse 默认值
+（这条规则就是为 §18.8 那类"文档写 25、代码默认 100"设的）。
+
+### 21.4 本轮新发现
+
+1. **STEP 装配姿态是腿收起姿态，不是工作姿态。** 髋→轮弦长 300.242981 mm，而目标站立高度
+   464.751 mm。所以 §18.11 的三点只能用于核对杆长，不能当作零位或工作腿长。
+   已写入 `mechanism.yaml: meta.assembly_pose: stowed` 与测试。
+2. **跨零件"坐标重合"不需要装配变换，因此可以判定铰点。** 新增的 `shared_axis_nodes` 在整车里
+   找到 19 个出现在 ≥2 个零件中的轴线点；髋轴 7 件、膝轴 9 件共享，误差 0。由此得到 8 个铰点
+   连通的平面图，杆长与 CAD 完全一致（G01–G07 复现，误差 ≤1e-6 mm）。
+3. **传动链是一条平行四连杆。** `HIP-CRANK_PIN = HIP-LINK_PIN_A = 113.400000`、
+   `KNEE-LINK_PIN_A = 96.600000`、`KNEE-END_PIN_A = 67.000000`，四个点
+   KNEE–END_PIN_A–LINK_PIN_C–LINK_PIN_A 对边等长且平行（1e-6 mm）。这解释了 67/96.6 为什么会
+   同时出现在三孔件和末端连杆上。
+4. **同一组几何支持两种固连归属，且两者可用域差别巨大。** `link_a_on_shin` 在 ±0.15 rad 网格里
+   只有 526/961 能闭合（推杆过早够不到曲柄销），`link_a_on_thigh` 是 961/961。两者在装配姿态下
+   都把 8 个节点复现到 1e-12 m。**只有 CAD 配合能选**，所以 `mechanism-check` 默认不建运动学模型，
+   两个变体并列报告，`topology.chain.selected_variant` 保持 `unconfirmed`。
+5. **精度曾经主导残差。** 原工具把坐标舍入到 1e-6 mm，导致由坐标派生的长度与闭链残差都在
+   1e-9 m 量级——正好卡在 §20.4 的门槛上，看上去像"刚好通过"。改为 1e-9 mm 后残差降到 1e-12 m，
+   门槛才是在量真实误差。这一条也说明：**门槛数字要和数据精度一起定**。
+6. **数值求解器在这个机构上不可靠。** 三孔件三边近乎共线（135+67=202 vs 200.51），距离约束的
+   雅可比条件数很差，Levenberg-Marquardt 会停在 1e-4 m 的局部最优上并报"不收敛"，看起来像
+   机构锁死。改用"每次交点为解析解 + 用通用约束残差独立复核"之后，可行性判断才可信。
+
+### 21.5 本轮明确没有做的事
+
+- 没有跑 `evaluate-stand` 的 64×60 s 验收；60 s 门槛依然没有任何策略通过。
+- 没有做 CPU/GPU 逐字段契约对拍，也没有复核 `warp_env.py` 里捕获期的张量分配。
+- 没有跑 `train-gpu`，没有 R0/H0 对照，没有新权重、没有 ONNX 导出。
+- 没有在 SolidWorks 里判定固连变体、零位、正方向、弹簧锚点。
+- 没有称重、没有台架、没有摩擦辨识。
+- `reports/index.json` 与 §14.3 命令跟踪入口仍未做（虽属"不需要环境"，不在 §20.4 第 1–3 项内）。
+
+### 21.6 下一步
+
+1. **§20.4 第 4 项**（本机 CUDA 可用，先 `fifty-mujoco doctor`）：GPU 契约逐字段对拍 +
+   `evaluate-stand --steps 6000 --episodes 64` 跑完 `demo_run4`，把 60 s 门槛第一次真正关上或关上失败。
+2. **CAD 判定固连变体**（第 5 项的前半）：只要回答"LINK_PIN_A 与 END_PIN_A 各由哪块板承载"，
+   `selected_variant` 就能从 `unconfirmed` 变成来源明确的值，可行域也随之确定。
+3. 补 `reports/index.json` 与 §14.3 的分段命令评估入口，再做 R0/H0 对照（第 6 项）。
+
+---
+
+## 22. 2026-10-30 第五次推进：§20.4 第 4 项（GPU 契约对拍 + 60 s 验收）
+
+### 22.1 环境
+
+| 项目 | 值 |
+|---|---|
+| GPU | NVIDIA GeForce RTX 5060 Laptop GPU（8 GiB, sm_120），Warp 1.12.0 / CUDA 12.9 / 驱动 13.2 |
+| `doctor` | `mujoco_cpu` `mujoco_can_load_model` `torch_gpu` `warp` `mjlab` 全部 PASS |
+| 测试（改动前） | 181 passed / 0 failed / 0 skipped |
+| 测试（改动后） | **184 passed / 0 failed / 0 skipped** |
+
+### 22.2 新增：CPU/GPU 逐字段对拍套件
+
+`evaluation/parity_suite.py` + `cli gpu-parity`（`--num-envs/--steps/--seed/--device/--no-graph/--json`），
+一次运行同时检查六类东西：
+
+| 检查对象 | 字段 |
+|---|---|
+| 观测 25 维 | 按 `policy_contract.yaml` 的六组分开比对：`ang_vel / projected_gravity / command / leg_pos / joint_vel / last_action` |
+| 特权观测 149 维 | 141 基座通道 + 8 弹簧通道分开比对 |
+| 历史 125 维 | 5 帧 × 6 组逐组比对 |
+| 奖励 / 终止 | 每步 reward 误差、`dones` 不一致计数 |
+| 重置语义 | 强制 70° 倾角直到终止，比对**重置后**返回的 obs（§18.1 那条缺陷） |
+| CUDA 图重放 | 同参数 eager vs captured，比对 `obs` 与 `qpos`（§18.9 第 7 条） |
+
+报告：`reports/gpu_parity_contract.json`（4 envs × 24 steps，`status: passed`）：
+
+| 字段 | 最大误差 | 容差 |
+|---|---:|---:|
+| obs | 1.20e-04 | 2e-03 |
+| privileged | 5.41e-04 | 5e-03 |
+| privileged 弹簧通道 | 1.30e-05 | 5e-03 |
+| history | 与 obs 同量级 | 2e-03 |
+| 终止标志不一致 | 0 | 0 |
+| 重置后 obs | ≤2e-03 | 2e-03 |
+| 图重放 obs / qpos | 1.07e-06 / 3.58e-07 | 1e-05 / 1e-06 |
+
+`tests/test_gpu_parity.py` 保留一个 2 envs × 6 steps 的短版本，防止两个已修缺陷回归。
+
+### 22.3 对拍抓到的两个 CPU 侧缺陷（已修）
+
+**缺陷 1：CPU 观测用了"上一物理子步"的状态。** `mj_step` 以积分结束，积分之后
+`data.cvel` / `data.xpos` / `data.xanchor` 仍然描述**积分前**的状态。CPU 用
+`mj_objectVelocity(..., flg_local=1)` 读角速度，于是 `obs[0:3]` 比 GPU 落后一个 5 ms 子步；
+第一步实测差 0.238（缩放后）= **0.95 rad/s**，而其余通道都在 1e-5 量级。
+奖励里的 `tracking_ang_vel` / `ang_vel_xy` / `tracking_lin_vel` 用的是同一个量。
+
+修法：
+1. `_base_velocity` 直接读自由关节的 `qvel`（MuJoCo 自由关节：线速度在世界系、角速度在机体系），
+   与 `WarpVecEnv` 的定义逐字一致；不再经过 `mj_objectVelocity`。
+2. `step()` 在子步循环里**先** `mj_kinematics` + `mj_comPos` 再写控制，循环结束后再刷新一次，
+   使观测/特权/奖励读到的是同一时刻的几何。
+
+顺带发现 `mj_objectVelocity` 返回的是**质心**速度而非常原点速度，局部角速度与 `cvel` 也有 ~0.6% 的
+差异——这也是改读 `qvel` 的理由之一。
+
+**缺陷 2：弹簧"长度变化率"两侧定义不同。** CPU 用解析 `J·qvel`，GPU 用
+`(length - prev)/timestep` 的差分；同一姿态下分别为 0.120 与 0.105 m/s，差 13%。
+而且 CPU 的弹簧几何在子步循环里读的是**上一子步**的 site 位置（同一个陈旧性缺陷），
+实测 `spring_lengths` 比 `ten_length` 落后 1 mm。
+
+修法（三处，全部对齐 GPU 语义）：
+1. 子步循环里先刷新 `mj_kinematics`/`mj_comPos`，弹簧几何才和 `ten_length` 同一时刻；
+2. 弹簧**力**用"一个物理子步"的差分率（与 GPU `_apply_controls` 一致）；
+3. 特权观测里的**速率通道**用"一个策略步"的差分率（与 GPU `_compute_privileged` 一致），
+   两者不能混用——这也是最初改错一版后误差反而变大的原因。
+
+修好之后：`obs` 4.98e-05、`privileged` 2.26e-04、`privileged_spring` 8.22e-06，全部远低于容差。
+
+**影响范围声明：**这两条都改变了 CPU 侧数值。历史上所有用 CPU 环境产生的评估、`spring-sweep`、
+`contract-test` 与 CPU 训练结果，都带着"速度落后一个子步 + 弹簧率定义不同"的偏差。已作废的口径
+不是"错得离谱"，但**不能与修复后的数字直接比较**。
+
+### 22.4 6 s 窗口的复测（同一 checkpoint）
+
+修复后用 `evaluate-stand --steps 600 --episodes 8 --seed-base 1000` 复测 `demo_run4/model_best.pt`：
+
+| 指标 | 2026-10-29 报告（修复前） | 2026-10-30 复测（修复后） |
+|---|---:|---:|
+| 存活 | 8/8 | **6/8** |
+| 存活最短 | — | 5.50 s |
+| vx MAE | 0.201 | 0.226 |
+| height MAE | 0.041 | 0.042 |
+| 倾角 P95 | 8.19° | 19.94° |
+| 力矩饱和占比 | — | 0.55% |
+
+**这不是"策略变差"，而是评估口径变对了**：旧数字来自一个观测角速度落后一个子步的环境，
+而那正是策略在训练时（GPU）不使用的输入。修复后评估环境才与训练环境逐字段一致。
+因此 §18.2 的"8/8、vx 0.201"只能作为历史记录，**不再作为基线**。
+
+### 22.5 64 独立初态 × 60 s：第一次真正跑完
+
+命令与 §14.2 一致：
+
+```bash
+fifty-mujoco evaluate-stand --checkpoint runs/demo_run4/model_best.pt \
+  --steps 6000 --episodes 64 --seed-base 1000 \
+  --json reports/stand_eval_demo_run4_64x60s.json
+```
+
+结果（`reports/stand_eval_demo_run4_64x60s.json`，64 个独立初态，窗口 60.0 s，episode 上限 63.0 s）：
+
+| 指标 | 实测 | §14.2 门槛 | 判定 |
+|---|---:|---:|---|
+| 成功率（存活满 60 s） | **0 / 64 = 0.0%** | ≥95% | FAIL |
+| 存活最短 / P10 / 中位 / 均值 | 2.83 / 3.56 / **7.91** / 6.93 s | — | — |
+| 失败原因 | 64/64 `tilt` | — | — |
+| vx MAE | 0.2303 m/s | ≤0.03 | FAIL |
+| height MAE | 0.0385 m | ≤0.02 | FAIL |
+| 倾角 P95 / 最大 | 25.22° / 34.28° | ≤10° / ≤15° | FAIL |
+| 力矩饱和占比 | 1.06% | <5% | **PASS** |
+| 最大漂移 | 2.21 m | 仅报告 | — |
+
+**结论：60 s 门槛第一次被真正测量，`demo_run4/model_best.pt` 明确不通过，而且不是"差一点"**：
+最好的一条也只站到 10.43 s，中位数 7.9 s，全部死于倾角。这条策略是"能短时间站住"，不是"能站稳"。
+
+与 §22.4 的 6 s 窗口对照：6 s 窗口下 6/8 存活（中位 6.00 s）看起来还行，60 s 窗口下 0/64、
+中位 7.9 s —— **短窗口会系统性高估**。这正是 §14.2 规定"episode 上限必须高于窗口"、
+"不能用 20 s 超时冒充 60 s"的原因，现在有了实证。
+
+力矩饱和只有 1.06%，说明失败**不是**执行器能力不足，而是平衡控制本身；
+配合 §22.4 的 vx MAE 0.23 m/s，漂移 2.2 m，可判定为"没有速度/位置保持能力"。
+
+**两个后端交叉验证（同一 checkpoint、同一 64 个种子）。**
+`evaluate-stand` 新增 `--backend warp`（默认仍为 `cpu`）：走训练用的 `WarpVecEnv`，
+因为 `WarpVecEnv` 不报终止原因字符串，`reasons` 由终止状态推导并在报告里标
+`reason_source: derived_from_terminal_state`。
+
+| 指标 | CPU（参照） | warp（训练后端） |
+|---|---:|---:|
+| 成功 | 0/64 | 0/64 |
+| 存活 最短 / P10 / 中位 | 2.83 / 3.56 / 7.91 s | 2.83 / 3.56 / 7.92 s |
+| 失败原因 | 64 × tilt | 64 × tilt（推导） |
+| vx MAE | 0.2303 | 0.2303 |
+| height MAE | 0.0385 | 0.0385 |
+| 倾角 P95 / 最大 | 25.22° / 34.28° | 25.21° / 34.29° |
+| 力矩饱和 | 1.06% | 1.06% |
+| 墙钟耗时 | ~25 min | **70 s**（其中 rollout ~7 s） |
+
+两个物理实现对**同一个策略给出同一个判决**，所以“0/64”不是某个后端的假象。
+报告：`reports/stand_eval_demo_run4_64x60s.json`（CPU）、
+`reports/stand_eval_demo_run4_64x60s_warp.json`（warp）。
+回归：`tests/test_stand_eval.py::test_warp_backend_matches_the_cpu_verdict`。
+
+### 22.6 本轮明确没有做的事
+
+- 没有训练、没有导出新权重、没有改奖励函数。
+- 没有在 SolidWorks 里判定固连变体，也没有称重或台架。
+- `reports/index.json` 与 §14.3 分段命令评估入口仍未做。
+- `warp_env.py` 里图捕获期的张量分配只被"图重放数值一致"间接验证，没有做逐算子静态审查。
+- warp 后端不支持直接读仿真真值的策略（如 LQR 教师）：`bind` 会抛错，教师类评估仍走 `--backend cpu`。
+- warp 的 `reasons` 是从终止状态推导的，不是环境上报的字符串；要精确原因仍用 CPU 后端。

@@ -1,0 +1,369 @@
+# Planar mechanism geometry extracted from the whole-vehicle STEP assembly.
+#
+# WHAT THIS FILE IS
+#   The single place where CAD-derived planar geometry lives, so that
+#   `configs/robot.yaml` keeps only model/control parameters and the numbers do
+#   not get retyped into code or documents.
+#
+# WHAT THIS FILE IS NOT
+#   It is not a verified mechanism. It contains, in increasing order of
+#   confidence:
+#     * `cad_extracted`   - a coordinate read out of the STEP text by
+#                           `tools/step_audit_standalone.py` (reproducible),
+#     * `computed_from_points` - a length derived from those coordinates,
+#     * `candidate_inferred`   - a *body assignment* that the geometry supports
+#                           but that nobody has confirmed in SolidWorks.
+#   Nothing here is `measured`. No entry may be promoted by editing the status
+#   alone; a promotion needs a source recorded in
+#   `docs/PHYSICAL_PARAMETER_CHECKLIST.md`.
+#
+# THE ONE THING TO NOT MISREAD
+#   `assembly_pose: stowed`. The STEP assembly has the legs folded up, so the
+#   hip-to-wheel chord is 300.24 mm while the standing height target is
+#   464.75 mm. The coordinates below locate pivots; they are NOT a controller
+#   zero and NOT the operating leg length.
+meta:
+  schema: 1
+  generated_at: "2026-10-29"
+  plane: "YZ"
+  note: "every leg cylinder axis is parallel to X, so the planar coordinates are (Y, Z)"
+  units_in_file: mm
+  assembly_pose: stowed
+  assembly_pose_evidence: >-
+    the hip-to-wheel chord is 300.242981 mm while robot.yaml asks for a standing
+    height of 464.751 mm; the STEP pose therefore cannot be the deployed pose
+  sign_convention: unverified
+  rotation_direction: unverified
+  status: cad_extracted
+  source:
+    step_file: "26英雄整车总装2.0.STEP"
+    step_bytes: 264168116
+    step_sha256: "ffe77c10b183a47c44bb96d829f2a1356c3d644de409979af5ab5da6bd00a055"
+    step_header: "AP214, SwSTEP 2.0, mm"
+    audit_report: "reports/step_geometry_audit.json"
+    audit_command: "python tools/step_audit_standalone.py --step <STEP>"
+    document: "docs/STEP_GEOMETRY_AUDIT.md"
+
+# ---------------------------------------------------------------------------
+# Pivot nodes, in the shared planar datum, millimetres.
+#
+# `shared_by` lists the parts whose bore axis passes through the point (STEP
+# audit `geometry.shared_axis_nodes`, tolerance 1e-3 mm). A node shared by two
+# or more parts needs no assembly transform: both parts were exported in the
+# same datum, and the coincidence *is* the joint.
+planar_nodes:
+  HIP:
+    yz_mm: [70.049989103, 2.417291320]
+    shared_by:
+      - 【碳板】18mm-大腿-V2-镜像_默认
+      - 大腿镜像_默认
+      - 【复用交C件】-7075-大腿从动链轮_默认
+      - 【复用交C件】-7075-小腿从动链轮_默认
+      - 【复用交C件】小腿出轴_默认
+      - 小腿关节_默认
+      - 【标准件】髋关节滑环MT2042-0605-图和实物不同_默认
+    status: cad_extracted
+    source: "step_audit shared_axis_nodes, 7 parts within 1e-3 mm"
+  KNEE:
+    yz_mm: [-88.921958041, 139.632159397]
+    shared_by:
+      - 【碳板】18mm-大腿-V2-镜像_默认
+      - 【碳板】15mm-小腿_默认
+      - 【复用交C件】膝关节大螺栓_默认
+      - 【复用交C件】膝关节轴承座_默认
+      - 【复用交C件】膝关节内侧轴承座_默认
+      - 【复用交C件】膝关节轴承压片_默认
+      - 【复用交C件】膝关节垫圈_默认
+      - 大腿镜像_默认
+      - 轮腿镜像_默认
+    status: cad_extracted
+    source: "step_audit shared_axis_nodes, 9 parts within 1e-3 mm"
+  WHEEL:
+    yz_mm: [-220.597818334, -72.880117463]
+    shared_by:
+      - 【碳板】15mm-小腿_默认
+      - 轮腿镜像_默认
+    status: cad_extracted
+    source: "step_audit G02 wheel bore, r=23.5 mm, 2 coaxial cylinders"
+  CRANK_PIN:
+    yz_mm: [30.980627816, -104.039953659]
+    shared_by:
+      - 【复用交C件】小腿出轴_默认
+      - 小腿关节_默认
+      - 【6.8】小腿传动前端连杆_默认
+    status: cad_extracted
+    source: "step_audit shared_axis_nodes, 3 parts; r=15.0 mm bore in 小腿出轴"
+  ROD_PIN:
+    yz_mm: [-86.899826913, -38.243309423]
+    shared_by:
+      - 【6.8】小腿传动前端连杆_默认
+      - 【碳板】8mm-小腿传动中部连杆_默认
+    status: cad_extracted
+    source: "step_audit shared_axis_nodes, 2 parts; r=12.0 / 11.0 mm bores"
+  LINK_PIN_C:
+    yz_mm: [32.869295492, 122.565461628]
+    shared_by:
+      - 【6.8】小腿传动末端连杆_默认
+      - 【碳板】8mm-小腿传动中部连杆_默认
+    status: cad_extracted
+    source: "step_audit shared_axis_nodes, 2 parts; r=12.0 / 11.0 mm bores"
+  LINK_PIN_A:
+    yz_mm: [-15.794862355, 76.513320082]
+    shared_by:
+      - 【碳板】8mm-小腿传动中部连杆_默认
+    status: cad_extracted
+    source: >-
+      step_audit dominant axis of 三孔件 only (r=12.0 mm, 5 coaxial cylinders).
+      The mating bearing is NOT among the six largest bores of any other part,
+      so this pin's carrier is unknown from the audit.
+  END_PIN_A:
+    yz_mm: [-40.257800194, 185.684300943]
+    shared_by:
+      - 【6.8】小腿传动末端连杆_默认
+    status: cad_extracted
+    source: >-
+      step_audit dominant axis of 末端连杆 only (r=12.0 mm, 5 coaxial cylinders).
+      The mating bearing is NOT among the six largest bores of any other part.
+
+# ---------------------------------------------------------------------------
+# Lengths between nodes. `reproduces` names the geometric measurement in
+# `docs/STEP_GEOMETRY_AUDIT.md` that the same pair of holes produced, so a typo
+# in a coordinate cannot silently change a link length.
+link_lengths:
+  thigh_hip_to_knee:
+    between: [HIP, KNEE]
+    length_mm: 210.000000000
+    reproduces: G01
+    part: 【碳板】18mm-大腿-V2-镜像_默认
+    status: cad_extracted
+    source: "step_audit measurement G01 (cylinder entities 1002386 and 677239, same part)"
+  shin_knee_to_wheel:
+    between: [KNEE, WHEEL]
+    length_mm: 250.000000000
+    reproduces: G02
+    part: 【碳板】15mm-小腿_默认
+    status: cad_extracted
+    source: "step_audit measurement G02"
+  push_rod:
+    between: [CRANK_PIN, ROD_PIN]
+    length_mm: 134.999999999
+    reproduces: G03
+    part: 【6.8】小腿传动前端连杆_默认
+    status: cad_extracted
+    source: "step_audit measurement G03"
+  end_link:
+    between: [END_PIN_A, LINK_PIN_C]
+    length_mm: 96.600000000
+    reproduces: G04
+    part: 【6.8】小腿传动末端连杆_默认
+    status: cad_extracted
+    source: "step_audit measurement G04"
+  ternary_a_b:
+    between: [LINK_PIN_A, ROD_PIN]
+    length_mm: 135.000000001
+    reproduces: G05
+    part: 【碳板】8mm-小腿传动中部连杆_默认
+    status: cad_extracted
+    source: "step_audit measurement G05"
+  ternary_a_c:
+    between: [LINK_PIN_A, LINK_PIN_C]
+    length_mm: 66.999999999
+    reproduces: G06
+    part: 【碳板】8mm-小腿传动中部连杆_默认
+    status: cad_extracted
+    source: "step_audit measurement G06"
+  ternary_b_c:
+    between: [ROD_PIN, LINK_PIN_C]
+    length_mm: 200.509609567
+    reproduces: G07
+    part: 【碳板】8mm-小腿传动中部连杆_默认
+    status: cad_extracted
+    source: "step_audit measurement G07"
+
+# A rigid body needs a third node to fix its orientation. These lengths were
+# never measured as a part feature; they follow from the two node coordinates.
+derived_lengths:
+  hip_to_crank_pin:
+    between: [HIP, CRANK_PIN]
+    length_mm: 113.400000000
+    status: computed_from_points
+    source: "distance between the two bores of 小腿出轴 (38.5 mm and 15.0 mm)"
+  hip_to_link_pin_a:
+    between: [HIP, LINK_PIN_A]
+    length_mm: 113.400000001
+    status: computed_from_points
+    source: >-
+      equal to hip_to_crank_pin to 1e-6 mm. It is recorded, not explained: at
+      the assembly pose the ternary link hole A lies on the same circle as the
+      crank pin.
+  knee_to_link_pin_a:
+    between: [KNEE, LINK_PIN_A]
+    length_mm: 96.600000000
+    status: computed_from_points
+    source: "equals the end link length to 1e-6 mm; this is what makes the loop a parallelogram"
+  knee_to_end_pin_a:
+    between: [KNEE, END_PIN_A]
+    length_mm: 66.999999999
+    status: computed_from_points
+    source: "equals ternary_a_c to 1e-6 mm; the second parallel crank"
+  hip_to_end_pin_a:
+    between: [HIP, END_PIN_A]
+    length_mm: 213.903261302
+    status: computed_from_points
+    source: "closes the thigh rigid triangle HIP-KNEE-END_PIN_A"
+  link_pin_a_to_wheel:
+    between: [LINK_PIN_A, WHEEL]
+    length_mm: 253.500788873
+    status: computed_from_points
+    source: "closes the shin rigid triangle KNEE-LINK_PIN_A-WHEEL (used by the link_a_on_shin assignment)"
+  end_pin_a_to_wheel:
+    between: [END_PIN_A, WHEEL]
+    length_mm: 315.242891448
+    status: computed_from_points
+    source: "closes the shin rigid triangle KNEE-END_PIN_A-WHEEL (used by the link_a_on_thigh assignment)"
+  hip_to_wheel_chord:
+    between: [HIP, WHEEL]
+    length_mm: 300.242981163
+    status: computed_from_points
+    source: "step_audit mechanism_candidates.hip_to_wheel_chord (assembly pose only)"
+
+# ---------------------------------------------------------------------------
+# Rigid-body assignment. EVERY entry is a candidate: the geometry supports it,
+# but "which part is bolted to which" needs the SolidWorks mates, which SwSTEP
+# does not export.
+#
+# Parallelogram: the four nodes KNEE, END_PIN_A, LINK_PIN_C, LINK_PIN_A form a
+# parallelogram with sides 67.0 / 96.6 / 67.0 / 96.6 (opposite sides equal and
+# parallel to 1e-6 mm). That is what the design does, and it is why the ternary
+# link angle can be tied to the thigh angle.
+bodies:
+  ground:
+    nodes: [HIP]
+    status: cad_extracted
+    source: "the hip axis is common to the chassis bracket and both driven sprockets"
+  thigh:
+    nodes: [HIP, KNEE, END_PIN_A]
+    status: candidate_inferred
+    evidence:
+      - "HIP-KNEE is the thigh plate G01"
+      - "END_PIN_A shares no part with the thigh plate in the audit; the assignment is inferred from KNEE-END_PIN_A = 67.0 mm = ternary_a_c, which closes the parallelogram"
+    confirm_in_cad: "is the end-link pin carried by the thigh plate?"
+  shin:
+    nodes: [KNEE, LINK_PIN_A, WHEEL]
+    status: candidate_inferred
+    evidence:
+      - "KNEE-WHEEL is the shin plate G02"
+      - "LINK_PIN_A shares no part with the shin plate in the audit; inferred from KNEE-LINK_PIN_A = 96.6 mm = end_link"
+    confirm_in_cad: "is the ternary link pivot carried by the shin plate?"
+  crank:
+    nodes: [HIP, CRANK_PIN]
+    status: candidate_inferred
+    evidence:
+      - "小腿出轴 has a 38.5 mm bore on the hip axis and a 15.0 mm bore at CRANK_PIN"
+      - "the two driven sprockets sit on the hip axis, so the second motor turns a body coaxial with the hip"
+    confirm_in_cad: "which sprocket is rigidly connected to 小腿出轴, and is the crank angle relative to the thigh or to the ground?"
+  push_rod:
+    nodes: [CRANK_PIN, ROD_PIN]
+    status: candidate_inferred
+    evidence: ["前推杆 has bores at exactly these two nodes (G03)"]
+    confirm_in_cad: "rod end type (spherical or plain) and its free rotation"
+  ternary:
+    nodes: [ROD_PIN, LINK_PIN_A, LINK_PIN_C]
+    status: cad_extracted
+    evidence: ["三孔件 G05/G06/G07 close the triangle 135.0 / 67.0 / 200.509609"]
+    confirm_in_cad: "none for the shape; only the carrier of LINK_PIN_A is open"
+  end_link:
+    nodes: [END_PIN_A, LINK_PIN_C]
+    status: cad_extracted
+    evidence: ["末端连杆 G04 = 96.6 mm between exactly these nodes"]
+    confirm_in_cad: "none for the length"
+  wheel:
+    nodes: [KNEE, WHEEL]
+    status: candidate_inferred
+    evidence: ["the wheel axle is carried by the shin plate"]
+    confirm_in_cad: "wheel bearing preload and rolling radius (see robot.yaml wheel_radius)"
+
+# ---------------------------------------------------------------------------
+# What the mechanism is, and how much of it may be used.
+topology:
+  # Facts: which parts share a pivot. Computed by the audit, no transform needed.
+  shared_datum:
+    status: cad_extracted
+    report_field: "geometry.shared_axis_nodes"
+    tolerance_mm: 0.001
+  # The chain itself: 8 nodes, 7 bodies, revolute joints only.
+  chain:
+    status: candidate_inferred
+    dof: 2
+    driven_by: [hip motor (thigh vs ground), knee motor (crank about the hip axis)]
+    loops: 2
+    use_inferred_topology: false
+    selected_variant: unconfirmed
+    reason_for_default_off: >-
+      a candidate body assignment is not a verified topology; anything that
+      builds a controller, a Jacobian or a MJCF from it must opt in explicitly,
+      and the result stays labelled provisional
+    confirm_in_cad:
+      - "which part carries END_PIN_A and LINK_PIN_A"
+      - "crank angle reference: thigh or ground"
+      - "rotation direction and zero of both motors"
+      - "joint stops and the real feasible set (robot.yaml limits are provisional boxes)"
+    # Two assignments fit the same eight pivots and the same fourteen lengths.
+    # They differ only in which body carries LINK_PIN_A and END_PIN_A, and they
+    # are not equivalent: see `mechanism-check`, which reports how much of a
+    # +/-0.15 rad grid each one closes. `selected_variant: unconfirmed` is the
+    # honest state until the CAD mates are read.
+    variants:
+      - name: link_a_on_shin
+        bodies:
+          thigh: [HIP, KNEE, END_PIN_A]
+          shin: [KNEE, LINK_PIN_A, WHEEL]
+          crank: [HIP, CRANK_PIN]
+          push_rod: [CRANK_PIN, ROD_PIN]
+          ternary: [ROD_PIN, LINK_PIN_A, LINK_PIN_C]
+          end_link: [END_PIN_A, LINK_PIN_C]
+        note: >-
+          three-hole link pivots on the shin, so the parallelogram slaves the
+          ternary angle to the thigh angle and the end link is redundant
+      - name: link_a_on_thigh
+        bodies:
+          thigh: [HIP, KNEE, LINK_PIN_A]
+          shin: [KNEE, END_PIN_A, WHEEL]
+          crank: [HIP, CRANK_PIN]
+          push_rod: [CRANK_PIN, ROD_PIN]
+          ternary: [ROD_PIN, LINK_PIN_A, LINK_PIN_C]
+          end_link: [END_PIN_A, LINK_PIN_C]
+        note: >-
+          three-hole link pivots on the thigh, so the chain is
+          crank -> push rod -> ternary -> end link -> shin pin
+  gas_spring:
+    status: pending
+    blocked_by: "G08 pin distance is a cross-part measurement; both spring cylinders live in parts that do not share the planar datum"
+  free_ends:
+    - node: LINK_PIN_A
+      note: "third hole of the ternary link; carrier unknown (only the ternary link itself has this bore in the audit)"
+    - node: END_PIN_A
+      note: "second hole of the end link; carrier unknown"
+
+# ---------------------------------------------------------------------------
+# Known-unknowns, kept next to the geometry so nobody has to rediscover them.
+unknowns:
+  gas_spring_pin_distance:
+    status: pending
+    blocked_by: "cross-part distance needs a verified assembly transform"
+    note: "the audit reports unmeasured_cross_part; the old 227.72 mm must not be reused"
+  joint_zeros:
+    status: pending
+    note: "robot.yaml default_angles are an asset convention, not an encoder zero"
+  joint_directions:
+    status: pending
+    note: "positive rotation direction of every joint is unknown"
+  feasible_range:
+    status: pending
+    note: "robot.yaml limits are provisional boxes around the assembly pose, not the closed-chain feasible set"
+  mass_and_inertia:
+    status: pending
+    blocked_by: "the STEP file carries no MASS_DENSITY / PROPERTY_DEFINITION"
+  spring_stroke_and_force_curve:
+    status: pending
+    blocked_by: "only the part name 1BKB0.45-75 is known; see configs/gas_spring.yaml"

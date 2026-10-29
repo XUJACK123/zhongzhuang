@@ -77,6 +77,14 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  {value}  {entry['label']}  [{entry['status']}]  {parts}")
         for entry in geometry.get("cross_part", []):
             print(f"  {'unmeasured':>13}  {entry['label']}  [{entry['status']}]")
+        shared = geometry.get("shared_axis_nodes") or {}
+        nodes = shared.get("shared_nodes") or []
+        print(f"shared    : {len(nodes)} axis nodes appear in >= "
+              f"{shared.get('min_parts', 2)} parts (tolerance {shared.get('tolerance_mm')} mm)")
+        for node in nodes[:8]:
+            y, z = node["point_mm"]
+            parts = ", ".join(part["part"] for part in node["parts"][:4])
+            print(f"  YZ=({y:9.3f}, {z:9.3f})  parts={node['part_count']:<2}  {parts}")
     print(f"status    : {report['status']}")
     print(f"report    : {out}")
     return 0

@@ -95,3 +95,48 @@ def test_policy_shape_is_validated(config, built_assets):
 
     with pytest.raises(ValueError):
         run_stand_eval(config, bad_policy, steps=2, scenarios=make_scenarios(count=1))
+
+
+def _gpu_available() -> bool:
+    try:
+        import torch
+
+        return bool(torch.cuda.is_available())
+    except Exception:  # pragma: no cover
+        return False
+
+
+def test_warp_backend_matches_the_cpu_verdict(config):
+    """The acceptance gate must not depend on which physics backend ran it.
+
+    ``--backend warp`` is what makes a 64 x 60 s acceptance affordable after
+    every training run (seconds instead of ~25 minutes), so the two backends have
+    to agree on the verdict, not just on the schema.
+    """
+    if not _gpu_available():
+        pytest.skip("needs CUDA")
+    scenarios = make_scenarios(base_seed=7, count=2)
+    cpu = run_stand_eval(config, zero_policy, steps=40, scenarios=scenarios, backend="cpu")
+    warp = run_stand_eval(
+        config, zero_policy, steps=40, scenarios=scenarios, backend="warp", device="cuda:0"
+    )
+    assert cpu["backend"] == "cpu"
+    assert warp["backend"] == "warp"
+    assert warp["steps"] == cpu["steps"]
+    assert warp["episode_limit_s"] == pytest.approx(cpu["episode_limit_s"])
+    assert warp["successes"] == cpu["successes"]
+    assert warp["survival_median_s"] == pytest.approx(cpu["survival_median_s"], abs=0.05)
+    assert warp["height_mae_m"] == pytest.approx(cpu["height_mae_m"], abs=5e-3)
+    assert warp["vx_mae_m_s"] == pytest.approx(cpu["vx_mae_m_s"], abs=5e-3)
+    # same gate, same metric names, so a report cannot mean two things
+    assert set(warp["criteria"]["checks"]) == set(cpu["criteria"]["checks"])
+    assert warp["status"] == cpu["status"]
+    # warp derives termination reasons from the terminal state and says so
+    assert warp["reason_source"] == "derived_from_terminal_state"
+
+
+def test_unknown_backend_is_rejected(config):
+    from fifty_mujoco.evaluation.stand_eval import run_stand_eval
+
+    with pytest.raises(ValueError, match="unknown backend"):
+        run_stand_eval(config, zero_policy, steps=5, backend="cuda")
