@@ -36,15 +36,14 @@ void bench_test_task(void const *argument)
             now - feedback.remote.update_time_ms <= CHASSIS_DBUS_TIMEOUT_MS;
         const bool motor_ok = feedback.motor[BENCH_MOTOR_INDEX].valid &&
             now - feedback.motor[BENCH_MOTOR_INDEX].update_time_ms <= CHASSIS_MOTOR_TIMEOUT_MS;
-        const bool all_up = remote_ok && feedback.remote.frame.switch_left == RC_SWITCH_UP &&
-            feedback.remote.frame.switch_right == RC_SWITCH_UP;
-        const bool reset = remote_ok && feedback.remote.frame.switch_left == RC_SWITCH_DOWN;
-        const bool permit = all_up && motor_ok && feedback.state == CHASSIS_STATE_ARMED &&
-            feedback.fault_flags == 0U && now - feedback.sample_time_ms <= BENCH_MAX_GAP_MS;
+        const bool up = remote_ok && feedback.remote.frame.switch_right == RC_SWITCH_UP;
+        const bool reset = !up;
+        /* 10 度闭环必须有当前位置；无需 IMU、左拨杆或下档解锁。 */
+        const bool permit = up && motor_ok && feedback.state == CHASSIS_STATE_ARMED;
         torque[BENCH_MOTOR_INDEX] = bench_controller_step(&status.controller, now,
             permit, reset, route.is_wheel, feedback.motor[BENCH_MOTOR_INDEX].position_rad,
             feedback.motor[BENCH_MOTOR_INDEX].speed_rad_s);
-        /* 待机提交零命令，完成“上档后新命令”的握手。 */
+        /* 等待使能时提交零命令；上档获准后记录起点并只走一段 10 度轨迹。 */
         (void)chassis_submit_torque(torque);
         status.chassis_faults = feedback.fault_flags;
         status.chassis_state = feedback.state;

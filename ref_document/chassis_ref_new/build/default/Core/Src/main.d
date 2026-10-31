@@ -54,8 +54,8 @@ build/default/Core/Src/main.o: Core/Src/main.c Core/Inc/main.h \
  Core/Inc/main.h Core/Inc/fdcan.h Core/Inc/spi.h Core/Inc/tim.h \
  Core/Inc/usart.h Core/Inc/gpio.h boards/board_indicator.h \
  application/remote_control.h application/chassis_protocol.h \
- application/chassis_motor_config.h boards/BMI088driver.h \
- application/USART7_Receive.h
+ application/chassis_motor_config.h application/bench_config.h \
+ boards/BMI088driver.h application/USART7_Receive.h
 Core/Inc/main.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 Core/Inc/stm32h7xx_hal_conf.h:
@@ -120,5 +120,6 @@ boards/board_indicator.h:
 application/remote_control.h:
 application/chassis_protocol.h:
 application/chassis_motor_config.h:
+application/bench_config.h:
 boards/BMI088driver.h:
 application/USART7_Receive.h:

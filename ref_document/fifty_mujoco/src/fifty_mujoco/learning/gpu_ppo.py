@@ -30,13 +30,72 @@ from ..envs.warp_env import WarpEnvOptions, WarpVecEnv
 from .actor_critic import ActorCriticSequence, NetworkDims
 from .checkpoint import (
     CHECKPOINT_FORMAT,
+    DEFAULT_BEST_ORDER,
     CheckpointManager,
     load_checkpoint,
+    metric_is_better,
     model_fingerprint,
     restore_rng_state,
     rng_state,
     save_checkpoint,
 )
+
+
+#: How long an evaluation window must be before it may certify "standing".
+#: A shorter window saturates by construction (every episode can survive it),
+#: so its median says nothing - the 6 s smoke window used to report "solved".
+SOLVED_MIN_WINDOW_S = 60.0
+
+
+def survival_streak_step(
+    *,
+    streak: int,
+    t_fall_median: float,
+    eval_steps: int,
+    eval_dt: float,
+    min_window_s: float = SOLVED_MIN_WINDOW_S,
+    required: int,
+) -> tuple[int, str | None]:
+    """Advance the ``stop_on_survive`` counter for one evaluation.
+
+    Returns ``(new_streak, verdict)`` where ``verdict`` is ``"solved"`` only
+    when the window is long enough to mean something *and* the policy already
+    survived it ``required`` times in a row.  The independent 64 x 60 s
+    evaluation stays the acceptance authority (progress.md §14.2).
+    """
+    if required <= 0:
+        return streak, None
+    window_s = float(eval_steps) * float(eval_dt)
+    if window_s + 1e-9 < float(min_window_s):
+        return 0, None
+    if t_fall_median >= 0.99 * window_s:
+        streak += 1
+    else:
+        streak = 0
+    if streak >= required:
+        return streak, "solved"
+    return streak, None
+
+
+def policy_state_subset(
+    state: dict[str, Any], parts: tuple[str, ...] | None
+) -> dict[str, Any]:
+    """Filter a policy ``state_dict`` down to the named sub-modules.
+
+    ``None`` means "the whole network".  Used by the H0 warm start: the actor
+    and the encoder may be reused, while the critic, the exploration std and
+    the optimiser have to be rebuilt for the new experiment.
+    """
+    if parts is None:
+        return state
+    wanted = {part.strip() for part in parts if part.strip()}
+    if not wanted:
+        return state
+    return {
+        key: value
+        for key, value in state.items()
+        if key in wanted or key.split(".", 1)[0] in wanted
+    }
 
 
 @dataclass
@@ -90,12 +149,21 @@ class GpuPpoConfig:
     #: Gate for logging ``best``; the *ordering* used to pick ``model_best.pt``
     #: lives in :data:`fifty_mujoco.learning.checkpoint.DEFAULT_BEST_ORDER`
     #: (alive fraction -> P10 survival -> median survival -> height -> vx).
+    #: It is a log column only: every evaluation enters the ordering.
     best_metric_key: str = "eval_t_fall_median"
     #: Number of numbered ``model_update_*.pt`` snapshots to retain.
     checkpoint_keep: int = 5
     #: Stop after this many consecutive evaluations that survive the whole eval
-    #: window (0 disables).
+    #: window (0 disables).  A window shorter than ``solved_min_window_s`` never
+    #: counts, see :func:`survival_streak_step`.
     stop_on_survive: int = 0
+    #: Minimum evaluation window for the ``stop_on_survive`` gate.  Acceptance
+    #: is the independent 64 x 60 s run; anything shorter cannot certify it.
+    solved_min_window_s: float = SOLVED_MIN_WINDOW_S
+    #: Hold the commanded forward speed, yaw rate and height for the whole run
+    #: (``vx = 0``, ``wz = 0``, ``h = h0``).  Stage 1 of the curriculum is a
+    #: standing task, so the environment must not resample motion commands.
+    stand_command: bool = False
     #: tqdm-style in-place progress bar (falls back to one line per update when
     #: tqdm is missing or stdout is not a tty).
     progress_bar: bool = True
@@ -139,6 +207,7 @@ class GpuPpoTrainer:
                 device=self.cfg.device,
                 seed=self.cfg.seed,
                 gains=self._resolve_gains(config),
+                stand_command=self.cfg.stand_command,
             ),
         )
         self.num_envs = self.env.num_envs
@@ -154,11 +223,8 @@ class GpuPpoTrainer:
                     device=self.cfg.device,
                     seed=self.cfg.seed + 991,
                     gains=self._resolve_gains(config),
-                    fixed_command=(0.0, 0.0, 0.0),  # replaced below by nominal h
+                    stand_command=True,
                 ),
-            )
-            self.eval_env.commands[:] = torch.tensor(
-                [0.0, 0.0, self.eval_env.nominal_height], device=self.device
             )
             self.eval_env.capture()
             self.eval_dt = self.eval_env.dt
@@ -210,7 +276,12 @@ class GpuPpoTrainer:
         self.total_env_steps = 0
         self.update_count = 0
         self.best_metric = float("-inf")
+        self.best_metrics: dict[str, float] | None = None
         self.best_update = 0
+        #: Set by :meth:`load`; recorded in every checkpoint so a weight file
+        #: can be traced back to the experiment it was initialised or resumed
+        #: from (progress.md §23.6 item 3).
+        self.init_from: dict[str, Any] | None = None
         self._survive_streak = 0
         self.checkpoints: CheckpointManager | None = None
         if self.cfg.save_path is not None:
@@ -219,6 +290,7 @@ class GpuPpoTrainer:
             )
             if self.checkpoints.best_metrics is not None:
                 self.best_update = self.checkpoints.best_update
+                self.best_metrics = dict(self.checkpoints.best_metrics)
 
     # ------------------------------------------------------------- inference
     def _resolve_gains(self, config: Config) -> PdGains | None:
@@ -534,10 +606,69 @@ class GpuPpoTrainer:
             f"{elapsed:.0f}/{budget:.0f}s [{elapsed/60:.1f}<{eta/60:.1f}min] {postfix}"
         )
 
+    def _update_range(self) -> range:
+        """Updates this call still has to run.
+
+        ``--updates`` is the *total* budget of the experiment, so a resumed run
+        continues the numbering (``update_count + 1``) instead of starting at 1
+        again - otherwise a resumed history contains two "update 1..N" blocks
+        and ``model_best.pt`` cannot be attributed to a point in time.
+        """
+        return range(self.update_count + 1, self.cfg.updates + 1)
+
+    def _promote_best(self, update: int, metrics: dict[str, float]) -> bool:
+        """Enter one evaluation into the ordered best comparison.
+
+        The old gate only looked at ``best_metric_key`` (median survival), so an
+        evaluation that kept survival identical while cutting the height or
+        velocity error never even reached ``maybe_save_best``.
+        """
+        if not metrics:
+            return False
+        if self.checkpoints is not None:
+            # Decide first, then pay for the payload: it hashes the MJCF/config
+            # files, which must not run on every evaluation.
+            if not metric_is_better(
+                metrics, self.checkpoints.best_metrics, self.checkpoints.best_order
+            ):
+                return False
+            promoted = self.checkpoints.maybe_save_best(
+                update, self._checkpoint_payload(), metrics
+            )
+            if promoted:
+                self.best_update = self.checkpoints.best_update
+                self.best_metrics = (
+                    dict(self.checkpoints.best_metrics)
+                    if self.checkpoints.best_metrics
+                    else None
+                )
+            return promoted
+        if not metric_is_better(metrics, self.best_metrics, DEFAULT_BEST_ORDER):
+            return False
+        self.best_metrics = {
+            key: float(value) for key, value in metrics.items() if value is not None
+        }
+        self.best_update = int(update)
+        return True
+
     def train(self, verbose: bool = True, deadline: float | None = None) -> dict[str, Any]:
         stop_reason = "max_updates"
+        updates = self._update_range()
+        if len(updates) == 0:
+            stop_reason = "already_at_budget"
+            updates = range(0)
+        session_updates = 0
         bar = self._make_bar(deadline) if verbose else None
-        for update in range(1, self.cfg.updates + 1):
+        if verbose and self.cfg.stop_on_survive and self.eval_env is not None:
+            window_s = float(self.cfg.eval_steps) * float(self.eval_dt)
+            if window_s + 1e-9 < self.cfg.solved_min_window_s:
+                print(
+                    f"  note: --stop-on-survive is on, but the {window_s:.1f} s eval "
+                    f"window is shorter than {self.cfg.solved_min_window_s:.0f} s, so "
+                    "the gate cannot fire; acceptance is `evaluate-stand`",
+                    flush=True,
+                )
+        for update in updates:
             if self.cfg.command_resample_updates and update % self.cfg.command_resample_updates == 0:
                 self.env.resample_commands()
             rollout = self._rollout()
@@ -566,12 +697,12 @@ class GpuPpoTrainer:
             }
             self.history.append(record)
             self.update_count = update
-            metric = eval_metrics.get(self.cfg.best_metric_key)
-            if metric is not None and metric > self.best_metric:
-                self.best_metric = float(metric)
-                self.best_update = update
-                if self.checkpoints is not None and eval_metrics:
-                    self.checkpoints.maybe_save_best(update, self._checkpoint_payload(), eval_metrics)
+            session_updates += 1
+            if eval_metrics:
+                self._promote_best(update, eval_metrics)
+                metric = eval_metrics.get(self.cfg.best_metric_key)
+                if metric is not None and metric == metric and metric > self.best_metric:
+                    self.best_metric = float(metric)
             record["best_metric"] = self.best_metric
             record["best_update"] = self.best_update
             if verbose:
@@ -600,12 +731,15 @@ class GpuPpoTrainer:
             if self.cfg.callback is not None:
                 self.cfg.callback(record)
             if self.cfg.stop_on_survive and "eval_t_fall_median" in record:
-                window = record["eval_steps"] * self.eval_dt * 0.99
-                if record["eval_t_fall_median"] >= window:
-                    self._survive_streak += 1
-                else:
-                    self._survive_streak = 0
-                if self._survive_streak >= self.cfg.stop_on_survive:
+                self._survive_streak, verdict = survival_streak_step(
+                    streak=self._survive_streak,
+                    t_fall_median=float(record["eval_t_fall_median"]),
+                    eval_steps=int(record["eval_steps"]),
+                    eval_dt=self.eval_dt,
+                    min_window_s=self.cfg.solved_min_window_s,
+                    required=self.cfg.stop_on_survive,
+                )
+                if verdict == "solved":
                     stop_reason = "solved"
                     break
             if deadline is not None and time.perf_counter() >= deadline:
@@ -618,7 +752,8 @@ class GpuPpoTrainer:
         if self.cfg.save_path is not None:
             self.save(Path(self.cfg.save_path))
         return {
-            "updates": len(self.history),
+            "updates": session_updates,
+            "total_updates": self.update_count,
             "stop_reason": stop_reason,
             "env_steps": self.total_env_steps,
             "elapsed_s": time.perf_counter() - self.start_time,
@@ -651,6 +786,7 @@ class GpuPpoTrainer:
             "rng": rng_state(),
             "fingerprint": model_fingerprint(),
             "eval_version": "stand_eval/v1",
+            "init_from": getattr(self, "init_from", None),
             # everything the deployment side needs next to the weights
             "pd_gains": {
                 "leg_kp": self.env.gains.leg_kp,
@@ -663,6 +799,8 @@ class GpuPpoTrainer:
             },
             "spawn_z_m": self.env.spawn_z,
             "best_update": self.best_update,
+            "best_metrics": getattr(self, "best_metrics", None),
+            "best_order": list(DEFAULT_BEST_ORDER),
         }
 
     def save(self, path: Path, numbered: bool = False) -> None:
@@ -674,21 +812,47 @@ class GpuPpoTrainer:
         if self.checkpoints is not None:
             self.checkpoints.save_last(self.update_count, payload)
 
-    def load(self, path: Path, resume: bool = True) -> dict[str, Any]:
+    def load(
+        self,
+        path: Path,
+        resume: bool = True,
+        parts: tuple[str, ...] | None = None,
+    ) -> dict[str, Any]:
         """Load a checkpoint.
 
         ``resume=True`` restores the optimiser, learning rate, update counter,
         history and RNG state (same experiment).  ``resume=False`` only loads
         the weights (a new experiment initialised from these weights): reusing
         the old optimiser state and the old evaluation scores would be wrong.
+
+        ``parts`` selects *which* sub-modules are taken from the file
+        (``actor``, ``encoder``, ``critic``, ``std``).  This is the H0 warm
+        start: reuse the actor and the encoder, but keep the freshly initialised
+        critic, exploration std and optimiser.  ``None`` means the whole
+        network, which is what a plain ``--init-from`` does.
         """
         payload = load_checkpoint(path, map_location=self.device)
-        self.policy.load_state_dict(payload["policy"])
+        state = policy_state_subset(payload["policy"], parts)
+        if parts is not None and not state:
+            raise ValueError(
+                f"{path}: --init-parts {','.join(parts)} matched no tensors in this checkpoint"
+            )
+        current = self.policy.state_dict()
+        unknown = [key for key in state if key not in current]
+        if unknown:
+            raise ValueError(
+                f"{path}: {len(unknown)} tensor(s) do not exist in this policy "
+                f"(first: {unknown[0]}); check --init-parts"
+            )
+        self.policy.load_state_dict(state, strict=False)
+        init = {"path": str(path), "parts": list(parts) if parts else "all"}
+        self.init_from = init
         if not resume:
             return {
                 "resumed": False,
                 "update": 0,
                 "fingerprint_match": None,
+                "init_from": init,
             }
         if payload.get("optimizer") is not None:
             self.optimizer.load_state_dict(payload["optimizer"])
@@ -699,17 +863,29 @@ class GpuPpoTrainer:
         self.total_env_steps = int(payload.get("env_steps", 0))
         self.update_count = int(payload.get("update", 0))
         self.best_update = int(payload.get("best_update", 0))
+        saved_best = payload.get("best_metrics")
+        if isinstance(saved_best, dict) and saved_best:
+            self.best_metrics = {key: float(value) for key, value in saved_best.items()}
+        if self.checkpoints is not None and self.best_metrics is not None:
+            # Continue the restored ranking in this run directory, with the file
+            # it refers to (progress.md §23.6 item 3).
+            self.checkpoints.best_metrics = dict(self.best_metrics)
+            self.checkpoints.best_update = self.best_update
+            source_best = Path(path).with_name("model_best.pt")
+            if source_best.is_file():
+                self.checkpoints.adopt_best(source_best)
         restore_rng_state(payload.get("rng"))
         fingerprint = payload.get("fingerprint")
         match = None
         if fingerprint is not None:
-            current = model_fingerprint()
-            match = fingerprint == current
+            current_fingerprint = model_fingerprint()
+            match = fingerprint == current_fingerprint
         return {
             "resumed": True,
             "update": self.update_count,
             "env_steps": self.total_env_steps,
             "fingerprint_match": match,
+            "init_from": self.init_from,
         }
 
 

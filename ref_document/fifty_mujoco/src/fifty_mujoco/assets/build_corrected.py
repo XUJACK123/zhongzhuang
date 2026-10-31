@@ -204,10 +204,11 @@ def build_corrected_assets(config: Config) -> CorrectedAssets:
     report: dict[str, Any] = {
         "stage": "P1",
         "source_urdf": str(config.source_urdf),
-        "source_urdf_sha256": stl.sha256(config.source_urdf),
+        "source_urdf_sha256": stl.sha256_text(config.source_urdf),
+        "source_urdf_sha256_scope": "text, CRLF normalised to LF",
         "training_urdf": str(config.training_urdf),
         "corrected_urdf": str(urdf_path),
-        "corrected_urdf_sha256": stl.sha256(urdf_path),
+        "corrected_urdf_sha256": stl.sha256_text(urdf_path),
         "base_transform": base_transform.as_dict(),
         "default_joint_angles_rad": config.default_angles,
         "links": report_links,

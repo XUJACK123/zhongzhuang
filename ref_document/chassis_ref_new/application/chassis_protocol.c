@@ -4,8 +4,8 @@
 #include <string.h>
 
 #define DBUS_CHANNEL_OFFSET 1024
-#define DBUS_CHANNEL_MIN (-660)
-#define DBUS_CHANNEL_MAX 660
+#define DBUS_CHANNEL_MIN (-700)
+#define DBUS_CHANNEL_MAX 700
 #define DBUS_SWITCH_UP 1U
 #define DBUS_SWITCH_DOWN 2U
 #define DBUS_SWITCH_MID 3U
@@ -15,7 +15,7 @@
  * 量产或上车前必须用实际减速箱和测功数据重新核对。
  */
 #define WHEEL_TORQUE_TO_CURRENT \
-    (20.0f * 16384.0f / 0.3f / (3591.0f / 187.0f) / CHASSIS_WHEEL_GEAR_RATIO)
+    (20.0f * 16384.0f / 0.3f / CHASSIS_WHEEL_MOTOR_GEAR_RATIO / CHASSIS_WHEEL_GEAR_RATIO)
 
 static bool switch_valid(uint8_t value)
 {
@@ -54,8 +54,9 @@ bool chassis_dbus_decode(const uint8_t frame[18], chassis_dbus_frame_t *decoded)
     decoded->channel[1] = (int16_t)((((frame[1] >> 3) | (frame[2] << 5)) & 0x07ffU) - DBUS_CHANNEL_OFFSET);
     decoded->channel[2] = (int16_t)((((frame[2] >> 6) | (frame[3] << 2) | (frame[4] << 10)) & 0x07ffU) - DBUS_CHANNEL_OFFSET);
     decoded->channel[3] = (int16_t)((((frame[4] >> 1) | (frame[5] << 7)) & 0x07ffU) - DBUS_CHANNEL_OFFSET);
-    decoded->switch_left = (uint8_t)((frame[5] >> 4) & 0x03U);
-    decoded->switch_right = (uint8_t)((frame[5] >> 6) & 0x03U);
+    /* HKU: s[0] 是右拨杆，s[1] 是左拨杆。 */
+    decoded->switch_right = (uint8_t)((frame[5] >> 4) & 0x03U);
+    decoded->switch_left = (uint8_t)((frame[5] >> 6) & 0x03U);
     decoded->mouse_x = (int16_t)(frame[6] | (frame[7] << 8));
     decoded->mouse_y = (int16_t)(frame[8] | (frame[9] << 8));
     decoded->mouse_z = (int16_t)(frame[10] | (frame[11] << 8));
@@ -64,7 +65,8 @@ bool chassis_dbus_decode(const uint8_t frame[18], chassis_dbus_frame_t *decoded)
     decoded->keyboard = (uint16_t)(frame[14] | (frame[15] << 8));
     decoded->channel[4] = (int16_t)((frame[16] | (frame[17] << 8)) - DBUS_CHANNEL_OFFSET);
 
-    for (size_t i = 0; i < 5U; ++i)
+    /* 与 HKU RC_DataIsError 一致：只校验四个摇杆，第五通道保留原始解码值。 */
+    for (size_t i = 0; i < 4U; ++i)
     {
         if (decoded->channel[i] < DBUS_CHANNEL_MIN || decoded->channel[i] > DBUS_CHANNEL_MAX)
         {

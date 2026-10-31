@@ -35,14 +35,22 @@ def audit_assets(config: Config) -> dict[str, Any]:
     parameters_path = config.parameters_json
 
     recorded = json.loads(parameters_path.read_text(encoding="utf-8"))
-    source_sha = stl.sha256(source_path)
+    # text sources: hash with CRLF normalised so the check measures content, not
+    # the checkout's line endings (see stl.sha256_text)
+    source_sha = stl.sha256_text(source_path)
     report["sources"] = {
         "source_urdf": {
             "path": str(source_path),
             "sha256": source_sha,
+            "sha256_scope": "text, CRLF normalised to LF",
+            "sha256_raw": stl.sha256(source_path),
             "sha256_matches_parameters_json": source_sha == recorded.get("source_urdf_sha256"),
         },
-        "training_urdf": {"path": str(training_path), "sha256": stl.sha256(training_path)},
+        "training_urdf": {
+            "path": str(training_path),
+            "sha256": stl.sha256_text(training_path),
+            "sha256_raw": stl.sha256(training_path),
+        },
         "parameters_json": {"path": str(parameters_path), "sha256": stl.sha256(parameters_path)},
         "gas_spring_config": {
             "configured": config.gas_spring_configured,

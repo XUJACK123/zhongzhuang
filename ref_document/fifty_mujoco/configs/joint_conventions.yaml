@@ -1,0 +1,191 @@
+# Joint signs, zeros, axes and the reference standing pose (progress.md §23.4).
+#
+# WHY THIS FILE EXISTS
+#   The simulation may choose its own positive direction and zero (§23.4), but the
+#   *same* transform has to reach position, velocity, torque, the Jacobian, the
+#   observation and the action. Written down in prose that is unenforceable; here
+#   every row is checked against the MJCF (`mjcf_joint_axes`) and the policy
+#   contract (`signs`), so a changed asset breaks a test instead of a robot.
+#
+# WHAT IT IS NOT
+#   * `zero_rad` is the *asset* convention (`robot.yaml: default_angles_rad`), not
+#     a real encoder zero. Hardware zeroes stay a deployment-time calibration.
+#   * `sign` mirrors the left channels onto the right ones. It does not prove the
+#     wiring direction of the real motors.
+#   * nothing here is `measured`.
+meta:
+  schema: 1
+  version: "1.0.0"
+  generated_at: "2026-10-30"
+  frame: "training base: X forward, Y left, Z up (right-handed)"
+  positive_rule: >-
+    positive rotation follows the right-hand rule about `axis_base`; a positive
+    velocity is the time derivative of the position in the same sense, and a
+    positive torque accelerates in the positive sense
+  sign_semantics: >-
+    `sign` maps a *left* channel onto its right-hand counterpart for a symmetric
+    pose: q_left = sign * q_right. Velocity and torque inherit the same sign; the
+    zero offset cancels in both, so it must never be added to a velocity.
+  axis_source: "assets/mjcf/fifty_train.xml, composed through the body quats"
+  zero_source: "configs/robot.yaml: joints.default_angles_rad (asset convention)"
+  sign_source: "configs/policy_contract.yaml: orders.signs"
+  status: cad_extracted
+
+# Six channels, in model/policy order. `drives` names the coordinate of the real
+# mechanism the channel stands for:
+#   thigh  - the HIP-KNEE link angle, shared by the serial equivalent and the
+#            confirmed five-bar (G01 = 210 mm), so the mapping is the identity;
+#   crank  - the second motor turns a crank about the hip axis; the serial model's
+#            "knee" is an *equivalent* coordinate and the relation is NOT affine.
+#            The conversion lives in mechanism/bridge.py (root find on the crank).
+#
+# CRANK REFERENCE (confirmed 2026-10-31): both DM-8009 are bolted to
+# 【复用交C件】髋关节大铝件, which does not rotate with the leg, and the operator
+# confirmed the kinematic consequence - rotating the thigh swings thigh AND shin
+# (the loop closes), while moving the shin alone turns one motor only. So the
+# crank angle is measured in the GROUND frame: crank = motor angle, no thigh term.
+# mechanism/transmission.py already models it that way.
+crank_reference: ground
+crank_reference_evidence:
+  - "both DM-8009 mounted on 髋关节大铝件 (chassis frame), operator, 2026-10-31"
+  - "thigh rotation swings thigh + shin; shin-only motion turns one motor"
+  - "mechanism-check: the chain closes over 961/961 poses with the crank as an independent coordinate"
+channels:
+  - name: rf0_Joint
+    role: hip
+    side: right
+    axis_base: [0.0, 1.0, 0.0]
+    sign: 1.0
+    zero_rad: 2.0554215512416354
+    limit_rad: [1.4554215512416353, 2.6554215512416355]
+    drives: thigh
+  - name: rf1_Joint
+    role: knee
+    side: right
+    axis_base: [0.0, 1.0, 0.0]
+    sign: 1.0
+    zero_rad: -2.5592683579936746
+    limit_rad: [-3.2592683579936743, -1.8592683579936746]
+    drives: crank
+  - name: r_wheel_Joint
+    role: wheel
+    side: right
+    axis_base: [0.0, 1.0, 0.0]
+    sign: 1.0
+    zero_rad: 0.0
+    limit_rad: null
+    drives: wheel
+  - name: lf0_Joint
+    role: hip
+    side: left
+    axis_base: [0.0, -1.0, 0.0]
+    sign: -1.0
+    zero_rad: -2.055421551241647
+    limit_rad: [-2.655421551241647, -1.4554215512416468]
+    drives: thigh
+  - name: lf1_Joint
+    role: knee
+    side: left
+    axis_base: [0.0, -1.0, 0.0]
+    sign: -1.0
+    zero_rad: 2.559268357993675
+    limit_rad: [1.859268357993675, 3.259268357993675]
+    drives: crank
+  - name: l_wheel_Joint
+    role: wheel
+    side: left
+    # Not the mirror of the leg joints: both wheels turn about the same base +Y
+    # axis, because a forward-rolling wheel rotates the same way on both sides.
+    # That is why the policy contract signs are (+1, +1, +1, -1, -1, +1) rather
+    # than a plain left/right negation, and it is why the axis is verified from
+    # the MJCF instead of assumed.
+    axis_base: [0.0, 1.0, 0.0]
+    sign: 1.0
+    zero_rad: 0.0
+    limit_rad: null
+    drives: wheel
+
+# Reference standing pose, in the planar mechanism coordinates of
+# configs/mechanism.yaml (radians, absolute link angles from +Y towards +Z).
+#
+# Derivation, all from data already in the repository:
+#   1. target base height 0.4647513721610853 m = the environment's nominal height
+#      (reports/stand_eval_* and configs/training_options agree on it);
+#   2. wheel radius 0.06 m (robot.yaml) -> hip-to-wheel chord 0.4047513721610853 m
+#      with the wheel directly below the hip;
+#   3. analytical two-link IK gives (thigh, shin);
+#   4. mechanism/bridge.py solves the crank that closes the confirmed chain at that
+#      pair, rejecting singular roots.
+reference_pose:
+  target:
+    base_height_m: 0.4647513721610853
+    wheel_radius_m: 0.06
+    chord_m: 0.4047513721610853
+    wheel_offset_from_hip_m: 0.0
+  solution:
+    thigh_rad: -2.115162642285236
+    shin_rad: -1.120740359909000
+    crank_rad: -1.026430011344950
+    wheel_from_hip_y_m: 0.0
+    wheel_from_hip_z_m: -0.404751372161075
+    jacobian_det: 0.039573581820094
+  status: computed_from_points
+  source: >-
+    mechanism/bridge.py leg_pose_from_serial() on the confirmed link_a_on_thigh
+    chain; tests/test_joint_conventions.py recomputes it and fails if the stored
+    numbers drift
+  not_a_hardware_zero: >-
+    this is a simulation reference pose; the real encoder zeroes are still a
+    deployment-time calibration (§23.4)
+  length_authority_note: >-
+    URDF joint-origin vectors have lateral offsets along the hinge axes. Their
+    perpendicular projections are 210/250 mm, consistent with the CAD planar
+    chain. The 23.1 mrad shift and 96.243 mm end link were consequences of using
+    full 3D vector norms as planar lengths; both conclusions are withdrawn.
+    Absolute planar angles are not URDF joint angles or hardware encoder zeros.
+  length_authority_delta_rad: { thigh: 0.0, shin: 0.0 }
+  runtime_default_pose:
+    model: equivalent_serial_6dof
+    wheel_forward_of_hip_m: 0.022865346232958
+    wheel_below_hip_m: 0.404751372161085
+    note: >-
+      still the OLD defaults: robot.yaml was not switched (see progress.md §26).
+      The reference pose puts the wheel directly below the hip, i.e. this offset
+      becomes 0.0 once serial_reference_candidate is made the default; that switch
+      changes what the asset build measures and needs the build to re-baseline.
+  closed_qpos:
+    note: >-
+      THE SAME POSE, different coordinates. A closed-chain hinge is measured from
+      the CAD assembly pose (qpos = 0 = stowed), so these values are NOT the serial
+      ones above and must never be interchanged. Recomputed by
+      mechanism/closed_pose.py:reference_pose(); tests/test_closed_pose.py fails if
+      they drift.
+    right:
+      rf0_Joint: 1.738502588860534
+      rf1_Joint: 0.896101201772943
+      r_wheel_Joint: 0.000000000000000
+      r_knee_Joint: 1.004773771416566
+      r_pushrod_Joint: 1.629830019256905
+      r_ternary_Joint: 1.004773771391616
+      r_endlink_Joint: 1.738502588860534
+    left_multiplier: -1
+    note_left: >-
+      every left leg hinge uses the -Y axis, so the left values are the negations
+      of these; the two wheels share +Y and stay zero.
+  serial_reference_candidate:
+    rf0_Joint: 2.1151626422852363
+    rf1_Joint: -2.565218609171035
+    lf0_Joint: -2.1151626422852363
+    lf1_Joint: 2.565218609171035
+    note: >-
+      computed for the current serial URDF: right hip q=-thigh,
+      right knee q=thigh-shin-pi/2; left leg signs are mirrored. Not activated.
+      The closed-chain rf1 instead drives the crank, so these knee numbers MUST
+      NOT be copied into its rf1 default. Its reset must solve passive joints too.
+  spring_stroke_check: >-
+    Geometric check only: with the adopted 250 mm free length and 75 mm stroke,
+    the nominal reference needs 227.760939 mm spatial pin spacing including
+    11 mm axial separation. It is compressed by 22.239061 mm and has
+    52.760939 mm additional compression travel before the 175 mm stop.
+    Full geometry, collision, mechanical limits and force dynamics remain to
+    be checked after integration. Runtime is still the old reference_300n.

@@ -1,5 +1,6 @@
 build/bench/tests/bench_motor_test.o: tests/bench_motor_test.c \
  tests/bench_motor_test.h tests/bench_controller.h \
+ application/bench_config.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Core/Inc/FreeRTOSConfig.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
@@ -11,7 +12,7 @@ build/bench/tests/bench_motor_test.o: tests/bench_motor_test.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  Task/chassis_task.h application/CAN_receive.h \
  application/chassis_protocol.h application/chassis_motor_config.h \
- Task/INS_task.h Core/Inc/main.h \
+ application/bench_config.h Task/INS_task.h Core/Inc/main.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  Core/Inc/stm32h7xx_hal_conf.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \
@@ -53,6 +54,7 @@ build/bench/tests/bench_motor_test.o: tests/bench_motor_test.c \
  application/remote_control.h
 tests/bench_motor_test.h:
 tests/bench_controller.h:
+application/bench_config.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -66,6 +68,7 @@ Task/chassis_task.h:
 application/CAN_receive.h:
 application/chassis_protocol.h:
 application/chassis_motor_config.h:
+application/bench_config.h:
 Task/INS_task.h:
 Core/Inc/main.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:

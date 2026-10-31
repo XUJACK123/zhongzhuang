@@ -96,6 +96,7 @@ BASELINE_FLAGS: frozenset[str] = frozenset(
         "--save-every",
         "--checkpoint-keep",
         "--stop-on-survive",
+        "--stand-command",
         "--updates",
         "--seed",
     }
@@ -266,6 +267,12 @@ def resolve_train_gpu_args(
         if entry.key == "seeds":
             continue  # a seed list is not a flag value; one run takes one seed
         if not entry.implemented_by.startswith("--"):
+            continue
+        if isinstance(entry.value, bool):
+            # store_true flags carry no value; only "baseline turns it on" is
+            # expressible.  None of the current entries wants the other way.
+            if entry.value and not entry.default:
+                args.append(entry.implemented_by)
             continue
         if entry.value == entry.default:
             continue

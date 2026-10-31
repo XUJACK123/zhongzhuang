@@ -53,12 +53,13 @@ build/bench/Core/Src/freertos.o: Core/Src/freertos.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  Task/chassis_task.h application/CAN_receive.h \
  application/chassis_protocol.h application/chassis_motor_config.h \
- Task/INS_task.h algorithm/kalman_filter.h \
+ application/bench_config.h Task/INS_task.h algorithm/kalman_filter.h \
  Drivers/CMSIS/DSP/Include/arm_math.h \
  Drivers/CMSIS/Core/Include/cmsis_compiler.h \
  application/chassis_protocol.h application/chassis_safety.h \
  application/remote_control.h Task/INS_task.h Task/send_task.h \
- tests/bench_motor_test.h tests/bench_controller.h
+ tests/bench_motor_test.h tests/bench_controller.h \
+ application/bench_config.h
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -116,6 +117,7 @@ Task/chassis_task.h:
 application/CAN_receive.h:
 application/chassis_protocol.h:
 application/chassis_motor_config.h:
+application/bench_config.h:
 Task/INS_task.h:
 algorithm/kalman_filter.h:
 Drivers/CMSIS/DSP/Include/arm_math.h:
@@ -127,3 +129,4 @@ Task/INS_task.h:
 Task/send_task.h:
 tests/bench_motor_test.h:
 tests/bench_controller.h:
+application/bench_config.h:

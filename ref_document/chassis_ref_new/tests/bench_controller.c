@@ -1,7 +1,7 @@
 #include "bench_controller.h"
 #include <math.h>
 #include <string.h>
-#include "chassis_motor_config.h"
+#include "chassis_protocol.h"
 
 static float clip(float value, float limit)
 {
@@ -53,71 +53,87 @@ float bench_controller_step(bench_controller_t *c, uint32_t now_ms,
 {
     if (c == NULL) return 0.0f;
     if (reset_requested) bench_controller_reset(c);
-    if (!permit || reset_requested || c->faults != BENCH_FAULT_NONE)
+    if (!permit || reset_requested)
     {
-        c->active = false;
-        c->torque_nm = 0.0f;
+        bench_controller_reset(c);
         return 0.0f;
     }
-    if (!isfinite(position_rad) || !isfinite(speed_rad_s) ||
-        !isfinite(BENCH_TARGET_RAD) || fabsf(BENCH_TARGET_RAD) > 0.2617994f)
-        c->faults |= BENCH_FAULT_DATA; /* 台架目标不超过 15 度。 */
-    if (fabsf(speed_rad_s) > BENCH_OVERSPEED_RAD_S)
-        c->faults |= BENCH_FAULT_OVERSPEED;
-    if (c->faults != 0U) goto stopped;
+    /* 3508 的位置/速度口径是“转子 / 13.94”，而台架的目标按**电机输出轴**（可见轴）计算：
+     * 输出轴角度 = 转子 / 19.2 = 反馈值 × 13.94 / 19.2。 */
+    const float gear = is_wheel ? (CHASSIS_WHEEL_GEAR_RATIO / CHASSIS_WHEEL_MOTOR_GEAR_RATIO) : 1.0f;
+    const float motor_position = position_rad * gear;
+    const float motor_speed = speed_rad_s * gear;
+
+    c->faults = BENCH_FAULT_NONE;
+    if (!isfinite(motor_position) || !isfinite(motor_speed) || !isfinite(BENCH_TARGET_RAD))
+    {
+        c->faults = BENCH_FAULT_DATA;
+        goto stopped;
+    }
     if (!c->active)
     {
         bench_controller_reset(c);
         c->active = true;
         c->start_ms = now_ms;
         c->previous_ms = now_ms;
-        c->previous_position = position_rad;
-        c->speed_rad_s = speed_rad_s;
+        c->previous_position = motor_position;
+        c->speed_rad_s = motor_speed;
         return 0.0f;
     }
     const uint32_t elapsed_ms = now_ms - c->previous_ms;
-    if (elapsed_ms > BENCH_MAX_GAP_MS)
-    {
-        c->faults |= BENCH_FAULT_TIMING;
-        goto stopped;
-    }
     if (elapsed_ms == 0U) return c->torque_nm;
     const float dt = (float)elapsed_ms * 0.001f;
-    float delta = position_rad - c->previous_position;
+    float delta = motor_position - c->previous_position;
     if (!is_wheel) delta = remainderf(delta, 2.0f * CHASSIS_DM_POSITION_MAX);
-    /* 小行程中跳变视为异常，不选择另一条整圈路径追赶。 */
-    if (fabsf(delta) > 0.05f)
-    {
-        c->faults |= BENCH_FAULT_DATA;
-        goto stopped;
-    }
     c->position_rad += delta;
-    c->previous_position = position_rad;
+    c->previous_position = motor_position;
     c->previous_ms = now_ms;
-    c->speed_rad_s = speed_rad_s;
-    if (fabsf(c->position_rad) > fabsf(BENCH_TARGET_RAD) + BENCH_TRAVEL_MARGIN_RAD)
+    c->speed_rad_s = motor_speed;
+
+    /* 一次上档只走一段：到位或超时后保持零力矩，直到下一次下档复位。 */
+    if (c->reached || c->aborted)
     {
-        c->faults |= BENCH_FAULT_TRAVEL;
-        goto stopped;
+        c->torque_nm = 0.0f;
+        return 0.0f;
     }
     bench_trajectory((float)(now_ms - c->start_ms) * 0.001f, BENCH_TARGET_RAD,
                       &c->reference_rad, &c->reference_speed);
-    if (fabsf(BENCH_TARGET_RAD - c->position_rad) < 0.017453293f && fabsf(speed_rad_s) < 0.05f)
+    if (fabsf(BENCH_TARGET_RAD - c->reference_rad) < 1e-6f &&
+        fabsf(BENCH_TARGET_RAD - c->position_rad) < 0.017453293f && fabsf(motor_speed) < 0.05f)
         c->settled_ms += elapsed_ms;
     else
         c->settled_ms = 0U;
-    if (c->settled_ms >= 300U) c->reached = true;
-    if (!c->reached && now_ms - c->start_ms > 5000U)
+    if (c->settled_ms >= BENCH_SETTLE_MS)
     {
-        c->faults |= BENCH_FAULT_NOT_REACHED;
-        goto stopped;
+        c->reached = true;
+        c->torque_nm = 0.0f;
+        return 0.0f;
     }
-    const float kp = is_wheel ? 0.50f : 5.0f;
-    const float kd = is_wheel ? 0.02f : 0.20f;
+    if (now_ms - c->start_ms > BENCH_TIMEOUT_MS)
+    {
+        c->aborted = true;
+        c->torque_nm = 0.0f;
+        return 0.0f;
+    }
+
+    const float kp = is_wheel ? BENCH_WHEEL_KP : BENCH_JOINT_KP;
+    const float ki = is_wheel ? BENCH_WHEEL_KI : BENCH_JOINT_KI;
+    const float kd = is_wheel ? BENCH_WHEEL_KD : BENCH_JOINT_KD;
     const float limit = is_wheel ? CHASSIS_BENCH_WHEEL_LIMIT_NM : CHASSIS_BENCH_JOINT_LIMIT_NM;
-    const float slew = is_wheel ? 0.50f : 2.0f;
-    const float requested = clip(kp * (c->reference_rad - c->position_rad) +
-                                 kd * (c->reference_speed - speed_rad_s), limit);
+    const float slew = is_wheel ? BENCH_WHEEL_SLEW_NM_S : BENCH_JOINT_SLEW_NM_S;
+    /* 常规位置 PID */
+    const float err = c->reference_rad - c->position_rad;
+    const float derr = (err - c->previous_error) / dt;
+    c->previous_error = err;
+    const float p_term = kp * err;
+    const float d_term = kd * derr;
+    /* 抗积分饱和：输出已经顶到限幅且误差同向时，不再继续累加。 */
+    const float unsaturated = p_term + c->integral_nm + d_term;
+    const bool saturated = (unsaturated >= limit && err > 0.0f) ||
+                           (unsaturated <= -limit && err < 0.0f);
+    if (!saturated)
+        c->integral_nm = clip(c->integral_nm + ki * err * dt, limit);
+    const float requested = clip(p_term + c->integral_nm + d_term, limit);
     c->torque_nm += clip(requested - c->torque_nm, slew * dt);
     return c->torque_nm;
 stopped:

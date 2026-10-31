@@ -28,7 +28,7 @@ import os
 import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Collection, Iterable, Sequence
 
 import torch
 
@@ -122,14 +122,26 @@ def restore_rng_state(state: dict[str, Any] | None) -> None:
         torch.cuda.set_rng_state_all(state["cuda"])
 
 
+#: Metrics where smaller is better.  A tracking *error* is not a score: without
+#: this set ``model_best.pt`` was chosen as if a 0.30 m height error beat a
+#: 0.02 m one, because the comparison was uniformly "larger wins".
+LOWER_IS_BETTER: frozenset[str] = frozenset(
+    {"eval_height_mae", "eval_vx_mae", "eval_tilt_max_deg"}
+)
+
+
 def metric_is_better(
-    new: dict[str, float], old: dict[str, float] | None, keys: Sequence[str]
+    new: dict[str, float],
+    old: dict[str, float] | None,
+    keys: Sequence[str],
+    lower_is_better: Collection[str] = LOWER_IS_BETTER,
 ) -> bool:
-    """Lexicographic comparison over ``keys`` (higher is better, NaN last).
+    """Lexicographic comparison over ``keys`` (NaN last, direction-aware).
 
     The order encodes the acceptance rules: a run that falls over must never
     win on a tracking-error tie-break, and a metric that is absent is worse
-    than any present value.
+    than any present value.  Keys listed in ``lower_is_better`` compare the
+    other way round; everything else keeps "larger is better".
     """
     if old is None:
         return True
@@ -147,6 +159,8 @@ def metric_is_better(
         if new_finite != old_finite:
             return new_finite
         if new_finite and new_value != old_value:
+            if key in lower_is_better:
+                return new_value < old_value
             return new_value > old_value
     return False
 
@@ -176,6 +190,15 @@ class CheckpointManager:
         self.run_dir.mkdir(parents=True, exist_ok=True)
         self.index_path = self.run_dir / "checkpoints.json"
         self._index: dict[str, Any] = self._read_index()
+        # A new process must continue the *same* best ranking: without this a
+        # resumed run treats its first evaluation as the first ever seen and
+        # overwrites a better ``model_best.pt`` with a worse policy.
+        if self.best_metrics is None and isinstance(self._index.get("best_metrics"), dict):
+            self.best_metrics = {
+                key: float(value) for key, value in self._index["best_metrics"].items()
+            }
+        if not self.best_update and self._index.get("best_update"):
+            self.best_update = int(self._index["best_update"])
 
     # ------------------------------------------------------------------ index
     def _read_index(self) -> dict[str, Any]:
@@ -243,6 +266,22 @@ class CheckpointManager:
         save_checkpoint(self.best_path, payload)
         self._write_index()
         return True
+
+    def adopt_best(self, source: str | Path) -> Path:
+        """Take an existing ``model_best.pt`` as this run's starting best.
+
+        Used when resuming into a fresh run directory: the ranking is restored
+        from the checkpoint, so the file it refers to has to come along -
+        otherwise the new directory either has no best at all or promotes the
+        first (possibly worse) evaluation over the restored one.
+        """
+        source_path = Path(source)
+        if not self.best_path.is_file():
+            if not source_path.is_file():
+                raise FileNotFoundError(f"no best checkpoint at {source_path}")
+            shutil.copy2(source_path, self.best_path)
+            self._write_index()
+        return self.best_path
 
     def release(self, version: str) -> Path:
         """Copy the accepted best into an immutable release directory."""

@@ -1,0 +1,166 @@
+{
+  "tool": "joint-conventions",
+  "generated_at": "2026-10-31T07:18:11+00:00",
+  "version": "1.0.0",
+  "frame": "training base: X forward, Y left, Z up (right-handed)",
+  "verification": {
+    "status": "passed",
+    "axes": {
+      "rf0_Joint": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rf1_Joint": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "r_wheel_Joint": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "lf0_Joint": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "lf1_Joint": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "l_wheel_Joint": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "problems": []
+  },
+  "channels": [
+    {
+      "name": "rf0_Joint",
+      "role": "hip",
+      "side": "right",
+      "axis_base": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "sign": 1.0,
+      "zero_rad": 2.0554215512416354,
+      "limit_rad": [
+        1.4554215512416353,
+        2.6554215512416355
+      ],
+      "drives": "thigh"
+    },
+    {
+      "name": "rf1_Joint",
+      "role": "knee",
+      "side": "right",
+      "axis_base": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "sign": 1.0,
+      "zero_rad": -2.5592683579936746,
+      "limit_rad": [
+        -3.2592683579936743,
+        -1.8592683579936746
+      ],
+      "drives": "crank"
+    },
+    {
+      "name": "r_wheel_Joint",
+      "role": "wheel",
+      "side": "right",
+      "axis_base": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "sign": 1.0,
+      "zero_rad": 0.0,
+      "limit_rad": null,
+      "drives": "wheel"
+    },
+    {
+      "name": "lf0_Joint",
+      "role": "hip",
+      "side": "left",
+      "axis_base": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "sign": -1.0,
+      "zero_rad": -2.055421551241647,
+      "limit_rad": [
+        -2.655421551241647,
+        -1.4554215512416468
+      ],
+      "drives": "thigh"
+    },
+    {
+      "name": "lf1_Joint",
+      "role": "knee",
+      "side": "left",
+      "axis_base": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "sign": -1.0,
+      "zero_rad": 2.559268357993675,
+      "limit_rad": [
+        1.859268357993675,
+        3.259268357993675
+      ],
+      "drives": "crank"
+    },
+    {
+      "name": "l_wheel_Joint",
+      "role": "wheel",
+      "side": "left",
+      "axis_base": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "sign": 1.0,
+      "zero_rad": 0.0,
+      "limit_rad": null,
+      "drives": "wheel"
+    }
+  ],
+  "reference_pose": {
+    "stored": {
+      "thigh_rad": -2.115162642285236,
+      "shin_rad": -1.120740359909,
+      "crank_rad": -1.02643001134495
+    },
+    "recomputed": {
+      "thigh_rad": -2.1151626422852363,
+      "shin_rad": -1.1207403599089987,
+      "crank_rad": -1.0264300113449498,
+      "wheel_from_hip_y_m": 2.2301605007157832e-14,
+      "wheel_from_hip_z_m": -0.4047513721610746,
+      "chord_m": 0.4047513721610746,
+      "jacobian_det": 0.03957358182009395
+    },
+    "drift_rad": {
+      "thigh_rad": -4.440892098500626e-16,
+      "shin_rad": 1.3322676295501878e-15,
+      "crank_rad": 2.220446049250313e-16
+    },
+    "chord_target_m": 0.4047513721610853,
+    "chord_recomputed_m": 0.4047513721610746,
+    "singular": false
+  },
+  "status": "passed",
+  "note": "signs and zeros are the simulation/asset convention; the real encoder zeroes and CAN directions remain a deployment calibration"
+}

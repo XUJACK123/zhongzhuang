@@ -67,6 +67,27 @@ class WarpEnvOptions:
     randomize_initial: bool = False
     #: When set, every env gets this exact command (parity tests, evaluation).
     fixed_command: tuple[float, float, float] | None = None
+    #: Standing task: command ``vx = 0``, ``wz = 0`` and the nominal height, for
+    #: every env and every episode.  The nominal height is only known after the
+    #: spawn audit runs, so this is resolved in ``__init__`` rather than passed
+    #: as a literal.  Ignored when ``fixed_command`` is given.
+    stand_command: bool = False
+
+
+def resolve_fixed_command(
+    options: WarpEnvOptions, nominal_height: float
+) -> tuple[float, float, float] | None:
+    """The command every env holds, or ``None`` to keep resampling.
+
+    ``stand_command`` exists because the standing curriculum stage must not
+    draw ``vx``/``wz`` from ``command_ranges``; a fixed nominal height is only
+    known after the spawn audit, which is why this is a function of it.
+    """
+    if options.fixed_command is not None:
+        return options.fixed_command
+    if options.stand_command:
+        return (0.0, 0.0, float(nominal_height))
+    return None
 
 
 class WarpVecEnv:
@@ -94,6 +115,9 @@ class WarpVecEnv:
         self.model = self.cpu.model
         self.spawn_z = resolve_spawn_height(self.cpu, load_spawn_spec(config))[0]
         self.nominal_height = self.spawn_z - float(config.spawn["spawn"]["wheel_clearance_m"])
+        # ``stand_command`` is resolved here because ``nominal_height`` is only
+        # known after the spawn audit; everything below reads ``fixed_command``.
+        self.fixed_command = resolve_fixed_command(self.options, self.nominal_height)
 
         # ------------------------------------------------------------- constants
         self.default_angles = np.array(
@@ -458,7 +482,7 @@ class WarpVecEnv:
             self.ten_prev_length[ids] = self.spawn_spring_length
             self.ten_obs_length[ids] = self.spawn_spring_length
             self.spring_actual_force[ids] = self.spring_force
-        if resample_commands and self.options.fixed_command is None:
+        if resample_commands and self.fixed_command is None:
             noise = torch.rand((n, 3), generator=self.generator, device=self.device) * 2.0 - 1.0
             command = self.command_mean + noise * self.command_half
             command[:, 2] = self.nominal_height + command[:, 2]
@@ -466,7 +490,7 @@ class WarpVecEnv:
             self.command_pool[ids] = command
         elif resample_commands:
             self.commands[ids] = torch.as_tensor(
-                self.options.fixed_command, dtype=torch.float32, device=self.device
+                self.fixed_command, dtype=torch.float32, device=self.device
             )
             self.command_pool[ids] = self.commands[ids]
         if self.options.randomize_initial:
@@ -487,9 +511,9 @@ class WarpVecEnv:
         observation command channels are refreshed immediately (doc 5.2): the
         next action must not run on the previous command.
         """
-        if self.options.fixed_command is not None:
+        if self.fixed_command is not None:
             self.commands[:] = torch.as_tensor(
-                self.options.fixed_command, dtype=torch.float32, device=self.device
+                self.fixed_command, dtype=torch.float32, device=self.device
             )
             self.command_pool.copy_(self.commands)
             self._refresh_command_channels()

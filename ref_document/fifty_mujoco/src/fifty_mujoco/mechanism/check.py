@@ -20,7 +20,12 @@ from .leg import body_constraints, serial_leg_report, static_closure
 from .loader import Mechanism, load_mechanism
 from .planar import NoSolutionError, TopologyNotConfirmedError, distance
 from .pose import MechanismPose
+from .resolve import describe as describe_resolution, resolve_nodes
+from .spring import describe, load_spring_link
 from .transmission import ThighCrankTransmission
+
+from ..config import load_yaml
+from ..paths import configs_dir
 
 #: Half-open sweep around the assembly pose. Small on purpose: the point is to
 #: prove the loop closes away from the pose it was measured at, not to explore a
@@ -52,6 +57,44 @@ def _confirmations(mechanism: Mechanism) -> list[str]:
     for entry in chain.get("confirm_in_cad") or []:
         items.append(str(entry))
     return items
+
+
+def _spring_report(mechanism: Mechanism) -> dict[str, Any]:
+    """Pin travel the linkage asks for, and what the real spring allows."""
+    link = load_spring_link(mechanism)
+    if link is None:
+        return {"status": "no_anchors"}
+    report: dict[str, Any] = {"status": "computed_from_points", **describe(link)}
+    spring = load_yaml(configs_dir() / "gas_spring.yaml")
+    real = spring.get("real_spring") or {}
+    datasheet = real.get("datasheet") or {}
+    free = datasheet.get("free_length_mm")
+    stroke = datasheet.get("max_working_stroke_mm")
+    if free is None or stroke is None:
+        report["status"] = "no_datasheet"
+        return report
+    window = link.window(float(free), float(stroke), float(report["wheel_radius_mm"]))
+    report["as_stated"] = window
+    conventions = load_yaml(configs_dir() / "joint_conventions.yaml")
+    target = conventions["reference_pose"]["target"]
+    chord_mm = float(target["chord_m"]) * 1000.0
+    nominal_height = float(target["base_height_m"])
+    delta = link.delta_for_chord(chord_mm)
+    pin = link.pin_distance_mm(delta)
+    report["nominal_pin_distance_3d_mm"] = pin
+    report["nominal_pin_distance_planar_mm"] = link.planar_pin_distance_mm(delta)
+    # the smallest free length that still reaches the nominal height: a gas spring
+    # can never be longer than its free length
+    report["free_length_required_for_nominal_height_mm"] = pin
+    report["compression_at_nominal_height_mm"] = float(free) - pin
+    report["remaining_compression_at_nominal_height_mm"] = pin - (float(free) - float(stroke))
+    report["reaches_nominal_height"] = bool(
+        window["feasible"]
+        and window["min_height_m"] - 1e-9 <= nominal_height <= window["max_height_m"] + 1e-9
+    )
+    report["runtime_profile"] = spring["gas_springs"]["profile"]
+    report["real_spring_integrated"] = False
+    return report
 
 
 def topology_gate(mechanism: Mechanism, allow_inferred: bool = False) -> None:
@@ -188,6 +231,8 @@ def mechanism_report(
             "attempted": True,
             "variants": variants,
             "closing_variants": [entry["variant"] for entry in closing],
+            "selected_variant": chain.get("selected_variant"),
+            "chain_status": chain.get("status"),
             "note": (
                 "both assignments use the same eight pivots and the same fourteen lengths;"
                 " they differ only in which part carries LINK_PIN_A and END_PIN_A"
@@ -200,6 +245,10 @@ def mechanism_report(
             "reason": gate_message,
             "chain_status": chain.get("status"),
             "confirm_in_cad": list(chain.get("confirm_in_cad") or []),
+            # Evidence available without instantiating anything: the STEP audit
+            # names the plate that carries each pin (see docs §6.8).
+            "selected_variant": chain.get("selected_variant"),
+            "geometry_supports": chain.get("geometry_supports"),
         }
 
     failures: list[str] = []
@@ -250,6 +299,8 @@ def mechanism_report(
         "static_closure": closure,
         "serial_leg": leg,
         "closed_chain": closed_chain,
+        "gas_spring": _spring_report(mech),
+        "resolved_nodes": describe_resolution(resolve_nodes(mech)),
         "unknowns": sorted(str(name) for name in mech.unknowns),
         "passed": not failures,
         "failures": failures,
@@ -294,8 +345,53 @@ def summarize(report: dict[str, Any]) -> str:
                 f"  worst residual {entry['worst_residual_m']:.2e} m"
                 f"  [{entry['status']}]"
             )
+        selected = chain.get("selected_variant")
+        if selected:
+            lines.append(f"  selected     : {selected}")
     else:
         lines.append(f"closed chain   : {chain['status']} - {chain['reason']}")
+        if chain.get("geometry_supports"):
+            lines.append(
+                f"  variant      : {chain.get('selected_variant')} (selected) / "
+                f"geometry supports {chain['geometry_supports']}"
+            )
+    spring = report.get("gas_spring") or {}
+    if spring.get("status") == "computed_from_points":
+        lines.append(
+            f"gas spring     : pin {spring['pin_min_mm']:.3f}-{spring['pin_max_mm']:.3f} mm"
+            f"  travel {spring['pin_travel_mm']:.3f} mm"
+            f"  (assembly {spring['pin_at_assembly_mm']:.3f} mm at"
+            f" {spring['delta_at_assembly_deg']:.2f} deg flexion)"
+        )
+        stated = spring.get("as_stated") or {}
+        if stated:
+            lines.append(
+                f"  as stated    : free {stated['free_length_mm']:.1f} mm /"
+                f" stroke {stated['stroke_mm']:.1f} mm ->"
+                f" height {stated['min_height_m']:.4f}-{stated['max_height_m']:.4f} m"
+                f"  reaches nominal {spring.get('reaches_nominal_height')}"
+            )
+            lines.append(
+                f"  at nominal   : 3D pin {spring['nominal_pin_distance_3d_mm']:.6f} mm"
+                f"  compressed {spring['compression_at_nominal_height_mm']:.6f} mm"
+                f"  remaining {spring['remaining_compression_at_nominal_height_mm']:.6f} mm"
+            )
+            for problem in stated.get("problems") or []:
+                lines.append(f"  spring limit : {problem}")
+    resolved = report.get("resolved_nodes") or {}
+    if resolved:
+        lateral = ((resolved.get("per_side") or {}).get("right") or {}).get("lateral") or {}
+        lines.append(
+            f"link length    : planar thigh {resolved['cad_planar_mm']['thigh']:.6f} mm"
+            f" / shin {resolved['cad_planar_mm']['shin']:.6f} mm"
+            f"  (projected from the URDF offsets, error"
+            f" {resolved['worst_planar_error_mm']:.1e} mm)"
+        )
+        lines.append(
+            f"  sideways     : knee {lateral.get('knee_from_hip_mm', 0.0):+.3f} mm"
+            f"  wheel {lateral.get('wheel_from_hip_mm', 0.0):+.3f} mm (right, from the hip)"
+            f"  end link {resolved['end_link_mm']:.3f} mm"
+        )
     if report["failures"]:
         for failure in report["failures"]:
             lines.append(f"FAIL           : {failure}")

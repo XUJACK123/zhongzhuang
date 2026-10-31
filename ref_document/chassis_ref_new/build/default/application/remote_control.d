@@ -1,6 +1,6 @@
 build/default/application/remote_control.o: application/remote_control.c \
  application/remote_control.h application/chassis_protocol.h \
- application/chassis_motor_config.h \
+ application/chassis_motor_config.h application/bench_config.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  Core/Inc/FreeRTOSConfig.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
@@ -48,6 +48,7 @@ build/default/application/remote_control.o: application/remote_control.c \
 application/remote_control.h:
 application/chassis_protocol.h:
 application/chassis_motor_config.h:
+application/bench_config.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 Core/Inc/FreeRTOSConfig.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:

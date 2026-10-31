@@ -90,8 +90,67 @@ def test_resolved_arguments_parse_with_the_real_parser(stages):
     assert parsed.minibatches == 2
     assert parsed.updates == 1500
     assert parsed.seed == 1
-    assert parsed.stop_on_survive == 2
+    assert parsed.stop_on_survive == 0
+    assert parsed.stand_command is True
     assert parsed.eval_steps == 600
+
+
+def test_the_baseline_never_relies_on_a_short_window_to_declare_success(stages):
+    """§23.6 item 5: a 6 s window saturates by construction."""
+    entry = stages.baseline["stop_on_survive"]
+    assert entry.value == 0
+    assert entry.default == 0
+
+
+def test_the_standing_baseline_actually_fixes_the_command(stages):
+    from fifty_mujoco.envs.warp_env import WarpEnvOptions, resolve_fixed_command
+
+    entry = stages.baseline["stand_command"]
+    assert entry.value is True and entry.default is False
+    command = resolve_fixed_command(WarpEnvOptions(stand_command=True), nominal_height=0.464751)
+    assert command == pytest.approx((0.0, 0.0, 0.464751))
+    # an explicit fixed command still wins, and "neither" keeps resampling
+    assert resolve_fixed_command(
+        WarpEnvOptions(stand_command=True, fixed_command=(0.1, 0.2, 0.3)), 0.5
+    ) == (0.1, 0.2, 0.3)
+    assert resolve_fixed_command(WarpEnvOptions(), 0.5) is None
+
+
+def test_a_short_evaluation_window_never_declares_solved():
+    """§23.6 item 5: the 6 s smoke window must not report ``solved``."""
+    from fifty_mujoco.learning.gpu_ppo import SOLVED_MIN_WINDOW_S, survival_streak_step
+
+    assert SOLVED_MIN_WINDOW_S >= 60.0
+    # 600 steps x 10 ms = 6 s, median saturated: still not solved, streak reset
+    streak = 0
+    for _ in range(5):
+        streak, verdict = survival_streak_step(
+            streak=streak,
+            t_fall_median=6.0,
+            eval_steps=600,
+            eval_dt=0.01,
+            required=2,
+        )
+        assert verdict is None
+        assert streak == 0
+    # a 60 s window that saturates twice does satisfy the *training* gate
+    streak = 0
+    streak, verdict = survival_streak_step(
+        streak=streak, t_fall_median=60.0, eval_steps=6000, eval_dt=0.01, required=2
+    )
+    assert verdict is None and streak == 1
+    streak, verdict = survival_streak_step(
+        streak=streak, t_fall_median=60.0, eval_steps=6000, eval_dt=0.01, required=2
+    )
+    assert verdict == "solved"
+    # a fall resets the streak, and a disabled gate never fires
+    streak, verdict = survival_streak_step(
+        streak=1, t_fall_median=12.0, eval_steps=6000, eval_dt=0.01, required=2
+    )
+    assert (streak, verdict) == (0, None)
+    assert survival_streak_step(
+        streak=9, t_fall_median=60.0, eval_steps=6000, eval_dt=0.01, required=0
+    ) == (9, None)
 
 
 def test_planned_commands_cover_every_baseline_seed(stages):

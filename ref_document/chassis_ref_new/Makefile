@@ -7,20 +7,10 @@ endif
 PROFILE := $(if $(filter 1,$(TEST_MOTOR)),bench,default)
 BUILD_DIR ?= build/$(PROFILE)
 TEST_BUILD_DIR := build/host_tests
-BENCH_MOTOR ?= LF
-MOTOR_LF := 0
-MOTOR_LR := 1
-MOTOR_RF := 2
-MOTOR_RR := 3
-MOTOR_LW := 4
-MOTOR_RW := 5
-ifeq ($(MOTOR_$(BENCH_MOTOR)),)
-$(error BENCH_MOTOR must be LF LR RF RR LW RW)
+# 台架路由和角度统一在 application/bench_config.h 修改。
+ifneq ($(strip $(BENCH_MOTOR)$(BENCH_CAN_BUS)$(BENCH_CAN_ID)$(BENCH_RX_ID)$(BENCH_TARGET_DEG)),)
+$(error Edit application/bench_config.h instead of passing BENCH_* make variables)
 endif
-BENCH_CAN_BUS ?= 0
-BENCH_CAN_ID ?= 0
-BENCH_RX_ID ?= -1
-BENCH_TARGET_DEG ?= 5.0f
 
 TOOLCHAIN_DIR ?=
 CROSS_COMPILE ?= $(TOOLCHAIN_DIR)arm-none-eabi-
@@ -151,9 +141,7 @@ ifeq ($(DEBUG),1)
 CFLAGS += -g3 -DDEBUG
 endif
 ifeq ($(TEST_MOTOR),1)
-CFLAGS += -DTEST_MOTOR_ENABLE=1 -DBENCH_MOTOR_INDEX=$(MOTOR_$(BENCH_MOTOR)) \
-          -DBENCH_CAN_BUS=$(BENCH_CAN_BUS) -DBENCH_CAN_ID=$(BENCH_CAN_ID) \
-          -DBENCH_RX_ID=$(BENCH_RX_ID) -DBENCH_TARGET_DEG=$(BENCH_TARGET_DEG)
+CFLAGS += -DTEST_MOTOR_ENABLE=1
 endif
 
 ASFLAGS := $(CPU_FLAGS) $(DEFINES) $(INCLUDES) -x assembler-with-cpp -MMD -MP
@@ -212,8 +200,12 @@ $(BUILD_DIR)/%.o: %.s Makefile $(CONFIG_STAMP)
 size: $(BUILD_DIR)/$(TARGET).elf
 	$(SIZE) $<
 
-test: $(TEST_BINARY) $(TEST_BUILD_DIR)/test_bench_controller$(HOST_EXEEXT) $(ROUTE_TESTS)
+test: $(TEST_BUILD_DIR)/output_bench$(HOST_EXEEXT) $(TEST_BUILD_DIR)/output_default$(HOST_EXEEXT) $(TEST_BUILD_DIR)/test_board_indicator$(HOST_EXEEXT) $(TEST_BINARY) $(TEST_BUILD_DIR)/test_bench_controller$(HOST_EXEEXT) $(ROUTE_TESTS) $(TEST_BUILD_DIR)/test_remote_receive$(HOST_EXEEXT)
 	$(TEST_BINARY)
+	$(TEST_BUILD_DIR)/output_bench$(HOST_EXEEXT)
+	$(TEST_BUILD_DIR)/output_default$(HOST_EXEEXT)
+	$(TEST_BUILD_DIR)/test_board_indicator$(HOST_EXEEXT)
+	$(TEST_BUILD_DIR)/test_remote_receive$(HOST_EXEEXT)
 	$(TEST_BUILD_DIR)/test_bench_controller$(HOST_EXEEXT)
 	$(foreach test,$(ROUTE_TESTS),"$(test)" && ) echo motor routing tests passed
 
@@ -235,11 +227,25 @@ define ROUTE_TEST_RULE
 $(TEST_BUILD_DIR)/route_$(1)$(HOST_EXEEXT): $(ROUTE_SOURCES) $(wildcard application/*.h) Makefile | $(TEST_BUILD_DIR)/
 	$(HOST_CC) -std=c11 -Wall -Wextra -Werror -Iapplication -DTEST_MOTOR_ENABLE=1 -DBENCH_MOTOR_INDEX=$(2) $(3) $(ROUTE_SOURCES) -lm -o $$@
 endef
-$(foreach n,0 1 2 3 4 5,$(eval $(call ROUTE_TEST_RULE,$(n),$(n),)))
+$(foreach n,0 1 2 3 4 5,$(eval $(call ROUTE_TEST_RULE,$(n),$(n),-DBENCH_CAN_BUS=0 -DBENCH_CAN_ID=0 -DBENCH_RX_ID=-1)))
 $(eval $(call ROUTE_TEST_RULE,joint,0,-DBENCH_CAN_BUS=2 -DBENCH_CAN_ID=5 -DBENCH_RX_ID=0x15 -DTEST_CUSTOM_JOINT))
-$(eval $(call ROUTE_TEST_RULE,wheel,4,-DBENCH_CAN_BUS=2 -DBENCH_RX_ID=0x204 -DTEST_CUSTOM_WHEEL))
+$(eval $(call ROUTE_TEST_RULE,wheel,4,-DBENCH_CAN_BUS=2 -DBENCH_CAN_ID=0x200 -DBENCH_RX_ID=0x204 -DTEST_CUSTOM_WHEEL))
 
 $(TEST_BUILD_DIR)/test_bench_controller$(HOST_EXEEXT): tests/test_bench_controller.c tests/bench_controller.c $(wildcard tests/*.h) $(wildcard application/*.h) Makefile | $(TEST_BUILD_DIR)/
 	$(HOST_CC) -std=c11 -Wall -Wextra -Werror -Iapplication -Itests $(filter %.c,$^) -lm -o $@
 
+$(TEST_BUILD_DIR)/test_remote_receive$(HOST_EXEEXT): tests/test_remote_receive.c application/remote_control.c application/chassis_protocol.c application/chassis_motor_config.c $(wildcard application/*.h) $(wildcard tests/remote_stubs/*.h) Makefile | $(TEST_BUILD_DIR)/
+	$(HOST_CC) -std=c11 -Wall -Wextra -Werror -Itests/remote_stubs -Iapplication $(filter %.c,$^) -lm -o $@
+
+$(TEST_BUILD_DIR)/test_board_indicator$(HOST_EXEEXT): tests/test_board_indicator.c boards/board_indicator.c boards/board_indicator.h $(wildcard application/*.h) tests/indicator_stubs/main.h Makefile | $(TEST_BUILD_DIR)/
+	$(HOST_CC) -std=c11 -Wall -Wextra -Werror -Itests/indicator_stubs -Iboards -Iapplication $(filter %.c,$^) -o $@
+
 -include $(DEPS)
+
+OUTPUT_TEST_SOURCES := tests/test_chassis_output.c application/chassis_safety.c application/chassis_protocol.c application/chassis_motor_config.c
+define OUTPUT_TEST_RULE
+$(TEST_BUILD_DIR)/output_$(1)$(HOST_EXEEXT): $(OUTPUT_TEST_SOURCES) Task/chassis_task.c Task/chassis_task.h $(wildcard application/*.h) $(wildcard tests/chassis_stubs/*.h) Makefile | $(TEST_BUILD_DIR)/
+	$(HOST_CC) -std=c11 -Wall -Wextra -Werror -Itests/chassis_stubs -Iapplication -DTEST_MOTOR_ENABLE=$(2) $(OUTPUT_TEST_SOURCES) -lm -o $$@
+endef
+$(eval $(call OUTPUT_TEST_RULE,bench,1))
+$(eval $(call OUTPUT_TEST_RULE,default,0))

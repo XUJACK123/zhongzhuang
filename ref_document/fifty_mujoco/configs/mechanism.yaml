@@ -43,6 +43,27 @@ meta:
     audit_report: "reports/step_geometry_audit.json"
     audit_command: "python tools/step_audit_standalone.py --step <STEP>"
     document: "docs/STEP_GEOMETRY_AUDIT.md"
+  # URDF remains authoritative for frames and axial offsets. A 3D body-origin
+  # norm is NOT a planar lever length. Project perpendicular to the hinge axis.
+  link_length_authority:
+    decision: urdf
+    interpretation: perpendicular_to_hinge_axis
+    source_urdf: ../../solidwork_graph/fifty_version_training/urdf/fifty_training.urdf
+    source: "training URDF joint origins/axes; projection checked by mechanism/resolve.py"
+    lengths:
+      thigh_m: 0.210000
+      shin_m: 0.250000
+    axial_offsets_m:
+      right: { thigh: 0.0114999999999869, shin: -0.0445999999999935 }
+      left: { thigh: 0.0120455339059333, shin: -0.0525499999999913 }
+    axial_offset_frame: "signed along the parent hinge local +Z; not base-frame Y"
+    adjustment_member: null
+    adjustment_reason: "CAD and URDF planar lengths agree; preserve all CAD pins and the 96.600 mm end link"
+    withdrawn_interpretation:
+      thigh_m: 0.210315
+      shin_m: 0.253947
+      end_link_mm: 96.242965701
+      reason: "3D origin distances included axial offsets and were incorrectly used as planar lengths"
 
 # ---------------------------------------------------------------------------
 # Pivot nodes, in the shared planar datum, millimetres.
@@ -242,36 +263,36 @@ bodies:
     status: cad_extracted
     source: "the hip axis is common to the chassis bracket and both driven sprockets"
   thigh:
-    nodes: [HIP, KNEE, END_PIN_A]
-    status: candidate_inferred
+    nodes: [HIP, KNEE, LINK_PIN_A]
+    status: cad_confirmed
     evidence:
       - "HIP-KNEE is the thigh plate G01"
-      - "END_PIN_A shares no part with the thigh plate in the audit; the assignment is inferred from KNEE-END_PIN_A = 67.0 mm = ternary_a_c, which closes the parallelogram"
-    confirm_in_cad: "is the end-link pin carried by the thigh plate?"
+      - "both thigh plates carry a coaxial Ø35 seat at LINK_PIN_A (step audit §6.8)"
+      - "2026-10-30: operator read the assembly mate in SolidWorks - the A pin is fixed on the thigh"
   shin:
-    nodes: [KNEE, LINK_PIN_A, WHEEL]
-    status: candidate_inferred
+    nodes: [KNEE, END_PIN_A, WHEEL]
+    status: cad_confirmed
     evidence:
       - "KNEE-WHEEL is the shin plate G02"
-      - "LINK_PIN_A shares no part with the shin plate in the audit; inferred from KNEE-LINK_PIN_A = 96.6 mm = end_link"
-    confirm_in_cad: "is the ternary link pivot carried by the shin plate?"
+      - "the shin plate carries a coaxial Ø24 seat at END_PIN_A and no bore at LINK_PIN_A (step audit §6.8)"
+      - "2026-10-30: follows from the A-pin mate read in SolidWorks"
   crank:
     nodes: [HIP, CRANK_PIN]
-    status: candidate_inferred
+    status: cad_confirmed
     evidence:
       - "小腿出轴 has a 38.5 mm bore on the hip axis and a 15.0 mm bore at CRANK_PIN"
-      - "the two driven sprockets sit on the hip axis, so the second motor turns a body coaxial with the hip"
-    confirm_in_cad: "which sprocket is rigidly connected to 小腿出轴, and is the crank angle relative to the thigh or to the ground?"
+      - "both DM-8009 sit on 髋关节大铝件, i.e. on the chassis frame, so the crank is turned in the ground frame"
+      - "2026-10-31 operator: rotating the thigh swings thigh AND shin (the loop closes); moving the shin alone turns one motor only -> crank angle is ground-referenced"
   push_rod:
     nodes: [CRANK_PIN, ROD_PIN]
-    status: candidate_inferred
+    status: cad_extracted
     evidence: ["前推杆 has bores at exactly these two nodes (G03)"]
     confirm_in_cad: "rod end type (spherical or plain) and its free rotation"
   ternary:
     nodes: [ROD_PIN, LINK_PIN_A, LINK_PIN_C]
     status: cad_extracted
     evidence: ["三孔件 G05/G06/G07 close the triangle 135.0 / 67.0 / 200.509609"]
-    confirm_in_cad: "none for the shape; only the carrier of LINK_PIN_A is open"
+    confirm_in_cad: "none - the A-pin carrier is settled (cad_confirmed on the thigh)"
   end_link:
     nodes: [END_PIN_A, LINK_PIN_C]
     status: cad_extracted
@@ -293,26 +314,69 @@ topology:
     tolerance_mm: 0.001
   # The chain itself: 8 nodes, 7 bodies, revolute joints only.
   chain:
-    status: candidate_inferred
+    status: confirmed_fixed_link
     dof: 2
     driven_by: [hip motor (thigh vs ground), knee motor (crank about the hip axis)]
     loops: 2
-    use_inferred_topology: false
-    selected_variant: unconfirmed
+    use_inferred_topology: true
+    #: 2026-10-30: confirmed in SolidWorks by the operator - the LINK_PIN_A pin is
+    #: fixed on the thigh plate. The STEP audit independently found a coaxial bore
+    #: in both thigh plates and none in the shin plate (§6.8), and only this
+    #: variant closes the whole +/-0.15 rad grid (961/961 vs 526/961).
+    selected_variant: link_a_on_thigh
+    selected_variant_evidence:
+      cad_mate: "operator read the assembly mate in SolidWorks, 2026-10-30"
+      step_geometry: "geometry.pin_carriers: LINK_PIN_A -> thigh plates, END_PIN_A -> shin plate"
+      feasible_set: "mechanism-check: link_a_on_thigh closes 961/961 poses, link_a_on_shin 526/961"
+    geometry_supports: link_a_on_thigh
+    geometry_supports_evidence:
+      LINK_PIN_A:
+        thigh: ["大腿镜像_默认", "【碳板】18mm-大腿-V2-镜像_默认"]
+        shin: []
+        corroborating:
+          - "【复用交C件】节点轴承座_默认 (r=11.5, 8 coaxial bores at x=158.9)"
+          - "【深沟球轴承】F688_默认 (r=8.0)"
+          - "【尼龙-机加工】腿限位_默认 (r=17.6)"
+      END_PIN_A:
+        thigh: []
+        shin: ["【碳板】15mm-小腿_默认"]
+        corroborating: ["【6.8】小腿传动末端连杆_默认", "轮腿镜像_默认"]
     reason_for_default_off: >-
-      a candidate body assignment is not a verified topology; anything that
-      builds a controller, a Jacobian or a MJCF from it must opt in explicitly,
-      and the result stays labelled provisional
+      superseded on 2026-10-30: the A-pin mate was read in SolidWorks, so the body
+      assignment is no longer inferred. Kept for the record - anything built from
+      the chain still passes through `topology_gate`, which now lets it through.
     confirm_in_cad:
-      - "which part carries END_PIN_A and LINK_PIN_A"
-      - "crank angle reference: thigh or ground"
       - "rotation direction and zero of both motors"
       - "joint stops and the real feasible set (robot.yaml limits are provisional boxes)"
+    drive_train:
+      status: cad_confirmed
+      source: "operator read the mates in SolidWorks, 2026-10-31"
+      motors:
+        - product: "【电机】DM-8009"
+          count: 4
+          mounted_on: "【复用交C件】髋关节大铝件 (chassis frame, does not rotate with the leg)"
+          drive: "thigh (2) and crank (2), one each per leg"
+        - product: "MOTOR_M3508_MKIV_III (with its own reducer)"
+          count: 2
+          mounted_on: "wheel, directly"
+          drive: "wheel"
+      chain_drive:
+        driving_teeth: 16
+        driven_teeth: 19
+        ratio: 1.1875
+        chain_pitch_mm: 12.7
+        status: confirmed
+        evidence: "tooth seats counted from geometry; both sprockets imply the same 1/2 in pitch"
+      note: >-
+        the #NW_GEARBOX_MKIV_III planetary is present in the CAD (14.88:1, carrier
+        fixed, ring output) but the operator states the wheel is driven by the
+        M3508's own reducer with no gearbox in between, so the MK4 parts are not
+        in the wheel power path.
     # Two assignments fit the same eight pivots and the same fourteen lengths.
     # They differ only in which body carries LINK_PIN_A and END_PIN_A, and they
-    # are not equivalent: see `mechanism-check`, which reports how much of a
-    # +/-0.15 rad grid each one closes. `selected_variant: unconfirmed` is the
-    # honest state until the CAD mates are read.
+    # are not equivalent: `link_a_on_thigh` closes the whole +/-0.15 rad sweep,
+    # `link_a_on_shin` closes 526/961. On 2026-10-30 the A-pin mate was read in
+    # SolidWorks -> `link_a_on_thigh` is the real one, so it is now the selection.
     variants:
       - name: link_a_on_shin
         bodies:
@@ -337,33 +401,66 @@ topology:
           three-hole link pivots on the thigh, so the chain is
           crank -> push rod -> ternary -> end link -> shin pin
   gas_spring:
-    status: pending
-    blocked_by: "G08 pin distance is a cross-part measurement; both spring cylinders live in parts that do not share the planar datum"
+    status: confirmed_endpoints_approximate_specification
+    pin_axis_offset_mm: 11.0
+    distance_metric: spatial_pin_center_distance
+    endpoints:
+      upper: { body: thigh, part: "【复用交C件】上部弹簧套_默认", point_yz_mm: [26.521227636, -24.158015360] }
+      lower: { body: shin, part: "【复用交C件】下部弹簧套_默认", point_yz_mm: [-120.869023913, 102.965816698] }
+    evidence:
+      - "operator: upper seat on the thigh plate, lower on the shin plate, 2026-10-31"
+      - "cylinder scan: the upper pin is coaxial with both thigh plates and no shin plate"
+      - "cylinder scan: the lower pin is coaxial with the shin plate and no thigh plate"
+    pin_distance_at_assembly_mm: 194.9496
+    # 2026-10-31: the two clevis pins are parallel to X but sit 11.000 mm apart
+    # along it (step_audit drive_train.gas_spring.pin_to_pin.perpendicular_mm),
+    # so the physical pin-centre distance is sqrt(planar^2 + 11^2) and the stroke
+    # must be judged on that number, not on the YZ projection.
+    pin_axis_offset_mm: 11.000
+    integration_pending: >-
+      endpoints are confirmed; use the accepted approximate 250 mm free length,
+      75 mm stroke and 450 N nominal force. Geometry is now spatial (11 mm axial
+      separation). The old runtime still uses reference_300n anchors and forces;
+      real-spring integration belongs to the future closed-chain model.
   free_ends:
     - node: LINK_PIN_A
-      note: "third hole of the ternary link; carrier unknown (only the ternary link itself has this bore in the audit)"
+      status: cad_confirmed
+      note: >-
+        third hole of the ternary link. 2026-10-30: a full-cylinder scan found the
+        pin coaxial with both thigh plates, a node bearing block, an F688 bearing
+        and the nylon leg limit stop, and the operator read the mate in SolidWorks
+        (link fixed on the thigh) - see topology.chain.geometry_supports_evidence.
     - node: END_PIN_A
-      note: "second hole of the end link; carrier unknown"
+      status: cad_confirmed
+      note: >-
+        second hole of the end link. 2026-10-30: coaxial with the shin plate only,
+        no thigh bore - consistent with link_a_on_thigh.
 
 # ---------------------------------------------------------------------------
 # Known-unknowns, kept next to the geometry so nobody has to rediscover them.
 unknowns:
   gas_spring_pin_distance:
-    status: pending
-    blocked_by: "cross-part distance needs a verified assembly transform"
-    note: "the audit reports unmeasured_cross_part; the old 227.72 mm must not be reused"
+    status: resolved
+    note: >-
+      194.9496 mm pin to pin at the assembly pose, from the two 弹簧套 bores; the
+      endpoints are confirmed (upper on the thigh plate, lower on the shin plate).
+      Specification precision, force curve and runtime integration remain open.
   joint_zeros:
     status: pending
     note: "robot.yaml default_angles are an asset convention, not an encoder zero"
   joint_directions:
     status: pending
-    note: "positive rotation direction of every joint is unknown"
+    note: "simulation directions are defined in joint_conventions.yaml; hardware wiring/encoder directions remain deployment work"
   feasible_range:
     status: pending
     note: "robot.yaml limits are provisional boxes around the assembly pose, not the closed-chain feasible set"
   mass_and_inertia:
-    status: pending
-    blocked_by: "the STEP file carries no MASS_DENSITY / PROPERTY_DEFINITION"
+    status: adopted_by_user
+    note: "use existing source masses/inertias; preserve grouping and transforms during future model integration"
   spring_stroke_and_force_curve:
-    status: pending
-    blocked_by: "only the part name 1BKB0.45-75 is known; see configs/gas_spring.yaml"
+    status: approximate_specification_accepted
+    note: >-
+      450 N nominal, approximately 250 mm free length, 75 mm stroke are adopted.
+      A constant 450 N baseline is permitted for the first new-model run when
+      explicitly labelled approximate. A measured force curve is a later refinement,
+      not a prerequisite for this offline numerical correction.

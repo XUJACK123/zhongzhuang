@@ -102,10 +102,21 @@ baseline:
     default: 5
     implemented_by: "--checkpoint-keep"
   stop_on_survive:
-    value: 2
+    value: 0
     default: 0
     implemented_by: "--stop-on-survive"
-    note: "0 disables early stop; the baseline wants two consecutive successes"
+    note: >-
+      off for this round (progress.md §23.6 item 5): a 6 s window saturates by
+      construction, so its median cannot certify standing.  Acceptance is the
+      independent 64 x 60 s `evaluate-stand`, and the gate refuses to count a
+      window shorter than 60 s even when the flag is on.
+  stand_command:
+    value: true
+    default: false
+    implemented_by: "--stand-command"
+    note: >-
+      stage 1 is standing: hold vx=0, wz=0 and h=h0 instead of resampling the
+      motion commands from `WarpEnvOptions.command_ranges`
   updates_budget:
     value: 1500
     default: 100000

@@ -50,6 +50,8 @@
 
 ## 3. 待获取数据，按优先级
 
+以下保留参数采集清单，不能全部视为开训阻塞项。最新用户约定：沿用当前质量、惯量、受载轮半径和轮距；六路型号、连接与弹簧近似规格已有记录。仿真坐标可自行约定，真实编码器零位留待部署。开训顺序以 progress.md §25 为准。
+
 来源：`progress.md` §10.2。
 
 | 优先级 | 数据 | 为什么需要 | 获取方式 |
@@ -67,37 +69,55 @@
 | P2 | 胎面与场地摩擦、滚动阻力 | 改善接触与防打滑 | §6 的测力流程 |
 | P2 | 间隙、弹性、温升、批次差异 | 后续鲁棒性与域随机化 | 多次重复实验 |
 
-## 4. 电机通道表（待填）
+## 4. 电机通道表
 
 `progress.md` §10.6。每行记录一份来源；同一通道有多次测量时分行记录，不要取平均后只留一个数。
+型号与安装归属来自 STEP（`docs/STEP_GEOMETRY_AUDIT.md` §6.6），**通道 A/B 的对应、减速比、
+力矩与速度限制仍待 SolidWorks 配合与型号资料**。
 
 | 通道 | 型号/控制模式 | 总减速比 | 输出角零位/方向 | 连续/峰值 N·m | 速度限制 rad/s | 数据来源 |
 |---|---|---|---|---|---|---|
-| 右主动腿电机 A | 待填 | 待填 | 待填 | 待填 | 待填 | 待填 |
-| 右主动腿电机 B | 待填 | 待填 | 待填 | 待填 | 待填 | 待填 |
-| 右轮 | 待填 | 待填 | 待填 | 待填 | 待填 | 待填 |
-| 左主动腿电机 A | 待填 | 待填 | 待填 | 待填 | 待填 | 待填 |
-| 左主动腿电机 B | 待填 | 待填 | 待填 | 待填 | 待填 | 待填 |
-| 左轮 | 待填 | 待填 | 待填 | 待填 | 待填 | 待填 |
+| 右主动腿电机 A | `DM-8009`（固定在髋关节大铝件；4 实例中 A/B 归属待标定） | **1.1875**（16→19 齿链） | 曲柄角为**地面参考**，零位待标定 | 待填 | 待填 | STEP + 操作者确认 |
+| 右主动腿电机 B | `DM-8009`（同上） | **1.1875** | 大腿角，零位待标定 | 待填 | 待填 | 同上 |
+| 右轮 | `M3508` 自带减速器，**直接驱动轮**（无 Mk4 齿轮箱） | 待填（M3508 规格） | 待填 | 待填 | 待填 | 操作者确认 |
+| 左主动腿电机 A | `DM-8009`（同上） | **1.1875** | 待填 | 待填 | 待填 | 同上 |
+| 左主动腿电机 B | `DM-8009`（同上） | **1.1875** | 待填 | 待填 | 待填 | 同上 |
+| 左轮 | `M3508` 自带减速器（同上） | 待填（M3508 规格） | 待填 | 待填 | 待填 | 同上 |
 
-## 5. 气弹簧表（待填）
+> 链轮齿数 16/19（主动/从动）与 12.7 mm 链节距由几何数出并用标准节距验证；
+> Mk4 行星齿轮箱（行星架固定、内齿圈输出、14.88:1）存在于模型但**不在轮驱动链上**。
+
+> STEP 侧的"实装数量"是沿父链相乘得到的（电机在齿轮箱里只写一条 NAUO，齿轮箱被实例化两次）。
+> 按零件名直接数实例会把装配体、齿轮零件和云台 Pitch 的两个 M3508 一起算进来，
+> 见 `docs/STEP_GEOMETRY_AUDIT.md` §6.6 的排除表。
+
+## 5. 气弹簧表
 
 `progress.md` §9.1。左右两侧分开填，因为它们可能装在不同姿态下。
 
 | 字段 | 左 | 右 |
 |---|---|---|
-| endpoint_A_body / endpoint_B_body | 待填 | 待填 |
-| endpoint_A_local_m / endpoint_B_local_m | 待填 | 待填 |
-| 销轴方向、是否球头 | 待填 | 待填 |
-| 型号 | 待填 | 待填 |
-| 安装长度 m（对应某个明确姿态） | 待填 | 待填 |
-| min / max 长度 m | 待填 | 待填 |
-| 参考力 N（含参考长度、温度） | 待填 | 待填 |
+| endpoint_A_body / endpoint_B_body | **大腿板 / 小腿板**（已确认） | 同左 |
+| endpoint_A_local_m / endpoint_B_local_m | 装配姿态 YZ：(26.521, −24.158) 与 (−120.869, 102.966) mm | 同左（镜像） |
+| 销轴方向、是否球头 | 销轴沿横向 X，孔径 r = 8.0 mm | 同左 |
+| 型号 | `1BKB0.45-75` | 同左 |
+| 安装长度 m（对应某个明确姿态） | 0.194950（**装配/收腿姿态**，三维销距） | 同左 |
+| min / max 长度 m | 自由长度 **≈0.250**，最大工作行程 **0.075** | 同左 |
+| 参考力 N（含参考长度、温度） | **450（cad_confirmed，2026-10-31）** | 同左 |
 | 压缩/伸展是否不同、是否有迟滞 | 待填 | 待填 |
-| 力曲线来源（手册/测量表/假设） | 待填 | 待填 |
+| 力曲线来源（手册/测量表/假设） | 用户口述型号数据，规格表原件未到 | 同左 |
 | CPU/GPU 是否同一模型 | 待填 | 待填 |
 
-> 型号名 `1BKB0.45-75` **不能**当作 450 N / 75 mm 直接使用。
+> 型号 `1BKB0.45-75` 中的 `0.45` 已确认为 **450 N**（不是 4.5 kN）。
+>
+> 安装长度 0.194950 m 来自 `docs/STEP_GEOMETRY_AUDIT.md` §6.10：上下弹簧套销孔在同一基准下的
+> 中心距，测的是**装配（收腿）姿态**。两端归属已由操作者与全孔扫描双重确认。
+>
+> **2026-10-31 离线纠正**：按 11 mm 侧向错位计算三维销距，理想几何包络为 152.152021–249.126126 mm，跨度 96.974105 mm。75 mm 行程只覆盖其中一部分；175–250 mm 销距在正下方姿态下给出约 0.281189651–0.520 m 的高度窗口，尚未叠加机械限位、碰撞、支路和动力学约束。
+>
+> 标称销距为 **227.760939 mm**，相对约 250 mm 自由长度，**已经压缩 22.239061 mm，还能压缩 52.760939 mm**。销距变化不能直接当作基座下落高度。
+>
+> **当前运行 gas_springs 仍为旧锚点 300 N**。real_spring 只是参数记录，尚未接入。首轮允许标注假设的 450 N 常力近似；力曲线、迟滞与摩擦用于后续改进，不是当前唯一缺项。新模型还需完整动力学、初始化、接触和契约验证。
 
 ## 6. 摩擦辨识流程（需要授权与台架）
 
@@ -120,18 +140,23 @@
 value / unit / coordinate_frame_or_actuator_side
 source_file_or_log / source_hash / measurement_date / method
 uncertainty_or_valid_range
-status: provisional | cad_extracted | computed_from_points | candidate_inferred
-        datasheet | measured | validated
+status: provisional | cad_extracted | cad_confirmed | computed_from_points
+        candidate_inferred | datasheet | measured | validated
 valid_model_version
 gates_to_rerun: [P2, P4, P5, ...]
 ```
+
+`cad_confirmed`（2026-10-30 新增）表示"人在原生装配里读到的配合关系"，例如 A 销固定在大腿板上；
+它比 `cad_extracted`（解析器从文件提取的数量）多了一条人工判读，但仍**不等于** `measured`。
 
 ## 8. 与代码的连接点
 
 | 参数类别 | 落地文件 | 校验位置 |
 |---|---|---|
 | 模型/控制参数 | `configs/robot.yaml` | `tests/test_model_release.py`、`tests/test_spawn_contract.py` |
+| 关节符号/零位/轴向、参考姿态 | `configs/joint_conventions.yaml` | `tests/test_joint_conventions.py`、`fifty-mujoco joint-conventions` |
 | 弹簧 | `configs/gas_spring.yaml` | `tests/test_gas_spring.py` |
 | 平面几何与固连候选 | `configs/mechanism.yaml` | `tests/test_mechanism_config.py`、`tests/test_planar_mechanism.py` |
 | 课程/随机化/门槛 | `configs/training_stages.yaml` | `tests/test_training_stages.py` |
+| 报告索引 | `reports/index.json` | `tests/test_report_index.py`、`python tools/report_index.py --check` |
 | 站立门槛唯一来源 | `src/fifty_mujoco/evaluation/stand_eval.py::THRESHOLDS` | 本表与 `training_stages.yaml` 只引用键名 |

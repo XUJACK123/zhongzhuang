@@ -29,6 +29,7 @@ from fifty_mujoco.cli import GATED_COMMANDS, build_parser, main
         "evaluate-lqr",
         "step-audit",
         "mechanism-check",
+        "joint-conventions",
         "stage-plan",
         "gpu-parity",
         "export",

@@ -52,8 +52,31 @@ def test_source_hashes_unchanged(config, audit_report):
     for entry in audit_report["meshes"].values():
         assert entry["recorded_sha256_matches"]
         assert entry["recorded_triangles_matches"]
-    # Re-hash directly, independent of the report.
-    assert stl.sha256(config.source_urdf) == audit_report["sources"]["source_urdf"]["sha256"]
+    # Re-hash directly, independent of the report. The URDFs are text, so the
+    # comparison normalises CRLF: a Windows checkout with core.autocrlf=true
+    # must not look like an edited source (see stl.sha256_text).
+    assert (
+        stl.sha256_text(config.source_urdf)
+        == audit_report["sources"]["source_urdf"]["sha256"]
+    )
+
+
+def test_text_hashes_ignore_line_endings(tmp_path):
+    """The CRLF/LF difference alone must not change a text hash."""
+    lf = tmp_path / "a.urdf"
+    crlf = tmp_path / "b.urdf"
+    lf.write_bytes(b"<robot>\n  <link/>\n</robot>\n")
+    crlf.write_bytes(b"<robot>\r\n  <link/>\r\n</robot>\r\n")
+    assert stl.sha256(lf) != stl.sha256(crlf)
+    assert stl.sha256_text(lf) == stl.sha256_text(crlf)
+
+
+def test_text_hashes_still_detect_real_edits(tmp_path):
+    original = tmp_path / "a.urdf"
+    edited = tmp_path / "b.urdf"
+    original.write_bytes(b"<robot>\n  <link name='a'/>\n</robot>\n")
+    edited.write_bytes(b"<robot>\n  <link name='b'/>\n</robot>\n")
+    assert stl.sha256_text(original) != stl.sha256_text(edited)
 
 
 def test_missing_inputs_are_listed(config, audit_report):

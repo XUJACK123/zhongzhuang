@@ -1,0 +1,43 @@
+{
+  "tool": "closed-mjcf",
+  "schema": 1,
+  "claim": "the closed chain compiles, both loops close at the assembly pose, and the total mass equals the serial asset; it is a kinematic skeleton, not the training model",
+  "model": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\fifty_mujoco\\assets\\mjcf\\fifty_closed_skeleton.xml",
+  "nq": 21,
+  "nv": 20,
+  "nu": 6,
+  "neq": 4,
+  "nbody": 16,
+  "total_mass_kg": 23.259600000000002,
+  "expected_mass_kg": 23.259600000000002,
+  "loop_residual_m": {
+    "right:ternary.LINK_PIN_A->thigh.LINK_PIN_A": 1.3877787807814457e-17,
+    "right:end_link.END_PIN_A->shin.END_PIN_A": 1.1102230246251565e-16,
+    "left:ternary.LINK_PIN_A->thigh.LINK_PIN_A": 1.3877787807814457e-17,
+    "left:end_link.END_PIN_A->shin.END_PIN_A": 1.1102230246251565e-16
+  },
+  "worst_loop_residual_m": 1.1102230246251565e-16,
+  "leg_lengths": {
+    "right": {
+      "thigh_m": 0.21031499999999995,
+      "shin_m": 0.253947,
+      "chord_m": 0.30306967923537714
+    },
+    "left": {
+      "thigh_m": 0.21031499999999995,
+      "shin_m": 0.253947,
+      "chord_m": 0.30306967923537714
+    }
+  },
+  "dof_after_loops": 12,
+  "passive_joints": [
+    "r_knee_Joint",
+    "r_pushrod_Joint",
+    "r_ternary_Joint",
+    "r_endlink_Joint",
+    "l_knee_Joint",
+    "l_pushrod_Joint",
+    "l_ternary_Joint",
+    "l_endlink_Joint"
+  ]
+}

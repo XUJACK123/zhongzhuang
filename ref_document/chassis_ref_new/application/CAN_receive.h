@@ -11,6 +11,16 @@ typedef struct
     motor_feedback_t motor[CHASSIS_MOTOR_COUNT];
 } motor_can_snapshot_t;
 
+/* 调试观测值，不参与控制判定。 */
+typedef struct
+{
+    uint32_t rx_frame_count; /* 自启动以来收到的所有 CAN 帧数。 */
+    uint32_t last_rx_id;     /* 最近一帧的 11 位标识符，即使因 ID 不匹配被丢弃也会记录。 */
+    uint32_t last_rx_bus;    /* 1 = CAN1，2 = CAN2。 */
+} motor_can_debug_t;
+
+extern volatile motor_can_debug_t motor_can_debug;
+
 bool motor_can_init(void);
 void motor_can_get_snapshot(motor_can_snapshot_t *snapshot);
 bool motor_can_send_torques(const float requested_nm[CHASSIS_MOTOR_COUNT],

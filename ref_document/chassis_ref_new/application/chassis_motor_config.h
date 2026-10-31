@@ -9,18 +9,7 @@
 #ifndef TEST_MOTOR_ENABLE
 #define TEST_MOTOR_ENABLE 0
 #endif
-#ifndef BENCH_MOTOR_INDEX
-#define BENCH_MOTOR_INDEX 0
-#endif
-#ifndef BENCH_CAN_BUS
-#define BENCH_CAN_BUS 0 /* 0：使用映射表中的总线。 */
-#endif
-#ifndef BENCH_CAN_ID
-#define BENCH_CAN_ID 0 /* 0：使用映射表中的命令 ID。轮电机固定为 0x200。 */
-#endif
-#ifndef BENCH_RX_ID
-#define BENCH_RX_ID (-1) /* -1：使用映射表中的反馈 ID。Master ID 可独立设为 0。 */
-#endif
+#include "bench_config.h"
 
 #if TEST_MOTOR_ENABLE && (BENCH_MOTOR_INDEX < 0 || BENCH_MOTOR_INDEX > 5)
 #error "BENCH_MOTOR_INDEX must be 0..5"
@@ -43,7 +32,7 @@
 #define CHASSIS_DM_SPEED_MAX 45.0f
 #define CHASSIS_DM_TORQUE_MAX 54.0f
 #define CHASSIS_BENCH_JOINT_LIMIT_NM 1.0f
-#define CHASSIS_BENCH_WHEEL_LIMIT_NM 0.20f
+#define CHASSIS_BENCH_WHEEL_LIMIT_NM 0.60f
 
 typedef struct
 {

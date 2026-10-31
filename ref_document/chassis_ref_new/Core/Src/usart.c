@@ -28,7 +28,7 @@ void MX_UART5_Init(void)
     huart5.Init.BaudRate = 100000;
     /* 8 个数据位加 1 个偶校验位，在 STM32 HAL 中使用 9B 字长。 */
     huart5.Init.WordLength = UART_WORDLENGTH_9B;
-    huart5.Init.StopBits = UART_STOPBITS_1;
+    huart5.Init.StopBits = UART_STOPBITS_2; /* 与 HKU_Balancing_2026 的 UART5 配置一致。 */
     huart5.Init.Parity = UART_PARITY_EVEN;
     huart5.Init.Mode = UART_MODE_RX;
     huart5.Init.HwFlowCtl = UART_HWCONTROL_NONE;

@@ -38,7 +38,7 @@ typedef struct
     uint32_t imu_age_ms;
     uint32_t command_age_ms;
     uint32_t command_sequence;
-    uint8_t switch_left;
+    uint8_t switch_left; /* 历史内部字段名：传入 S1 / HKU s[0] / 右拨杆。 */
     bool dbus_valid;
     bool motors_valid;
     bool imu_valid;

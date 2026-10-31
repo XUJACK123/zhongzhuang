@@ -85,6 +85,54 @@ def main(argv: list[str] | None = None) -> int:
             y, z = node["point_mm"]
             parts = ", ".join(part["part"] for part in node["parts"][:4])
             print(f"  YZ=({y:9.3f}, {z:9.3f})  parts={node['part_count']:<2}  {parts}")
+    drive = report.get("drive_train") or {}
+    if drive:
+        print(f"drive     : {drive['motor_count']} drive motors inside a "
+              f"{drive['module_assembly']} module "
+              f"({len(drive['excluded_motors'])} more name matches elsewhere)")
+        for motor in drive["motors"]:
+            print(f"  {motor['count']:2d} x {motor['product'][:44]}")
+            for placement in motor["placements"]:
+                moment = placement.get("translation_mm") or [0.0, 0.0, 0.0]
+                print(f"       {placement['instance']:8s} parent={placement['parent'][:26]:26s} "
+                      f"t=({moment[0]:8.2f},{moment[1]:8.2f},{moment[2]:8.2f})")
+        spring = drive.get("gas_spring") or {}
+        pins = spring.get("pin_to_pin") or {}
+        if pins:
+            print(f"spring    : pin-to-pin {pins['center_distance_mm']:.3f} mm "
+                  f"(along axis {pins['along_spring_axis_mm']:.3f}, "
+                  f"off axis {pins['perpendicular_mm']:.3f}) [{spring['status']}]")
+        else:
+            print(f"spring    : {spring.get('status')} (no pin pair measured)")
+        gearbox = drive.get("gearbox") or {}
+        ratio = gearbox.get("ratio") or {}
+        arrangements = ratio.get("arrangements") or []
+        if arrangements:
+            best = arrangements[0]
+            print(f"gearbox   : Z_sun {ratio['sun_teeth']} (derived), planets "
+                  f"{gearbox['planet_teeth']}, ring {gearbox['ring_teeth']} -> "
+                  f"{best['ring_fixed_carrier_output']:.2f}:1 ring fixed / "
+                  f"{best['carrier_fixed_ring_output']:.2f}:1 carrier fixed "
+                  f"[{ratio['status']}]")
+        else:
+            print(f"gearbox   : {gearbox.get('status')} (ratio not derived)")
+        sprockets = drive.get("sprocket_train") or {}
+        for entry in sprockets.get("drives") or []:
+            if entry.get("ratio") is None:
+                print(f"chain     : {entry['body']:5s} incomplete "
+                      f"(driving {entry.get('driving_teeth')}, "
+                      f"driven {entry.get('driven_teeth')})")
+                continue
+            print(f"chain     : {entry['body']:5s} {entry['driving_teeth']}T -> "
+                  f"{entry['driven_teeth']}T  ratio {entry['ratio']:.4f} "
+                  f"[{entry['status']}]")
+        wheel = drive.get("wheel_drive") or {}
+        if wheel:
+            print(f"wheel     : {wheel.get('motor')} "
+                  f"[gearbox in path: {wheel.get('gearbox_in_path')}, "
+                  f"{wheel.get('status')}]")
+            print(f"crank ref : {wheel.get('crank_reference')} "
+                  f"(evidence in the JSON report)")
     print(f"status    : {report['status']}")
     print(f"report    : {out}")
     return 0

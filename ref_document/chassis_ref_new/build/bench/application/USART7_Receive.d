@@ -1,7 +1,8 @@
 build/bench/application/USART7_Receive.o: application/USART7_Receive.c \
  application/USART7_Receive.h Task/chassis_task.h \
  application/CAN_receive.h application/chassis_protocol.h \
- application/chassis_motor_config.h Task/INS_task.h Core/Inc/main.h \
+ application/chassis_motor_config.h application/bench_config.h \
+ Task/INS_task.h Core/Inc/main.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h \
  Core/Inc/stm32h7xx_hal_conf.h \
  Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc.h \
@@ -48,12 +49,14 @@ build/bench/application/USART7_Receive.o: application/USART7_Receive.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
  application/chassis_protocol.h application/chassis_safety.h \
  application/remote_control.h Core/Inc/usart.h Core/Inc/main.h \
- tests/bench_motor_test.h tests/bench_controller.h
+ tests/bench_motor_test.h tests/bench_controller.h \
+ application/bench_config.h
 application/USART7_Receive.h:
 Task/chassis_task.h:
 application/CAN_receive.h:
 application/chassis_protocol.h:
 application/chassis_motor_config.h:
+application/bench_config.h:
 Task/INS_task.h:
 Core/Inc/main.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -108,3 +111,4 @@ Core/Inc/usart.h:
 Core/Inc/main.h:
 tests/bench_motor_test.h:
 tests/bench_controller.h:
+application/bench_config.h:

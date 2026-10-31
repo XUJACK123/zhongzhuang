@@ -7,12 +7,7 @@
       "command": "make",
       "args": [
         "-j32",
-        "TEST_MOTOR=1",
-        "BENCH_MOTOR=${input:benchMotor}",
-        "BENCH_CAN_BUS=${input:benchBus}",
-        "BENCH_CAN_ID=${input:benchTx}",
-        "BENCH_RX_ID=${input:benchRx}",
-        "BENCH_TARGET_DEG=${input:benchAngle}"
+        "TEST_MOTOR=1"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -102,51 +97,6 @@
       ],
       "dependsOn": "make: default",
       "problemMatcher": []
-    }
-  ],
-  "inputs": [
-    {
-      "id": "benchMotor",
-      "type": "pickString",
-      "description": "选择电机通道（LF/LR/RF/RR=关节，LW/RW=3508）",
-      "options": [
-        "LF",
-        "LR",
-        "RF",
-        "RR",
-        "LW",
-        "RW"
-      ],
-      "default": "LF"
-    },
-    {
-      "id": "benchBus",
-      "type": "pickString",
-      "description": "CAN 总线：0 使用映射表，1/2 指定总线",
-      "options": [
-        "0",
-        "1",
-        "2"
-      ],
-      "default": "0"
-    },
-    {
-      "id": "benchTx",
-      "type": "promptString",
-      "description": "命令 ID：0 使用映射表；关节填实际 CAN ID，3508 固定 0x200",
-      "default": "0"
-    },
-    {
-      "id": "benchRx",
-      "type": "promptString",
-      "description": "反馈 ID：-1 使用映射表；关节填 Master ID，3508 填 0x201..0x204",
-      "default": "-1"
-    },
-    {
-      "id": "benchAngle",
-      "type": "promptString",
-      "description": "相对转角（度），默认 5；负数反向，最大绝对值 15",
-      "default": "5"
     }
   ]
 }

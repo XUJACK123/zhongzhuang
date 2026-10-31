@@ -100,7 +100,7 @@ void chassis_task(void const *argument)
     TickType_t wake_time;
     chassis_safety_t safety;
     bool can_tx_ok;
-    bool down_was_active = false;
+    bool init_was_active = false;
     float applied_nm[CHASSIS_MOTOR_COUNT] = {0};
 
     (void)argument;
@@ -125,20 +125,23 @@ void chassis_task(void const *argument)
         remote_control_get_snapshot(&remote);
         const uint32_t now_ms = HAL_GetTick(); /* 采样之后取时间，避免 ISR 更新造成负年龄。 */
 
-        const bool down_active = remote.valid &&
-                                 age_ms(now_ms, remote.update_time_ms) <= CHASSIS_DBUS_TIMEOUT_MS &&
-                                 remote.frame.switch_left == RC_SWITCH_DOWN;
-        if (down_active)
+        const bool remote_online = remote.valid &&
+            age_ms(now_ms, remote.update_time_ms) <= CHASSIS_DBUS_TIMEOUT_MS;
+#if TEST_MOTOR_ENABLE
+        /* 台架上档即开始初始化，不再要求先下档解锁。 */
+        const bool init_active = remote_online && remote.frame.switch_right == RC_SWITCH_UP;
+#else
+        const bool init_active = remote_online && remote.frame.switch_right == RC_SWITCH_DOWN;
+#endif
+        if (init_active)
         {
-            if (!down_was_active)
-            {
-                /* 每次由操作者重新进入下档时，只开启一轮有限次数的初始化。 */
-                motor_can_joint_init_reset();
-            }
+            if (!init_was_active) motor_can_joint_init_reset();
+#if !TEST_MOTOR_ENABLE
             chassis_stop();
+#endif
             (void)motor_can_joint_init_step(now_ms);
         }
-        down_was_active = down_active;
+        init_was_active = init_active;
         read_command(&command);
 
         const bool motors_valid = chassis_feedback_health(motors.motor, now_ms,
@@ -155,11 +158,45 @@ void chassis_task(void const *argument)
         input.command_invalid = command.invalid_latched;
         input.command_age_ms = age_ms(now_ms, command.update_time_ms);
         input.command_sequence = command.sequence;
-        input.switch_left = remote.frame.switch_left;
+        input.switch_left = remote.frame.switch_right;
         input.can_tx_ok = can_tx_ok;
         input.joints_enabled = joints_enabled;
 
-        if (chassis_safety_step(&safety, &input))
+        /* 最外层输出许可：直接核对遥控快照，不依赖测试任务提交零命令。 */
+        bool remote_permit = remote.valid &&
+            age_ms(HAL_GetTick(), remote.update_time_ms) <= CHASSIS_DBUS_TIMEOUT_MS &&
+            remote.frame.switch_right == RC_SWITCH_UP;
+#if TEST_MOTOR_ENABLE
+        /* 简化台架：只保留闭环所需的反馈、命令有效性，不锁存恢复流程。
+         * 不检查 IMU、左拨杆；遥控恢复上档后会从当前位置重新开始。 */
+        safety.fault_flags = CHASSIS_FAULT_NONE;
+        if (!remote_online) safety.fault_flags |= CHASSIS_FAULT_DBUS_TIMEOUT;
+        if (!motors_valid || motor_max_age > CHASSIS_MOTOR_TIMEOUT_MS)
+            safety.fault_flags |= CHASSIS_FAULT_MOTOR_TIMEOUT;
+        if (!joints_enabled) safety.fault_flags |= CHASSIS_FAULT_JOINT_STATUS;
+        if (!command.valid || input.command_age_ms > CHASSIS_COMMAND_TIMEOUT_MS)
+            safety.fault_flags |= CHASSIS_FAULT_COMMAND_TIMEOUT;
+        const bool safety_permit = safety.fault_flags == CHASSIS_FAULT_NONE;
+        safety.state = !remote_online ? CHASSIS_STATE_LOCKED :
+                       !remote_permit ? CHASSIS_STATE_STOPPED :
+                       safety_permit ? CHASSIS_STATE_ARMED : CHASSIS_STATE_STANDBY;
+#else
+        const bool safety_permit = chassis_safety_step(&safety, &input);
+#endif
+        if (!remote_permit || !safety_permit)
+        {
+            if (!remote_permit)
+            {
+                /* 丢弃残留运动命令；非法命令故障仍需由下档明确复位。 */
+                taskENTER_CRITICAL();
+                memset(latest_command.torque_nm, 0, sizeof(latest_command.torque_nm));
+                latest_command.valid = false;
+                taskEXIT_CRITICAL();
+            }
+            memset(applied_nm, 0, sizeof(applied_nm));
+            can_tx_ok = motor_can_send_zero(); /* 每个周期发零，不只是停止发帧。 */
+        }
+        else
         {
             if (!motor_can_send_torques(command.torque_nm, applied_nm))
             {
@@ -171,11 +208,6 @@ void chassis_task(void const *argument)
             {
                 can_tx_ok = true;
             }
-        }
-        else
-        {
-            memset(applied_nm, 0, sizeof(applied_nm));
-            can_tx_ok = motor_can_send_zero();
         }
 
         publish_feedback(&motors, &imu, &remote, applied_nm, &command, &safety, now_ms);

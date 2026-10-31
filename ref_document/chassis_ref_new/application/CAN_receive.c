@@ -33,6 +33,9 @@ static uint8_t joint_init_phase;
 static uint8_t joint_init_attempts;
 static uint32_t joint_init_next_ms;
 
+/* 调试观测：记录总线上最近一帧（无论是否被路由接受），用于核对电调实际反馈 ID。 */
+volatile motor_can_debug_t motor_can_debug;
+
 static float uint_to_float(uint32_t value, float minimum, float maximum, uint8_t bits)
 {
     return (float)value * (maximum - minimum) / (float)((1UL << bits) - 1UL) + minimum;
@@ -41,6 +44,12 @@ static float uint_to_float(uint32_t value, float minimum, float maximum, uint8_t
 static bool configure_bus(FDCAN_HandleTypeDef *bus)
 {
     FDCAN_FilterTypeDef filter = {0};
+#if defined(CAN_LOOPBACK_TEST)
+    /* 诊断用：内部回环，帧不过收发器，用于区分“FDCAN 内核问题”和“收发器/线路问题”。 */
+    bus->Init.Mode = FDCAN_MODE_INTERNAL_LOOPBACK;
+    bus->Init.AutoRetransmission = ENABLE;
+    if (HAL_FDCAN_Init(bus) != HAL_OK) return false;
+#endif
     filter.IdType = FDCAN_STANDARD_ID;
     filter.FilterIndex = 0;
     filter.FilterType = FDCAN_FILTER_MASK;
@@ -141,6 +150,9 @@ static void process_rx(FDCAN_HandleTypeDef *bus, const FDCAN_RxHeaderTypeDef *he
     uint8_t bus_number;
 
     bus_number = bus == &hfdcan1 ? 1U : (bus == &hfdcan2 ? 2U : 0U);
+    motor_can_debug.last_rx_id = header->Identifier;
+    motor_can_debug.last_rx_bus = bus_number;
+    ++motor_can_debug.rx_frame_count;
     if (header->FDFormat != FDCAN_CLASSIC_CAN ||
         !chassis_validate_can_feedback(bus_number,
                                        header->Identifier,

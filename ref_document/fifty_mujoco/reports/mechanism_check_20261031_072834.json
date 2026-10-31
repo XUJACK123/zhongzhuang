@@ -1,0 +1,298 @@
+{
+  "tool": "mechanism-check",
+  "schema": 1,
+  "generated_at": "2026-10-31T07:28:34+00:00",
+  "config": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\fifty_mujoco\\configs\\mechanism.yaml",
+  "source": {
+    "step_sha256": "ffe77c10b183a47c44bb96d829f2a1356c3d644de409979af5ab5da6bd00a055",
+    "audit_report": "reports/step_geometry_audit.json",
+    "assembly_pose": "stowed",
+    "sign_convention": "unverified"
+  },
+  "criteria": {
+    "residual_limit_m": 1e-09,
+    "source": "progress.md §20.4 item 2"
+  },
+  "topology": {
+    "use_inferred_topology": true,
+    "chain_status": "confirmed_fixed_link",
+    "dof": 2,
+    "loops": 2,
+    "confirm_in_cad": [
+      "push_rod: rod end type (spherical or plain) and its free rotation",
+      "ternary: none - the A-pin carrier is settled (cad_confirmed on the thigh)",
+      "end_link: none for the length",
+      "wheel: wheel bearing preload and rolling radius (see robot.yaml wheel_radius)",
+      "rotation direction and zero of both motors",
+      "joint stops and the real feasible set (robot.yaml limits are provisional boxes)"
+    ]
+  },
+  "static_closure": {
+    "status": "consistent",
+    "worst_error_m": 4.817118925970476e-13,
+    "tolerance_mm": 1e-06,
+    "links": [
+      {
+        "link": "thigh_hip_to_knee",
+        "between": [
+          "HIP",
+          "KNEE"
+        ],
+        "declared_mm": 210.0,
+        "from_points_mm": 210.0,
+        "error_mm": 0.0,
+        "status": "cad_extracted",
+        "reproduces": "G01"
+      },
+      {
+        "link": "shin_knee_to_wheel",
+        "between": [
+          "KNEE",
+          "WHEEL"
+        ],
+        "declared_mm": 250.0,
+        "from_points_mm": 250.0,
+        "error_mm": 0.0,
+        "status": "cad_extracted",
+        "reproduces": "G02"
+      },
+      {
+        "link": "push_rod",
+        "between": [
+          "CRANK_PIN",
+          "ROD_PIN"
+        ],
+        "declared_mm": 135.0,
+        "from_points_mm": 135.0,
+        "error_mm": 0.0,
+        "status": "cad_extracted",
+        "reproduces": "G03"
+      },
+      {
+        "link": "end_link",
+        "between": [
+          "END_PIN_A",
+          "LINK_PIN_C"
+        ],
+        "declared_mm": 96.6,
+        "from_points_mm": 96.6,
+        "error_mm": -0.0,
+        "status": "cad_extracted",
+        "reproduces": "G04"
+      },
+      {
+        "link": "ternary_a_b",
+        "between": [
+          "LINK_PIN_A",
+          "ROD_PIN"
+        ],
+        "declared_mm": 135.0,
+        "from_points_mm": 135.0,
+        "error_mm": -0.0,
+        "status": "cad_extracted",
+        "reproduces": "G05"
+      },
+      {
+        "link": "ternary_a_c",
+        "between": [
+          "LINK_PIN_A",
+          "LINK_PIN_C"
+        ],
+        "declared_mm": 67.0,
+        "from_points_mm": 67.0,
+        "error_mm": 0.0,
+        "status": "cad_extracted",
+        "reproduces": "G06"
+      },
+      {
+        "link": "ternary_b_c",
+        "between": [
+          "ROD_PIN",
+          "LINK_PIN_C"
+        ],
+        "declared_mm": 200.50961,
+        "from_points_mm": 200.50961,
+        "error_mm": -0.0,
+        "status": "cad_extracted",
+        "reproduces": "G07"
+      },
+      {
+        "link": "hip_to_crank_pin",
+        "between": [
+          "HIP",
+          "CRANK_PIN"
+        ],
+        "declared_mm": 113.4,
+        "from_points_mm": 113.4,
+        "error_mm": -0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "hip_to_link_pin_a",
+        "between": [
+          "HIP",
+          "LINK_PIN_A"
+        ],
+        "declared_mm": 113.4,
+        "from_points_mm": 113.4,
+        "error_mm": -0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "knee_to_link_pin_a",
+        "between": [
+          "KNEE",
+          "LINK_PIN_A"
+        ],
+        "declared_mm": 96.6,
+        "from_points_mm": 96.6,
+        "error_mm": -0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "knee_to_end_pin_a",
+        "between": [
+          "KNEE",
+          "END_PIN_A"
+        ],
+        "declared_mm": 67.0,
+        "from_points_mm": 67.0,
+        "error_mm": 0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "hip_to_end_pin_a",
+        "between": [
+          "HIP",
+          "END_PIN_A"
+        ],
+        "declared_mm": 213.903261,
+        "from_points_mm": 213.903261,
+        "error_mm": 0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "link_pin_a_to_wheel",
+        "between": [
+          "LINK_PIN_A",
+          "WHEEL"
+        ],
+        "declared_mm": 253.500789,
+        "from_points_mm": 253.500789,
+        "error_mm": 0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "end_pin_a_to_wheel",
+        "between": [
+          "END_PIN_A",
+          "WHEEL"
+        ],
+        "declared_mm": 315.242891,
+        "from_points_mm": 315.242891,
+        "error_mm": -0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      },
+      {
+        "link": "hip_to_wheel_chord",
+        "between": [
+          "HIP",
+          "WHEEL"
+        ],
+        "declared_mm": 300.242981,
+        "from_points_mm": 300.242981,
+        "error_mm": -0.0,
+        "status": "computed_from_points",
+        "reproduces": null
+      }
+    ],
+    "note": "static closure compares the length table with the CAD node coordinates; it is an arithmetic consistency check, not evidence that the body assignment is the real one"
+  },
+  "serial_leg": {
+    "thigh_m": 0.21,
+    "shin_m": 0.25,
+    "reach_annulus_m": [
+      0.04,
+      0.46
+    ],
+    "assembly_pose": {
+      "thigh_angle_rad": 2.429520076034,
+      "shin_angle_rad": -2.125514131326,
+      "hip_to_wheel_chord_m": 0.300242981,
+      "cad_reproduction_error_m": 3.8796344798196887e-13,
+      "inside_annulus": true,
+      "note": "angles are in the STEP planar frame; the mapping to controller zero is unknown"
+    },
+    "round_trip": {
+      "samples": 552,
+      "worst_error_m": 1.2867684837234142e-16,
+      "unreachable_targets": 0
+    }
+  },
+  "closed_chain": {
+    "status": "solved",
+    "attempted": true,
+    "variants": [
+      {
+        "variant": "link_a_on_shin",
+        "status": "closes",
+        "branch": 1,
+        "cad_reproduction_error_m": 1.5284987173545987e-12,
+        "grid": {
+          "span_rad": 0.15,
+          "step_rad": 0.01,
+          "poses": 961,
+          "closed": 526,
+          "closed_fraction": 0.547347
+        },
+        "worst_residual_m": 4.817118925970476e-13,
+        "worst_pose_delta": [
+          -0.14,
+          -0.15
+        ]
+      },
+      {
+        "variant": "link_a_on_thigh",
+        "status": "closes",
+        "branch": 1,
+        "cad_reproduction_error_m": 6.309900332733377e-12,
+        "grid": {
+          "span_rad": 0.15,
+          "step_rad": 0.01,
+          "poses": 961,
+          "closed": 961,
+          "closed_fraction": 1.0
+        },
+        "worst_residual_m": 1.000019511643302e-12,
+        "worst_pose_delta": [
+          -0.14,
+          -0.15
+        ]
+      }
+    ],
+    "closing_variants": [
+      "link_a_on_shin",
+      "link_a_on_thigh"
+    ],
+    "selected_variant": "link_a_on_thigh",
+    "chain_status": "confirmed_fixed_link",
+    "note": "both assignments use the same eight pivots and the same fourteen lengths; they differ only in which part carries LINK_PIN_A and END_PIN_A"
+  },
+  "unknowns": [
+    "feasible_range",
+    "gas_spring_pin_distance",
+    "joint_directions",
+    "joint_zeros",
+    "mass_and_inertia",
+    "spring_stroke_and_force_curve"
+  ],
+  "passed": true,
+  "failures": []
+}

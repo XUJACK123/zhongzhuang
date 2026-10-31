@@ -168,7 +168,19 @@ def test_the_two_assignments_are_not_equivalent(mechanism):
 
 
 def test_report_refuses_the_chain_by_default_and_says_why(mechanism):
-    report = mechanism_report(mechanism)
+    """The gate must still bite when the switch is off (2026-10-30: it is on)."""
+    import copy
+
+    import yaml
+
+    from fifty_mujoco.mechanism.loader import parse_mechanism
+
+    with mechanism.path.open("r", encoding="utf-8") as handle:
+        data = copy.deepcopy(yaml.safe_load(handle))
+    data["topology"]["chain"]["use_inferred_topology"] = False
+    gated = parse_mechanism(data, mechanism.path)
+
+    report = mechanism_report(gated)
     closed_chain = report["closed_chain"]
     assert closed_chain["attempted"] is False
     assert closed_chain["status"] == "not_instantiated"
@@ -176,3 +188,15 @@ def test_report_refuses_the_chain_by_default_and_says_why(mechanism):
     assert report["passed"] is True
     text = summarize(report)
     assert "not_instantiated" in text
+
+
+def test_the_shipped_chain_is_instantiated_and_names_the_selected_variant(mechanism):
+    report = mechanism_report(mechanism)
+    closed_chain = report["closed_chain"]
+    assert closed_chain["attempted"] is True
+    assert closed_chain["status"] == "solved"
+    assert closed_chain["selected_variant"] == "link_a_on_thigh"
+    by_name = {entry["variant"]: entry for entry in closed_chain["variants"]}
+    assert by_name["link_a_on_thigh"]["grid"]["closed"] == by_name["link_a_on_thigh"]["grid"]["poses"]
+    assert by_name["link_a_on_shin"]["grid"]["closed"] < by_name["link_a_on_shin"]["grid"]["poses"]
+    assert "selected     : link_a_on_thigh" in summarize(report)

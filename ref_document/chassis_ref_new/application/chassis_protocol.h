@@ -10,6 +10,7 @@
 #define CHASSIS_JOINT_TORQUE_LIMIT_NM 54.0f
 #define CHASSIS_WHEEL_TORQUE_LIMIT_NM 3.3f
 #define CHASSIS_WHEEL_CURRENT_LIMIT 16384
+#define CHASSIS_WHEEL_MOTOR_GEAR_RATIO (3591.0f / 187.0f) /* C620 内置 ~19.2:1 */
 #define CHASSIS_WHEEL_GEAR_RATIO 13.94f
 
 typedef enum
@@ -39,8 +40,8 @@ bool chassis_feedback_health(const motor_feedback_t motor[CHASSIS_MOTOR_COUNT],
 typedef struct
 {
     int16_t channel[5];
-    uint8_t switch_left;
-    uint8_t switch_right;
+    uint8_t switch_left;  /* HKU rc.s[1], frame[5] bits 6..7 */
+    uint8_t switch_right; /* HKU rc.s[0], frame[5] bits 4..5；现有 S1 灯色/停止拨杆 */
     int16_t mouse_x;
     int16_t mouse_y;
     int16_t mouse_z;

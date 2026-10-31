@@ -47,7 +47,7 @@ def test_every_entry_declares_a_source_and_an_evidence_level(mechanism):
         assert link.status in ("cad_extracted", "computed_from_points")
         assert link.source
     for body in mechanism.bodies.values():
-        assert body.status in ("cad_extracted", "candidate_inferred")
+        assert body.status in ("cad_extracted", "cad_confirmed", "candidate_inferred")
         assert body.source or body.evidence or body.confirm_in_cad
 
 
@@ -88,10 +88,24 @@ def test_serial_leg_reproduces_the_three_cad_points(mechanism):
     assert report["round_trip"]["unreachable_targets"] == 0
 
 
+def test_the_shipped_topology_passes_the_gate_after_the_cad_mate_was_read(mechanism):
+    """2026-10-30: the A-pin mate was read in SolidWorks, so the chain is on."""
+    topology_gate(mechanism, allow_inferred=False)  # must not raise
+    chain = mechanism.topology["chain"]
+    assert chain["selected_variant"] == "link_a_on_thigh"
+    assert chain["use_inferred_topology"] is True
+
+
 def test_candidate_topology_is_refused_unless_it_is_switched_on(mechanism):
+    """The gate still bites when the switch is off - only the flag changed."""
+    from fifty_mujoco.mechanism.loader import parse_mechanism
+
+    data = copy.deepcopy(_raw())
+    data["topology"]["chain"]["use_inferred_topology"] = False
+    gated = parse_mechanism(data, mechanism.path)
     with pytest.raises(TopologyNotConfirmedError):
-        topology_gate(mechanism, allow_inferred=False)
-    topology_gate(mechanism, allow_inferred=True)  # must not raise
+        topology_gate(gated, allow_inferred=False)
+    topology_gate(gated, allow_inferred=True)  # must not raise
 
 
 def _raw() -> dict:

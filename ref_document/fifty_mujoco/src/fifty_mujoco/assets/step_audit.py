@@ -119,6 +119,897 @@ INTERESTING_PARTS: tuple[str, ...] = (
     "轮腿",
 )
 
+#: Drive motors (progress.md §23.2).  The pattern only *finds* candidates; the
+#: assembly it sits in decides whether it belongs to the wheel-leg drive train,
+#: because the same product name also appears in the gimbal and the shooter.
+DRIVE_MOTOR_PATTERNS: tuple[str, ...] = ("DM-8009", "M3508")
+
+#: Only a motor inside a module with this name is part of the leg/wheel drive.
+DRIVE_MODULE_ASSEMBLY = "髋关节"
+
+#: Parts that make up the transmission next to the motors.
+DRIVE_TRANSMISSION_PATTERNS: tuple[str, ...] = (
+    "主动链轮",
+    "从动链轮",
+    "GEARBOX",
+    "GearAssembly",
+    "T3508_Gear",
+)
+
+#: Gas spring (progress.md §23.3): the two halves and the two seat ends.
+GAS_SPRING_PART_PATTERNS: tuple[str, ...] = ("1BKB",)
+#: The spring's end mounts: their pin bores are the two anchor points (G08).
+GAS_SPRING_CLEVIS_PATTERNS: tuple[str, ...] = ("弹簧套",)
+#: Assemblies and drivetrain parts that carry a motor name without being one.
+DRIVE_EXCLUDE_PATTERNS: tuple[str, ...] = (
+    "Gear_MKIV_III",
+    "GearAssembly",
+    "分线板",
+)
+#: The two pins whose carrier decides the fixed-link variant (progress.md §21.4).
+#: Coordinates are copied from ``configs/mechanism.yaml: planar_nodes`` (both are
+#: ``cad_extracted``); the audit is standard-library only and cannot read YAML.
+VARIANT_PINS: dict[str, tuple[float, float]] = {
+    "LINK_PIN_A": (-15.794862355, 76.513320082),
+    "END_PIN_A": (-40.257800194, 185.684300943),
+}
+
+#: Which rigid body a part belongs to, from its name.  The drivetrain check comes
+#: first on purpose: ``小腿传动中部连杆`` contains 小腿 but is not the shin.
+BODY_NAME_MARKERS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("drivetrain", ("传动", "连杆", "轴承座", "轴承", "限位")),
+    ("thigh", ("大腿",)),
+    ("shin", ("小腿",)),
+    ("wheel", ("轮腿",)),
+)
+
+
+def classify_body(part_name: str) -> str:
+    for body, markers in BODY_NAME_MARKERS:
+        if any(marker in part_name for marker in markers):
+            return body
+    return "other"
+
+
+def _pin_carriers(
+    by_rep: dict[int, list[dict[str, Any]]],
+    rep_names: dict[int, list[str]],
+    tolerance_mm: float = 0.5,
+) -> dict[str, Any]:
+    """Every part with a bore on each variant-deciding pin (progress.md §21.4).
+
+    The shared-node analysis only looks at parts whose name matches a leg
+    keyword, so a bearing block, a bearing or a mirror link next to the pin was
+    never considered - and those are exactly the parts that fix the pin.  This
+    scans *all* attributed cylinders whose axis passes within ``tolerance_mm`` of
+    the pin, then classifies each part by the rigid body it belongs to.
+
+    Still ``candidate``: a coincident bore proves the parts share an axis, not
+    that a mate pins them together.
+    """
+    report: dict[str, Any] = {"pins": {}, "status": "candidate", "tolerance_mm": tolerance_mm}
+    for name, (target_y, target_z) in VARIANT_PINS.items():
+        found: dict[str, dict[str, Any]] = {}
+        for rep_id, cylinders in by_rep.items():
+            names = rep_names.get(rep_id) or []
+            if not names:
+                continue
+            for entry in cylinders:
+                axis = entry["axis"]
+                if abs(abs(axis[0]) - 1.0) > 1e-6:
+                    continue  # only the X-parallel bores belong to this plane
+                distance = math.hypot(
+                    entry["origin_mm"][1] - target_y, entry["origin_mm"][2] - target_z
+                )
+                if distance > tolerance_mm:
+                    continue
+                record = found.setdefault(
+                    names[0],
+                    {
+                        "part": names[0],
+                        "body": classify_body(names[0]),
+                        "distance_mm": round(distance, 6),
+                        "max_radius_mm": 0.0,
+                        "coaxial_cylinders": 0,
+                        "x_planes_mm": [],
+                    },
+                )
+                record["max_radius_mm"] = round(
+                    max(record["max_radius_mm"], entry["radius_mm"]), 6
+                )
+                record["coaxial_cylinders"] += 1
+                plane = round(entry["origin_mm"][0], 3)
+                if plane not in record["x_planes_mm"]:
+                    record["x_planes_mm"].append(plane)
+        parts = sorted(
+            found.values(), key=lambda item: (-item["max_radius_mm"], item["part"])
+        )
+        bodies: dict[str, list[str]] = {}
+        for part in parts:
+            bodies.setdefault(part["body"], []).append(part["part"])
+        report["pins"][name] = {
+            "point_mm": [target_y, target_z],
+            "parts": parts,
+            "by_body": bodies,
+            "status": "shared" if len(bodies) > 1 else ("single_part" if parts else "not_found"),
+        }
+
+    link_a = report["pins"]["LINK_PIN_A"]["by_body"]
+    end_a = report["pins"]["END_PIN_A"]["by_body"]
+    if "thigh" in link_a and "shin" not in link_a and "shin" in end_a and "thigh" not in end_a:
+        report["variant_supported"] = "link_a_on_thigh"
+    elif "shin" in link_a and "thigh" not in link_a and "thigh" in end_a and "shin" not in end_a:
+        report["variant_supported"] = "link_a_on_shin"
+    else:
+        report["variant_supported"] = None
+    report["note"] = (
+        "the plate that carries the pin decides the variant; the bearing block and "
+        "the bearing around the same bore are the corroborating parts, so confirm "
+        "the mate in SolidWorks before promoting selected_variant"
+    )
+    return report
+
+#: ``STD_DualSpurGear_M0.6xT14_M0.6xT46`` carries module and tooth count in the
+#: part name.  That is the only place the ratio can come from: SwSTEP exports no
+#: ``PROPERTY_DEFINITION`` and no gear mate.
+GEAR_TOOTH_PATTERN = re.compile(r"M(?P<module>\d+(?:\.\d+)?)xT(?P<teeth>\d+)")
+INTERNAL_GEAR_MARKER = "InternalSpurGear"
+SUN_GEAR_MARKERS: tuple[str, ...] = ("3508_Gear",)
+
+#: Sprocket names carry no tooth count, so it has to be counted from the geometry:
+#: the tooth seats are coaxial cylinders repeated at exactly 360/N around the
+#: boss.  ``链条``/``链轮`` in the name is the only hint that a part is one.
+SPROCKET_MARKERS: tuple[str, ...] = ("链轮",)
+#: A tooth-seat ring needs at least this many seats before it is believed, and
+#: the angular spacing must be uniform to within this fraction of the mean.
+SPROCKET_MIN_TEETH = 8
+SPROCKET_UNIFORMITY_TOLERANCE = 0.02
+#: Standard roller-chain pitches, mm.  A counted tooth count is only reported as
+#: confirmed when the implied pitch lands on one of these.
+CHAIN_PITCHES_MM: tuple[float, ...] = (6.35, 9.525, 12.7, 15.875, 19.05, 25.4)
+CHAIN_PITCH_TOLERANCE_MM = 0.15
+
+#: 2026-10-31: the operator counted the sun gear in SolidWorks.  Recorded as a
+#: constant so the centre-distance derivation is checked *against a human
+#: reading* instead of only against itself.
+CAD_CONFIRMED_SUN_TEETH = 17
+
+
+def _assembly_path(instances: Sequence[dict[str, Any]], name: str, limit: int = 10) -> dict[str, Any]:
+    """Walk the NAUO parents of one product instance up to the root.
+
+    Names repeat in this file (two identical gearbox sub-assemblies), so the
+    walk follows the first parent and reports when a node has several - a
+    silently invented single path is worse than a flagged ambiguity.
+    """
+    parents: dict[str, list[str]] = {}
+    for entry in instances:
+        bucket = parents.setdefault(entry["child"], [])
+        if entry["parent"] not in bucket:
+            bucket.append(entry["parent"])
+    path: list[str] = []
+    ambiguous = False
+    node = name
+    for _ in range(limit):
+        options = parents.get(node, [])
+        if not options:
+            break
+        if len(options) > 1:
+            ambiguous = True
+        parent = options[0]
+        if parent in path or parent == node:
+            break
+        path.append(parent)
+        node = parent
+    return {"path": path, "ambiguous": ambiguous}
+
+
+def _part_axes(
+    by_rep: dict[int, list[dict[str, Any]]],
+    rep_names: dict[int, list[str]],
+    patterns: Sequence[str],
+) -> list[dict[str, Any]]:
+    """Axis groups of every part whose name contains one of ``patterns``."""
+    found: list[dict[str, Any]] = []
+    for rep_id, cylinders in by_rep.items():
+        names = rep_names.get(rep_id) or []
+        matched = [name for name in names if any(p in name for p in patterns)]
+        if not matched:
+            continue
+        found.append(
+            {
+                "rep": rep_id,
+                "parts": names[:3],
+                "matched": matched[0],
+                "cylinder_count": len(cylinders),
+                "dominant_axes": _dominant_axes(cylinders, limit=3),
+            }
+        )
+    found.sort(key=lambda item: item["matched"])
+    return found
+
+
+def _gear_teeth(names: Sequence[str]) -> list[dict[str, Any]]:
+    """``M0.6xT14`` style tokens in a part name -> ``{module, teeth, internal}``."""
+    internal = any(INTERNAL_GEAR_MARKER in name for name in names)
+    found: list[dict[str, Any]] = []
+    for name in names:
+        for match in GEAR_TOOTH_PATTERN.finditer(name):
+            entry = {
+                "module_mm": float(match.group("module")),
+                "teeth": int(match.group("teeth")),
+                "internal": internal,
+            }
+            if entry not in found:
+                found.append(entry)
+    return found
+
+
+def _predicted_radii(module: float, teeth: int, internal: bool) -> dict[str, float]:
+    """Tip and root radius of a standard 20 deg spur gear (module = mm/tooth)."""
+    if internal:
+        return {
+            "tip_mm": module * (teeth / 2.0 - 1.0),
+            "root_mm": module * (teeth / 2.0 + 1.25),
+        }
+    return {
+        "tip_mm": module * (teeth / 2.0 + 1.0),
+        "root_mm": module * (teeth / 2.0 - 1.25),
+    }
+
+
+def _chain_pitch(radius_mm: float, teeth: int) -> float:
+    """``p = 2 R sin(pi/N)``: the roller-chain pitch implied by a tooth count."""
+    return 2.0 * radius_mm * math.sin(math.pi / teeth)
+
+
+def _nearest_standard_pitch(pitch_mm: float) -> tuple[float, float] | None:
+    best = min(CHAIN_PITCHES_MM, key=lambda value: abs(value - pitch_mm))
+    error = abs(best - pitch_mm)
+    return (best, error) if error <= CHAIN_PITCH_TOLERANCE_MM else None
+
+
+def _parallel(first: Sequence[float], second: Sequence[float], tolerance: float = 1e-6) -> bool:
+    """True when two axes are collinear directions, in either sense.
+
+    A cylindrical surface's axis vector has no preferred sign: the exporter writes
+    ``+X`` for one bore and ``-X`` for the same bore on the other face. Comparing
+    only the same sense silently drops half the holes on a part - which is exactly
+    how the crank sprocket's 19-tooth ring went missing while the thigh's worked.
+    """
+    a = _unit((first[0], first[1], first[2]))
+    b = _unit((second[0], second[1], second[2]))
+    same = all(abs(x - y) <= tolerance for x, y in zip(a, b))
+    opposite = all(abs(x + y) <= tolerance for x, y in zip(a, b))
+    return same or opposite
+
+
+def _merge_angles(angles: Sequence[float], tolerance_deg: float = 0.5) -> list[float]:
+    """Collapse angles that differ only by rounding, including across 0/360."""
+    ordered = sorted(angle % 360.0 for angle in angles)
+    merged: list[float] = []
+    for angle in ordered:
+        if merged and angle - merged[-1] <= tolerance_deg:
+            continue
+        merged.append(angle)
+    if len(merged) > 1 and 360.0 - merged[-1] + merged[0] <= tolerance_deg:
+        merged.pop()
+    return merged
+
+
+def sprocket_teeth(
+    cylinders: Sequence[dict[str, Any]], axis_hint: Vec3 | None = None
+) -> dict[str, Any]:
+    """Count the teeth of one sprocket from its tooth-seat ring.
+
+    A sprocket stores one coaxial cylinder per tooth seat, all at the pitch radius
+    and evenly spaced in angle. That gives three independent numbers - the seat
+    radius, the count, and the spacing - so the pitch ``p = 2 R sin(pi/N)`` can be
+    checked against the standard chain pitches.
+
+    That check is what separates teeth from lightening holes. The 12 bolt holes in
+    a sprocket hub are also a uniform ring at 30 deg spacing, and counting them
+    gave a 12-tooth "sprocket" with a 11.1 mm pitch - no such chain exists. A ring
+    is therefore accepted only when its implied pitch is a standard one.
+    """
+    if not cylinders:
+        return {"status": "no_cylinders", "teeth": None}
+    dominant = _dominant_axes(cylinders, limit=1)
+    if not dominant:
+        return {"status": "no_axis", "teeth": None}
+    axis = (
+        tuple(axis_hint) if axis_hint is not None else tuple(dominant[0]["axis"])
+    )
+    center = dominant[0]["origin_mm"]
+
+    rings: dict[float, list[float]] = {}
+    for entry in cylinders:
+        if not _parallel(tuple(entry["axis"]), axis):
+            continue
+        # the sprockets of this assembly all turn about X, so the perpendicular
+        # plane is (Y, Z); keeping it explicit avoids a silent index choice
+        y = entry["origin_mm"][1] - center[1]
+        z = entry["origin_mm"][2] - center[2]
+        radius = math.hypot(y, z)
+        if radius < 1.0:
+            continue
+        angle = math.degrees(math.atan2(z, y))
+        rings.setdefault(round(radius, 2), []).append(angle)
+
+    candidates: list[dict[str, Any]] = []
+    rejected: list[dict[str, Any]] = []
+    for radius, angles in rings.items():
+        merged = _merge_angles(angles)
+        if len(merged) < SPROCKET_MIN_TEETH:
+            continue
+        gaps = [
+            (merged[(index + 1) % len(merged)] - merged[index]) % 360.0
+            for index in range(len(merged))
+        ]
+        mean = sum(gaps) / len(gaps)
+        spread = max(abs(gap - mean) for gap in gaps)
+        pitch = _chain_pitch(radius, len(merged))
+        standard = _nearest_standard_pitch(pitch)
+        record = {
+            "pitch_radius_mm": round(radius, 3),
+            "teeth": len(merged),
+            "angular_spacing_deg": round(mean, 4),
+            "spacing_spread_deg": round(spread, 4),
+            "implied_chain_pitch_mm": round(pitch, 4),
+            "standard_pitch_mm": None if standard is None else standard[0],
+            "pitch_error_mm": None if standard is None else round(standard[1], 4),
+        }
+        uniform = mean > 0.0 and spread / mean <= SPROCKET_UNIFORMITY_TOLERANCE
+        if uniform and standard is not None:
+            record["status"] = "confirmed"
+            candidates.append(record)
+        else:
+            record["status"] = (
+                "non_uniform_ring" if not uniform else "no_standard_pitch"
+            )
+            rejected.append(record)
+    if not candidates:
+        return {
+            "status": "no_tooth_ring",
+            "teeth": None,
+            "rejected_rings": sorted(
+                rejected, key=lambda item: item["pitch_radius_mm"], reverse=True
+            )[:4],
+        }
+    # copy, not mutate: ``best`` is one of the records inside ``candidates``,
+    # so attaching the list to it would make the record contain itself and the
+    # report would no longer be JSON-serialisable
+    best = dict(max(candidates, key=lambda item: item["pitch_radius_mm"]))
+    best["candidates"] = sorted(
+        candidates, key=lambda item: item["pitch_radius_mm"], reverse=True
+    )
+    best["rejected_rings"] = sorted(
+        rejected, key=lambda item: item["pitch_radius_mm"], reverse=True
+    )[:4]
+    return best
+
+
+def _sprocket_train(
+    by_rep: dict[int, list[dict[str, Any]]],
+    rep_names: dict[int, list[str]],
+) -> dict[str, Any]:
+    """Tooth counts of the leg chain drives and the ratio they imply."""
+    entries: list[dict[str, Any]] = []
+    for rep_id, cylinders in by_rep.items():
+        names = rep_names.get(rep_id) or []
+        matched = [name for name in names if any(m in name for m in SPROCKET_MARKERS)]
+        if not matched:
+            continue
+        counted = sprocket_teeth(cylinders)
+        entries.append(
+            {
+                "rep": rep_id,
+                "part": matched[0],
+                "role": (
+                    "driving"
+                    if "主动" in matched[0]
+                    else ("driven" if "从动" in matched[0] else "unknown")
+                ),
+                "side_body": (
+                    "thigh"
+                    if "大腿" in matched[0]
+                    else ("crank" if "小腿" in matched[0] else "unknown")
+                ),
+                **counted,
+            }
+        )
+    entries.sort(key=lambda item: (item["role"], item["part"]))
+
+    def find(role: str, body: str) -> dict[str, Any] | None:
+        for entry in entries:
+            if entry["role"] == role and entry["side_body"] == body:
+                return entry
+        return None
+
+    drives: list[dict[str, Any]] = []
+    for body in ("thigh", "crank"):
+        driving, driven = find("driving", body), find("driven", body)
+        record: dict[str, Any] = {"body": body}
+        if not driving or not driven or not driving["teeth"] or not driven["teeth"]:
+            record["status"] = "incomplete"
+            record["driving_teeth"] = driving["teeth"] if driving else None
+            record["driven_teeth"] = driven["teeth"] if driven else None
+            drives.append(record)
+            continue
+        ratio = driven["teeth"] / driving["teeth"]
+        same_pitch = (
+            driving["standard_pitch_mm"] is not None
+            and driving["standard_pitch_mm"] == driven["standard_pitch_mm"]
+        )
+        record.update(
+            {
+                "driving_teeth": driving["teeth"],
+                "driven_teeth": driven["teeth"],
+                "ratio": round(ratio, 6),
+                "same_standard_pitch": same_pitch,
+                "status": (
+                    "confirmed" if same_pitch else "ratio_only_pitch_mismatch"
+                ),
+                "note": (
+                    "driving sprocket on the motor, driven on the hip axis;"
+                    " the driven side turns 1/ratio of the motor"
+                ),
+            }
+        )
+        drives.append(record)
+    return {"sprockets": entries, "drives": drives}
+
+
+def _gear_train(
+    by_rep: dict[int, list[dict[str, Any]]],
+    rep_names: dict[int, list[str]],
+) -> dict[str, Any]:
+    """Reduction ratio of the wheel gearbox, derived and then checked.
+
+    The ratio is not an attribute anywhere in the file, so it has to be
+    reconstructed.  Three independent facts are used, in this order:
+
+    1. the tooth counts and module are in the part names
+       (``STD_DualSpurGear_M0.6xT14_M0.6xT46``, ``STD_InternalSpurGear_M0.6xT77``);
+    2. the measured cylinder radii must match the tip/root radius predicted by
+       those numbers - otherwise the name is not trusted;
+    3. a compound planetary needs the sun-planet and planet-ring centre
+       distances to be equal, which *fixes* the sun tooth count that the sun
+       part name does not carry.
+
+    Everything stays ``candidate``: which element is fixed and which is the
+    output is a mate, and this file has none.
+    """
+    gears: list[dict[str, Any]] = []
+    radii_by_rep: dict[int, list[float]] = {
+        rep_id: [group["max_radius_mm"] for group in _dominant_axes(cylinders, limit=6)]
+        for rep_id, cylinders in by_rep.items()
+    }
+    for rep_id, cylinders in by_rep.items():
+        names = rep_names.get(rep_id) or []
+        teeth = _gear_teeth(names)
+        if not teeth:
+            continue
+        measured_radii = radii_by_rep.get(rep_id) or []
+        for entry in teeth:
+            predicted = _predicted_radii(entry["module_mm"], entry["teeth"], entry["internal"])
+            candidates = [predicted["tip_mm"], predicted["root_mm"]]
+            best = min(
+                (
+                    (abs(radius - target), radius, target)
+                    for radius in measured_radii
+                    for target in candidates
+                ),
+                default=None,
+            )
+            gears.append(
+                {
+                    "rep": rep_id,
+                    "part": names[0] if names else f"<rep {rep_id}>",
+                    "module_mm": entry["module_mm"],
+                    "teeth": entry["teeth"],
+                    "internal": entry["internal"],
+                    "predicted": {
+                        key: round(value, 6) for key, value in predicted.items()
+                    },
+                    "closest_measured_radius_mm": None if best is None else best[1],
+                    "matched_on": (
+                        None
+                        if best is None
+                        else ("tip" if best[2] == predicted["tip_mm"] else "root")
+                    ),
+                    "radius_error_mm": None if best is None else round(best[0], 6),
+                    # 0.05 mm is far below one tooth of module 0.6 (0.94 mm pitch)
+                    "radius_confirmed": best is not None and best[0] <= 0.05,
+                }
+            )
+    if not gears:
+        return {
+            "status": "no_gear_names",
+            "gears": [],
+            "gaps": [
+                "no part name carries an M<module>xT<teeth> token; the ratio cannot be derived"
+            ],
+        }
+
+    planet_pairs: dict[int, list[dict[str, Any]]] = {}
+    for gear in gears:
+        if not gear["internal"]:
+            planet_pairs.setdefault(gear["rep"], []).append(gear)
+    ring = next((gear for gear in gears if gear["internal"]), None)
+    sun: dict[str, Any] | None = None
+    for rep_id, names in rep_names.items():
+        if not any(marker in name for name in names for marker in SUN_GEAR_MARKERS):
+            continue
+        if _gear_teeth(names):
+            continue  # a named gear is handled above
+        radii = radii_by_rep.get(rep_id) or []
+        sun = {
+            "rep": rep_id,
+            "part": names[0] if names else f"<rep {rep_id}>",
+            "measured_max_radius_mm": max(radii) if radii else None,
+            "teeth_from_name": None,
+        }
+        break
+
+    result: dict[str, Any] = {
+        "gears": gears,
+        "planet_reps": len(planet_pairs),
+        "planet_teeth": sorted(
+            {gear["teeth"] for gears_ in planet_pairs.values() for gear in gears_}
+        ),
+        "ring_teeth": ring["teeth"] if ring else None,
+        "ring_part": ring["part"] if ring else None,
+        "sun_part": sun["part"] if sun else None,
+        "sun_teeth_from_name": sun.get("teeth_from_name") if sun else None,
+        "module_mm": sorted({gear["module_mm"] for gear in gears}),
+        "status": "candidate",
+    }
+
+    compound = [
+        sorted(gears_, key=lambda item: item["teeth"])
+        for gears_ in planet_pairs.values()
+        if len({gear["teeth"] for gear in gears_}) > 1
+    ]
+    if not ring or not compound:
+        result["status"] = "inconclusive"
+        result["note"] = "need one internal gear and one compound (two tooth counts) planet"
+        return result
+
+    low, high = compound[0][0], compound[0][-1]
+    result["compound_planet"] = {
+        "small_teeth": low["teeth"],
+        "large_teeth": high["teeth"],
+        "instances": len(compound),
+        "module_mm": low["module_mm"],
+    }
+    # equal centre distance: (Z_sun + Z_large)/2 = (Z_ring - Z_small)/2
+    sun_teeth = ring["teeth"] - low["teeth"] - high["teeth"]
+    if sun_teeth <= 0:
+        result["status"] = "inconclusive"
+        result["note"] = (
+            f"the centre-distance constraint gives Z_sun = {sun_teeth}, which is not a gear; "
+            "this is not a compound planetary with the ring fixed"
+        )
+        return result
+    centre_planet_ring = high["module_mm"] * (ring["teeth"] - low["teeth"]) / 2.0
+    centre_sun_planet = high["module_mm"] * (sun_teeth + high["teeth"]) / 2.0
+    result["sun_teeth_derived"] = sun_teeth
+    operator_confirmed_sun_teeth = CAD_CONFIRMED_SUN_TEETH
+    result["sun_teeth_matches_cad"] = sun_teeth == operator_confirmed_sun_teeth
+    result["centre_distance"] = {
+        "planet_ring_mm": round(centre_planet_ring, 6),
+        "sun_planet_mm": round(centre_sun_planet, 6),
+        "equal": abs(centre_planet_ring - centre_sun_planet) < 1e-9,
+    }
+    if sun and sun["measured_max_radius_mm"] is not None:
+        predicted_tip = _predicted_radii(high["module_mm"], sun_teeth, False)["tip_mm"]
+        result["sun_radius_check"] = {
+            "predicted_tip_mm": round(predicted_tip, 6),
+            "measured_max_radius_mm": round(sun["measured_max_radius_mm"], 6),
+            "relative_error": round(
+                abs(sun["measured_max_radius_mm"] - predicted_tip) / predicted_tip, 6
+            ),
+            "note": "a corrected (profile shifted) pinion sits slightly above the "
+            "standard tip radius; within ~2% supports the derived tooth count",
+        }
+    else:
+        result["sun_radius_check"] = None
+    def _ratio(sun_input: dict[str, Any], ring_mesh: dict[str, Any]) -> dict[str, float]:
+        # ring fixed, carrier output -> 1 + (Zr/Zp_ring)*(Zp_sun/Zs)
+        # carrier fixed, ring output ->    (Zr*Zp_sun)/(Zs*Zp_ring)
+        carrier_out = 1.0 + (ring["teeth"] / ring_mesh["teeth"]) * (
+            sun_input["teeth"] / sun_teeth
+        )
+        ring_out = (ring["teeth"] * sun_input["teeth"]) / (sun_teeth * ring_mesh["teeth"])
+        return {
+            "ring_fixed_carrier_output": round(carrier_out, 4),
+            "carrier_fixed_ring_output": round(ring_out, 4),
+        }
+
+    result["ratio"] = {
+        "formula_ring_fixed": "1 + (Z_ring/Z_planet_ring_side) * (Z_planet_sun_side/Z_sun)",
+        "formula_carrier_fixed": "(Z_sun*Z_planet_sun_side)/(Z_ring*Z_planet_ring_side)"
+        " -> reduction = 1/that",
+        "sun_teeth": sun_teeth,
+        "arrangements": [
+            {
+                "sun_meshes": high["teeth"],
+                "ring_meshes": low["teeth"],
+                "centre_distance_mm": round(centre_planet_ring, 6),
+                **_ratio(high, low),
+            },
+            {
+                "sun_meshes": low["teeth"],
+                "ring_meshes": high["teeth"],
+                "centre_distance_mm": round(
+                    high["module_mm"] * (ring["teeth"] - low["teeth"]) / 2.0, 6
+                ),
+                **_ratio(low, high),
+            },
+        ],
+        # 2026-10-31: the operator read the mates in SolidWorks - the carrier is
+        # fixed and the ring gear is the output, so the ordinary-gear-train
+        # arrangement (carrier fixed) is the real one, not the planetary one.
+        "configuration": {
+            "fixed": "carrier",
+            "output": "ring",
+            "selected": "carrier_fixed_ring_output",
+            "reduction": _ratio(high, low)["carrier_fixed_ring_output"],
+            "source": "operator read the mates in SolidWorks, 2026-10-31",
+            "in_wheel_power_path": False,
+            "why_not_in_path": (
+                "operator: the wheel is driven directly by the M3508 geared motor,"
+                " without this gearbox"
+            ),
+            "output_direction": "opposite to the sun: external mesh reverses once,"
+            " the internal mesh keeps it",
+        },
+        "status": "confirmed_arrangement",
+        "note": (
+            "tooth counts and the fixed/output elements are both settled; the gearbox"
+            " is nevertheless not in the wheel drive train"
+        ),
+    }
+    result["gaps"] = [
+        "which element is fixed (ring or carrier): settled 2026-10-31 (carrier fixed, ring output)",
+        "sprocket tooth counts: counted from the tooth seats (16 / 19, 12.7 mm chain)",
+        "efficiency: a two-mesh planetary is ~0.95-0.97 per mesh; not in the file",
+        "whether this gearbox is in the machine at all: operator says the wheel is driven"
+        " by the M3508's own reducer, so it is modelled but not used",
+    ]
+    return result
+
+
+def _path_multiplicity(instances: Sequence[dict[str, Any]], name: str, limit: int = 10) -> dict[str, Any]:
+    """How many physical copies of ``name`` the assembly actually contains.
+
+    The file stores one NAUO per *product pair*, not per placement: the motor
+    appears once as "MOTOR inside gearbox" even though the gearbox itself is
+    instantiated twice.  The installed count is therefore the product of the
+    multiplicities along the parent chain.
+    """
+    edges: dict[tuple[str, str], int] = {}
+    for entry in instances:
+        key = (entry["parent"], entry["child"])
+        edges[key] = edges.get(key, 0) + 1
+    count = 1
+    node = name
+    path: list[str] = []
+    for _ in range(limit):
+        parents = {edge[0] for edge in edges if edge[1] == node}
+        if not parents:
+            break
+        if len(parents) > 1:
+            return {"count": count, "path": path, "ambiguous": True}
+        parent = next(iter(parents))
+        if parent in path:
+            break
+        count *= edges[(parent, node)]
+        path.append(parent)
+        node = parent
+    return {"count": count, "path": path, "ambiguous": False}
+
+
+def _drive_train(
+    instances: Sequence[dict[str, Any]],
+    by_rep: dict[int, list[dict[str, Any]]],
+    rep_names: dict[int, list[str]],
+) -> dict[str, Any]:
+    """Motor instances, transmission parts and the gas-spring geometry.
+
+    What this can and cannot answer is the whole point of the section:
+
+    * an *instance* (product, parent assembly, placement) is data the file has;
+    * which instance is the hip joint and which is the knee joint is a mate,
+      which SwSTEP does not export;
+    * a cross-part distance is only meaningful when the two parts were exported
+      in one datum, which is checked here per pair instead of assumed.
+    """
+    #: a product that is some other instance's parent is an assembly, not a part
+    assembly_names = {entry["parent"] for entry in instances}
+    motors: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+    for entry in instances:
+        name = entry["child"]
+        if not any(pattern in name for pattern in DRIVE_MOTOR_PATTERNS):
+            continue
+        chain = _assembly_path(instances, name)
+        is_assembly = name in assembly_names
+        is_drivetrain_part = any(pattern in name for pattern in DRIVE_EXCLUDE_PATTERNS)
+        in_module = any(DRIVE_MODULE_ASSEMBLY in node for node in chain["path"])
+        record = {
+            "product": name,
+            "instance": entry["name"],
+            "parent": entry["parent"],
+            "assembly_path": chain["path"],
+            "path_ambiguous": chain["ambiguous"],
+            "translation_mm": (entry.get("transform_mm") or {}).get("translation_mm"),
+            "rotation": (entry.get("transform_mm") or {}).get("rotation"),
+            "rejected_because": (
+                "sub-assembly"
+                if is_assembly
+                else (
+                    "drivetrain part"
+                    if is_drivetrain_part
+                    else ("outside the wheel-leg module" if not in_module else None)
+                )
+            ),
+        }
+        keep = in_module and not is_assembly and not is_drivetrain_part
+        (motors if keep else excluded).append(record)
+
+    grouped: dict[str, dict[str, Any]] = {}
+    for motor in motors:
+        bucket = grouped.setdefault(
+            motor["product"],
+            {
+                "product": motor["product"],
+                "count": 0,
+                "placements": [],
+                "axis_candidates": [],
+            },
+        )
+        bucket["placements"].append(
+            {
+                "instance": motor["instance"],
+                "parent": motor["parent"],
+                "translation_mm": motor["translation_mm"],
+                "rotation": motor["rotation"],
+                "path_ambiguous": motor["path_ambiguous"],
+            }
+        )
+    for product, bucket in grouped.items():
+        multiplicity = _path_multiplicity(instances, product)
+        bucket["count"] = multiplicity["count"]
+        bucket["install_parents"] = multiplicity["path"][:1]
+        bucket["count_ambiguous"] = multiplicity["ambiguous"]
+        bucket["axis_candidates"] = next(
+            (
+                part["dominant_axes"]
+                for part in _part_axes(by_rep, rep_names, (product,))
+                if part["dominant_axes"]
+            ),
+            [],
+        )
+
+    transmission: dict[tuple[str, str], int] = {}
+    for entry in instances:
+        if any(pattern in entry["child"] for pattern in DRIVE_TRANSMISSION_PATTERNS):
+            key = (entry["child"], entry["parent"])
+            transmission[key] = transmission.get(key, 0) + 1
+    transmission_rows = [
+        {"part": part, "parent": parent, "instances": count}
+        for (part, parent), count in sorted(transmission.items())
+    ]
+
+    spring_parts = _part_axes(by_rep, rep_names, GAS_SPRING_PART_PATTERNS)
+    clevis_parts = _part_axes(by_rep, rep_names, GAS_SPRING_CLEVIS_PATTERNS)
+    body = next((part for part in spring_parts if "缸" in part["matched"]), None)
+    rod = next((part for part in spring_parts if "杆" in part["matched"]), None)
+    gas_spring: dict[str, Any] = {
+        "parts": spring_parts,
+        "clevis_parts": clevis_parts,
+        "status": "no_geometry",
+    }
+    if body and rod and body["dominant_axes"] and rod["dominant_axes"]:
+        body_axis = body["dominant_axes"][0]
+        rod_axis = rod["dominant_axes"][0]
+        coaxial = _line_distance(
+            tuple(body_axis["origin_mm"]), tuple(body_axis["axis"]),
+            tuple(rod_axis["origin_mm"]), tuple(rod_axis["axis"]),
+        )
+        # the two halves point at each other: 180 deg is as coaxial as 0 deg
+        line_angle = min(coaxial["angle_deg"], 180.0 - coaxial["angle_deg"])
+        pins = [
+            part["dominant_axes"][0]
+            for part in clevis_parts
+            if part["dominant_axes"]
+        ]
+        pin_distance = None
+        if len(pins) == 2:
+            first, second = pins
+            vector = _sub(tuple(second["origin_mm"]), tuple(first["origin_mm"]))
+            axis = _unit(tuple(body_axis["axis"]))
+            along = _dot(vector, axis)
+            pin_distance = {
+                "center_distance_mm": round(_norm(vector), 6),
+                "along_spring_axis_mm": round(abs(along), 6),
+                "signed_along_spring_axis_mm": round(along, 6),
+                "perpendicular_mm": round(
+                    math.sqrt(max(0.0, _norm(vector) ** 2 - along * along)), 6
+                ),
+                "pin_axes": [first["axis"], second["axis"]],
+                "pin_origins_mm": [first["origin_mm"], second["origin_mm"]],
+            }
+        gas_spring = {
+            "parts": spring_parts,
+            "clevis_parts": clevis_parts,
+            "body_axis": {
+                "axis": body_axis["axis"],
+                "origin_mm": body_axis["origin_mm"],
+                "max_radius_mm": body_axis["max_radius_mm"],
+                "coaxial_cylinders": body_axis["count"],
+            },
+            "rod_axis": {
+                "axis": rod_axis["axis"],
+                "origin_mm": rod_axis["origin_mm"],
+                "max_radius_mm": rod_axis["max_radius_mm"],
+                "coaxial_cylinders": rod_axis["count"],
+            },
+            "body_rod_line": {
+                "perpendicular_mm": round(coaxial["distance_mm"], 6),
+                "angle_deg": round(line_angle, 6),
+            },
+            "pin_to_pin": pin_distance,
+            "status": (
+                "candidate_same_datum"
+                if pin_distance is not None
+                and line_angle < 1.0
+                and coaxial["distance_mm"] < 0.01
+                else "inconclusive"
+            ),
+        }
+
+    return {
+        "motor_patterns": list(DRIVE_MOTOR_PATTERNS),
+        "module_assembly": DRIVE_MODULE_ASSEMBLY,
+        "motors": list(grouped.values()),
+        "motor_count": sum(item["count"] for item in grouped.values()),
+        "excluded_motors": excluded,
+        "transmission_parts": transmission_rows,
+        "gearbox": _gear_train(by_rep, rep_names),
+        "sprocket_train": _sprocket_train(by_rep, rep_names),
+        # 2026-10-31, operator: the wheel is turned by the M3508 geared motor
+        # directly; the #NW_GEARBOX planetary is in the CAD but not in the power
+        # path.  Recorded here because every downstream ratio depends on it.
+        "wheel_drive": {
+            "motor": "M3508 with its integrated reducer, mounted directly on the wheel",
+            "gearbox_in_path": False,
+            "ratio_source": "the M3508's own reducer (datasheet), not derivable from this file",
+            "status": "confirmed_by_operator",
+            "crank_reference": "ground",
+            "crank_reference_evidence": (
+                "both DM-8009 sit on 髋关节大铝件 (chassis frame); rotating the thigh"
+                " swings thigh + shin, moving the shin alone turns one motor"
+            ),
+        },
+        "gas_spring": gas_spring,
+        "gaps": [
+            "hip/knee role of each DM-8009 instance: it is a mate, not a placement",
+            "wheel drive identity: the file has a hub-motor distribution board and an "
+            "M3508+MKIV gearbox; only the assembly mates decide which one drives the wheel",
+            "gear ratio: derived from the part names plus the measured radii, but which "
+            "element is fixed and which is the output is a mate - see drive_train.gearbox",
+            "gas spring force and stroke: the name 1BKB0.45-75 is a lead, the file has no "
+            "PROPERTY_DEFINITION, MASS_DENSITY or force attribute",
+            "installed spring length at the reference pose: this file is the stowed pose",
+            "transform convention: confirm one cross-part distance in SolidWorks before "
+            "promoting candidate_same_datum to verified",
+        ],
+        "provenance": "cad_extracted; every number here is geometry, never a measurement",
+    }
+
 # --------------------------------------------------------------- tiny vectors
 Vec3 = tuple[float, float, float]
 Mat3 = tuple[Vec3, Vec3, Vec3]
@@ -801,7 +1692,9 @@ def _shared_axis_nodes(
     points: list[dict[str, Any]] = []
     for part in selected:
         names = part.get("candidate_parts") or [f"<rep {part.get('rep')}>"]
-        for group in part.get("dominant_axes", []):
+        # every coaxial group, not just the six largest: a Ø24 bearing seat in a
+        # thigh plate sat behind the hip/knee bosses and was invisible
+        for group in part.get("all_axes") or part.get("dominant_axes", []):
             origin = group["origin_mm"]
             points.append(
                 {
@@ -1106,6 +1999,7 @@ def audit_step(
                     "candidate_parts": names[:3],
                     "cylinder_count": len(entries),
                     "dominant_axes": _dominant_axes(entries),
+                    "all_axes": _dominant_axes(entries, limit=len(entries)),
                 }
             )
         selected.sort(key=lambda item: item["cylinder_count"], reverse=True)
@@ -1115,11 +2009,11 @@ def audit_step(
         cross_part = [
             _measure_pair(pair, cylinder_index, rep_candidates_parts) for pair in cross_part_pairs
         ]
+        shared = _shared_axis_nodes(selected)
         report["geometry"] = {
             "diagnostics": diagnostics,
             "reps_with_cylinders": len(by_rep),
-            "parts": [
-                {
+            "parts": [                {
                     "rep": rep_id,
                     "cylinder_count": len(entries),
                     "candidate_parts": rep_candidates_parts.get(rep_id, [])[:3],
@@ -1130,9 +2024,10 @@ def audit_step(
             ][:80],
             "selected_parts": selected,
             "mechanism_candidates": _planar_candidates(measurements),
-            "shared_axis_nodes": _shared_axis_nodes(selected),
+            "shared_axis_nodes": shared,
             "measurements": measurements,
             "cross_part": cross_part,
+            "pin_carriers": _pin_carriers(by_rep, rep_candidates_parts),
             "verification": {
                 "axis_definition": "AXIS2_PLACEMENT_3D local +Z is the cylinder axis",
                 "distance": "perpendicular distance between two parallel axes, mm",
@@ -1141,12 +2036,14 @@ def audit_step(
                 "note": "reproducing progress.md §6.3 G01/G02 is this parser's acceptance test",
             },
         }
+        report["drive_train"] = _drive_train(instances, by_rep, rep_candidates_parts)
 
     report["next_steps"] = [
-        "confirm the transform convention on two known parts",
-        "map the hip sub-assembly to the four DM8009 instances",
-        "confirm which dominant axes are the real hip / knee / wheel joints",
-        "record results in docs/STEP_GEOMETRY_AUDIT.md and configs/mechanism.yaml",
+        "confirm which DM-8009 instance is the hip joint and which is the knee joint in SolidWorks",
+        "confirm the wheel drive (M3508 + MKIV gearbox or hub motor) from the assembly mates",
+        "confirm one cross-part distance in SolidWorks before trusting candidate_same_datum",
+        "read the MKIV gearbox ratio and the 1BKB0.45-75 force/stroke from their specifications",
+        "record confirmed values in docs/STEP_GEOMETRY_AUDIT.md and configs/mechanism.yaml",
     ]
     return report
 
@@ -1189,4 +2086,16 @@ def summarize(
 ) -> dict[str, Any]:
     summary: dict[str, Any] = {"counts": report["counts"], "roots": report["assembly"]["roots"]}
     summary["matches"] = {needle: name_instances(report, needle, limit=8) for needle in needles}
+    drive = report.get("drive_train")
+    if drive:
+        spring = drive.get("gas_spring") or {}
+        summary["drive_train"] = {
+            "motors": drive.get("motor_count"),
+            "excluded_name_matches": len(drive.get("excluded_motors") or []),
+            "transmission_parts": len(drive.get("transmission_parts") or []),
+            "gas_spring_status": spring.get("status"),
+            "gas_spring_pin_to_pin_mm": (spring.get("pin_to_pin") or {}).get(
+                "center_distance_mm"
+            ),
+        }
     return summary

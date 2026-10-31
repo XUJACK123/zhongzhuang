@@ -19,9 +19,15 @@ from ..paths import configs_dir
 #: Evidence vocabulary. ``robot.yaml`` documents the first, third and fourth;
 #: the two CAD-only labels were added when the STEP audit started producing
 #: geometry, and they must never be read as measurements.
+#:
+#: ``cad_confirmed`` (2026-10-30) is for a relation a person read in the *native*
+#: assembly - a mate, not a number: no parser can recover it, and it is still not
+#: a hardware measurement. It exists so that "the audit could not find it" and
+#: "SolidWorks confirms it" stop sharing one label.
 STATUS_LEVELS: tuple[str, ...] = (
     "provisional",
     "cad_extracted",
+    "cad_confirmed",
     "computed_from_points",
     "candidate_inferred",
     "datasheet",

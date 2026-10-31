@@ -60,6 +60,11 @@ joints:
     lf0_Joint: hip
     lf1_Joint: knee
     l_wheel_Joint: wheel
+  # NOT SWITCHED YET (2026-10-31): the standing reference pose exists and is
+  # validated (configs/joint_conventions.yaml: reference_pose), but moving the
+  # runtime defaults here changes what the asset build measures, and several
+  # regression baselines are recorded at this pose.  Switching needs the build to
+  # run; see progress.md §26.
   default_angles_rad:
     rf0_Joint: 2.0554215512416354
     rf1_Joint: -2.5592683579936746

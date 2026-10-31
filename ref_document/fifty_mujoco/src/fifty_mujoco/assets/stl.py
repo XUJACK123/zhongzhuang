@@ -46,6 +46,24 @@ def sha256(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+def sha256_text(path: str | Path) -> str:
+    """SHA-256 of a text source with CRLF normalised to LF.
+
+    The URDFs are text, and git checks them out as CRLF on Windows when
+    ``core.autocrlf=true``.  The hash recorded in ``model_parameters.json`` was
+    taken from the LF original, so a raw byte hash reported a mismatch on every
+    Windows checkout even though nothing had been edited - the check was
+    measuring the checkout, not the source.
+
+    Normalising makes the integrity check line-ending independent without
+    weakening it: any change to the actual content still changes the hash.
+    Binary assets (STL meshes) keep using :func:`sha256`, because a normaliser
+    applied to them would be meaningless.
+    """
+    data = Path(path).read_bytes()
+    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
+
+
 def stl_info(path: str | Path) -> dict:
     path = Path(path)
     count, size = _read_header(path)

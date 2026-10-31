@@ -53,7 +53,7 @@ build/default/Core/Src/freertos.o: Core/Src/freertos.c \
  Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  Task/chassis_task.h application/CAN_receive.h \
  application/chassis_protocol.h application/chassis_motor_config.h \
- Task/INS_task.h algorithm/kalman_filter.h \
+ application/bench_config.h Task/INS_task.h algorithm/kalman_filter.h \
  Drivers/CMSIS/DSP/Include/arm_math.h \
  Drivers/CMSIS/Core/Include/cmsis_compiler.h \
  application/chassis_protocol.h application/chassis_safety.h \
@@ -115,6 +115,7 @@ Task/chassis_task.h:
 application/CAN_receive.h:
 application/chassis_protocol.h:
 application/chassis_motor_config.h:
+application/bench_config.h:
 Task/INS_task.h:
 algorithm/kalman_filter.h:
 Drivers/CMSIS/DSP/Include/arm_math.h:

@@ -1,5 +1,15 @@
 # fifty_mujoco
 
+> **2026-10-31 当前状态**：平面杆长改为**垂直铰轴投影**，恢复 **210 / 250 mm**（三维距离
+> 210.315 / 253.947 mm 含侧向安装偏移，不是杆长），末端连杆回到 **96.600 mm**，23.1 mrad 的
+> 参考姿态移动**撤回**；气弹簧改用三维销距（含 11 mm 侧向错位）。闭链骨架
+> `assets/mjcf/fifty_closed_skeleton.xml` **已重新生成**并编译，两环残差 1.1e-16 m。
+> 只跑了不依赖仿真库的检查（`mechanism-check`、`joint-conventions`、`closed-mjcf` 与四个纯
+> pytest 模块）；完整 pytest、MuJoCo 动力学、CUDA、训练均未执行。
+> 完整启动顺序见 `../../progress.md` §25 —— 其中明确指出：`audit-assets`、`build-assets`、
+> `spring-*`、`train*`、`evaluate-*`、`gpu-parity`、`export`、`play` **仍绑定旧串联模型**，
+> 必须完成新模型适配后才能用于验收。
+
 五十版轮腿机器人的 MuJoCo 迁移工程。对应方案文档
 `zhongzhuang/轮腿机器人_本机迁移方案2.0注意事项.md` 的 **P0–P10 阶段**。
 
@@ -22,6 +32,25 @@ CPU 回归；新增独立评估器 `evaluate-stand`（64 独立初态 × 60 s，
 `control/lqr_teacher.py` 与 `evaluate-lqr` 保留为诊断工具，不再作为示教/预训练前置。
 当前主线改为 STEP 机构建模（`docs/STEP_GEOMETRY_AUDIT.md`）。
 
+**2026-10-30 补充（机构确认与关节约定）**：
+- 固连变体已在 SolidWorks 确认（A 销固定在大腿板 → `link_a_on_thigh`），
+  闭链现在可实例化，`±0.15 rad` 内 961/961 闭合。
+- 新增 `configs/joint_conventions.yaml` + `mechanism/conventions.py`：六个通道的
+  基座轴向、左右符号、零位与**参考站立姿态**，全部与 MJCF/策略契约/`robot.yaml` 交叉核对。
+  核对过程中纠正了一处：左轮有效轴与右轮相同（+Y），不是腿关节那样的镜像。
+- 新增 `mechanism/bridge.py`：等效串联模型 ↔ 真实闭链（曲柄）的映射与 Jacobian，
+  过滤 ±π 绕回和可行域边界造成的假根。详见 `docs/JOINT_CONVENTIONS.md`。
+
+**2026-10-31 补充（四项 CAD 事实 + 弹簧数据）**：
+- 曲柄角是**地面参考**：两台 DM-8009 都固定在 `【复用交C件】髋关节大铝件`（车体架）上，
+  所以 `crank = 电机角`，不带大腿项。
+- 轮由 **M3508 自带减速器直接驱动**；Mk4 行星（行星架固定，14.88:1）在 CAD 里但**不在动力路径上**。
+- 链传动齿数由齿座几何数出并用标准节距验证：**16 → 19 齿、12.7 mm 链、传动比 1.1875**。
+- 气弹簧两端确认（上=大腿板、下=小腿板）。最初的 4500 N / 195 mm 两个读数都已撤回
+  （前者是电机上限的 6 倍，后者其实是装配姿态画出来的销距），改按 **450 N / ≈250 mm**，
+  这一组与机构自洽。记录在 `configs/gas_spring.yaml: real_spring` 与
+  `docs/STEP_GEOMETRY_AUDIT.md` §6.10。
+
 ## 快速开始
 
 ```bash
@@ -37,6 +66,10 @@ uv run python -m fifty_mujoco.cli spring-sweep
 uv run python -m fifty_mujoco.cli contact-test
 uv run python -m fifty_mujoco.cli contract-test
 uv run python -m fifty_mujoco.cli render --variant visual --prefix fifty  # 固定视角截图
+uv run python -m fifty_mujoco.cli mechanism-check        # 闭链拓扑、闭合与可行性
+uv run python -m fifty_mujoco.cli closed-mjcf            # 生成并校验闭链 MJCF 骨架
+uv run python -m fifty_mujoco.cli joint-conventions      # 关节符号/零位/轴向 + 参考姿态
+uv run python tools/report_index.py                      # 重建 reports/index.json
 uv run pytest -q
 ```
 
@@ -114,15 +147,23 @@ docs/         MIGRATION_STATUS.md、PHASES.md、STEP_GEOMETRY_AUDIT.md
 
 ## 已知未核实项
 
-- 轮半径 0.06 m 只是网格半径，可能缺胎面。
+- 轮半径 0.06 m、轮距、质量与惯量按用户约定沿用，未新增实测证据。
 - 关节限位是围绕装配姿态的外接框，不是五连杆真实可行域。
 - 关节速度上限 1000 rad/s 是占位值。
 - 力矩上限按分组：腿 30 N·m（占位）/ 轮 5 N·m（取自复旦资产）。
 - 轮关节 `armature=0.01 kg·m²` 是**没有厂商数据的暂定值**，但没有它轮速环在
   5 ms 下会发散；腿关节 armature 仍为 0。
-- base_link 占总质量 91%，惯量未复核。
-- 气弹簧按复旦数据设为每侧 300 N（每侧 1 支、共 2 支），**锚点借自复旦、
-  行程未实测**，P3 关卡未关闭。
+- base_link 占总质量约 91%；沿用已接受惯量，闭链转换仍需正确分组和坐标变换。
+- 气弹簧按复旦数据设为每侧 300 N（每侧 1 支、共 2 支）。**锚点已从 STEP 确认**
+  （上=大腿板、下=小腿板，装配姿态销距 194.95 mm），名义力 **450 N**、自由长度 **≈250 mm**、
+  行程 75 mm 已记录：三维标称销距 227.760939 mm，已压缩 22.239061 mm、剩余可压缩 52.760939 mm。
+  **P3 尚未关闭**：真实锚点、三维力方向与行程检查尚未接入；首轮允许明确标注的 450 N 常力近似，见
+  `configs/gas_spring.yaml: real_spring`、`docs/STEP_GEOMETRY_AUDIT.md` §6.10。
+
+**2026-10-31 离线纠正**：保留 URDF 坐标与侧向安装偏移，平面投影杆长为 **210 / 250 mm**；三维原点距离不是平面杆长。末端连杆保持 **96.600 mm**，撤回节点移动与 23.1 mrad 姿态修正结论。旧默认姿态轮心在髋前方 22.865 mm，不是正下方；本轮未改变运行默认角与策略契约。
+
+**闭链骨架尚不能训练**：旧 XML 及其历史编译报告保留，未按这次数值修正重新生成。源码生成器与运动学已共用投影解析入口；完整候选模型还缺地面、碰撞、正确惯量、真实弹簧、轮轴/连续关节修正及 CPU/GPU 环境名称与初始化适配。详见 docs/CLOSED_CHAIN.md。
+
 - 车身原先按 G1 记录的基座旋转是倒的，现在用 `base.mesh_correction` 单独修正
   base_link；整条链的规范化推导留待车头方向确认后重做。
 - **默认站立姿态下 `Kp=20` 抱不住车身**：维持 `h0` 需约 14/21 N·m，而
@@ -131,5 +172,4 @@ docs/         MIGRATION_STATUS.md、PHASES.md、STEP_GEOMETRY_AUDIT.md
 - **复旦教师不可迁移到本机**：教师对应 `infantry_V4`（20.68 kg、腿长 0.494 m、
   默认角 ±0.2/±0.4），本项目 23.26 kg、0.460 m、默认角 ±2.055/−2.559，
   关节零位约定不同。`policy_contract.teacher.distillation_enabled=false`。
-- **端到端 GPU 训练未验证**：只验证了 MuJoCo Warp 物理批量（133k env-steps/s
-  @1024 worlds），PD/观测/奖励仍在 NumPy 里。
+- **历史状态已更新**：旧串联模型已有端到端 GPU 训练与 CPU/GPU 对拍记录（progress.md §22）；旧策略 64×60 s 为 0/64。新闭链模型尚未验证，这些旧报告不迁移为新模型通过。

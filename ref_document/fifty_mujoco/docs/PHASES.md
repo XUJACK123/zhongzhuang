@@ -1,5 +1,7 @@
 # 关卡状态（P0–P10）
 
+> **2026-10-31 最新覆盖说明**：下表的仿真/测试计数是旧串联模型或旧骨架历史证据，本轮未重跑。旧模型 GPU 对拍及 64×60 s 评估已见 progress.md §22（策略 0/64）；新闭链须重新过关。平面杆长已纠正为 210/250 mm，末端 96.600 mm；弹簧三维标称销距 227.760939 mm，已压缩 22.239061 mm、剩余可压缩 52.760939 mm。当前运行仍为旧锚点 300 N。完整检查顺序以 progress.md §25 为准。
+
 > 验证级别只使用方案 §9.2 的六档，且不能跨级标记：
 > 静态检查通过 / CPU仿真通过 / GPU仿真通过 / 训练工程通过 / 策略评估通过 / 实机验证通过。
 
@@ -8,7 +10,7 @@
 | P0 来源冻结 | 源 URDF、7 个 STL 哈希、关节树、已知缺陷复现 | ✅ 静态检查通过（5/5） | `reports/assets_audit.json` |
 | P1 坐标与物理资产 | 单次刚体变换重算 visual/COM/惯量、重生成碰撞、两个 MJCF、§3.6 放行 | ✅ 静态检查通过（18/18） | `reports/model_validation.json` |
 | P2 正立初始化 | SpawnSpec、根四元数、轮底离地、顶部标记、无穿地 | ✅ CPU仿真通过（8/8） | `reports/spawn_report.json` |
-| P3 安装几何与力模型 | 气弹簧两端安装点、行程、力方向、虚功 | ⚠️ **接口通过（9/9），关卡未关闭** | `reports/spring_report.json`；锚点借自复旦，行程未实测 |
+| P3 安装几何与力模型 | 气弹簧两端安装点、行程、力方向、虚功 | ⚠️ **接口通过（9/9），关卡未关闭** | `reports/spring_report.json`；锚点已从 STEP 确认（上=大腿板、下=小腿板），名义力 450 N、自由长度 ≈250 mm、行程 75 mm 均已确认，标称已压缩 22.239061 mm、剩余可压缩 52.760939 mm；新锚点与模型尚未接入（`docs/STEP_GEOMETRY_AUDIT.md` §6.10–§6.11、`mechanism-check` 的 `gas_spring` 段） |
 | P4 电机与被动力组合 | 六通道方向/单位、A/B/C 组合、断使能仍有被动支撑 | ✅ CPU仿真通过（12 + 3） | `reports/joint_test.json`、`reports/spring_sweep.json` |
 | P5 接触与策略契约 | 25/125/149、PD、五帧历史、terminal/reset | ✅ CPU仿真通过（4 + 12）；**2026-10-29 重开修复后重跑** | `reports/contact_test.json`、`reports/contract_test.json`、`tests/test_env_contract_reset.py` |
 | P6 教师复现 | ONNX 权重恢复、原模型复现、通道语义 | ⚠️ **权重恢复通过，迁移失败** | `reports/teacher_report.json`、`reports/teacher_eval.json` |
@@ -18,7 +20,11 @@
 | P10 导出与回放 | ONNX 数值对拍、普通 MuJoCo 独立回放 | ✅ 训练工程通过 | `runs/export/*.onnx` + `play` |
 | 新增：独立站立评估 | 64 独立初态 × 60 s、逐环境首次失败、不混入 reset 状态 | 🟡 **评估器已实现并实测（CPU）**；demo_run4 在 6 s 窗口 8/8 存活、vx MAE 0.201（`reports/stand_eval_demo_run4_6s.json`）；**64×60 s 未跑完，门槛仍空缺** | `tests/test_stand_eval.py` |
 | 新增：LQR 教师 | 当前模型 LQR/PD 教师 + 动作适配 | ⏸ **路线暂停**（用户决定不用作教师）；原型 6 s 内 0/4 失败，保留为诊断工具 | `reports/lqr_teacher_eval.json`、`tests/test_lqr_teacher.py` |
-| 新增：STEP 结构与轴线 | 产品/实例/变换、圆柱归属、同零件两轴距离、平面机构三点 | 🟡 **G01–G07 复现且带零件名；平面三点已推出**；未在 SolidWorks 复核、无质量信息 | `docs/STEP_GEOMETRY_AUDIT.md`、`reports/step_geometry_audit.json`、`tools/step_audit_standalone.py` |
+| 新增：STEP 结构与轴线 | 产品/实例/变换、圆柱归属、同零件两轴距离、平面机构三点 | 🟡 **G01–G07 复现且带零件名；平面三点已推出**；锚点/固连变体/驱动路径已在 SolidWorks 复核；仍无质量信息 | `docs/STEP_GEOMETRY_AUDIT.md`、`reports/step_geometry_audit.json`、`tools/step_audit_standalone.py` |
+| 新增：驱动与弹簧信息（S2b） | 六路电机型号/实装数量/所属装配、气弹簧轴向与销距、轮侧行星减速比 | ✅ **静态提取完成，并已由操作者在 SolidWorks 逐项确认**：4×DM-8009（固定在髋关节大铝件）+ 2×M3508（自带减速器直接驱动轮）；销距 194.950 mm（装配姿态）；链传动 16→19 齿 = 1.1875；Mk4 行星 14.88:1 **但不在轮驱动链上**；旧 4500 N / 195 mm 读法已撤回；平面杆长按垂直铰轴投影为 210 / 250 mm，三维销距（含 11 mm 侧向错位）装配 194.949622、标称 227.760939 mm；动力学尚未接入 | `docs/STEP_GEOMETRY_AUDIT.md` §6.6–§6.10、`configs/gas_spring.yaml: real_spring`、`reports/step_geometry_audit.json` |
+| 新增：闭链拓扑（S2c） | 两种固连候选的可行域、A 销承载件 | ✅ **已确认**：A 销固定在大腿板 → `link_a_on_thigh`，961/961 闭合 | `configs/mechanism.yaml`、`reports/mechanism_check_*.json` |
+| 新增：闭链 MJCF 骨架（S2c→C） | 七刚体/腿的真实环链、两个 `<connect>` 闭合、六通道输入 | 🟡 **骨架已重新生成并编译通过**：nq 21 / nv 20 / nu 6 / neq 4、两环残差 1.1e-16 m、总质量与串联资产相等；带 URDF 侧向偏移（三维 0.210315 / 平面 0.210000 m）；**无网格/无碰撞/无弹簧/不是训练模型** | `assets/mjcf/fifty_closed_skeleton.xml`、`docs/CLOSED_CHAIN.md`、`tests/test_closed_chain.py` |
+| 新增：关节约定与参考姿态（S3） | 六通道基座轴向/符号/零位、参考站立姿态、串联↔闭链映射与 Jacobian | ✅ **静态检查通过**：轴向与 MJCF 一致、参考姿态弦长 0.404751 m 且非奇异 | `configs/joint_conventions.yaml`、`docs/JOINT_CONVENTIONS.md`、`reports/joint_conventions_*.json` |
 
 ## 命令与关卡的对应
 
@@ -43,6 +49,8 @@ train-gpu         P9（--resume / --init-from 为 2026-10-29 新增）
 evaluate-stand    独立站立验收（2026-10-29 新增，CPU）
 evaluate-lqr      LQR 教师门槛（2026-10-29 新增）
 step-audit        S2 STEP 装配结构审计（2026-10-29 新增）
+mechanism-check   S2c 闭链拓扑、闭合误差与可行域（2026-10-29 新增）
+joint-conventions S3 关节符号/零位/轴向与参考姿态（2026-10-30 新增）
 export            P10
 play              P10
 ```
@@ -82,5 +90,4 @@ play              P10
 4. 推力依据：型号、参考长度下的推力、力—长度曲线、温度/公差资料。
 5. 气弹簧与连接件质量是否已并入 CAD 刚体（避免重复计重）。
 
-在这些数据补齐之前，MJCF 中**不会**生成 site/tendon/motor，`validate-mjcf` 会记录
-`gas_spring: not_generated_missing_geometry_and_force`，P3/P4 保持未通过。
+当前旧串联 MJCF 已有参考 300 N 弹簧，闭链骨架尚无弹簧。真实参数记录不能自动生成新锚点与力模型，须完成集成再重验 P3/P4。力曲线可后补，首轮允许显式 450 N 常力近似。

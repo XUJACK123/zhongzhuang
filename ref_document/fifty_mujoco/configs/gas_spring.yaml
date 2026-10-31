@@ -1,19 +1,22 @@
 # Passive gas spring schema (doc section 12.2).
 #
-# STATUS: `reference_300n`.  One spring per side, data transferred from the
-# Fudan model, NOT measured on this robot:
+# STATUS: `reference_300n` - **this is what the running environment reads**, and
+# it is still the Fudan placeholder, unchanged:
 #   * force          : constant 300 N per side (Fudan `d.ctrl = 300` on the
 #                      tendon motors `Left_loop1_motor` / `Right_loop1_motor`)
 #   * anchors        : Fudan sites `right_lf0_qitanhuang` / `right_lf1_qitanhuang`
 #                      (left: `left_*`), expressed as offsets from the hip / knee
-#                      joint origin in the assembly pose.  That description is
-#                      independent of link geometry, so it transfers to this
-#                      robot even though the two CAD parts differ.
-#   * stroke         : UNKNOWN -> no stroke limit is enforced; `spring-audit`
-#                      reports the achieved length, but P3 cannot pass without
-#                      the real min/max length.
-#   * compensation   : off.  Fudan's analytic 300*1.23 hip moment is NOT copied
-#                      (unverified compensation, doc 11.3 / 12.6).
+#                      joint origin in the assembly pose.
+#   * stroke         : UNKNOWN -> no stroke limit is enforced.
+#   * compensation   : off.
+#
+# The machine's real spring is recorded further down under `real_spring`
+# (450 N, ~250 mm free length, 75 mm stroke).  It is **not** applied here and must
+# not be: its anchors are the STEP ones from `configs/mechanism.yaml`, while the
+# springs below still hang off the Fudan transfer positions.  Wiring 450 N onto
+# the Fudan anchors would produce a number that is wrong twice and looks right
+# once.  The switch happens together with the closed-chain model (progress.md §25
+# stage ②/③).
 #
 # `force_n > 0` means "push the two anchors apart" (gas spring).  MuJoCo tendon
 # motors act as cables (positive ctrl shortens a tendon), so the runtime writes
@@ -27,14 +30,6 @@ gas_springs:
   actual_count_verified: true
   actual_count_per_side: 1
   feature_order: [gas_right, gas_left]
-  transfer_source: >-
-    ref_document/fudan_rl_wheel_leg-main/mujoco/assert_now/infantry_binglian_yuntai/
-    infantry_V2/meshes/mjmodel.xml (sites 114-121 / 133-140, tendons 195-205,
-    actuators 219-220); runtime constant in mujoco/python_tools/onnx_mj_binglian.py:106-110
-  transfer_rule: >-
-    anchor = joint_origin + (Fudan anchor position at its q=0 assembly pose minus
-    the same joint origin), i.e. the offset is copied in base coordinates.
-    Link-local numbers would mix in the different CAD link frames and knee angles.
   springs:
     - name: gas_right
       side: right
@@ -73,3 +68,118 @@ gas_springs:
       parameter_status: reference_300n
       stroke_status: unverified
       source: fudan_tendon_motor_300N
+
+
+# ---------------------------------------------------------------------------
+# Accepted real-spring data, NOT YET used by the runtime gas_springs block above.
+# Geometry uses spatial pin-centre distance. Runtime reference_300n is retained
+# until the new model's anchors, stroke limits and control interface are integrated.
+real_spring:
+  model: "1BKB0.45-75"
+  side_count: 2
+  source: "operator, 2026-10-31; STEP anchor geometry; progress.md section 25"
+  runtime_integrated: false
+  datasheet:
+    free_length_mm: 250.0
+    free_length_basis: "operator estimate: approximately 250 mm; not a precise datasheet measurement"
+    free_length_tolerance_mm: 5.0
+    tolerance_basis: "provisional sensitivity range, not a measured manufacturing tolerance"
+    max_working_stroke_mm: 75.0
+    nominal_force_n: 450.0
+    nominal_force_basis: "operator confirmed 0.45 means 450 N; no force curve measured"
+    status: provisional
+  anchors:
+    datum: "assembly pose, shared planar YZ datum, mm"
+    upper:
+      part: "【复用交C件】上部弹簧套_默认"
+      body: thigh
+      point_yz_mm: [26.521227636, -24.158015360]
+      offset_from_hip_mm: 51.000
+      evidence: "operator confirmation and thigh-bore coaxiality"
+    lower:
+      part: "【复用交C件】下部弹簧套_默认"
+      body: shin
+      point_yz_mm: [-120.869023913, 102.965816698]
+      offset_from_knee_mm: 48.632
+      evidence: "operator confirmation and shin-bore coaxiality"
+    pin_axis_offset_mm: 11.0
+    pin_distance_at_assembly_mm: 194.949622
+    pin_axis: "parallel X axes; pin centres separated 11 mm axially"
+  envelope:
+    distance_metric: spatial_pin_center_distance
+    scope: "ideal planar linkage plus constant axial pin offset; not complete closed-chain feasible range"
+    delta_at_assembly_deg: 99.015764
+    pin_at_assembly_mm: 194.949622
+    planar_pin_at_assembly_mm: 194.639038
+    pin_axis_offset_mm: 11.0
+    pin_min_mm: 152.152021
+    delta_at_min_pin_deg: 175.258206
+    pin_max_mm: 249.126126
+    pin_at_folded_limit_mm: 152.371079
+    pin_travel_mm: 96.974105
+    chord_min_mm: 40.000000
+    chord_max_mm: 460.000000
+    note: "pin spacing has an interior minimum near 175.26 degrees; the 180-degree distance is not the minimum"
+  window_as_stated:
+    distance_metric: spatial_pin_center_distance
+    free_length_mm: 250.0
+    stroke_mm: 75.0
+    min_chord_mm: 221.189651
+    max_chord_mm: 460.000000
+    min_height_m: 0.281189651
+    max_height_m: 0.520000000
+    nominal_pin_distance_mm: 227.760939
+    compression_at_nominal_height_mm: 22.239061
+    remaining_compression_at_nominal_height_mm: 52.760939
+    clamps_extension: false
+    clamps_flexion: true
+    verdict: >-
+      geometry-only feasible at the nominal reference. About 22.239 mm is already
+      compressed (remaining extension), while about 52.761 mm of compression
+      stroke remains. Neither value proves dynamic landing capability.
+  free_length_from_geometry:
+    full_extension_pin_mm: 249.126126
+    minimum_pin_mm: 152.152021
+    full_flexion_pin_mm: 152.371079
+    note: "derived geometry, not a replacement for the approximately 250 mm specification"
+  withdrawn_readings:
+    - { value: 4500.0, unit: N, why: "operator corrected the nominal force to 450 N" }
+    - { value: 195.0, unit: mm, why: "assembly installed length, not free length" }
+    - { value: 22.505, unit: mm, why: "old planar estimate of compression already used; wrongly described as remaining compression travel" }
+  physics_check:
+    result: geometry_consistent_dynamics_unverified
+    load_estimate:
+      full_vehicle_load_lever_torque_nm: 24.815155
+      symmetric_half_load_example_nm_per_side: 12.407577
+      note: >-
+        simplified F times knee offset at the vertical reference only. 24.8 Nm
+        used the whole vehicle load; it is not a per-leg requirement during
+        two-leg support. Body COM, link weights, wheel reactions and transmission
+        must be included before stating actual motor torque or spring sufficiency.
+    force_check:
+      nominal_force_n: 450.0
+      model: constant_force_candidate
+      measured_curve_available: false
+      verdict: "450 N may be used as an explicitly approximate first-run baseline; no support-balance or motor-margin verdict yet"
+    length_check:
+      geometric_nominal_pose_reachable: true
+      free_length_mm: 250.0
+      nominal_pin_distance_mm: 227.760939
+      compression_at_nominal_height_mm: 22.239061
+      remaining_compression_at_nominal_height_mm: 52.760939
+    action: "integrate the real anchors and spatial stroke in the new model before enabling its 450 N force profile"
+  open_questions:
+    - "exact free length and force progression can refine the accepted approximation later"
+    - "full mechanical limits, collision and dynamics remain unverified"
+
+# The Fudan transfer description belongs to the placeholder above, not to the
+# real spring; it is kept here because `spring-audit` re-reads it every run.
+placeholder_transfer:
+  transfer_source: >-
+    ref_document/fudan_rl_wheel_leg-main/mujoco/assert_now/infantry_binglian_yuntai/
+    infantry_V2/meshes/mjmodel.xml (sites 114-121 / 133-140, tendons 195-205,
+    actuators 219-220); runtime constant in mujoco/python_tools/onnx_mj_binglian.py:106-110
+  transfer_rule: >-
+    anchor = joint_origin + (Fudan anchor position at its q=0 assembly pose minus
+    the same joint origin), i.e. the offset is copied in base coordinates.
+    Link-local numbers would mix in the different CAD link frames and knee angles.

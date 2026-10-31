@@ -51,11 +51,43 @@ static void test_protocol(void)
     {
         assert(decoded.channel[i] == 0);
     }
-    assert(decoded.switch_left == 2U);
-    assert(decoded.switch_right == 3U);
+    assert(decoded.switch_right == 2U); /* HKU s[0] */
+    assert(decoded.switch_left == 3U);  /* HKU s[1] */
 
     make_dbus_frame(frame, 0U, 2U, 3U);
     assert(!chassis_dbus_decode(frame, &decoded));
+
+    /* HKU 验证阈值为 +/-700，只检查前四通道；第五通道不拒绝整帧。 */
+    make_dbus_frame(frame, 1024U, 1U, 2U);
+    frame[16] = 0U;
+    frame[17] = 0U;
+    assert(chassis_dbus_decode(frame, &decoded));
+    assert(decoded.channel[4] == -1024);
+    assert(decoded.switch_right == 1U && decoded.switch_left == 2U);
+    const int16_t offsets[] = {-701, -700, -660, 0, 660, 700, 701};
+    for (size_t channel = 0U; channel < 4U; ++channel)
+    {
+        for (size_t j = 0U; j < sizeof(offsets) / sizeof(offsets[0]); ++j)
+        {
+            make_dbus_frame(frame, 1024U, 2U, 3U);
+            uint64_t bits = 0U;
+            for (size_t k = 0U; k < 6U; ++k) bits |= (uint64_t)frame[k] << (8U * k);
+            bits &= ~((uint64_t)0x7ffU << (11U * channel));
+            bits |= (uint64_t)(1024 + offsets[j]) << (11U * channel);
+            for (size_t k = 0U; k < 6U; ++k) frame[k] = (uint8_t)(bits >> (8U * k));
+            assert(chassis_dbus_decode(frame, &decoded) == (offsets[j] >= -700 && offsets[j] <= 700));
+            assert(decoded.channel[channel] == offsets[j]);
+        }
+    }
+    for (uint8_t right = 0U; right <= 3U; ++right)
+    {
+        for (uint8_t left = 0U; left <= 3U; ++left)
+        {
+            make_dbus_frame(frame, 1024U, right, left);
+            assert(chassis_dbus_decode(frame, &decoded) == (right != 0U && left != 0U));
+            assert(decoded.switch_right == right && decoded.switch_left == left);
+        }
+    }
     assert(chassis_torque_vector_valid(torque));
     torque[2] = NAN;
     assert(!chassis_torque_vector_valid(torque));

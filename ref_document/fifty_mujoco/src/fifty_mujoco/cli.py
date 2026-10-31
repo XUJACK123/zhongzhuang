@@ -550,9 +550,34 @@ def cmd_train(args: argparse.Namespace, config: Config) -> int:
     return 0
 
 
+def _parse_init_parts(text: str | None) -> tuple[str, ...] | None:
+    """``--init-parts`` -> sub-module tuple (``None`` = the whole network)."""
+    if text is None:
+        return None
+    cleaned = text.strip().lower()
+    if cleaned in ("", "all"):
+        return None
+    known = {"actor", "encoder", "critic", "std"}
+    parts = tuple(part.strip() for part in cleaned.split(",") if part.strip())
+    unknown = [part for part in parts if part not in known]
+    if unknown or not parts:
+        raise SystemExit(
+            f"--init-parts: unknown {', '.join(unknown) or text!r}; "
+            f"choose from {', '.join(sorted(known))} or 'all'"
+        )
+    return parts
+
+
 def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
     """PPO on the Warp + CUDA-graph environment, with live progress."""
     from .learning.gpu_ppo import GpuPpoConfig, GpuPpoTrainer, plot_progress
+
+    if args.resume and args.init_from:
+        print("  --resume and --init-from are different experiments; pick one")
+        return 2
+    if args.resume and _parse_init_parts(args.init_parts) is not None:
+        print("  --init-parts only applies to --init-from")
+        return 2
 
     run_dir = PROJECT_ROOT / "runs" / (args.name or datetime.now(timezone.utc).strftime("gpu_%Y%m%d_%H%M%S"))
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -576,6 +601,7 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
         max_std=args.max_std,
         adaptive_lr=not args.no_adaptive_lr,
         stop_on_survive=args.stop_on_survive,
+        stand_command=args.stand_command,
         checkpoint_keep=args.checkpoint_keep,
         progress_path=run_dir / "progress.log",
         save_path=run_dir / "model_last.pt",
@@ -590,8 +616,12 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
             print("  WARNING: the model or config hash changed since that checkpoint; "
                   "this is a different experiment, not a continuation")
     elif args.init_from:
-        loaded = trainer.load(Path(args.init_from), resume=False)
-        print(f"  initialised from {args.init_from} (weights only, fresh optimiser)")
+        parts = _parse_init_parts(args.init_parts)
+        loaded = trainer.load(Path(args.init_from), resume=False, parts=parts)
+        description = "all weights" if parts is None else " + ".join(parts)
+        print(f"  initialised from {args.init_from} ({description}, fresh optimiser/std/critic "
+              f"unless listed)")
+        print(f"  next update index: {trainer.update_count + 1}")
     # Start the clock *after* environment construction + CUDA-graph capture,
     # otherwise ~15 s of setup is silently taken out of the requested budget.
     deadline = time.perf_counter() + args.minutes * 60.0
@@ -626,6 +656,10 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
         "num_envs": args.num_envs,
         "num_steps": args.steps,
         "updates": result["updates"],
+        "total_updates": result["total_updates"],
+        "stop_reason": result["stop_reason"],
+        "stand_command": args.stand_command,
+        "init_from": trainer.init_from,
         "env_steps": result["env_steps"],
         "elapsed_s": result["elapsed_s"],
         "sps": result["env_steps"] / max(result["elapsed_s"], 1e-9),
@@ -643,7 +677,8 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
         plot_path = Path(args.plot) if args.plot else run_dir / "progress.png"
         plot_progress(records, plot_path, title=f"GPU PPO  {args.num_envs} 环境 × {args.steps} 步")
         print(f"  plot : {plot_path}")
-    print(f"\n  updates   : {result['updates']}")
+    print(f"\n  updates   : {result['updates']} this run / {result['total_updates']} total"
+          f"  (stop: {result['stop_reason']})")
     print(f"  env steps : {result['env_steps']:,}")
     print(f"  elapsed   : {result['elapsed_s']:.1f} s ({report['sps']:,.0f} env-steps/s)")
     print(f"  checkpoint: {run_dir / 'model_last.pt'}")
@@ -811,6 +846,31 @@ def cmd_step_audit(args: argparse.Namespace, config: Config) -> int:
             print(f"      {value}  {entry['label']}  [{entry['status']}]  {parts}")
         for entry in geometry.get("cross_part", []):
             print(f"      {'unmeasured':>13}  {entry['label']}  [{entry['status']}]")
+        drive = report.get("drive_train") or {}
+        if drive:
+            print(f"  drive     : {drive['motor_count']} motor(s) inside a "
+                  f"{drive['module_assembly']} module "
+                  f"({len(drive['excluded_motors'])} other name match(es) rejected)")
+            for motor in drive["motors"]:
+                print(f"      {motor['count']:2d} x {motor['product']}")
+            spring = drive["gas_spring"]
+            pins = spring.get("pin_to_pin") or {}
+            if pins:
+                print(f"  spring    : pin-to-pin {pins['center_distance_mm']:.3f} mm "
+                      f"(along {pins['along_spring_axis_mm']:.3f}, "
+                      f"off axis {pins['perpendicular_mm']:.3f}) [{spring['status']}]")
+            else:
+                print(f"  spring    : {spring.get('status')} (no pin pair measured)")
+            gearbox = drive.get("gearbox") or {}
+            ratio = gearbox.get("ratio") or {}
+            arrangements = ratio.get("arrangements") or []
+            if arrangements:
+                best = arrangements[0]
+                print(f"  gearbox   : Z_sun {ratio['sun_teeth']} (derived), planets "
+                      f"{gearbox['planet_teeth']}, ring {gearbox['ring_teeth']} -> "
+                      f"{best['ring_fixed_carrier_output']:.2f}:1 ring fixed / "
+                      f"{best['carrier_fixed_ring_output']:.2f}:1 carrier fixed "
+                      f"[{ratio['status']}]")
     for needle, matches in summary["matches"].items():
         print(f"  match {needle!r}: {len(matches)} instance(s)")
         for entry in matches[:3]:
@@ -903,6 +963,104 @@ def cmd_stage_plan(args: argparse.Namespace, config: Config) -> int:
     return 0
 
 
+def cmd_joint_conventions(args: argparse.Namespace, config: Config) -> int:
+    """Print and verify the joint sign/zero/axis table and the reference pose."""
+    from datetime import datetime, timezone
+
+    import yaml
+
+    from .mechanism import load_mechanism
+    from .mechanism.conventions import load_conventions, mjcf_joint_axes, reference_pose
+    from .paths import configs_dir
+
+    conventions = load_conventions()
+    axes = mjcf_joint_axes()
+    with (configs_dir() / "robot.yaml").open("r", encoding="utf-8") as handle:
+        robot = yaml.safe_load(handle)
+    with (configs_dir() / "policy_contract.yaml").open("r", encoding="utf-8") as handle:
+        contract = yaml.safe_load(handle)
+    verification = conventions.verify(axes, robot, contract)
+
+    mechanism = load_mechanism()
+    pose = reference_pose(conventions, mechanism)
+    solved = conventions.reference_channel_values()
+    drift = {
+        "thigh_rad": pose.thigh_angle - solved["thigh_rad"],
+        "shin_rad": pose.shin_angle - solved["shin_rad"],
+        "crank_rad": pose.crank_angle - solved["crank_rad"],
+    }
+    target = conventions.reference.get("target") or {}
+    chord_target = float(target.get("chord_m", 0.0))
+
+    report = {
+        "tool": "joint-conventions",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "version": (conventions.meta or {}).get("version"),
+        "frame": (conventions.meta or {}).get("frame"),
+        "verification": verification,
+        "channels": [
+            {
+                "name": entry.name,
+                "role": entry.role,
+                "side": entry.side,
+                "axis_base": list(entry.axis_base),
+                "sign": entry.sign,
+                "zero_rad": entry.zero_rad,
+                "limit_rad": list(entry.limit_rad) if entry.limit_rad else None,
+                "drives": entry.drives,
+            }
+            for entry in conventions.channels
+        ],
+        "reference_pose": {
+            "stored": solved,
+            "recomputed": pose.as_dict(),
+            "drift_rad": drift,
+            "chord_target_m": chord_target,
+            "chord_recomputed_m": pose.chord_m,
+            "singular": abs(pose.jacobian_det) < 1e-6,
+        },
+        "status": (
+            "passed"
+            if verification["status"] == "passed"
+            and max(abs(value) for value in drift.values()) <= 1e-9
+            and abs(pose.chord_m - chord_target) <= 1e-9
+            else "failed"
+        ),
+        "note": (
+            "signs and zeros are the simulation/asset convention; the real encoder"
+            " zeroes and CAN directions remain a deployment calibration"
+        ),
+    }
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    out = _report_path(report, args.json, f"joint_conventions_{stamp}.json")
+
+    print(f"version : {report['version']}   frame : {report['frame']}")
+    print("channel        side   axis            sign   zero(rad)   drives")
+    for entry in conventions.channels:
+        axis = ", ".join(f"{value:+.0f}" for value in entry.axis_base)
+        print(
+            f"  {entry.name:<13} {entry.side:<6} [{axis}]  {entry.sign:+.0f}"
+            f"   {entry.zero_rad:+.6f}   {entry.drives}"
+        )
+    print(f"axes verified against the MJCF : {verification['status']}")
+    for problem in verification["problems"]:
+        print(f"  PROBLEM: {problem}")
+    print(
+        f"reference pose : thigh {pose.thigh_angle:+.6f}  shin {pose.shin_angle:+.6f}"
+        f"  crank {pose.crank_angle:+.6f} rad"
+    )
+    print(
+        f"  chord {pose.chord_m:.9f} m (target {chord_target:.9f})"
+        f"  det J {pose.jacobian_det:+.6f}"
+        f"  {'SINGULAR' if report['reference_pose']['singular'] else 'non-singular'}"
+    )
+    worst = max(abs(value) for value in drift.values())
+    print(f"  stored-vs-recomputed drift : {worst:.3e} rad")
+    print(f"status : {report['status']}")
+    print(f"report : {out}")
+    return 0 if report["status"] == "passed" else 1
+
+
 def cmd_mechanism_check(args: argparse.Namespace, config: Config) -> int:
     from datetime import datetime, timezone
 
@@ -918,6 +1076,35 @@ def cmd_mechanism_check(args: argparse.Namespace, config: Config) -> int:
         print(f"  {line}")
     print(f"  report : {out}")
     return 0 if report["passed"] else 1
+
+
+def cmd_closed_mjcf(args: argparse.Namespace, config: Config) -> int:
+    from datetime import datetime, timezone
+
+    from .assets.build_closed_mjcf import main as build_and_verify
+
+    status = build_and_verify()
+    report = _closed_mjcf_report()
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    out = _report_path(report, args.json, f"closed_chain_{stamp}.json")
+    print(f"  report : {out}")
+    return status
+
+
+def _closed_mjcf_report() -> dict:
+    from .assets.build_closed_mjcf import verify
+
+    report = verify()
+    return {
+        "tool": "closed-mjcf",
+        "schema": 1,
+        "claim": (
+            "the closed chain compiles, both loops close at the assembly pose, and the"
+            " total mass equals the serial asset; it is a kinematic skeleton, not the"
+            " training model"
+        ),
+        **report,
+    }
 
 
 def cmd_export(args: argparse.Namespace, config: Config) -> int:
@@ -1154,7 +1341,14 @@ def build_parser() -> argparse.ArgumentParser:
         "--stop-on-survive",
         type=int,
         default=0,
-        help="stop after N consecutive evals that survive the whole window (0 = off)",
+        help="stop after N consecutive evals that survive the whole window (0 = off); "
+        "a window shorter than 60 s never counts as solved",
+    )
+    gpu.add_argument(
+        "--stand-command",
+        action="store_true",
+        help="hold vx=0, wz=0 and h=h0 for every env and episode (curriculum stage 1); "
+        "without it the environment resamples the motion commands",
     )
     gpu.add_argument("--name", default=None)
     gpu.add_argument("--plot", default=None)
@@ -1168,6 +1362,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--init-from",
         default=None,
         help="load only the network weights into a new experiment (fresh optimiser)",
+    )
+    gpu.add_argument(
+        "--init-parts",
+        default="all",
+        help="sub-modules taken by --init-from: all (default), or a comma-separated "
+        "subset of actor,encoder,critic,std. The H0 warm start is actor,encoder - "
+        "the critic, the exploration std and the optimiser stay freshly initialised",
     )
     gpu.add_argument(
         "--checkpoint-keep",
@@ -1244,6 +1445,18 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
 
+    closed = subparsers.add_parser(
+        "closed-mjcf",
+        help="S2c: emit and verify the closed-chain MJCF skeleton (kinematics only)",
+    )
+    closed.add_argument("--json", default=None)
+
+    conventions_cmd = subparsers.add_parser(
+        "joint-conventions",
+        help="S3: joint signs/zeros/axes and the reference standing pose",
+    )
+    conventions_cmd.add_argument("--json", default=None)
+
     stage_plan = subparsers.add_parser(
         "stage-plan",
         help="S5: print the curriculum/randomisation plan and the baseline train command",
@@ -1256,6 +1469,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="seeds to emit commands for (default: the baseline seed list)",
     )
+    stage_plan.add_argument("--json", default=None)
 
     parity = subparsers.add_parser(
         "gpu-parity", help="S1: CPU/GPU contract parity, field by field"
@@ -1310,6 +1524,8 @@ def main(argv: list[str] | None = None) -> int:
         "evaluate-lqr": cmd_evaluate_lqr,
         "step-audit": cmd_step_audit,
         "mechanism-check": cmd_mechanism_check,
+        "closed-mjcf": cmd_closed_mjcf,
+        "joint-conventions": cmd_joint_conventions,
         "stage-plan": cmd_stage_plan,
         "gpu-parity": cmd_gpu_parity,
         "export": cmd_export,
