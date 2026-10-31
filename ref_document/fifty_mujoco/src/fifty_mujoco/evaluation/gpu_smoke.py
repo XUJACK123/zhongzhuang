@@ -50,9 +50,8 @@ def _mjw_batch(config: Config, nworld: int = 1024, steps: int = 100) -> dict[str
     import warp as warp
 
     from ..envs.cpu_env import FiftyCpuEnv
-    from ..paths import assets_dir
 
-    xml = assets_dir() / "mjcf" / "fifty_train.xml"
+    xml = config.model_xml()
     cpu = FiftyCpuEnv(xml, config)
     root_z, _ = resolve_spawn_height(cpu, load_spawn_spec(config))
     defaults = np.array([config.default_angles[name] for name in config.joint_order])
@@ -113,9 +112,8 @@ def run_smoke(config: Config, num_envs: int = 16) -> dict[str, Any]:
         from mjlab.entity import EntityCfg  # noqa: F401
 
         gpu_report["mjlab_import"] = True
-        from ..paths import assets_dir
 
-        xml = assets_dir() / "mjcf" / "fifty_train.xml"
+        xml = config.model_xml()
         spec = mujoco.MjSpec.from_file(str(xml))
         gpu_report["mj_spec_bodies"] = len(spec.bodies)
         gpu_report["mj_spec_joints"] = len(spec.joints)

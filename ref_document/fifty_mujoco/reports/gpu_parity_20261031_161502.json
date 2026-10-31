@@ -1,0 +1,426 @@
+{
+  "tool": "gpu-parity",
+  "schema": 1,
+  "generated_at": "2026-10-31T16:15:01+00:00",
+  "device": "cuda:0",
+  "num_envs": 64,
+  "steps": 48,
+  "fixed_command": [
+    0.0,
+    0.0,
+    0.4647513721610853
+  ],
+  "seed": 7,
+  "fields": {
+    "obs": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00014717876712408244,
+      "relative_tolerance": 0.02,
+      "worst_step": 19,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "privileged": {
+      "max_abs_error": 0.0005766441650265769,
+      "tolerance": 0.005,
+      "max_rel_error": 0.00024815167832434456,
+      "relative_tolerance": 0.02,
+      "worst_step": 20,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "privileged_spring": {
+      "max_abs_error": 2.886918573918873e-05,
+      "tolerance": 0.005,
+      "max_rel_error": 2.753570245101299e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 21,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "reward": {
+      "max_abs_error": 2.842806661675079e-05,
+      "tolerance": 0.0001,
+      "max_rel_error": 0.0010348230681777335,
+      "relative_tolerance": 0.02,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00014717876712408244,
+      "relative_tolerance": 0.02,
+      "worst_step": 19,
+      "first_step_exceeding": null,
+      "passed": true
+    }
+  },
+  "field_groups": {
+    "obs.ang_vel": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00025123555758454065,
+      "relative_tolerance": 0.02,
+      "worst_step": 19,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.projected_gravity": {
+      "max_abs_error": 3.083931091985015e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 3.083931091985015e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 7.144109095734018e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.leg_pos": {
+      "max_abs_error": 5.099924636509101e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 9.955148654689629e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 24,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.joint_vel": {
+      "max_abs_error": 0.00010858707392036315,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00048346435185989746,
+      "relative_tolerance": 0.02,
+      "worst_step": 22,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.last_action": {
+      "max_abs_error": 2.9635488507651075e-08,
+      "tolerance": 0.002,
+      "max_rel_error": 4.939248084608513e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 30,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].ang_vel": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00023082865512988026,
+      "relative_tolerance": 0.02,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].projected_gravity": {
+      "max_abs_error": 1.8782303840891856e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 1.9578457226026064e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 27,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 7.144109095734018e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].leg_pos": {
+      "max_abs_error": 5.099924636509101e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00010048663730579815,
+      "relative_tolerance": 0.02,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].joint_vel": {
+      "max_abs_error": 0.0001045337216466144,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00048346435185989746,
+      "relative_tolerance": 0.02,
+      "worst_step": 41,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].last_action": {
+      "max_abs_error": 2.9635488507651075e-08,
+      "tolerance": 0.002,
+      "max_rel_error": 5.1159398984267925e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 34,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].ang_vel": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.0002579845793208953,
+      "relative_tolerance": 0.02,
+      "worst_step": 22,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].projected_gravity": {
+      "max_abs_error": 1.9931560316321928e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 2.2974843331663557e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 26,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 7.144109095734018e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].leg_pos": {
+      "max_abs_error": 5.099924636509101e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 9.955148654689629e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 27,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].joint_vel": {
+      "max_abs_error": 0.00010858707392036315,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00048346435185989746,
+      "relative_tolerance": 0.02,
+      "worst_step": 25,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].last_action": {
+      "max_abs_error": 2.9635488507651075e-08,
+      "tolerance": 0.002,
+      "max_rel_error": 4.939248084608513e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 33,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].ang_vel": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.0002551106574653996,
+      "relative_tolerance": 0.02,
+      "worst_step": 21,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].projected_gravity": {
+      "max_abs_error": 2.142294360085728e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 2.441982224127385e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 7.144109095734018e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].leg_pos": {
+      "max_abs_error": 5.099924636509101e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 9.955148654689629e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 26,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].joint_vel": {
+      "max_abs_error": 0.00010858707392036315,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00048346435185989746,
+      "relative_tolerance": 0.02,
+      "worst_step": 24,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].last_action": {
+      "max_abs_error": 2.9635488507651075e-08,
+      "tolerance": 0.002,
+      "max_rel_error": 4.939248084608513e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 32,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].ang_vel": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00025123555758454065,
+      "relative_tolerance": 0.02,
+      "worst_step": 20,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].projected_gravity": {
+      "max_abs_error": 2.7055067526315923e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 2.7055067526315923e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 7.144109095734018e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].leg_pos": {
+      "max_abs_error": 5.099924636509101e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 9.955148654689629e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 25,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].joint_vel": {
+      "max_abs_error": 0.00010858707392036315,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00048346435185989746,
+      "relative_tolerance": 0.02,
+      "worst_step": 23,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].last_action": {
+      "max_abs_error": 2.9635488507651075e-08,
+      "tolerance": 0.002,
+      "max_rel_error": 4.939248084608513e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 31,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].ang_vel": {
+      "max_abs_error": 0.00034200766986947073,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00025123555758454065,
+      "relative_tolerance": 0.02,
+      "worst_step": 19,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].projected_gravity": {
+      "max_abs_error": 3.083931091985015e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 3.083931091985015e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].command": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 7.144109095734018e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].leg_pos": {
+      "max_abs_error": 5.099924636509101e-05,
+      "tolerance": 0.002,
+      "max_rel_error": 9.955148654689629e-05,
+      "relative_tolerance": 0.02,
+      "worst_step": 24,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].joint_vel": {
+      "max_abs_error": 0.00010858707392036315,
+      "tolerance": 0.002,
+      "max_rel_error": 0.00048346435185989746,
+      "relative_tolerance": 0.02,
+      "worst_step": 22,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].last_action": {
+      "max_abs_error": 2.9635488507651075e-08,
+      "tolerance": 0.002,
+      "max_rel_error": 4.939248084608513e-08,
+      "relative_tolerance": 0.02,
+      "worst_step": 30,
+      "first_step_exceeding": null,
+      "passed": true
+    }
+  },
+  "termination_flag_mismatches": 0,
+  "forced_reset": {
+    "reached": true,
+    "post_reset_obs": {
+      "max_abs_error": 1.6601172525554375e-07,
+      "tolerance": 0.002,
+      "max_rel_error": 0.0,
+      "relative_tolerance": 0.0,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "note": "the observation returned for a finished env must describe the reset state, not the state the episode died in (§18.1)"
+  },
+  "graph_replay": {
+    "captured": true,
+    "comparison": {
+      "graph_replay_obs": {
+        "max_abs_error": 1.1920928955078125e-06,
+        "tolerance": 1e-05,
+        "max_rel_error": 0.0,
+        "relative_tolerance": 0.0,
+        "worst_step": 8,
+        "first_step_exceeding": null,
+        "passed": true
+      },
+      "graph_replay_qpos": {
+        "max_abs_error": 3.5762786865234375e-07,
+        "tolerance": 1e-06,
+        "max_rel_error": 0.0,
+        "relative_tolerance": 0.0,
+        "worst_step": 6,
+        "first_step_exceeding": null,
+        "passed": true
+      }
+    }
+  },
+  "failures": [],
+  "status": "passed"
+}

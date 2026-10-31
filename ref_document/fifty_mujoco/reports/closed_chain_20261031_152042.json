@@ -1,0 +1,58 @@
+{
+  "tool": "closed-mjcf",
+  "schema": 1,
+  "claim": "the closed chain compiles, both loops close at the assembly pose, and the total mass equals the serial asset; it is a kinematic skeleton, not the training model",
+  "model": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/assets/mjcf/fifty_closed_train.xml",
+  "nq": 21,
+  "nv": 20,
+  "nu": 8,
+  "neq": 4,
+  "ntendon": 2,
+  "nbody": 16,
+  "total_mass_kg": 23.259630515567014,
+  "loop_residual_m": {
+    "right:ternary.LINK_PIN_A": 2.1619283448996456e-13,
+    "right:end_link.END_PIN_A": 1.833755621206907e-12,
+    "left:ternary.LINK_PIN_A": 2.1619283448996456e-13,
+    "left:end_link.END_PIN_A": 1.833755621206907e-12
+  },
+  "worst_loop_residual_m": 1.833755621206907e-12,
+  "spring_length_m": {
+    "right": 0.22776093947347678,
+    "left": 0.22776093947347678
+  },
+  "constraint_rank": {
+    "equality_constraints": 4,
+    "equality_rows": 12,
+    "lateral_zero_rows": 4,
+    "active_rows": 8,
+    "rank": 8,
+    "full_rank_on_active_rows": true,
+    "dof_after_constraints": 12,
+    "dof_count_formula_nv_minus_2neq": 12,
+    "note": "3 rows per <connect>; the y row is identically zero because every hinge axis is parallel to Y, so the expected rank is 4*neq/3*2 = 8; the real DOF is nv - rank = 12 (6 base + thigh+crank+wheel per leg)"
+  },
+  "qpos": [
+    0.0,
+    0.0,
+    0.4647513721610853,
+    1.0,
+    0.0,
+    0.0,
+    0.0,
+    -1.738502588860534,
+    0.7337288174439673,
+    0.0,
+    -0.8961012017729433,
+    -0.7337288174839613,
+    0.6250562478652886,
+    -0.733728817468918,
+    1.738502588860534,
+    -0.7337288174439673,
+    0.0,
+    0.8961012017729433,
+    0.7337288174839613,
+    -0.6250562478652886,
+    0.733728817468918
+  ]
+}

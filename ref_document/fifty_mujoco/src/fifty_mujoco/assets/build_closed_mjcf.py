@@ -44,6 +44,7 @@ from ..mechanism.closed_pose import (
     DRIVEN,
     JOINT_NAMES,
     SIDES,
+    TREE,
     ClosedPose,
     reference_pose,
 )
@@ -72,6 +73,22 @@ LOOP_BODY_MASS_KG = 0.030
 #: Thin-rod radius used for the loop bodies' inertia, metres.
 LOOP_BODY_RADIUS_M = 0.008
 
+#: Reflected inertia added to the four passive loop hinges, kg m^2.
+#:
+#: The CAD links are 30 g with a swing inertia of 3e-5 kg m^2, i.e. the loop
+#: hinges have ``dof_invweight0`` ~ 2e4 -- four orders above the 21 kg trunk they
+#: have to hold.  The equality rows then have to balance a near-massless lever
+#: against the trunk, which is numerically hopeless: MuJoCo (float64) and
+#: mujoco_warp (float32, Newton tolerance floored at 1e-6) disagreed by 42 % on
+#: ``obs.joint_vel`` within one policy step, and the passive links rang at
+#: 34 rad/s.  This is a *conditioning* term (bearings, clevis pins, the parts the
+#: CAD simplified away), not a measured value -- same status as the wheel's
+#: provisional armature.  Measured effect on the CPU/GPU gap, 64 envs x 48 steps:
+#: 0 -> 1.1e-1 (relative), 2e-3 -> 2.5e-2, 5e-3 -> 1.3e-2, 2e-2 -> 4.2e-1 (the
+#: loop starts lagging the trunk instead).  5e-3 is the smallest value that puts
+#: the closed model inside the same budget the serial model passes.
+PASSIVE_ARMATURE_KG_M2 = 0.005
+
 #: Nominal standing height, metres (== ``joint_conventions.yaml`` target).
 STANDING_HEIGHT_M = 0.4647513721610853
 
@@ -89,17 +106,6 @@ LEG_TORQUE_NM = 30.0
 WHEEL_TORQUE_NM = 5.0
 
 MODEL_NAME = "fifty_closed_train"
-
-#: ``(body, parent)`` spanning tree; the two loops are equalities.
-TREE: tuple[tuple[str, str], ...] = (
-    ("thigh", "trunk"),
-    ("shin", "thigh"),
-    ("wheel", "shin"),
-    ("crank", "trunk"),
-    ("push_rod", "crank"),
-    ("ternary", "push_rod"),
-    ("end_link", "ternary"),
-)
 
 #: ``(site1, site2)`` pairs that must coincide, i.e. the closed loops.
 LOOPS: tuple[tuple[tuple[str, str], tuple[str, str]], ...] = (
@@ -384,7 +390,7 @@ def build_model(
     ET.SubElement(
         root,
         "option",
-        {"timestep": "0.005", "integrator": "implicitfast", "cone": "elliptic"},
+        {"timestep": "0.0025", "integrator": "implicitfast", "cone": "elliptic"},
     )
     default = ET.SubElement(root, "default")
     ET.SubElement(default, "joint", {"damping": "0.03", "frictionloss": "0.015"})
@@ -411,6 +417,14 @@ def build_model(
             )
         else:
             ET.SubElement(entry, "joint", {"damping": "0.03", "frictionloss": "0.015"})
+    # Non-driven loop hinges: same passive damping as above, plus the
+    # conditioning inertia documented on ``PASSIVE_ARMATURE_KG_M2``.
+    passive = ET.SubElement(default, "default", {"class": "passive"})
+    ET.SubElement(
+        passive,
+        "joint",
+        {"damping": "0.03", "frictionloss": "0.015", "armature": _fmt(PASSIVE_ARMATURE_KG_M2)},
+    )
 
     world = ET.SubElement(root, "worldbody")
     ET.SubElement(
@@ -503,6 +517,7 @@ def build_model(
                 attributes["class"] = "knee" if name in ("shin", "end_link") else "hip"
                 attributes["range"] = _vec((-DRIVEN_RANGE_RAD, DRIVEN_RANGE_RAD))
             else:
+                attributes["class"] = "passive"
                 attributes["limited"] = "false"
             ET.SubElement(element, "joint", attributes)
 
@@ -523,15 +538,17 @@ def build_model(
                 )
 
         if anchored is not None:
+            # Site names follow the runtime contract (``<spring>_a`` / ``<spring>_b``)
+            # so ``control.gas_spring.spring_geometry`` finds them unchanged.
             ET.SubElement(
                 bodies["thigh"],
                 "site",
-                {"name": f"{key}_gas_a", "pos": _vec(anchored["upper"]), "size": "0.004"},
+                {"name": f"gas_{side}_a", "pos": _vec(anchored["upper"]), "size": "0.004"},
             )
             ET.SubElement(
                 bodies["shin"],
                 "site",
-                {"name": f"{key}_gas_b", "pos": _vec(anchored["lower"]), "size": "0.004"},
+                {"name": f"gas_{side}_b", "pos": _vec(anchored["lower"]), "size": "0.004"},
             )
             authored["spring"][side] = {
                 "upper_local_m": [round(v, 9) for v in anchored["upper"]],
@@ -555,18 +572,25 @@ def build_model(
                     "name": f"{key}_{first[0]}_{first[1]}",
                     "site1": f"{key}_{first[0]}_{first[1]}",
                     "site2": f"{key}_{second[0]}_{second[1]}",
-                    "solref": "0.004 1",
+                    # 2x the 2.5 ms timestep.  With 0.004 s and a 5 ms step the
+                    # loops stretched 15-18 mm under the robot's weight and the
+                    # leg could not support it (found in stage 5); ``solref``
+                    # must be >= 2*timestep and stiff enough for 23 kg.
+                    "solref": "0.005 1",
                 },
             )
 
     if authored["spring"]:
         tendon = ET.SubElement(root, "tendon")
         for side, key in SIDES:
-            ET.SubElement(
-                tendon,
-                "spatial",
-                {"name": f"gas_{side}", "site1": f"{key}_gas_a", "site2": f"{key}_gas_b", "width": "0.006"},
+            # ``spatial`` takes child <site> elements; site1/site2 is the
+            # <fixed> tendon schema and MuJoCo rejects it here (this was the
+            # first compile error, found 2026-10-31).
+            spatial = ET.SubElement(
+                tendon, "spatial", {"name": f"gas_{side}_length", "width": "0.006"}
             )
+            ET.SubElement(spatial, "site", {"site": f"gas_{side}_a"})
+            ET.SubElement(spatial, "site", {"site": f"gas_{side}_b"})
 
     actuator = ET.SubElement(root, "actuator")
     for side, key in SIDES:
@@ -594,7 +618,7 @@ def build_model(
                 "motor",
                 {
                     "name": f"gas_{side}_force",
-                    "tendon": f"gas_{side}",
+                    "tendon": f"gas_{side}_length",
                     "gear": "1",
                     "ctrllimited": "true",
                     "ctrlrange": _vec((-SPRING_FORCE_N, SPRING_FORCE_N)),
@@ -689,7 +713,10 @@ def verify(path: Path | None = None) -> dict[str, Any]:
     model = mujoco.MjModel.from_xml_path(str(target))
     data = mujoco.MjData(model)
     mujoco.mj_resetDataKeyframe(model, data, 0)
-    mujoco.mj_kinematics(model, data)
+    # ``mj_forward`` (not ``mj_kinematics``): tendon lengths live in
+    # ``data.ten_length`` and are only filled by the forward pass.  With
+    # ``mj_kinematics`` the springs report 0 mm and look like a defect.
+    mujoco.mj_forward(model, data)
 
     def site(name: str) -> Any:
         return data.site_xpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, name)].copy()
@@ -704,9 +731,51 @@ def verify(path: Path | None = None) -> dict[str, Any]:
             )
     springs: dict[str, float] = {}
     for side in ("right", "left"):
-        identifier = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_TENDON, f"gas_{side}")
+        identifier = mujoco.mj_name2id(
+            model, mujoco.mjtObj.mjOBJ_TENDON, f"gas_{side}_length"
+        )
         if identifier >= 0:
             springs[side] = float(data.ten_length[identifier])
+
+    # Constraint rank: ``nv - 2*neq`` is a count, not a rank.  Each <connect>
+    # contributes three rows, so the equality Jacobian has 3*neq rows and the
+    # real remaining DOF is ``nv - rank``.  Contacts are disabled and a fresh
+    # ``MjData`` is used, otherwise ``efc_J`` still contains the wheel/floor
+    # contact rows from the keyframe and the rank check compares apples to pears.
+    model.opt.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_CONTACT)
+    data = mujoco.MjData(model)
+    mujoco.mj_resetDataKeyframe(model, data, 0)
+    mujoco.mj_forward(model, data)
+    types = np.asarray(data.efc_type)
+    equality = types == int(mujoco.mjtConstraint.mjCNSTR_EQUALITY)
+    jacobian = np.array(data.efc_J, dtype=float).reshape(int(data.nefc), model.nv)[equality]
+    rows = int(jacobian.shape[0])
+    # Every hinge axis is parallel to Y, so a <connect>'s y-component cannot be
+    # changed by any coordinate: that row is identically zero.  It is correct
+    # for the mechanism to have 4 such rows (2 loops x 2 legs); calling that
+    # "rank deficient" would be wrong, so the zero rows are counted separately.
+    row_norms = np.linalg.norm(jacobian, axis=1) if rows else np.zeros(0)
+    zero_rows = int(np.sum(row_norms < 1e-9))
+    active = jacobian[row_norms >= 1e-9] if rows else jacobian
+    active_rows = int(active.shape[0])
+    rank = int(np.linalg.matrix_rank(active, tol=1e-8)) if active_rows else 0
+    constraint = {
+        "equality_constraints": int(model.neq),
+        "equality_rows": rows,
+        "lateral_zero_rows": zero_rows,
+        "active_rows": active_rows,
+        "rank": rank,
+        "full_rank_on_active_rows": bool(active_rows and rank == active_rows),
+        "dof_after_constraints": int(model.nv - rank),
+        "dof_count_formula_nv_minus_2neq": int(model.nv - 2 * model.neq),
+        "note": (
+            "3 rows per <connect>; the y row is identically zero because every"
+            " hinge axis is parallel to Y, so the expected rank is 4*neq/3*2 = 8;"
+            " the real DOF is nv - rank = 12 (6 base + thigh+crank+wheel per leg)"
+        ),
+    }
+    model.opt.disableflags &= ~int(mujoco.mjtDisableBit.mjDSBL_CONTACT)
+
     return {
         "model": str(target),
         "nq": int(model.nq),
@@ -719,6 +788,7 @@ def verify(path: Path | None = None) -> dict[str, Any]:
         "loop_residual_m": residuals,
         "worst_loop_residual_m": max(residuals.values()) if residuals else 0.0,
         "spring_length_m": springs,
+        "constraint_rank": constraint,
         "qpos": [float(value) for value in data.qpos],
     }
 
@@ -732,11 +802,22 @@ def main() -> int:
         f"  neq {report['neq']}  ntendon {report['ntendon']}"
     )
     print(f"mass     : {report['total_mass_kg']:.4f} kg")
+    constraint = report["constraint_rank"]
+    print(
+        f"rank     : {constraint['rank']}/{constraint['active_rows']} active rows"
+        f" ({constraint['lateral_zero_rows']} lateral rows are structurally zero)"
+        f"  full rank {constraint['full_rank_on_active_rows']}"
+        f"  dof {constraint['dof_after_constraints']}"
+    )
     for name, residual in report["loop_residual_m"].items():
         print(f"  loop   {name}  {residual:.3e} m")
     for side, length in report["spring_length_m"].items():
         print(f"  spring {side:<5}  {length * 1000.0:.6f} mm")
-    return 0 if report["worst_loop_residual_m"] < 1e-9 else 1
+    return 0 if (
+        report["worst_loop_residual_m"] < 1e-9
+        and constraint["full_rank_on_active_rows"]
+        and constraint["lateral_zero_rows"] == 2 * len(LOOPS)
+    ) else 1
 
 
 if __name__ == "__main__":  # pragma: no cover

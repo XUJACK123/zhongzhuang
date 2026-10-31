@@ -1,6 +1,6 @@
 # 轮腿机器人：当前状态、下一步与注意事项
 
-> 更新：2026-10-31 21:00（Asia/Hong_Kong）
+> 更新：2026-10-31 23:40（Asia/Hong_Kong）
 > 项目根：`D:\robomaster_material\electric_contol\zhongzhuang`；实施工程：`ref_document/fifty_mujoco/`；模型资产：`solidwork_graph/`
 > **本文是精简版**，只保留"现在是什么状态、下一步做什么、别踩哪些坑"。
 > 逐轮的详细过程、失败记录与原始输出在 `backups/progress_history_20261031_204938.md`
@@ -15,13 +15,19 @@
 
 ## 1. 一句话状态
 
-几何、姿态、弹簧、驱动已全部确认并通过离线数值复核；**闭链候选训练模型已生成但从未编译**；
-所有"验证训练条件"的入口仍指向旧的等效串联模型。**离开始训练还有 3 个必做阶段**。
+阶段 ①–⑦ **全部跑通**：训练入口已切到 `configs/models.yaml` 注册表（`FIFTY_MODEL` 选择），
+串链模型（默认）的初始化、短时仿真、接触、契约、CPU/GPU 对拍、20-update 冒烟全部通过；
+**闭链候选模型已编译、可通过 CPU 侧检查，但 CPU/GPU 对拍仍超预算，因此仍是 `candidate`，
+不参与训练**。剩下的只有阶段 ⑧ 正式训练与阶段 ⑨ 验收——按约定，开训前先报用户。
 
 ```
-pytest tests        289 collected · 0 failed · 8 skipped（无 CUDA）
-mechanism-check     verdict: all attempted checks within 1e-9 m
-closed-mjcf         verify() 尚未运行过（需要 MuJoCo 编译）
+pytest              314 passed（含 1 个 CUDA 对拍用例，本机有 GPU 时不再 skip）
+spawn-audit         PASS（两模型）       clearance 0.01 m，环残差 ≤1.8e-12 m
+joint-test          PASS 12/12           spring-sweep PASS 4/4
+contact-test        PASS 4/4（两模型）   wheel_load_path / drop / rolling / fallen_pose
+contract-test       PASS 12/12           25/125/6、PD、限幅、历史顺序
+gpu-parity          serial: passed（0 终止标志不符）   closed: failed（见 §6）
+train-gpu 冒烟      20 updates / 30,720 env steps / 3.1 s / 9.8k sps，checkpoint 落盘
 ```
 
 ---
@@ -167,49 +173,48 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 | 阶段 | 内容 | 状态 |
 |---|---|---|
 | ① 离线数值检查 | 几何、姿态、弹簧、映射的派生值一致 | ✅ **完成**（2026-10-31） |
-| ② 训练模型接入 | 地面/碰撞/惯量/弹簧/轮轴/连续轮关节/电机限制 + **入口切到新模型** | 🟡 **部分**：候选模型已生成（未编译）；入口**未**切 |
-| ③ 环境与编译检查 | 编译无误；约束秩满；名称映射 100% | ⬜ 未开始 |
-| ④ 初始化检查 | 主动+被动关节、基座姿态、速度、控制量、历史全部显式设置；闭链闭合、轮地正确、弹簧未越程 | ⬜ 未开始 |
-| ⑤ CPU 短时仿真 | 逐通道扰动、弹簧方向、接触；无 NaN/穿透/发散 | ⬜ 未开始 |
-| ⑥ 契约与对拍 | 25/125/6 语义、CPU/GPU 容差、终止与重置 | ⬜ 未开始 |
-| ⑦ 训练冒烟 | 固定高度站立 20 updates；保存/恢复/评估 | ⬜ 未开始 |
-| ⑧ 正式训练 | R0 纯 PPO；H0 视兼容性；**总预算 ≤ 3 h** | ⬜ 未开始 |
+| ② 训练模型接入 | 地面/碰撞/惯量/弹簧/轮轴/连续轮关节/电机限制 + **入口切到新模型** | ✅ **完成**：`configs/models.yaml` 注册表 + `FIFTY_MODEL`；spawn/joint/spring/contact/contract/parity/train/evaluate 全部走 `config.model_xml()` |
+| ③ 环境与编译检查 | 编译无误；约束秩满；名称映射 100% | ✅ **完成**：nq21/nv20/nu8/neq4/ntendon2，秩 8/8（4 行侧向结构零），DOF 12，20/20 名称映射命中 |
+| ④ 初始化检查 | 主动+被动关节、基座姿态、速度、控制量、历史全部显式设置；闭链闭合、轮地正确、弹簧未越程 | ✅ **完成**：被动关节由 keyframe 播种，spawn z 0.474751372，环残差 ≤1.8e-12 m，弹簧 227.760939 mm |
+| ⑤ CPU 短时仿真 | 逐通道扰动、弹簧方向、接触；无 NaN/穿透/发散 | ✅ **完成**：joint-test 12/12、spring-sweep 4/4、contact-test 4/4（判据已改为接触路径，见 §6） |
+| ⑥ 契约与对拍 | 25/125/6 语义、CPU/GPU 容差、终止与重置 | ✅ **串链通过**：0 终止标志不符、契约通道 1.7e-7；闭链仍超预算（见 §6） |
+| ⑦ 训练冒烟 | 固定高度站立 20 updates；保存/恢复/评估 | ✅ **完成**：20 updates / 30,720 steps / 3.1 s，`runs/stage7_smoke/model_last.pt` |
+| ⑧ 正式训练 | R0 纯 PPO；H0 视兼容性；**总预算 ≤ 3 h** | ⏸ **等用户确认后开跑** |
 | ⑨ 站立验收 | 64 独立初态 × 60 s，**≥61/64**；速度 MAE ≤ 0.03 m/s、高度 MAE ≤ 0.02 m | ⬜ 未开始 |
 
 ---
 
 ## 5. 下一步
 
-### 5.1 立刻要做（阶段 ② 剩余的第一件事）
+### 5.1 现在只剩两件事
 
-1. **生成并编译候选模型**，这是 `verify()` 第一次真正跑：
+1. **阶段 ⑧ 正式训练（等确认）**。冒烟已验证链路，正式训练的基线命令：
 
    ```bash
    cd ref_document/fifty_mujoco
-   uv run python -m fifty_mujoco.cli closed-mjcf --json
+   ./.venv/bin/python -m fifty_mujoco.cli train-gpu \
+     --stand-command --num-envs 64 --steps 24 --minutes 180 \
+     --name r0_stand --plot
    ```
 
-   必须看到：
-   - `nq 21 / nv 20 / nu 8 / neq 4 / ntendon 2`
-   - 两环残差 `< 1e-9 m`（在**编译后**，不是生成时）
-   - 弹簧长度 `227.760939 mm`（三维，含 11 mm 侧向差）
-   - 总质量 `23.2596 kg`
+   预算 ≤ 3 h；`--stand-command` 固定指令为 `(0,0,标称高度)`，与验收口径一致。
 
-2. **检查约束秩**。`nv − 2·neq = 12` 只是数出来的自由度，**不是**秩检查。要算
-   `<connect>` 的约束 Jacobian 在 keyframe 下的秩；秩亏通常意味着两环共线或某环退化成
-   同一 body 内的自约束。
+2. **阶段 ⑨ 验收**：`evaluate-stand --seeds 64 --seconds 60`，要求 ≥61/64 存活，
+   速度 MAE ≤ 0.03 m/s、高度 MAE ≤ 0.02 m。
 
-3. **加 `configs/models.yaml`**：模型版本 + 刚体/执行器/弹簧名称映射，把
-   `spawn` / `spring-audit` / `contact-test` / `contract-test` / `gpu-parity` / `train*` /
-   `evaluate-*` 的模型路径改成可选。**在此之前，这些入口的任何"通过"都属于旧模型。**
+### 5.2 闭链模型的"转正"还差什么
 
-### 5.2 然后（阶段 ③–⑤）
+闭链候选模型已经能编译、能过 CPU 侧全部检查，但对拍超预算（`obs.joint_vel` 相对误差
+3.3e-2 > 2e-2，CUDA graph 回放 1.5e-4 > 1e-5）。要转正需要：
 
-按 §4 顺序推进。每阶段的**命令、预期报告、通过标准、失败处理**见
-[`ref_document/fifty_mujoco/docs/STARTUP_GUIDE.md`](ref_document/fifty_mujoco/docs/STARTUP_GUIDE.md)；
-关卡定义见 `docs/PHASES.md`。
+- 定位 graph 回放差异（怀疑 `mj_step` 的约束 warm-start 状态没进捕获图）；
+- 复核 4 根被动连杆的 `PASSIVE_ARMATURE_KG_M2 = 0.005`——它是数值正则项，不是实测值；
+- 用真实弹簧数据复核 450 N / 锚点（`gas_spring.yaml` 里仍是 Fudan 300 N 占位）。
+
+在转正之前，**训练与验收都用串链模型**，这也是 `models.yaml` 的 `meta.default`。
 
 ### 5.3 默认角切换：不要单独做
+
 
 `robot.yaml: default_angles_rad` 切到参考姿态会连带 **12 项回归基线失效**：
 
@@ -257,14 +262,32 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 12. **不要用放大 `damping` 掩盖约束发散**，那会把机构问题变成参数问题。
 13. 被动关节落到另一支路时，查初值是否与 `bridge.py` 同支，不要加大迭代次数。
 14. 预算用完未达验收就**停下来记录**，不要延长预算重跑同一配置。
-15. 中途改奖励/课程后不得仍当作同一组对照。
-
+15. 中途改奖励/课程后不得仍当作同一组对照。16. **控制周期必须由模型 timestep 推导，不能读配置常量。** 串链 XML 是 5 ms、闭链 XML 是
+    2.5 ms，用 `simulation.timestep_s` 会让闭链的 `dt` 变成 5 ms（应该是 10 ms），
+    对拍时两边做的子步数不同。现在用 `Config.decimation_for(model.opt.timestep)`，
+    除不尽直接抛错。
+17. **`fixed_command` 里的 NaN 表示"用标称高度"**，必须在下发前解析掉。曾把它原样写进
+    `obs[8]`，非有限值触发终止，每步都 reset，对拍 599 个标志不符。
+18. **对拍预算要分两类**：契约通道（command / last_action / 重置后 obs / graph replay /
+    终止标志）仍是绝对值 1e-7 级；轨迹通道（角度、角速度、奖励）走绝对 + 相对双预算，
+    因为 `mujoco_warp` 是 float32 且把 Newton 容差夹在 1e-6，而 CPU MuJoCo 是 float64/1e-8。
+    闭链模型在**同一初值同一动作**下，一个 10 ms 策略步就能让 `qvel` 差 9e-2 rad/s。
+19. **`contact-test` 的 `wheel_load_path` 不再验证"轮子承担全部重量"**：那是静力恒等式，
+    而 PD 在垂直滑轨上永远不严格静止（零偏置时 PD 不出力，有偏置时持续蠕动），
+    测得比值随 100 步窗口的位置在 0.80–1.30 之间跳。现在固定基座、只验接触路径
+    （只有轮-地接触、两侧都接触），"能不能站住"交给冒烟和验收。
+20. 被动连杆（曲柄/推杆/三元/端杆，各 30 g，摆动静惯量 3e-5 kg·m²）会让等约束承担的
+    转动惯量比机身小四个数量级，float32 直接算不动。`PASSIVE_ARMATURE_KG_M2 = 0.005`
+    是**数值正则项**，不是实测值，转正前必须复核。
 ### 工程
 
-16. **文本资产的哈希要按 LF 归一化**（`stl.sha256_text`）：`core.autocrlf=true` 把 URDF 变 CRLF，
+21. **文本资产的哈希要按 LF 归一化**（`stl.sha256_text`）：`core.autocrlf=true` 把 URDF 变 CRLF，
     原始字节哈希会把"检出了 CRLF"误报成"文件被改"。二进制 STL 仍用原始字节。
-17. `tests/test_report_index.py` 会因为新增报告失败——先跑 `python tools/report_index.py`。
-18. 完整 `pytest` 会 `import mujoco` 并编译模型；跑它就等于越过了"不跑 MuJoCo"的边界。
+22. `tests/test_report_index.py` 会因为新增报告失败——先跑 `python tools/report_index.py`。
+23. 完整 `pytest` 会 `import mujoco` 并编译模型；跑它就等于越过了"不跑 MuJoCo"的边界。
+24. **`mujoco` 固定在 `==3.16.0`**（`pyproject.toml` 里有注释）：3.17 把 `eq_data` 加宽到 12 列，
+    而 mjlab 1.3.0 依赖的 `mujoco_warp` 3.8.1 仍按 11 列写，等约束路径直接崩——闭链模型
+    正好只用等约束。
 
 ---
 
@@ -333,3 +356,4 @@ python tools/report_index.py                           # 报告索引，之后�
 | §24.15 | 10-31 | 文档同步、回归源码、启动指南 |
 | §25 | 10-31 | 九阶段启动指南（已抽出为 `docs/STARTUP_GUIDE.md`） |
 | §26 | 10-31 | 阶段 ② 第一批代码：闭链参考 qpos、候选训练模型生成器；默认角切换**回退** |
+| §27 | 10-31 | 阶段 ②–⑦：`models.yaml` 注册表 + `FIFTY_MODEL`、闭链编译与秩检查、被动关节 keyframe 播种、`decimation_for`、NaN 指令、对拍双预算、`wheel_load_path` 新判据、被动连杆 armature、mujoco 锁 3.16.0、20-update 冒烟 |

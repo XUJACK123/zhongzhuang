@@ -69,7 +69,10 @@ class FiftyVecEnv:
 
         from ..paths import assets_dir
 
-        xml = assets_dir() / "mjcf" / f"fifty_{self.options.variant}.xml"
+        if self.options.variant == "train":
+            xml = config.model_xml()
+        else:
+            xml = assets_dir() / "mjcf" / f"fifty_{self.options.variant}.xml"
         self.single = FiftyCpuEnv(xml, config)  # name maps, spring list, summaries
         self.model = self.single.model
         self.num_envs = int(self.options.num_envs)
@@ -94,9 +97,7 @@ class FiftyVecEnv:
             leg_position_scale=float(config.robot["control"]["leg_position_scale"]),
             wheel_velocity_scale=float(config.robot["control"]["wheel_velocity_scale"]),
         )
-        self.decimation = int(round(
-            float(config.robot["control"]["policy_dt_s"]) / float(config.robot["simulation"]["timestep_s"])
-        ))
+        self.decimation = config.decimation_for(float(self.model.opt.timestep))
         self.dt = self.decimation * float(self.model.opt.timestep)
 
         self.springs = load_springs(config) if config.gas_spring_configured else []
@@ -244,6 +245,13 @@ class FiftyVecEnv:
         rates = np.zeros(self.spring_count)
         forces = np.zeros(self.spring_count)
         joint_torque = np.zeros(6)
+        # The spring Jacobian has one entry per DOF (nv).  ``[6:]`` assumed the
+        # only DOFs are the free-root six plus the six policy joints, which is
+        # false for the closed model (8 passive hinges).  Address the policy
+        # joints by their DOF index instead.
+        policy_dofs = np.array(
+            [self.single.dof_adr[name] for name in names.MODEL_JOINT_ORDER], dtype=int
+        )
         dt = float(self.model.opt.timestep)
         for k, spring in enumerate(self.springs):
             proxy = _SlotView(self.single, self.data[index])
@@ -255,7 +263,7 @@ class FiftyVecEnv:
             lengths[k] = length
             rates[k] = rate
             forces[k] = force
-            joint_torque += geometry["jacobian"][6:] * force
+            joint_torque += geometry["jacobian"][policy_dofs] * force
         return lengths, rates, forces, joint_torque
 
     def _write_controls(self, index: int, action: np.ndarray) -> None:
@@ -298,6 +306,12 @@ class FiftyVecEnv:
         data.qpos[3:7] = self.spawn.root_quat_wxyz
         for joint_name, angle in self.config.default_angles.items():
             data.qpos[self.single.qpos_adr[joint_name]] = angle
+        # Closed chain: the passive hinges are not policy coordinates, so they
+        # come from the model keyframe; zeros would start with open loops.
+        for joint_name, value in self.single.passive_defaults.items():
+            address = self.single.passive_qpos_adr.get(joint_name)
+            if address is not None:
+                data.qpos[address] = value
         data.ctrl[:] = 0.0
         self.actions[index] = 0.0
         self.previous_actions[index] = 0.0

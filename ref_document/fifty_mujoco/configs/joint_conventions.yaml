@@ -159,15 +159,20 @@ reference_pose:
       the CAD assembly pose (qpos = 0 = stowed), so these values are NOT the serial
       ones above and must never be interchanged. Recomputed by
       mechanism/closed_pose.py:reference_pose(); tests/test_closed_pose.py fails if
-      they drift.
+      they drift. Sign and relativity were corrected on 2026-10-31 after the model
+      was first compiled: a hinge value is the *relative* angle change and, because
+      the body frames are unrotated at qpos = 0 and +Y turns the planar angle
+      negative, q = -((target - zero) - (parent_target - parent_zero)). The old
+      absolute-difference values (+1.7385 / +1.0048 / ...) left the loops open by
+      0.24 m / 0.44 m.
     right:
-      rf0_Joint: 1.738502588860534
-      rf1_Joint: 0.896101201772943
+      rf0_Joint: -1.738502588860534
+      rf1_Joint: -0.896101201772943
       r_wheel_Joint: 0.000000000000000
-      r_knee_Joint: 1.004773771416566
-      r_pushrod_Joint: 1.629830019256905
-      r_ternary_Joint: 1.004773771391616
-      r_endlink_Joint: 1.738502588860534
+      r_knee_Joint: 0.733728817443967
+      r_pushrod_Joint: -0.733728817483961
+      r_ternary_Joint: 0.625056247865289
+      r_endlink_Joint: -0.733728817468918
     left_multiplier: -1
     note_left: >-
       every left leg hinge uses the -Y axis, so the left values are the negations

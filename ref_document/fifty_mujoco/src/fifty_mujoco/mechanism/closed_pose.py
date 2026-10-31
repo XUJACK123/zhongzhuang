@@ -68,8 +68,28 @@ JOINT_NAMES: Mapping[str, str] = {
 #: Bodies whose hinge is driven; the rest are determined by the two loops.
 DRIVEN = ("thigh", "crank", "wheel")
 
+#: Kinematic parent of every body in the generated model.  A hinge rotates the
+#: body *relative to its parent*, so the conversion needs this tree - the first
+#: version subtracted each body's absolute angle directly, which is only right
+#: for the two bodies whose parent is the trunk.
+PARENT: Mapping[str, str] = {
+    "thigh": "trunk",
+    "shin": "thigh",
+    "wheel": "shin",
+    "crank": "trunk",
+    "push_rod": "crank",
+    "ternary": "push_rod",
+    "end_link": "ternary",
+}
+
 #: Hinge turn axis sign per side, in the base frame.
 AXIS_SIGN = {"right": 1.0, "left": -1.0}
+
+#: Emission (and therefore ``qpos``) order of the bodies, ``(body, parent)``.
+TREE: tuple[tuple[str, str], ...] = tuple(
+    (body, PARENT[body])
+    for body in ("thigh", "shin", "wheel", "crank", "push_rod", "ternary", "end_link")
+)
 
 SIDES = (("right", "r"), ("left", "l"))
 
@@ -128,12 +148,29 @@ class ClosedPose:
 
 
 def _qpos_from(target: Mapping[str, float], zero: Mapping[str, float]) -> dict[str, float]:
-    """Right-hand (canonical) hinge values; the side sign is applied on output."""
-    values = {
-        body: wrap(angle - zero[body]) for body, angle in target.items() if body in zero
-    }
-    # the wheel hinge spins freely, so the reference key leaves it at zero
-    values.setdefault("wheel", 0.0)
+    """Right-hand (+Y) hinge values for a pose, as the generated model stores them.
+
+    Two things the first version got wrong, both caught by compiling the model:
+
+    * a hinge is a **relative** rotation, so a child's value is the difference
+      of its angle change and its parent's;
+    * a positive rotation about +Y **decreases** the planar angle ``atan2(z, y)``
+      (the model's body frames are unrotated at ``qpos = 0``, and the CAD plane
+      maps ``Y -> X``, ``Z -> Z``), so the value carries a minus sign.
+
+    Hence ``q = -((target - zero) - (target_parent - zero_parent))``.  With this
+    sign the two loop residuals are ~1e-12 m and the gas-spring tendon measures
+    227.760939 mm; with the old absolute-difference formula the thigh alone is
+    off by 2x1.7385 rad and the loops miss by 0.24 m / 0.44 m.
+    """
+    values: dict[str, float] = {"wheel": 0.0}
+    for body in target:
+        if body == "wheel":
+            continue
+        parent = PARENT.get(body, "trunk")
+        delta = wrap(target[body] - zero[body])
+        parent_delta = wrap(target[parent] - zero[parent]) if parent in target else 0.0
+        values[body] = wrap(-(delta - parent_delta))
     return values
 
 

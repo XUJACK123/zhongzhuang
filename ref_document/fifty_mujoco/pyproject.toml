@@ -11,7 +11,12 @@ requires-python = ">=3.12,<3.14"
 license = { text = "Proprietary" }
 dependencies = [
     "numpy>=1.26",
-    "mujoco>=3.3.0",
+    # Pinned, not a floor: mujoco 3.17 widened ``eq_data`` to 12 columns, while
+    # mujoco_warp 3.8.1 (the GPU backend mjlab 1.3.0 ships) still writes 11 and
+    # fails in the equality-constraint path -- which is exactly what the closed
+    # model depends on.  3.16.0 is the newest version where CPU MuJoCo and
+    # mujoco_warp agree on the model layout.
+    "mujoco==3.16.0",
     "PyYAML>=6.0",
     "pillow>=10.0",
     "onnx>=1.16",

@@ -1,0 +1,95 @@
+# Model registry: which MJCF every entry point loads, and how its names map.
+#
+# WHY THIS FILE EXISTS
+#   Until 2026-10-31 every entry (spawn-audit, spring-audit, contract-test,
+#   gpu-parity, train*, evaluate-*) hard-coded `assets/mjcf/fifty_train.xml`.
+#   The closed-chain candidate compiled on that date, but a passing check on the
+#   serial model says nothing about it, so the model has to be a first-class
+#   choice instead of a path typed into each command.
+#
+# WHAT IS SELECTED
+#   `meta.default` is used unless the environment variable FIFTY_MODEL names
+#   another entry.  Reports must record `model` (see `Config.model_name`), so a
+#   "passed" line can never be read without knowing which model it refers to.
+#
+# WHAT `bodies` IS FOR
+#   The policy/env layer addresses bodies by the *serial* names it was written
+#   against (`r0_link`, `right_wheel`, ...).  `bodies` maps those semantic keys
+#   to the names in this model, so the same code can drive either one.
+#
+# STATUS
+#   `serial`  : the equivalent 6-dof leg every existing baseline was produced on.
+#   `closed`  : the confirmed mechanism (link_a_on_thigh). It compiles, its loops
+#               close to 1.8e-12 m and its spring measures 227.760939 mm, but it
+#               has NOT passed stages ③-⑥ yet, so it is `candidate`, not
+#               `current`. Nothing here promotes evidence levels.
+meta:
+  schema: 1
+  default: serial
+  generated_at: "2026-10-31"
+  note: >-
+    `expected` holds the compiled dimensions. `model-summary` compares the real
+    model against them, so a silently regenerated file cannot pass by looking
+    similar.
+
+models:
+  serial:
+    xml: fifty_train.xml
+    status: current
+    description: "equivalent serial leg, 7 links / 6 joints"
+    reset: default_angles
+    passive_joints: []
+    tendon_suffix: "_length"
+    bodies:
+      base: base_link
+      thigh_right: r0_link
+      shin_right: r1_link
+      wheel_right: right_wheel
+      thigh_left: l0_link
+      shin_left: l1_link
+      wheel_left: left_wheel
+    expected:
+      nq: 13
+      nv: 12
+      nu: 8
+      neq: 0
+      ntendon: 2
+      nbody: 8
+
+  closed:
+    xml: fifty_closed_train.xml
+    status: candidate
+    description: "closed chain link_a_on_thigh, two loops per leg"
+    reset: keyframe
+    keyframe: reference
+    #: Where the six policy joints get their reset values from.  The serial
+    #: numbers are the old operating pose; the closed model needs the reference
+    #: pose expressed in its own coordinates (joint_conventions.yaml).
+    policy_pose:
+      source: joint_conventions.closed_qpos
+    #: Hinges the policy does not drive; their values come from the keyframe.
+    passive_joints:
+      - r_knee_Joint
+      - r_pushrod_Joint
+      - r_ternary_Joint
+      - r_endlink_Joint
+      - l_knee_Joint
+      - l_pushrod_Joint
+      - l_ternary_Joint
+      - l_endlink_Joint
+    tendon_suffix: "_length"
+    bodies:
+      base: base_link
+      thigh_right: r_thigh
+      shin_right: r_shin
+      wheel_right: r_wheel
+      thigh_left: l_thigh
+      shin_left: l_shin
+      wheel_left: l_wheel
+    expected:
+      nq: 21
+      nv: 20
+      nu: 8
+      neq: 4
+      ntendon: 2
+      nbody: 16

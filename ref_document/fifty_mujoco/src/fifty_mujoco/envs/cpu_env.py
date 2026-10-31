@@ -15,6 +15,21 @@ import numpy as np
 
 from ..config import Config
 from ..control.gas_spring import load_springs, spring_force, spring_geometry
+from ..assets.model_binding import passive_joint_values
+
+#: Semantic body keys the env addresses, mapped to the *serial* names this code
+#: was written against.  ``Config.body_name`` resolves each one to the selected
+#: model's own name (``r0_link`` in the serial model, ``r_thigh`` in the closed
+#: one), so everything downstream keeps its existing keys.
+BODY_KEYS: tuple[tuple[str, str], ...] = (
+    ("base_link", "base"),
+    ("r0_link", "thigh_right"),
+    ("r1_link", "shin_right"),
+    ("right_wheel", "wheel_right"),
+    ("l0_link", "thigh_left"),
+    ("l1_link", "shin_left"),
+    ("left_wheel", "wheel_left"),
+)
 
 #: Measured on MuJoCo 3.17: a positive tendon-motor command produces
 #: ``qfrc_actuator = J_length^T * force``, i.e. it pushes the two anchors APART
@@ -54,20 +69,24 @@ class FiftyCpuEnv:
             self.qpos_adr[joint_name] = int(self.model.jnt_qposadr[joint_id])
             self.dof_adr[joint_name] = int(self.model.jnt_dofadr[joint_id])
 
-        for link_name in ("base_link", "r0_link", "r1_link", "right_wheel", "l0_link", "l1_link", "left_wheel"):
-            body_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, link_name)
+        for link_key, semantic in BODY_KEYS:
+            model_name = self.config.body_name(semantic)
+            body_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, model_name)
             if body_id < 0:
-                raise ValueError(f"body {link_name!r} missing from {self.xml_path.name}")
-            self.body_ids[link_name] = int(body_id)
+                raise ValueError(f"body {model_name!r} ({semantic}) missing from {self.xml_path.name}")
+            self.body_ids[link_key] = int(body_id)
 
+        wheel_bodies = {
+            self.body_ids["right_wheel"]: "right_wheel",
+            self.body_ids["left_wheel"]: "left_wheel",
+        }
         for geom_id in range(self.model.ngeom):
             body_id = int(self.model.geom_bodyid[geom_id])
             if body_id == 0:
                 continue
             self.robot_geom_ids.append(geom_id)
-            body_name = mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_BODY, body_id)
-            if body_name and body_name.endswith("_wheel"):
-                self.wheel_geom_ids.setdefault(body_name, []).append(geom_id)
+            if body_id in wheel_bodies:
+                self.wheel_geom_ids.setdefault(wheel_bodies[body_id], []).append(geom_id)
 
         # ---------------------------------------------------------- actuators
         self.actuator_ids: dict[str, int] = {}
@@ -87,7 +106,7 @@ class FiftyCpuEnv:
         self.tendon_ids: dict[str, int] = {}
         for spring in self.springs:
             actuator_name = f"{spring.name}_force"
-            tendon_name = f"{spring.name}_length"
+            tendon_name = self.config.tendon_name(spring.name)
             if actuator_name not in self.actuator_ids:
                 raise ValueError(f"actuator {actuator_name!r} missing from {self.xml_path.name}")
             tendon_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_TENDON, tendon_name)
@@ -95,6 +114,21 @@ class FiftyCpuEnv:
                 raise ValueError(f"tendon {tendon_name!r} missing from {self.xml_path.name}")
             self.spring_motor_ids[spring.name] = self.actuator_ids[actuator_name]
             self.tendon_ids[spring.name] = int(tendon_id)
+
+        # Passive hinges (closed chain) are not driven by the policy; their reset
+        # values live in the model keyframe.  Empty for the serial model.
+        self.passive_defaults: dict[str, float] = (
+            passive_joint_values(
+                self.xml_path, self.config.joint_order, self.config.keyframe_name
+            )
+            if self.config.uses_keyframe_reset
+            else {}
+        )
+        self.passive_qpos_adr: dict[str, int] = {}
+        for joint_name in self.passive_defaults:
+            joint_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_JOINT, joint_name)
+            if joint_id >= 0:
+                self.passive_qpos_adr[joint_name] = int(self.model.jnt_qposadr[joint_id])
 
     # ------------------------------------------------------------------- state
     @property
@@ -118,8 +152,32 @@ class FiftyCpuEnv:
                 continue
             self.data.qpos[self.qpos_adr[joint_name]] = float(angle)
             self.data.qvel[self.dof_adr[joint_name]] = float(velocities.get(joint_name, 0.0))
+        for joint_name, value in self.passive_defaults.items():
+            address = self.passive_qpos_adr.get(joint_name)
+            if address is not None:
+                self.data.qpos[address] = float(value)
         self.data.ctrl[:] = 0.0
         mujoco.mj_forward(self.model, self.data)
+
+    def spawn_qpos(self, root_position: Any) -> np.ndarray:
+        """Full ``qpos`` for a spawn pose, passive joints included.
+
+        ``WarpVecEnv`` needs the whole vector (it copies it into every world), and
+        a zeros vector would leave the closed chain open at every reset.  The root
+        height comes from the caller because the spawn audit owns it.
+        """
+        values = np.zeros(self.model.nq)
+        values[0:3] = np.asarray(root_position, dtype=float)
+        quat = np.asarray(self.config.spawn["spawn"]["root_quat_wxyz"], dtype=float)
+        values[3:7] = quat / np.linalg.norm(quat)
+        for joint_name, angle in self.config.default_angles.items():
+            if joint_name in self.qpos_adr:
+                values[self.qpos_adr[joint_name]] = float(angle)
+        for joint_name, value in self.passive_defaults.items():
+            address = self.passive_qpos_adr.get(joint_name)
+            if address is not None:
+                values[address] = float(value)
+        return values
 
     def step(self) -> None:
         mujoco.mj_step(self.model, self.data)

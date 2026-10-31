@@ -1,0 +1,371 @@
+{
+  "tool": "gpu-parity",
+  "schema": 1,
+  "generated_at": "2026-10-31T15:39:42+00:00",
+  "device": "cuda:0",
+  "num_envs": 64,
+  "steps": 48,
+  "fixed_command": [
+    0.0,
+    0.0,
+    0.4647513721615878
+  ],
+  "seed": 7,
+  "fields": {
+    "obs": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 14,
+      "first_step_exceeding": 0,
+      "passed": false
+    },
+    "privileged": {
+      "max_abs_error": 0.39747052764595114,
+      "tolerance": 0.005,
+      "worst_step": 11,
+      "first_step_exceeding": 0,
+      "passed": false
+    },
+    "privileged_spring": {
+      "max_abs_error": 0.0910721616346033,
+      "tolerance": 0.005,
+      "worst_step": 1,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "reward": {
+      "max_abs_error": 0.0041343873834861,
+      "tolerance": 0.0001,
+      "worst_step": 31,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "history": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 14,
+      "first_step_exceeding": 0,
+      "passed": false
+    }
+  },
+  "field_groups": {
+    "obs.ang_vel": {
+      "max_abs_error": 0.043112456121100706,
+      "tolerance": 0.002,
+      "worst_step": 30,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "obs.projected_gravity": {
+      "max_abs_error": 0.008465031539570456,
+      "tolerance": 0.002,
+      "worst_step": 30,
+      "first_step_exceeding": 7,
+      "passed": false
+    },
+    "obs.command": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "obs.leg_pos": {
+      "max_abs_error": 0.01491906645444796,
+      "tolerance": 0.002,
+      "worst_step": 14,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "obs.joint_vel": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 14,
+      "first_step_exceeding": 0,
+      "passed": false
+    },
+    "obs.last_action": {
+      "max_abs_error": 2.971638368709506e-08,
+      "tolerance": 0.002,
+      "worst_step": 27,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].ang_vel": {
+      "max_abs_error": 0.03539264447399093,
+      "tolerance": 0.002,
+      "worst_step": 10,
+      "first_step_exceeding": 5,
+      "passed": false
+    },
+    "history[0].projected_gravity": {
+      "max_abs_error": 0.008316805874933997,
+      "tolerance": 0.002,
+      "worst_step": 25,
+      "first_step_exceeding": 11,
+      "passed": false
+    },
+    "history[0].command": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[0].leg_pos": {
+      "max_abs_error": 0.01491906645444796,
+      "tolerance": 0.002,
+      "worst_step": 18,
+      "first_step_exceeding": 5,
+      "passed": false
+    },
+    "history[0].joint_vel": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 18,
+      "first_step_exceeding": 4,
+      "passed": false
+    },
+    "history[0].last_action": {
+      "max_abs_error": 2.9432545844976232e-08,
+      "tolerance": 0.002,
+      "worst_step": 43,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].ang_vel": {
+      "max_abs_error": 0.03539264447399093,
+      "tolerance": 0.002,
+      "worst_step": 9,
+      "first_step_exceeding": 4,
+      "passed": false
+    },
+    "history[1].projected_gravity": {
+      "max_abs_error": 0.008316805874933997,
+      "tolerance": 0.002,
+      "worst_step": 24,
+      "first_step_exceeding": 10,
+      "passed": false
+    },
+    "history[1].command": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[1].leg_pos": {
+      "max_abs_error": 0.01491906645444796,
+      "tolerance": 0.002,
+      "worst_step": 17,
+      "first_step_exceeding": 4,
+      "passed": false
+    },
+    "history[1].joint_vel": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 17,
+      "first_step_exceeding": 3,
+      "passed": false
+    },
+    "history[1].last_action": {
+      "max_abs_error": 2.9432545844976232e-08,
+      "tolerance": 0.002,
+      "worst_step": 42,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].ang_vel": {
+      "max_abs_error": 0.03539264447399093,
+      "tolerance": 0.002,
+      "worst_step": 8,
+      "first_step_exceeding": 3,
+      "passed": false
+    },
+    "history[2].projected_gravity": {
+      "max_abs_error": 0.008316805874933997,
+      "tolerance": 0.002,
+      "worst_step": 23,
+      "first_step_exceeding": 9,
+      "passed": false
+    },
+    "history[2].command": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[2].leg_pos": {
+      "max_abs_error": 0.01491906645444796,
+      "tolerance": 0.002,
+      "worst_step": 16,
+      "first_step_exceeding": 3,
+      "passed": false
+    },
+    "history[2].joint_vel": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 16,
+      "first_step_exceeding": 2,
+      "passed": false
+    },
+    "history[2].last_action": {
+      "max_abs_error": 2.971638368709506e-08,
+      "tolerance": 0.002,
+      "worst_step": 29,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].ang_vel": {
+      "max_abs_error": 0.03539264447399093,
+      "tolerance": 0.002,
+      "worst_step": 7,
+      "first_step_exceeding": 2,
+      "passed": false
+    },
+    "history[3].projected_gravity": {
+      "max_abs_error": 0.008316805874933997,
+      "tolerance": 0.002,
+      "worst_step": 22,
+      "first_step_exceeding": 8,
+      "passed": false
+    },
+    "history[3].command": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[3].leg_pos": {
+      "max_abs_error": 0.01491906645444796,
+      "tolerance": 0.002,
+      "worst_step": 15,
+      "first_step_exceeding": 2,
+      "passed": false
+    },
+    "history[3].joint_vel": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 15,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "history[3].last_action": {
+      "max_abs_error": 2.971638368709506e-08,
+      "tolerance": 0.002,
+      "worst_step": 28,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].ang_vel": {
+      "max_abs_error": 0.043112456121100706,
+      "tolerance": 0.002,
+      "worst_step": 30,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "history[4].projected_gravity": {
+      "max_abs_error": 0.008465031539570456,
+      "tolerance": 0.002,
+      "worst_step": 30,
+      "first_step_exceeding": 7,
+      "passed": false
+    },
+    "history[4].command": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "history[4].leg_pos": {
+      "max_abs_error": 0.01491906645444796,
+      "tolerance": 0.002,
+      "worst_step": 14,
+      "first_step_exceeding": 1,
+      "passed": false
+    },
+    "history[4].joint_vel": {
+      "max_abs_error": 0.25181666293568694,
+      "tolerance": 0.002,
+      "worst_step": 14,
+      "first_step_exceeding": 0,
+      "passed": false
+    },
+    "history[4].last_action": {
+      "max_abs_error": 2.971638368709506e-08,
+      "tolerance": 0.002,
+      "worst_step": 27,
+      "first_step_exceeding": null,
+      "passed": true
+    }
+  },
+  "termination_flag_mismatches": 1280,
+  "forced_reset": {
+    "reached": true,
+    "post_reset_obs": {
+      "max_abs_error": 1.6601423791229308e-07,
+      "tolerance": 0.002,
+      "worst_step": 0,
+      "first_step_exceeding": null,
+      "passed": true
+    },
+    "note": "the observation returned for a finished env must describe the reset state, not the state the episode died in (§18.1)"
+  },
+  "graph_replay": {
+    "captured": true,
+    "comparison": {
+      "graph_replay_obs": {
+        "max_abs_error": 0.00012431666254997253,
+        "tolerance": 1e-05,
+        "worst_step": 6,
+        "first_step_exceeding": 2,
+        "passed": false
+      },
+      "graph_replay_qpos": {
+        "max_abs_error": 4.470348358154297e-06,
+        "tolerance": 1e-06,
+        "worst_step": 9,
+        "first_step_exceeding": 4,
+        "passed": false
+      }
+    }
+  },
+  "failures": [
+    "obs",
+    "privileged",
+    "privileged_spring",
+    "reward",
+    "history",
+    "obs.ang_vel",
+    "obs.projected_gravity",
+    "obs.leg_pos",
+    "obs.joint_vel",
+    "history[0].ang_vel",
+    "history[0].projected_gravity",
+    "history[0].leg_pos",
+    "history[0].joint_vel",
+    "history[1].ang_vel",
+    "history[1].projected_gravity",
+    "history[1].leg_pos",
+    "history[1].joint_vel",
+    "history[2].ang_vel",
+    "history[2].projected_gravity",
+    "history[2].leg_pos",
+    "history[2].joint_vel",
+    "history[3].ang_vel",
+    "history[3].projected_gravity",
+    "history[3].leg_pos",
+    "history[3].joint_vel",
+    "history[4].ang_vel",
+    "history[4].projected_gravity",
+    "history[4].leg_pos",
+    "history[4].joint_vel",
+    "graph_replay_obs",
+    "graph_replay_qpos",
+    "termination_flag_mismatches"
+  ],
+  "status": "failed"
+}

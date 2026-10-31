@@ -66,6 +66,20 @@ def _print_checks(title: str, checks: dict[str, Any]) -> None:
 
 
 def _model_path(config: Config, variant: str) -> Path:
+    """Model file for an entry point.
+
+    ``train`` is the model selected in ``configs/models.yaml`` (or
+    ``FIFTY_MODEL``); ``visual`` names the serial-only mesh variant and is
+    therefore rejected for any other selected model instead of silently loading
+    the serial bodies under the closed model's name map.
+    """
+    if variant == "train":
+        return config.model_xml()
+    if config.model_name != "serial":
+        raise SystemExit(
+            f"variant {variant!r} only exists for the serial model; "
+            f"model {config.model_name!r} has no visual MJCF (use --variant train)"
+        )
     return assets_dir() / "mjcf" / f"fifty_{variant}.xml"
 
 
@@ -425,10 +439,12 @@ def cmd_contact_test(args: argparse.Namespace, config: Config) -> int:
     report = run_contact_test(config, env)
     path = _write_report(report, "contact_test.json")
     _print_checks("contact-test", report["checks"])
-    load = report["checks"]["dual_wheel_load"]
+    path_check = report["checks"]["wheel_load_path"]
     print(
-        f"\n  wheels {np.round(load['wheel_normal_force_n'], 1)} N  "
-        f"total {load['total_vertical_n']:.1f} N vs weight {load['weight_n']:.1f} N"
+        f"\n  wheels {np.round(path_check['wheel_normal_force_n'], 1)} N  "
+        f"contacts {path_check['contact_count']}  "
+        f"trunk {path_check['trunk_height_m']:.4f} m  "
+        f"other {path_check['other_contacts']}"
     )
     print(f"  report: {path}")
     return 0 if report["status"] == "passed" else 1

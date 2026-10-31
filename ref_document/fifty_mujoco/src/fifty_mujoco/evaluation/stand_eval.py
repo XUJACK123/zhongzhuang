@@ -578,7 +578,6 @@ def _run_stand_eval_warp(
     from ..control.spawn import load_spawn_spec, resolve_spawn_height
     from ..envs.cpu_env import FiftyCpuEnv
     from ..envs.warp_env import WarpEnvOptions, WarpVecEnv
-    from ..paths import assets_dir
 
     scenarios = list(scenarios)
     n = len(scenarios)
@@ -586,7 +585,7 @@ def _run_stand_eval_warp(
     window_s = steps * dt
     episode_length_s = window_s + max(1.0, window_s * 0.05)
 
-    probe = FiftyCpuEnv(assets_dir() / "mjcf" / "fifty_train.xml", config)
+    probe = FiftyCpuEnv(config.model_xml(), config)
     nominal = resolve_spawn_height(probe, load_spawn_spec(config))[0] - float(
         config.spawn["spawn"]["wheel_clearance_m"]
     )

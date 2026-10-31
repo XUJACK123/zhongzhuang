@@ -84,7 +84,14 @@ def resolve_fixed_command(
     known after the spawn audit, which is why this is a function of it.
     """
     if options.fixed_command is not None:
-        return options.fixed_command
+        # A NaN height means "this model's nominal height".  Leaving it in place
+        # puts NaN straight into obs[8] and every history frame, which the
+        # termination check then reads as non-finite and resets every step
+        # (found in the first GPU parity run on the closed model).
+        command = list(options.fixed_command)
+        if command[2] != command[2]:
+            command[2] = float(nominal_height)
+        return (command[0], command[1], command[2])
     if options.stand_command:
         return (0.0, 0.0, float(nominal_height))
     return None
@@ -110,7 +117,7 @@ class WarpVecEnv:
         self.num_envs = int(self.options.num_envs)
         self.generator = torch.Generator(device=self.device).manual_seed(self.options.seed)
 
-        xml = assets_dir() / "mjcf" / "fifty_train.xml"
+        xml = config.model_xml()
         self.cpu = FiftyCpuEnv(xml, config)  # name maps, spring list, spawn audit
         self.model = self.cpu.model
         self.spawn_z = resolve_spawn_height(self.cpu, load_spawn_spec(config))[0]
@@ -139,11 +146,8 @@ class WarpVecEnv:
         self.num_privileged_obs, self.critic_input_dim = names.privileged_dim(self.spring_count)
         self.num_actions = names.NUM_ACTIONS
         self.history_length = names.HISTORY_LENGTH
-        self.decimation = int(round(
-            float(config.robot["control"]["policy_dt_s"])
-            / float(config.robot["simulation"]["timestep_s"])
-        ))
         self.timestep = float(self.model.opt.timestep)
+        self.decimation = config.decimation_for(self.timestep)
         self.dt = self.decimation * self.timestep
         self.termination = term_lib.TerminationConfig(
             episode_length_s=self.options.episode_length_s
@@ -152,11 +156,15 @@ class WarpVecEnv:
         # ------------------------------------------------------------ physics
         mjm = mujoco.MjModel.from_xml_path(str(xml))
         mjd = mujoco.MjData(mjm)
-        self._spawn_qpos = np.zeros(mjm.nq)
-        self._spawn_qpos[2] = self.spawn_z
-        self._spawn_qpos[3] = 1.0
-        for joint_name, angle in config.default_angles.items():
-            self._spawn_qpos[self.cpu.qpos_adr[joint_name]] = angle
+        # ``spawn_qpos`` already fills the passive hinges from the keyframe; the
+        # closed-chain reset would otherwise start 0.24 m open.
+        self._spawn_qpos = self.cpu.spawn_qpos(
+            (
+                float(config.spawn["spawn"]["root_xy_m"][0]),
+                float(config.spawn["spawn"]["root_xy_m"][1]),
+                self.spawn_z,
+            )
+        )
         mjd.qpos[:] = self._spawn_qpos
         mjd.qvel[:] = 0.0
         mjd.ctrl[:] = 0.0

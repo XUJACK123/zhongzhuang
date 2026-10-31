@@ -60,10 +60,14 @@ def test_the_reference_angles_are_the_planar_convention(reference):
 
 
 def test_the_hinge_values_are_not_the_absolute_angles(reference):
-    """A concrete guard: the two differ by ~3 rad, so a mix-up is visible."""
-    assert reference.qpos["thigh"] == pytest.approx(1.738502588860534, abs=1e-12)
+    """A concrete guard: a hinge is a relative rotation, signed by the +Y axis."""
     assert reference.angles["thigh"] == pytest.approx(-2.1151626422852363, abs=1e-12)
-    assert abs(reference.qpos["thigh"] - reference.angles["thigh"]) > 1.0
+    # +Y turns the planar angle negative, and the thigh's parent is the trunk,
+    # so the value is the *negated* angle change since the CAD pose.
+    assert reference.qpos["thigh"] == pytest.approx(-1.738502588860534, abs=1e-12)
+    # the old bug produced the positive absolute difference; the sign flip is
+    # exactly what left the loops open by 0.24 m
+    assert reference.qpos["thigh"] != pytest.approx(1.738502588860534, abs=1e-9)
 
 
 def test_every_body_gets_a_hinge_value(reference):
@@ -71,15 +75,31 @@ def test_every_body_gets_a_hinge_value(reference):
     assert reference.qpos["wheel"] == 0.0
 
 
+def _angles_from_qpos(qpos, zero):
+    """Rebuild absolute planar angles the way MuJoCo composes the hinges.
+
+    ``delta_body = delta_parent - q_body`` for a +Y hinge; the trunk has no hinge.
+    """
+    from fifty_mujoco.mechanism.closed_pose import TREE
+
+    rebuilt: dict[str, float] = {}
+    delta: dict[str, float] = {}
+    for body, parent in TREE:
+        if body == "wheel":
+            continue
+        parent_delta = delta.get(parent, 0.0)
+        delta[body] = parent_delta - qpos[body]
+        rebuilt[body] = zero[body] + delta[body]
+    return rebuilt
+
+
 def test_the_loops_are_consistent_in_the_reference_pose(mechanism, reference):
     """Re-deriving the angles from the hinge values must give the same pose."""
     transmission = ThighCrankTransmission.from_mechanism(mechanism)
     zero = assembly_pose(mechanism).angles
-    angles = {
-        body: wrap(zero[body] + AXIS_SIGN["right"] * value)
-        for body, value in reference.qpos.items()
-        if body in zero
-    }
+    angles = _angles_from_qpos(reference.qpos, zero)
+    for body, target in reference.angles.items():
+        assert wrap(angles[body] - target) == pytest.approx(0.0, abs=1e-12), body
     rebuilt = transmission.forward(angles["thigh"], angles["crank"])
     expected = transmission.forward(-2.1151626422852363, -1.02643001134495)
     for node, point in expected.items():

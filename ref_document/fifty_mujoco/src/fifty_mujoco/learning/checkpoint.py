@@ -52,13 +52,14 @@ def model_fingerprint(extra_paths: Iterable[str | Path] = ()) -> dict[str, Any]:
 
     The MJCF variants and the YAML configs are hashed when present; missing
     files are recorded as ``null`` rather than silently skipped, so a report
-    can tell "not built yet" from "identical".
+    can tell "not built yet" from "identical".  ``models.yaml`` is included, so
+    switching the selected model changes the fingerprint.
     """
     from ..paths import assets_dir, configs_dir
 
     files: list[Path] = []
     files.extend(sorted(configs_dir().glob("*.yaml")))
-    for variant in ("fifty_train.xml", "fifty_visual.xml"):
+    for variant in ("fifty_train.xml", "fifty_visual.xml", "fifty_closed_train.xml"):
         files.append(assets_dir() / "mjcf" / variant)
     files.extend(Path(path) for path in extra_paths)
     return {

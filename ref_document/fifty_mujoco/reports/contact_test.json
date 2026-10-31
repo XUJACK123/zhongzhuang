@@ -3,19 +3,20 @@
   "status": "passed",
   "total_mass_kg": 23.259630515567018,
   "checks": {
-    "dual_wheel_load": {
+    "wheel_load_path": {
+      "contact_count": 4,
+      "wheel_contacts": 4,
       "wheel_normal_force_n": [
-        56.21583840013415,
-        61.197431957435285,
-        60.543105087215686,
-        55.461041288304635
+        48.72038557800685,
+        22.858289627607114,
+        50.10272670686337,
+        26.708201500025506
       ],
-      "total_vertical_n": 235.94716648538417,
-      "weight_n": 228.17697535771245,
-      "ratio": 1.0340533531724243,
-      "settled_height_m": 0.22454216291541387,
+      "both_wheels_in_contact": true,
+      "other_contacts": [],
+      "trunk_height_m": 0.43066149269721765,
       "passed": true,
-      "note": "vertical-slider support (no weight carried by the pin); mean of the last 100 steps"
+      "note": "base pinned at the grounded spawn height, legs at the default pose, springs on: the ground contact must be wheel-floor only, on both sides"
     },
     "drop": {
       "start_height_m": 0.7747513721610852,
