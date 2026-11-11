@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import math
+import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -146,6 +147,11 @@ class GpuPpoConfig:
     #: 25 is the value the experiment baseline in progress.md §5.5 / §13.1 fixes;
     #: retention (``checkpoint_keep``) bounds the disk cost.
     save_every: int = 25
+    #: Wall-clock minutes between checkpoints, independent of ``save_every``.
+    #: A 5-hour run at ~100 k env-steps/s goes through far too many updates for a
+    #: fixed update count to line up with "once an hour"; whichever trigger fires
+    #: first wins.  0 disables the time trigger.
+    save_minutes: float = 60.0
     #: Gate for logging ``best``; the *ordering* used to pick ``model_best.pt``
     #: lives in :data:`fifty_mujoco.learning.checkpoint.DEFAULT_BEST_ORDER`
     #: (alive fraction -> P10 survival -> median survival -> height -> vx).
@@ -544,19 +550,30 @@ class GpuPpoTrainer:
 
     def _make_bar(self, deadline: float | None):
         """tqdm progress bar over the *time budget* (the run is time bounded)."""
+        # The budget is recorded even when no tqdm bar is drawn: the redirected
+        # one-line fallback needs it too, and forgetting it made every fallback
+        # line read ``100%`` with a total of one second.
+        if deadline is not None:
+            self._budget_s = max(1.0, deadline - time.perf_counter())
         if not self.cfg.progress_bar or deadline is None:
+            return None
+        # A redirected stdout (``nohup ... > console.log``) gets one plain line
+        # per log interval instead: tqdm's carriage returns turn a 5-hour log into
+        # thousands of unusable half-overwritten lines.
+        if not sys.stdout.isatty():
             return None
         try:
             from tqdm import tqdm
         except ImportError:  # pragma: no cover - optional dependency
             return None
-        total = max(1.0, deadline - time.perf_counter())
-        self._budget_s = total
         return tqdm(
-            total=total,
+            total=self._budget_s,
             unit="s",
             desc="train",
-            ncols=110,
+            # Fit the terminal the bar is actually drawn in: a hard ``ncols=110``
+            # in a narrower window wraps and leaves a mess of stale lines.
+            dynamic_ncols=True,
+            mininterval=1.0,
             leave=True,
             bar_format=(
                 "{desc}: {percentage:3.0f}%|{bar}| {n:.0f}/{total:.0f}s "
@@ -579,8 +596,9 @@ class GpuPpoTrainer:
                 f" | eval ep {record['eval_episode_len']:.2f}s"
                 f" fall {record['eval_t_fall_median']:.2f}s"
             )
-        bar.set_postfix_str(postfix)
-        bar.refresh()
+        # ``mininterval`` throttles the redraw; forcing a refresh on every update
+        # is what produced the wall of identical bar lines in the smoke run.
+        bar.set_postfix_str(postfix, refresh=False)
 
     def _bar_line(self, record: dict[str, Any], width: int = 28) -> str:
         """tqdm-shaped progress line that also works in a redirected log."""
@@ -603,7 +621,7 @@ class GpuPpoTrainer:
             )
         return (
             f"train {frac*100:3.0f}%|{bar}| "
-            f"{elapsed:.0f}/{budget:.0f}s [{elapsed/60:.1f}<{eta/60:.1f}min] {postfix}"
+            f"{elapsed/60:.1f}/{budget/60:.1f}min [eta {eta/60:.1f}min] {postfix}"
         )
 
     def _update_range(self) -> range:
@@ -659,6 +677,8 @@ class GpuPpoTrainer:
             updates = range(0)
         session_updates = 0
         bar = self._make_bar(deadline) if verbose else None
+        #: Timestamp of the last checkpoint, for the ``save_minutes`` trigger.
+        last_save_wall = time.perf_counter()
         if verbose and self.cfg.stop_on_survive and self.eval_env is not None:
             window_s = float(self.cfg.eval_steps) * float(self.eval_dt)
             if window_s + 1e-9 < self.cfg.solved_min_window_s:
@@ -728,6 +748,30 @@ class GpuPpoTrainer:
                     Path(self.cfg.save_path).with_name("history.json"), "w", encoding="utf-8"
                 ) as handle:
                     json.dump(self.history, handle)
+                last_save_wall = time.perf_counter()
+            # Time trigger, independent of the update counter: a 5-hour run must
+            # leave a usable snapshot every hour no matter how many updates fit in
+            # one, and the two triggers must not double-write the same file.
+            if (
+                self.cfg.save_minutes
+                and self.cfg.save_path is not None
+                and time.perf_counter() - last_save_wall >= self.cfg.save_minutes * 60.0
+            ):
+                self.save(Path(self.cfg.save_path), numbered=True)
+                with open(
+                    Path(self.cfg.save_path).with_name("history.json"), "w", encoding="utf-8"
+                ) as handle:
+                    json.dump(self.history, handle)
+                last_save_wall = time.perf_counter()
+                line = (
+                    f"  checkpoint @ {elapsed/3600.0:.2f} h  update {update}"
+                    f"  env steps {self.total_env_steps:,}"
+                    f"  -> {self.cfg.save_path}"
+                )
+                if bar is not None:
+                    bar.write(line)
+                else:
+                    print(line, flush=True)
             if self.cfg.callback is not None:
                 self.cfg.callback(record)
             if self.cfg.stop_on_survive and "eval_t_fall_median" in record:

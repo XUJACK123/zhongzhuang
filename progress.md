@@ -1,10 +1,10 @@
 # 轮腿机器人：当前状态、下一步与注意事项
 
-> 更新：2026-10-31 23:40（Asia/Hong_Kong）
+> 更新：2026-11-01 09:40（Asia/Hong_Kong）
 > 项目根：`D:\robomaster_material\electric_contol\zhongzhuang`；实施工程：`ref_document/fifty_mujoco/`；模型资产：`solidwork_graph/`
 > **本文是精简版**，只保留"现在是什么状态、下一步做什么、别踩哪些坑"。
-> 逐轮的详细过程、失败记录与原始输出在 `backups/progress_history_20261031_204938.md`
-> （3321 行，sha256 `8dfc0b29…d7442c`，清单见 `backups/manifest_progress_history.json`）。
+> 逐轮的详细过程、失败记录与原始输出在 `progress_history_20261031_204938.md`
+> （3489 行，sha256 `51f5edd7…`；每轮直接追加，不再单独做清单）。
 
 **证据等级**（不得跨级标记）：
 `measured`（实物测量）> `cad_confirmed`（人在 CAD 里读到的配合/关系）> `cad_extracted`（解析器从文件提取的几何）
@@ -15,20 +15,23 @@
 
 ## 1. 一句话状态
 
-阶段 ①–⑦ **全部跑通**：训练入口已切到 `configs/models.yaml` 注册表（`FIFTY_MODEL` 选择），
-串链模型（默认）的初始化、短时仿真、接触、契约、CPU/GPU 对拍、20-update 冒烟全部通过；
-**闭链候选模型已编译、可通过 CPU 侧检查，但 CPU/GPU 对拍仍超预算，因此仍是 `candidate`，
-不参与训练**。剩下的只有阶段 ⑧ 正式训练与阶段 ⑨ 验收——按约定，开训前先报用户。
+阶段 ①–⑨ **全部执行完毕**：串链模型的初始化、短时仿真、接触、契约、CPU/GPU 对拍、冒烟、
+5 h 正式训练、64×60 s 验收全部通过；**首个能站满 60 s 的策略已经落地**
+（`runs/r0_stand_5h/model_best.pt`，CPU 与 warp 双后端都是 64/64）。
+闭链候选模型能编译、能过 CPU 侧全部检查，但对拍仍超预算，因此仍是 `candidate`，不参与训练。
 
 ```
-pytest              314 passed（含 1 个 CUDA 对拍用例，本机有 GPU 时不再 skip）
+pytest              314 passed
 spawn-audit         PASS（两模型）       clearance 0.01 m，环残差 ≤1.8e-12 m
-joint-test          PASS 12/12           spring-sweep PASS 4/4
+joint-test          PASS 12/12           spring-sweep PASS 3/3
 contact-test        PASS 4/4（两模型）   wheel_load_path / drop / rolling / fallen_pose
 contract-test       PASS 12/12           25/125/6、PD、限幅、历史顺序
-gpu-parity          serial: passed（0 终止标志不符）   closed: failed（见 §6）
-train-gpu 冒烟      20 updates / 30,720 env steps / 3.1 s / 9.8k sps，checkpoint 落盘
+gpu-parity          serial: passed（0 终止标志不符）   closed: failed（见 §6 第 20 条）
+train-gpu 冒烟      20 updates / 30,720 steps / 3.1 s
+正式训练            24000 updates / 5 h / 2.1k sps；**仅前 17 min 有效**（见 §5.1）
+验收 evaluate-stand 64/64 = 100 %，vx_mae 0.0247，height_mae 0.0000，tilt_p95 0.10°
 ```
+
 
 ---
 
@@ -98,7 +101,7 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 > **`robot.yaml` 的运行默认角仍是旧姿态**（轮心在髋**前方 22.865346 mm**，弦长 405.396717 mm）。
 > 切换目标已算好并存进 `joint_conventions.yaml: serial_reference_candidate`，
-> 但**尚未应用**，原因见 §5.3。
+> 但**尚未应用**，原因见 §5.4。
 
 ### 2.4 气弹簧
 
@@ -179,30 +182,54 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 | ⑤ CPU 短时仿真 | 逐通道扰动、弹簧方向、接触；无 NaN/穿透/发散 | ✅ **完成**：joint-test 12/12、spring-sweep 4/4、contact-test 4/4（判据已改为接触路径，见 §6） |
 | ⑥ 契约与对拍 | 25/125/6 语义、CPU/GPU 容差、终止与重置 | ✅ **串链通过**：0 终止标志不符、契约通道 1.7e-7；闭链仍超预算（见 §6） |
 | ⑦ 训练冒烟 | 固定高度站立 20 updates；保存/恢复/评估 | ✅ **完成**：20 updates / 30,720 steps / 3.1 s，`runs/stage7_smoke/model_last.pt` |
-| ⑧ 正式训练 | R0 纯 PPO；H0 视兼容性；**总预算 ≤ 3 h** | ⏸ **等用户确认后开跑** |
-| ⑨ 站立验收 | 64 独立初态 × 60 s，**≥61/64**；速度 MAE ≤ 0.03 m/s、高度 MAE ≤ 0.02 m | ⬜ 未开始 |
+| ⑧ 正式训练 | R0 纯 PPO；H0 视兼容性；**总预算 ≤ 3 h** | ✅ **完成（但超预算）**：实跑 5 h / 24000 updates；策略 17 min 就收敛，后 4.5 h 空转（§5.1） |
+| ⑨ 站立验收 | 64 独立初态 × 60 s，**≥61/64**；速度 MAE ≤ 0.03 m/s、高度 MAE ≤ 0.02 m | ✅ **通过**：CPU 64/64、warp 64/64；vx_mae 0.0247、height_mae 0.0000、tilt_p95 0.10° |
 
 ---
 
 ## 5. 下一步
 
-### 5.1 现在只剩两件事
+### 5.1 训练预算的实测结论：1 h 就够
 
-1. **阶段 ⑧ 正式训练（等确认）**。冒烟已验证链路，正式训练的基线命令：
+`runs/r0_stand_5h`（24000 updates / 5 h）的评估时间线：
 
-   ```bash
-   cd ref_document/fifty_mujoco
-   ./.venv/bin/python -m fifty_mujoco.cli train-gpu \
-     --stand-command --num-envs 64 --steps 24 --minutes 180 \
-     --name r0_stand --plot
-   ```
+```
+upd   250 ( 2.4 min)  eval 0.88 s
+upd   850 (10   min)  eval 2.12 s
+upd  1450 (17   min)  eval 3.00 s   ← 已撑满 3 s 评估窗口
+upd 24000 (300  min)  指标与 17 min 完全相同
+```
 
-   预算 ≤ 3 h；`--stand-command` 固定指令为 `(0,0,标称高度)`，与验收口径一致。
+同期 `std_mean` 0.30 → 0.07、`entropy` +0.27 → **−8.45**、`lr` 掉到 2e-5 下限、
+`reward_mean` 锁死在 +0.029。**后 4.5 h 完全是空转**。下一次训练应改用：
 
-2. **阶段 ⑨ 验收**：`evaluate-stand --seeds 64 --seconds 60`，要求 ≥61/64 存活，
-   速度 MAE ≤ 0.03 m/s、高度 MAE ≤ 0.02 m。
+```bash
+train-gpu --stand-command --num-envs 64 --steps 24 --minutes 60 \
+          --save-every 500 --save-minutes 10 --checkpoint-keep 12 \
+          --stop-on-survive 5 --name r0_stand_1h --plot
+```
 
-### 5.2 闭链模型的"转正"还差什么
+即 1 h 预算 + 早停 + 密集快照（好策略出现在 update ≈1450，而 `--save-every 3000` 的
+第一个快照已经是收敛之后，这次靠 `model_best.pt` 才没丢）。
+
+### 5.2 验收命令（复现结论用）
+
+```bash
+# 权威口径：CPU 参考，64 × 60 s，约 25 min
+./.venv/bin/python -m fifty_mujoco.cli evaluate-stand \
+  --checkpoint runs/r0_stand_5h/model_best.pt --backend cpu --episodes 64 --steps 6000
+
+# 快速口径：warp，同样 64 × 60 s，约 10 s
+./.venv/bin/python -m fifty_mujoco.cli evaluate-stand \
+  --checkpoint runs/r0_stand_5h/model_best.pt --backend warp --episodes 64 --steps 6000
+
+# 可视化（真实 MuJoCo viewer，600 s）
+./.venv/bin/python -m fifty_mujoco.cli export --checkpoint runs/r0_stand_5h/model_best.pt
+./.venv/bin/python -m fifty_mujoco.cli play --onnx runs/export/model_best.onnx \
+  --variant train --viewer --seconds 600
+```
+
+### 5.3 闭链模型的"转正"还差什么
 
 闭链候选模型已经能编译、能过 CPU 侧全部检查，但对拍超预算（`obs.joint_vel` 相对误差
 3.3e-2 > 2e-2，CUDA graph 回放 1.5e-4 > 1e-5）。要转正需要：
@@ -213,7 +240,7 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 在转正之前，**训练与验收都用串链模型**，这也是 `models.yaml` 的 `meta.default`。
 
-### 5.3 默认角切换：不要单独做
+### 5.4 默认角切换：不要单独做
 
 
 `robot.yaml: default_angles_rad` 切到参考姿态会连带 **12 项回归基线失效**：
@@ -279,6 +306,18 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 20. 被动连杆（曲柄/推杆/三元/端杆，各 30 g，摆动静惯量 3e-5 kg·m²）会让等约束承担的
     转动惯量比机身小四个数量级，float32 直接算不动。`PASSIVE_ARMATURE_KG_M2 = 0.005`
     是**数值正则项**，不是实测值，转正前必须复核。
+21. **训练会“早收敛 + 探索被压死”**：本次 5 h 里，`entropy` 从 +0.27 跌到 −8.45、
+    `std_mean` 0.30 → 0.07，`lr` 掉到 2e-5 下限，而 `eval` 从 17 min 起就不再变。
+    看日志时要盯 `entropy` 与 `eval`，两者同时平就是可以停，不要看总时长。
+22. **无 episode 结束时 `length_mean` / `return_mean` 是 `0/0 = NaN`**（目前**未修**）：
+    日志会打印 `len nans ret +nan`，`eval_episode_len` 也变 NaN，看上去像“训练发散”，
+    实际是“这 3 s 里没有任何 episode 结束”。位置：`learning/gpu_ppo.py` 的统计汇总。
+23. **`WarpVecEnv` 的物理状态永远在 warp 设备上**：`options.device` 只是“策略放哪”。
+    两者混用会让 `evaluate-stand --backend warp`（默认 `--device cpu`）在 `__init__` 就
+    `found at least two devices`。已在 `warp_env.py` 统一跟随 `state_device`。
+24. **`play` 的播放窗口必须按 `--seconds` 设 episode 上限**：`EnvOptions.episode_length_s`
+    默认 20 s，之前 `--seconds 120` 只跑了 20 s 并当成摔倒。另外 `play --viewer` 在窗口被关掉时
+    也会 break，日志里看着像“摔倒了”，实际是窗口没了。
 ### 工程
 
 21. **文本资产的哈希要按 LF 归一化**（`stl.sha256_text`）：`core.autocrlf=true` 把 URDF 变 CRLF，
@@ -339,7 +378,7 @@ python tools/report_index.py                           # 报告索引，之后�
 
 ---
 
-## 9. 历史（每轮一行，细节见备份）
+## 9. 历史（每轮一行，细节见 `progress_history_20261031_204938.md`）
 
 | 轮次 | 时间 | 做了什么 |
 |---|---|---|
@@ -357,3 +396,4 @@ python tools/report_index.py                           # 报告索引，之后�
 | §25 | 10-31 | 九阶段启动指南（已抽出为 `docs/STARTUP_GUIDE.md`） |
 | §26 | 10-31 | 阶段 ② 第一批代码：闭链参考 qpos、候选训练模型生成器；默认角切换**回退** |
 | §27 | 10-31 | 阶段 ②–⑦：`models.yaml` 注册表 + `FIFTY_MODEL`、闭链编译与秩检查、被动关节 keyframe 播种、`decimation_for`、NaN 指令、对拍双预算、`wheel_load_path` 新判据、被动连杆 armature、mujoco 锁 3.16.0、20-update 冒烟 |
+| §28 | 11-01 | 阶段 ⑧⑨：5 h PPO（24000 updates，仅前 17 min 有效）、64×60 s 验收 CPU/warp 均 64/64；另修 warp 评估设备不匹配、`play` 窗口截断 |

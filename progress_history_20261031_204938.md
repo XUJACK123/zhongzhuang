@@ -3319,3 +3319,171 @@ URDF 变成 CRLF 而记录值是 LF。改法是文本资产按 LF 归一化后�
 - 没有安装或升级依赖，没有运行 MuJoCo（除 `closed-mjcf` 的编译）、CUDA、训练、SolidWorks。
 - 没有生成候选训练模型；② 的两个入口仍是待实现规格。
 - 没有把 `robot.yaml` 默认角或 `policy_contract.yaml` 切到新模型。
+
+---
+
+## 27. 2026-11-01 第七次推进：阶段 ②–⑨ 全部执行完毕（首个通过验收的策略）
+
+本轮把 `progress.md` §4 的九阶段从"②部分"一路推到"⑨通过"，中途修掉 8 个缺陷，
+其中 3 个属于"测试/日志骗人"而非物理错误。结论先行：
+
+```
+阶段①–⑦   全部通过（默认模型 = 串链 fifty_train.xml）
+阶段⑧      5 h PPO，24000 updates；策略在 17 min 就收敛，后 4.5 h 空转
+阶段⑨      CPU 参考 64/64 = 100 %，warp 64/64 = 100 %，判定 passed
+```
+
+### 27.1 这一轮落地的模型注册表（阶段 ②/③）
+
+- 新增 `configs/models.yaml`：`meta.default: serial`，两个模型条目（`serial` / `closed`），
+  各自声明 `xml` / `status` / `reset` / `keyframe` / `policy_pose` / `passive_joints` /
+  `tendon_suffix` / 语义刚体映射（`base` / `thigh_right` / `shin_right` / `wheel_right` /
+  `thigh_left` / `shin_left` / `wheel_left`）/ `expected{nq,nv,nu,neq,ntendon,nbody}`。
+- `Config` 增加 `model_name`（环境变量 `FIFTY_MODEL` 覆盖 `meta.default`）、`model_xml()`、
+  `body_name(semantic)`、`passive_joints`、`keyframe_name`、`tendon_name()`、`model_expected`。
+  `default_angles` 按模型走 `_closed_default_angles()`（左腿 = `left_multiplier` × 右腿）。
+- 新增 `assets/model_binding.py`（纯标准库读 XML）：`joint_qpos_addresses` / `keyframe_values` /
+  `passive_joint_values` / `spawn_qpos`，全部在测试里与 `MjModel` 交叉验证。
+- `spawn-audit` / `joint-test` / `spring-sweep` / `contact-test` / `contract-test` /
+  `gpu-parity` / `train*` / `evaluate-*` / `inspect` / `play` 的模型路径全部改走
+  `config.model_xml()`；`variant="visual"` 在非串链模型下显式报错而不是静默换模型。
+
+### 27.2 闭链模型的编译、秩与初始化（阶段 ③/④）
+
+```
+nq 21 / nv 20 / nu 8 / neq 4 / ntendon 2 · mass 23.2596 kg
+秩：8/8 有效行满秩，4 行侧向结构零（2 环 × 2 侧），约束后 DOF = 12
+环残差：right/left ternary 2.162e-13 m，end_link 1.834e-12 m
+弹簧：左右均为 227.760939 mm（含 11 mm 侧向差）
+spawn：z = 0.474751372 m，轮地间隙 0.01 m，四元数/倾角/投影重力全部 PASS
+```
+
+关节约定修正后，闭链 `qpos` 是 `[-1.7385, 0.7337, 0, -0.8961, -0.7337, 0.6251, -0.7337]`
+（右腿 7 个铰），与串联的 `[2.0554, -2.5593, 0]` 描述同一个物理姿态。被动关节
+（`r_knee` / `r_pushrod` / `r_ternary` / `r_endlink`）由 keyframe 播种，不再是 0。
+
+### 27.3 五个"数值/判定"缺陷（都已修，含证据）
+
+1. **控制周期读错来源**。`decimation` 原来读 `robot.yaml: simulation.timestep_s = 0.005`，
+   而闭链 XML 的 timestep 是 0.0025，于是闭链的 `dt` 变成 5 ms（应为 10 ms），对拍时两边
+   每步做的物理子步数不同（2 vs 4）。改为 `Config.decimation_for(model.opt.timestep)`，
+   除不尽直接抛错。
+2. **`fixed_command` 的 NaN 直接进观测**。NaN 第三位本意是"用标称高度"，但
+   `resolve_fixed_command` 原样返回，NaN 落进 `obs[8]` 与整条历史，非有限值触发终止 →
+   每步 reset、机器人冻在 spawn，对拍出现 599 个终止标志不符。现在在解析处替换为
+   `nominal_height`。
+3. **对拍预算必须分两类**。契约通道（command / last_action / 重置后 obs /
+   graph replay / 终止标志）保持绝对值 1e-7 级；轨迹通道（角速度、姿态、位置、奖励）
+   改"绝对 + 相对"双预算。理由是可测量的：`mujoco_warp` 是 float32 且把 Newton 容差
+   夹在 1e-6（`io.py`），CPU MuJoCo 是 float64 / 1e-8；闭链模型在**同一初值同一动作**下，
+   一个 10 ms 策略步就让 `qvel` 差 9e-2 rad/s、`qpos` 差 3.5e-4 rad——纯后端舍入被约束求解放大。
+   结果：串链模型 `gpu-parity` 由 FAIL 变 **passed**（终止标志 0 不符、契约通道 1.66e-7、
+   graph replay 1.2e-6 / 3.6e-7）。
+4. **`contact-test` 的 `dual_wheel_load` 判据不成立**。它要求"轮子承担全部重量"，那是
+   静力恒等式，而 PD 在垂直滑轨上永远不严格静止：零目标偏置时 PD 不出力（机身沉到
+   0.2226 m），有偏置时持续蠕动，实测比值随 100 步窗口落点 0.80 → 1.30 乱跳。
+   改为 `wheel_load_path`：固定基座、只验接触路径（只有轮-地接触、两侧都接触），
+   "能不能站住"交给冒烟与验收。两模型均 PASS。
+5. **闭链被动连杆数值病态**。曲柄/推杆/三元/端杆各 30 g、摆动静惯量 3e-5 kg·m²，
+   `dof_invweight0` ≈ 2e4，等约束要拿它去平衡 21 kg 机身。float32 下 CPU/GPU 一步之内
+   `obs.joint_vel` 相对误差 42 %、被动杆以 34 rad/s 振铃。加
+   `PASSIVE_ARMATURE_KG_M2 = 0.005`（数值正则项，非实测）后相对误差降到 3.3e-2，
+   峰值角速度 12.3 → 8.5 rad/s。**闭链仍未转正**：`obs.joint_vel` 3.3e-2 > 2e-2、
+   CUDA graph 回放 1.5e-4 > 1e-5。
+
+另外把 `mujoco` 固定在 `==3.16.0`：3.17 把 `eq_data` 加宽到 12 列，而 mjlab 1.3.0 依赖的
+`mujoco_warp` 3.8.1 仍按 11 列写，等约束路径直接崩——闭链模型正好只用等约束。
+
+### 27.4 阶段 ⑤/⑥/⑦ 的实测结果
+
+```
+pytest                     314 passed
+spawn-audit                8/8   （两模型）
+joint-test                 12/12
+spring-sweep               3/3
+contact-test               4/4   （wheel_load_path / drop / rolling / fallen_pose_detected）
+contract-test              12/12 （25/125/6、PD、限幅、历史顺序、纯读）
+gpu-parity serial          passed，0 终止标志不符
+gpu-parity closed          failed（见 27.3 第 5 条）
+train-gpu 冒烟             20 updates / 30,720 steps / 3.1 s / 9.8k sps
+```
+
+### 27.5 阶段 ⑧：5 小时训练的实测时间线（关键教训）
+
+命令（用户要求 5 h + 每小时存盘 + tqdm 进度）：
+
+```bash
+train-gpu --stand-command --num-envs 64 --steps 24 \
+          --minutes 300 --save-minutes 60 --save-every 3000 \
+          --checkpoint-keep 8 --log-every 100 --eval-every 50 \
+          --name r0_stand_5h --no-plot
+```
+
+```
+upd   250 ( 2.4 min)  eval 0.88 s
+upd   850 (10   min)  eval 2.12 s
+upd  1450 (17   min)  eval 3.00 s   ← 已撑满 3 s 评估窗口
+upd 24000 (300  min)  指标与 17 min 时完全相同
+```
+
+同时段的状态量：`std_mean` 0.30 → 0.07，`entropy` +0.27 → **−8.45**（策略几乎确定化），
+自适应 `lr` 掉到 2e-5 下限，`explained_variance` 在 0 附近，`reward_mean` 从 17 min 起
+锁死在 +0.029。**即 5 h 里只有前 20 分钟有效，后 4.5 h 在空转。**
+
+两个由此暴露的工程问题：
+
+- `--save-every 3000`（≈35 min）与 `--save-minutes 60` 都太粗：好策略出现在 update ≈1450，
+  第一个快照 `model_update_003000` 已经在收敛之后。这次靠 `model_best.pt` 兜住。
+- 无 episode 结束时 `length_mean` / `return_mean` 直接是 `0/0 = NaN`，日志从 update 1109 起
+  打印 `len nans ret +nan`，`eval_episode_len` 也是 NaN，把"已经站满窗口"误显示成坏指标。
+  **该缺陷本轮未修**，位置在 `learning/gpu_ppo.py` 的统计汇总（`stat_episodes` 为 0 时应回退，
+  或直接省略该列）。
+
+### 27.6 阶段 ⑨：验收（两套后端都给同一结论）
+
+`runs/r0_stand_5h/model_best.pt`，64 个独立初态（seed 1000..1063）× 6000 步 = 60 s：
+
+| 指标 | CPU（权威） | warp | 限值 |
+|---|---|---|---|
+| success | **64/64 = 100 %** | 64/64 = 100 % | ≥ 61/64 |
+| survival | min/p10/median 均 60.00 s | 同 | — |
+| vx_mae | 0.0247 | 0.0247 | ≤ 0.03 |
+| height_mae | 0.0000 | 0.0000 | ≤ 0.02 |
+| tilt_p95 | 0.0977° | 0.0976° | ≤ 10° |
+| tilt_max | 2.0154° | 2.0154° | ≤ 15° |
+| torque_saturation | 0.0000 | 0.0000 | ≤ 0.05 |
+
+报告：`reports/stand_eval_model_best_6000steps_20261101_012723.json`（CPU）、
+`…_012108.json`（warp）。另外 3000 / 24000 / last 三个快照在 6 s 版验收里也都 PASS，
+说明不是单点侥幸。
+
+### 27.7 可视化时又抓到 3 个缺陷
+
+1. **`evaluate-stand --backend warp` 根本跑不起来**：默认 `--device cpu`，而
+   `WarpVecEnv` 里 `options.device` 同时被用于物理张量，warp 的状态却永远在 GPU，于是
+   `__init__` 第一句 `self.ctrl[:, spring] = self.spring_force` 就
+   `RuntimeError: found at least two devices`。修法：物理状态一律跟随 warp 设备
+   （`state_device = self.ctrl.device`），`options.device` 只表示策略放哪，generator 同步重建。
+2. **`play` 被 `EnvOptions.episode_length_s = 20.0` 截断**：`--seconds 120` 其实只能跑 20 s，
+   而且走 `done` 分支被当成摔倒。修法：播放窗口按 `--seconds` 设 episode 上限，并打印终止原因。
+3. **"16.81 s 摔倒"是误报**：`play --viewer` 循环里有 `if not handle.is_running(): break`，
+   终端被清理时窗口跟着关掉，于是被记成提前结束。修好 1、2 之后同一策略在 train 与 visual
+   两个变体下都 **120 s / 120 s 存活、末高 0.4647 m**。
+
+### 27.8 本章明确没有做的事
+
+- 没有把闭链模型转正（对拍仍超预算），训练与验收都用串链模型。
+- 没有复核 `PASSIVE_ARMATURE_KG_M2 = 0.005` 与弹簧 450 N / 锚点（`gas_spring.yaml` 仍是
+  Fudan 300 N 占位）。
+- 没有修 `length_mean` 的 NaN 汇总（见 27.5）。
+- 没有做速度指令（`vx / wz ≠ 0`）、地形、扰动等课程阶段；本轮只交付"定点站立"。
+- 没有清理 `runs/` 下的历史目录（`preflight_*`、`smoke_*`、`stage7_smoke` 等仍在）。
+
+### 27.9 下一步（按优先级）
+
+1. 修 `length_mean/return_mean` 的 0/0 NaN，并给训练加"早停"信号（连续 N 次 eval 达标即停）
+   ——5 h 变成 1 h 的直接收益。
+2. 快照密度：`--save-every 500`、`--save-minutes 10`，`--checkpoint-keep 12`。
+3. 闭链转正：先复现并定位 CUDA graph 回放差异，再复核被动连杆 armature 与真实弹簧参数。
+4. 站立稳定后再上速度指令课程（`vx` 0 → ±0.5 m/s），并用 `evaluate-stand --vx` 验收。
+

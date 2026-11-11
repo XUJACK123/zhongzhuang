@@ -1,0 +1,16 @@
+nohup: ignoring input
+  policy   : checkpoint:runs/r0_stand_5h/model_best.pt
+  backend  : cpu
+  window   : 6000 steps = 60.0 s per episode, episode limit 63.0 s
+  episodes : 64 (seeds 1000..1063)
+  success  : 64/64 = 100.0%
+  survival : min 60.00s  p10 60.00s  median 60.00s
+  reasons  : {}
+  PASS success_rate         1.0000  (limit 0.95)
+  PASS vx_mae               0.0247  (limit 0.03)
+  PASS height_mae           0.0000  (limit 0.02)
+  PASS tilt_p95             0.0977  (limit 10.0)
+  PASS tilt_max             2.0154  (limit 15.0)
+  PASS torque_saturation    0.0000  (limit 0.05)
+  status   : passed
+  report   : /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/reports/stand_eval_model_best_6000steps_20261101_012723.json

@@ -193,6 +193,18 @@ class WarpVecEnv:
         self.ctrl = warp.to_torch(self.d.ctrl)
         self.xpos = warp.to_torch(self.d.xpos)
         self.ten_length = warp.to_torch(self.d.ten_length)
+        # The physics state always lives on the warp device, whatever
+        # ``options.device`` says: that option is where the *caller* keeps the
+        # policy, and ``evaluate-stand`` legitimately asks for a CPU policy with
+        # a GPU simulation.  Every env-side tensor has to follow the state, or
+        # the first assignment inside ``__init__`` fails with "found at least two
+        # devices" (which is exactly what ``--backend warp`` did before).
+        state_device = self.ctrl.device
+        if torch.device(self.device) != state_device:
+            self.device = state_device
+            self.generator = torch.Generator(device=state_device).manual_seed(
+                self.options.seed
+            )
         # Contacts live in ONE flat array shared by all worlds (world i's contacts
         # are packed after world 0's, so a fixed-stride view would mis-attribute
         # them).  Use the flat arrays plus ``worldid`` and scatter instead.

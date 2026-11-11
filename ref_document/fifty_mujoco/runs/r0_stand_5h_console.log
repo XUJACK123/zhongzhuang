@@ -1,0 +1,292 @@
+nohup: ignoring input
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.2
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/xy/.cache/warp/1.12.0
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 41.27 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 3.46 ms  (cached)
+Module _nxn_broadphase__locals__kernel_c763f4cb c763f4c load on device 'cuda:0' took 3.51 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_42493a75 42493a7 load on device 'cuda:0' took 6.21 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 17.93 ms  (cached)
+Module _efc_contact_init__locals__kernel_c8a6d94d c8a6d94 load on device 'cuda:0' took 3.98 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_3ce537d5 8484a5a load on device 'cuda:0' took 4.07 ms  (cached)
+Module _efc_contact_update__locals__kernel_7bd789c7 7bd789c load on device 'cuda:0' took 3.98 ms  (cached)
+Module mujoco_warp._src.forward b4bf9c3 load on device 'cuda:0' took 15.94 ms  (cached)
+Module mujoco_warp._src.forward ab3b1a6 load on device 'cuda:0' took 15.14 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 7.60 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 4.09 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_d83d6ecc 23c3f6f load on device 'cuda:0' took 268.09 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 15.03 ms  (cached)
+Module solve_init_jaref__locals__kernel_d614c3c4 d614c3c load on device 'cuda:0' took 4.76 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_1ef9b850 1ef9b85 load on device 'cuda:0' took 4.18 ms  (cached)
+Module update_constraint_efc__locals__kernel_81015163 8101516 load on device 'cuda:0' took 3.80 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_cc0b8ce1 cc0b8ce load on device 'cuda:0' took 3.34 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_290f79eb 4017870 load on device 'cuda:0' took 5.64 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_68ba042b 3c7cbe3 load on device 'cuda:0' took 279.96 ms  (cached)
+Module linesearch_iterative__locals__kernel_f2a333a5 de36de8 load on device 'cuda:0' took 6.39 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 19.96 ms  (cached)
+Module mujoco_warp._src.derivative a753363 load on device 'cuda:0' took 7.40 ms  (cached)
+  envs 64 x 24 steps, device cuda:0, leg Kp 20 / Kd 1, cuda graph ON
+  budget 300.0 min, run dir /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/r0_stand_5h
+train   0%|░░░░░░░░░░░░░░░░░░░░░░░░░░░░| 0.5/300.0min [eta 299.5min] up 100 | 5k sps | len 0.54s | ret +0.43 | eval ep 0.55s fall 0.55s
+train   1%|░░░░░░░░░░░░░░░░░░░░░░░░░░░░| 1.7/300.0min [eta 298.3min] up 200 | 3k sps | len 0.86s | ret +0.17 | eval ep 0.94s fall 0.94s
+train   1%|░░░░░░░░░░░░░░░░░░░░░░░░░░░░| 3.0/300.0min [eta 297.0min] up 300 | 3k sps | len 0.97s | ret +0.60 | eval ep 1.35s fall 1.35s
+train   1%|░░░░░░░░░░░░░░░░░░░░░░░░░░░░| 4.3/300.0min [eta 295.7min] up 400 | 2k sps | len 1.04s | ret +1.28 | eval ep 0.98s fall 0.98s
+train   2%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 5.6/300.0min [eta 294.4min] up 500 | 2k sps | len 0.99s | ret +1.56 | eval ep 0.93s fall 0.93s
+train   2%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 6.8/300.0min [eta 293.2min] up 600 | 2k sps | len 1.06s | ret +1.71 | eval ep 0.95s fall 0.95s
+train   3%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 7.9/300.0min [eta 292.1min] up 700 | 2k sps | len 1.31s | ret +1.89 | eval ep 1.20s fall 1.20s
+train   3%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 9.1/300.0min [eta 290.9min] up 800 | 2k sps | len 1.33s | ret +2.14 | eval ep 1.42s fall 1.42s
+train   3%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 10.3/300.0min [eta 289.7min] up 900 | 2k sps | len 1.63s | ret +2.19 | eval ep 1.79s fall 1.79s
+train   4%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 11.5/300.0min [eta 288.5min] up 1000 | 2k sps | len 2.08s | ret +2.39 | eval ep 1.89s fall 1.89s
+train   4%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 12.7/300.0min [eta 287.3min] up 1100 | 2k sps | len 2.76s | ret +3.28 | eval ep 2.51s fall 2.51s
+train   5%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 13.9/300.0min [eta 286.1min] up 1200 | 2k sps | len 2.37s | ret +3.53 | eval ep 2.40s fall 2.40s
+train   5%|█░░░░░░░░░░░░░░░░░░░░░░░░░░░| 15.1/300.0min [eta 284.9min] up 1300 | 2k sps | len 6.10s | ret +8.97 | eval ep nans fall 3.00s
+train   5%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 16.3/300.0min [eta 283.7min] up 1400 | 2k sps | eval ep nans fall 3.00s
+train   6%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 17.5/300.0min [eta 282.5min] up 1500 | 2k sps | eval ep nans fall 3.00s
+train   6%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 18.6/300.0min [eta 281.4min] up 1600 | 2k sps | eval ep nans fall 3.00s
+train   7%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 19.8/300.0min [eta 280.2min] up 1700 | 2k sps | eval ep nans fall 3.00s
+train   7%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 21.0/300.0min [eta 279.0min] up 1800 | 2k sps | len 20.00s | ret +54.97 | eval ep nans fall 3.00s
+train   7%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 22.2/300.0min [eta 277.8min] up 1900 | 2k sps | eval ep nans fall 3.00s
+train   8%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 23.4/300.0min [eta 276.6min] up 2000 | 2k sps | eval ep nans fall 3.00s
+train   8%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 24.6/300.0min [eta 275.4min] up 2100 | 2k sps | eval ep nans fall 3.00s
+train   9%|██░░░░░░░░░░░░░░░░░░░░░░░░░░| 25.8/300.0min [eta 274.2min] up 2200 | 2k sps | eval ep nans fall 3.00s
+train   9%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 26.9/300.0min [eta 273.1min] up 2300 | 2k sps | len 1.18s | ret +0.35 | eval ep 1.12s fall 1.12s
+train   9%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 28.1/300.0min [eta 271.9min] up 2400 | 2k sps | len 1.28s | ret +0.41 | eval ep 1.32s fall 1.32s
+train  10%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 29.3/300.0min [eta 270.7min] up 2500 | 2k sps | eval ep nans fall 3.00s
+train  10%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 30.5/300.0min [eta 269.5min] up 2600 | 2k sps | eval ep nans fall 3.00s
+train  11%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 31.7/300.0min [eta 268.3min] up 2700 | 2k sps | len 20.00s | ret +57.13 | eval ep nans fall 3.00s
+train  11%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 32.9/300.0min [eta 267.1min] up 2800 | 2k sps | len 20.00s | ret +57.61 | eval ep nans fall 3.00s
+train  11%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 34.1/300.0min [eta 265.9min] up 2900 | 2k sps | eval ep nans fall 3.00s
+train  12%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 35.3/300.0min [eta 264.7min] up 3000 | 2k sps | eval ep nans fall 3.00s
+train  12%|███░░░░░░░░░░░░░░░░░░░░░░░░░| 36.5/300.0min [eta 263.5min] up 3100 | 2k sps | eval ep nans fall 3.00s
+train  13%|████░░░░░░░░░░░░░░░░░░░░░░░░| 37.7/300.0min [eta 262.3min] up 3200 | 2k sps | len 20.00s | ret +57.36 | eval ep nans fall 3.00s
+train  13%|████░░░░░░░░░░░░░░░░░░░░░░░░| 38.8/300.0min [eta 261.2min] up 3300 | 2k sps | len 20.00s | ret +57.48 | eval ep nans fall 3.00s
+train  13%|████░░░░░░░░░░░░░░░░░░░░░░░░| 40.0/300.0min [eta 260.0min] up 3400 | 2k sps | eval ep nans fall 3.00s
+train  14%|████░░░░░░░░░░░░░░░░░░░░░░░░| 41.2/300.0min [eta 258.8min] up 3500 | 2k sps | eval ep nans fall 3.00s
+train  14%|████░░░░░░░░░░░░░░░░░░░░░░░░| 42.4/300.0min [eta 257.6min] up 3600 | 2k sps | eval ep nans fall 3.00s
+train  15%|████░░░░░░░░░░░░░░░░░░░░░░░░| 43.6/300.0min [eta 256.4min] up 3700 | 2k sps | len 20.00s | ret +57.33 | eval ep nans fall 3.00s
+train  15%|████░░░░░░░░░░░░░░░░░░░░░░░░| 44.7/300.0min [eta 255.3min] up 3800 | 2k sps | len 20.00s | ret +57.53 | eval ep nans fall 3.00s
+train  15%|████░░░░░░░░░░░░░░░░░░░░░░░░| 45.9/300.0min [eta 254.1min] up 3900 | 2k sps | eval ep nans fall 3.00s
+train  16%|████░░░░░░░░░░░░░░░░░░░░░░░░| 47.1/300.0min [eta 252.9min] up 4000 | 2k sps | eval ep nans fall 3.00s
+train  16%|█████░░░░░░░░░░░░░░░░░░░░░░░| 48.3/300.0min [eta 251.7min] up 4100 | 2k sps | eval ep nans fall 3.00s
+train  17%|█████░░░░░░░░░░░░░░░░░░░░░░░| 49.5/300.0min [eta 250.5min] up 4200 | 2k sps | len 20.00s | ret +57.54 | eval ep nans fall 3.00s
+train  17%|█████░░░░░░░░░░░░░░░░░░░░░░░| 50.7/300.0min [eta 249.3min] up 4300 | 2k sps | len 20.00s | ret +57.53 | eval ep nans fall 3.00s
+train  17%|█████░░░░░░░░░░░░░░░░░░░░░░░| 51.9/300.0min [eta 248.1min] up 4400 | 2k sps | eval ep nans fall 3.00s
+train  18%|█████░░░░░░░░░░░░░░░░░░░░░░░| 53.1/300.0min [eta 246.9min] up 4500 | 2k sps | eval ep nans fall 3.00s
+train  18%|█████░░░░░░░░░░░░░░░░░░░░░░░| 54.3/300.0min [eta 245.7min] up 4600 | 2k sps | eval ep nans fall 3.00s
+train  18%|█████░░░░░░░░░░░░░░░░░░░░░░░| 55.4/300.0min [eta 244.6min] up 4700 | 2k sps | len 20.00s | ret +57.74 | eval ep nans fall 3.00s
+train  19%|█████░░░░░░░░░░░░░░░░░░░░░░░| 56.6/300.0min [eta 243.4min] up 4800 | 2k sps | len 20.00s | ret +57.70 | eval ep nans fall 3.00s
+train  19%|█████░░░░░░░░░░░░░░░░░░░░░░░| 57.8/300.0min [eta 242.2min] up 4900 | 2k sps | eval ep nans fall 3.00s
+train  20%|██████░░░░░░░░░░░░░░░░░░░░░░| 59.0/300.0min [eta 241.0min] up 5000 | 2k sps | eval ep nans fall 3.00s
+train  20%|██████░░░░░░░░░░░░░░░░░░░░░░| 60.2/300.0min [eta 239.8min] up 5100 | 2k sps | eval ep nans fall 3.00s
+train  20%|██████░░░░░░░░░░░░░░░░░░░░░░| 61.4/300.0min [eta 238.6min] up 5200 | 2k sps | len 20.00s | ret +57.83 | eval ep nans fall 3.00s
+train  21%|██████░░░░░░░░░░░░░░░░░░░░░░| 62.6/300.0min [eta 237.4min] up 5300 | 2k sps | len 20.00s | ret +57.82 | eval ep nans fall 3.00s
+train  21%|██████░░░░░░░░░░░░░░░░░░░░░░| 63.8/300.0min [eta 236.2min] up 5400 | 2k sps | eval ep nans fall 3.00s
+train  22%|██████░░░░░░░░░░░░░░░░░░░░░░| 64.9/300.0min [eta 235.1min] up 5500 | 2k sps | eval ep nans fall 3.00s
+train  22%|██████░░░░░░░░░░░░░░░░░░░░░░| 66.1/300.0min [eta 233.9min] up 5600 | 2k sps | eval ep nans fall 3.00s
+train  22%|██████░░░░░░░░░░░░░░░░░░░░░░| 67.3/300.0min [eta 232.7min] up 5700 | 2k sps | len 20.00s | ret +57.50 | eval ep nans fall 3.00s
+train  23%|██████░░░░░░░░░░░░░░░░░░░░░░| 68.5/300.0min [eta 231.5min] up 5800 | 2k sps | len 20.00s | ret +57.57 | eval ep nans fall 3.00s
+train  23%|███████░░░░░░░░░░░░░░░░░░░░░| 69.7/300.0min [eta 230.3min] up 5900 | 2k sps | eval ep nans fall 3.00s
+train  24%|███████░░░░░░░░░░░░░░░░░░░░░| 70.9/300.0min [eta 229.1min] up 6000 | 2k sps | eval ep nans fall 3.00s
+train  24%|███████░░░░░░░░░░░░░░░░░░░░░| 72.1/300.0min [eta 227.9min] up 6100 | 2k sps | eval ep nans fall 3.00s
+train  24%|███████░░░░░░░░░░░░░░░░░░░░░| 73.3/300.0min [eta 226.7min] up 6200 | 2k sps | len 20.00s | ret +57.81 | eval ep nans fall 3.00s
+train  25%|███████░░░░░░░░░░░░░░░░░░░░░| 74.5/300.0min [eta 225.5min] up 6300 | 2k sps | len 20.00s | ret +57.86 | eval ep nans fall 3.00s
+train  25%|███████░░░░░░░░░░░░░░░░░░░░░| 75.7/300.0min [eta 224.3min] up 6400 | 2k sps | eval ep nans fall 3.00s
+train  26%|███████░░░░░░░░░░░░░░░░░░░░░| 76.9/300.0min [eta 223.1min] up 6500 | 2k sps | eval ep nans fall 3.00s
+train  26%|███████░░░░░░░░░░░░░░░░░░░░░| 78.0/300.0min [eta 222.0min] up 6600 | 2k sps | eval ep nans fall 3.00s
+train  26%|███████░░░░░░░░░░░░░░░░░░░░░| 79.2/300.0min [eta 220.8min] up 6700 | 2k sps | len 20.00s | ret +57.50 | eval ep nans fall 3.00s
+train  27%|████████░░░░░░░░░░░░░░░░░░░░| 80.4/300.0min [eta 219.6min] up 6800 | 2k sps | len 20.00s | ret +57.57 | eval ep nans fall 3.00s
+train  27%|████████░░░░░░░░░░░░░░░░░░░░| 81.6/300.0min [eta 218.4min] up 6900 | 2k sps | eval ep nans fall 3.00s
+train  28%|████████░░░░░░░░░░░░░░░░░░░░| 82.8/300.0min [eta 217.2min] up 7000 | 2k sps | eval ep nans fall 3.00s
+train  28%|████████░░░░░░░░░░░░░░░░░░░░| 84.0/300.0min [eta 216.0min] up 7100 | 2k sps | eval ep nans fall 3.00s
+train  28%|████████░░░░░░░░░░░░░░░░░░░░| 85.2/300.0min [eta 214.8min] up 7200 | 2k sps | len 20.00s | ret +57.78 | eval ep nans fall 3.00s
+train  29%|████████░░░░░░░░░░░░░░░░░░░░| 86.4/300.0min [eta 213.6min] up 7300 | 2k sps | len 20.00s | ret +57.79 | eval ep nans fall 3.00s
+train  29%|████████░░░░░░░░░░░░░░░░░░░░| 87.6/300.0min [eta 212.4min] up 7400 | 2k sps | eval ep nans fall 3.00s
+train  30%|████████░░░░░░░░░░░░░░░░░░░░| 88.8/300.0min [eta 211.2min] up 7500 | 2k sps | eval ep nans fall 3.00s
+train  30%|████████░░░░░░░░░░░░░░░░░░░░| 90.0/300.0min [eta 210.0min] up 7600 | 2k sps | eval ep nans fall 3.00s
+train  30%|█████████░░░░░░░░░░░░░░░░░░░| 91.2/300.0min [eta 208.8min] up 7700 | 2k sps | len 20.00s | ret +57.91 | eval ep nans fall 3.00s
+train  31%|█████████░░░░░░░░░░░░░░░░░░░| 92.4/300.0min [eta 207.6min] up 7800 | 2k sps | len 20.00s | ret +57.64 | eval ep nans fall 3.00s
+train  31%|█████████░░░░░░░░░░░░░░░░░░░| 93.6/300.0min [eta 206.4min] up 7900 | 2k sps | eval ep nans fall 3.00s
+train  32%|█████████░░░░░░░░░░░░░░░░░░░| 94.7/300.0min [eta 205.3min] up 8000 | 2k sps | eval ep nans fall 3.00s
+train  32%|█████████░░░░░░░░░░░░░░░░░░░| 95.9/300.0min [eta 204.1min] up 8100 | 2k sps | eval ep nans fall 3.00s
+train  32%|█████████░░░░░░░░░░░░░░░░░░░| 97.1/300.0min [eta 202.9min] up 8200 | 2k sps | len 20.00s | ret +57.15 | eval ep nans fall 3.00s
+train  33%|█████████░░░░░░░░░░░░░░░░░░░| 98.3/300.0min [eta 201.7min] up 8300 | 2k sps | len 20.00s | ret +56.84 | eval ep nans fall 3.00s
+train  33%|█████████░░░░░░░░░░░░░░░░░░░| 99.5/300.0min [eta 200.5min] up 8400 | 2k sps | eval ep nans fall 3.00s
+train  34%|█████████░░░░░░░░░░░░░░░░░░░| 100.7/300.0min [eta 199.3min] up 8500 | 2k sps | eval ep nans fall 3.00s
+train  34%|██████████░░░░░░░░░░░░░░░░░░| 101.9/300.0min [eta 198.1min] up 8600 | 2k sps | eval ep nans fall 3.00s
+train  34%|██████████░░░░░░░░░░░░░░░░░░| 103.0/300.0min [eta 197.0min] up 8700 | 2k sps | len 20.00s | ret +57.15 | eval ep nans fall 3.00s
+train  35%|██████████░░░░░░░░░░░░░░░░░░| 104.2/300.0min [eta 195.8min] up 8800 | 2k sps | len 20.00s | ret +57.31 | eval ep nans fall 3.00s
+train  35%|██████████░░░░░░░░░░░░░░░░░░| 105.4/300.0min [eta 194.6min] up 8900 | 2k sps | eval ep nans fall 3.00s
+train  36%|██████████░░░░░░░░░░░░░░░░░░| 106.6/300.0min [eta 193.4min] up 9000 | 2k sps | eval ep nans fall 3.00s
+train  36%|██████████░░░░░░░░░░░░░░░░░░| 107.9/300.0min [eta 192.1min] up 9100 | 2k sps | eval ep nans fall 3.00s
+train  36%|██████████░░░░░░░░░░░░░░░░░░| 109.1/300.0min [eta 190.9min] up 9200 | 2k sps | len 20.00s | ret +57.50 | eval ep nans fall 3.00s
+train  37%|██████████░░░░░░░░░░░░░░░░░░| 110.3/300.0min [eta 189.7min] up 9300 | 2k sps | len 20.00s | ret +57.56 | eval ep nans fall 3.00s
+train  37%|██████████░░░░░░░░░░░░░░░░░░| 111.5/300.0min [eta 188.5min] up 9400 | 2k sps | eval ep nans fall 3.00s
+train  38%|███████████░░░░░░░░░░░░░░░░░| 112.7/300.0min [eta 187.3min] up 9500 | 2k sps | eval ep nans fall 3.00s
+train  38%|███████████░░░░░░░░░░░░░░░░░| 113.8/300.0min [eta 186.2min] up 9600 | 2k sps | eval ep nans fall 3.00s
+train  38%|███████████░░░░░░░░░░░░░░░░░| 115.0/300.0min [eta 185.0min] up 9700 | 2k sps | len 20.00s | ret +57.74 | eval ep nans fall 3.00s
+train  39%|███████████░░░░░░░░░░░░░░░░░| 116.2/300.0min [eta 183.8min] up 9800 | 2k sps | len 20.00s | ret +57.84 | eval ep nans fall 3.00s
+train  39%|███████████░░░░░░░░░░░░░░░░░| 117.4/300.0min [eta 182.6min] up 9900 | 2k sps | eval ep nans fall 3.00s
+train  40%|███████████░░░░░░░░░░░░░░░░░| 118.6/300.0min [eta 181.4min] up 10000 | 2k sps | eval ep nans fall 3.00s
+train  40%|███████████░░░░░░░░░░░░░░░░░| 119.8/300.0min [eta 180.2min] up 10100 | 2k sps | eval ep nans fall 3.00s
+train  40%|███████████░░░░░░░░░░░░░░░░░| 121.0/300.0min [eta 179.0min] up 10200 | 2k sps | len 20.00s | ret +57.77 | eval ep nans fall 3.00s
+train  41%|███████████░░░░░░░░░░░░░░░░░| 122.1/300.0min [eta 177.9min] up 10300 | 2k sps | len 20.00s | ret +57.72 | eval ep nans fall 3.00s
+train  41%|████████████░░░░░░░░░░░░░░░░| 123.3/300.0min [eta 176.7min] up 10400 | 2k sps | eval ep nans fall 3.00s
+train  42%|████████████░░░░░░░░░░░░░░░░| 124.5/300.0min [eta 175.5min] up 10500 | 2k sps | eval ep nans fall 3.00s
+train  42%|████████████░░░░░░░░░░░░░░░░| 125.7/300.0min [eta 174.3min] up 10600 | 2k sps | eval ep nans fall 3.00s
+train  42%|████████████░░░░░░░░░░░░░░░░| 126.9/300.0min [eta 173.1min] up 10700 | 2k sps | len 20.00s | ret +57.85 | eval ep nans fall 3.00s
+train  43%|████████████░░░░░░░░░░░░░░░░| 128.1/300.0min [eta 171.9min] up 10800 | 2k sps | len 20.00s | ret +57.96 | eval ep nans fall 3.00s
+train  43%|████████████░░░░░░░░░░░░░░░░| 129.3/300.0min [eta 170.7min] up 10900 | 2k sps | eval ep nans fall 3.00s
+train  44%|████████████░░░░░░░░░░░░░░░░| 130.5/300.0min [eta 169.5min] up 11000 | 2k sps | eval ep nans fall 3.00s
+train  44%|████████████░░░░░░░░░░░░░░░░| 131.7/300.0min [eta 168.3min] up 11100 | 2k sps | eval ep nans fall 3.00s
+train  44%|████████████░░░░░░░░░░░░░░░░| 132.9/300.0min [eta 167.1min] up 11200 | 2k sps | len 20.00s | ret +57.99 | eval ep nans fall 3.00s
+train  45%|█████████████░░░░░░░░░░░░░░░| 134.1/300.0min [eta 165.9min] up 11300 | 2k sps | len 20.00s | ret +58.06 | eval ep nans fall 3.00s
+train  45%|█████████████░░░░░░░░░░░░░░░| 135.3/300.0min [eta 164.7min] up 11400 | 2k sps | eval ep nans fall 3.00s
+train  45%|█████████████░░░░░░░░░░░░░░░| 136.5/300.0min [eta 163.5min] up 11500 | 2k sps | eval ep nans fall 3.00s
+train  46%|█████████████░░░░░░░░░░░░░░░| 137.7/300.0min [eta 162.3min] up 11600 | 2k sps | eval ep nans fall 3.00s
+train  46%|█████████████░░░░░░░░░░░░░░░| 138.9/300.0min [eta 161.1min] up 11700 | 2k sps | len 20.00s | ret +58.00 | eval ep nans fall 3.00s
+train  47%|█████████████░░░░░░░░░░░░░░░| 140.1/300.0min [eta 159.9min] up 11800 | 2k sps | len 20.00s | ret +57.97 | eval ep nans fall 3.00s
+train  47%|█████████████░░░░░░░░░░░░░░░| 141.3/300.0min [eta 158.7min] up 11900 | 2k sps | eval ep nans fall 3.00s
+train  47%|█████████████░░░░░░░░░░░░░░░| 142.5/300.0min [eta 157.5min] up 12000 | 2k sps | eval ep nans fall 3.00s
+train  48%|█████████████░░░░░░░░░░░░░░░| 143.7/300.0min [eta 156.3min] up 12100 | 2k sps | eval ep nans fall 3.00s
+train  48%|██████████████░░░░░░░░░░░░░░| 144.9/300.0min [eta 155.1min] up 12200 | 2k sps | len 20.00s | ret +58.07 | eval ep nans fall 3.00s
+train  49%|██████████████░░░░░░░░░░░░░░| 146.1/300.0min [eta 153.9min] up 12300 | 2k sps | len 20.00s | ret +57.91 | eval ep nans fall 3.00s
+train  49%|██████████████░░░░░░░░░░░░░░| 147.3/300.0min [eta 152.7min] up 12400 | 2k sps | eval ep nans fall 3.00s
+train  49%|██████████████░░░░░░░░░░░░░░| 148.5/300.0min [eta 151.5min] up 12500 | 2k sps | eval ep nans fall 3.00s
+train  50%|██████████████░░░░░░░░░░░░░░| 149.7/300.0min [eta 150.3min] up 12600 | 2k sps | eval ep nans fall 3.00s
+train  50%|██████████████░░░░░░░░░░░░░░| 150.9/300.0min [eta 149.1min] up 12700 | 2k sps | len 20.00s | ret +58.16 | eval ep nans fall 3.00s
+train  51%|██████████████░░░░░░░░░░░░░░| 152.1/300.0min [eta 147.9min] up 12800 | 2k sps | len 20.00s | ret +57.94 | eval ep nans fall 3.00s
+train  51%|██████████████░░░░░░░░░░░░░░| 153.3/300.0min [eta 146.7min] up 12900 | 2k sps | eval ep nans fall 3.00s
+train  51%|██████████████░░░░░░░░░░░░░░| 154.5/300.0min [eta 145.5min] up 13000 | 2k sps | eval ep nans fall 3.00s
+train  52%|███████████████░░░░░░░░░░░░░| 155.7/300.0min [eta 144.3min] up 13100 | 2k sps | eval ep nans fall 3.00s
+train  52%|███████████████░░░░░░░░░░░░░| 156.9/300.0min [eta 143.1min] up 13200 | 2k sps | len 20.00s | ret +58.01 | eval ep nans fall 3.00s
+train  53%|███████████████░░░░░░░░░░░░░| 158.1/300.0min [eta 141.9min] up 13300 | 2k sps | len 20.00s | ret +57.58 | eval ep nans fall 3.00s
+train  53%|███████████████░░░░░░░░░░░░░| 159.3/300.0min [eta 140.7min] up 13400 | 2k sps | eval ep nans fall 3.00s
+train  53%|███████████████░░░░░░░░░░░░░| 160.5/300.0min [eta 139.5min] up 13500 | 2k sps | eval ep nans fall 3.00s
+train  54%|███████████████░░░░░░░░░░░░░| 161.6/300.0min [eta 138.4min] up 13600 | 2k sps | eval ep nans fall 3.00s
+train  54%|███████████████░░░░░░░░░░░░░| 162.8/300.0min [eta 137.2min] up 13700 | 2k sps | len 20.00s | ret +57.69 | eval ep nans fall 3.00s
+train  55%|███████████████░░░░░░░░░░░░░| 164.0/300.0min [eta 136.0min] up 13800 | 2k sps | len 20.00s | ret +58.03 | eval ep nans fall 3.00s
+train  55%|███████████████░░░░░░░░░░░░░| 165.2/300.0min [eta 134.8min] up 13900 | 2k sps | eval ep nans fall 3.00s
+train  55%|████████████████░░░░░░░░░░░░| 166.4/300.0min [eta 133.6min] up 14000 | 2k sps | eval ep nans fall 3.00s
+train  56%|████████████████░░░░░░░░░░░░| 167.6/300.0min [eta 132.4min] up 14100 | 2k sps | eval ep nans fall 3.00s
+train  56%|████████████████░░░░░░░░░░░░| 168.8/300.0min [eta 131.2min] up 14200 | 2k sps | len 20.00s | ret +58.02 | eval ep nans fall 3.00s
+train  57%|████████████████░░░░░░░░░░░░| 170.0/300.0min [eta 130.0min] up 14300 | 2k sps | len 20.00s | ret +58.03 | eval ep nans fall 3.00s
+train  57%|████████████████░░░░░░░░░░░░| 171.2/300.0min [eta 128.8min] up 14400 | 2k sps | eval ep nans fall 3.00s
+train  57%|████████████████░░░░░░░░░░░░| 172.4/300.0min [eta 127.6min] up 14500 | 2k sps | eval ep nans fall 3.00s
+train  58%|████████████████░░░░░░░░░░░░| 173.6/300.0min [eta 126.4min] up 14600 | 2k sps | eval ep nans fall 3.00s
+train  58%|████████████████░░░░░░░░░░░░| 174.8/300.0min [eta 125.2min] up 14700 | 2k sps | len 20.00s | ret +58.03 | eval ep nans fall 3.00s
+train  59%|████████████████░░░░░░░░░░░░| 176.0/300.0min [eta 124.0min] up 14800 | 2k sps | len 20.00s | ret +57.94 | eval ep nans fall 3.00s
+train  59%|█████████████████░░░░░░░░░░░| 177.1/300.0min [eta 122.9min] up 14900 | 2k sps | eval ep nans fall 3.00s
+train  59%|█████████████████░░░░░░░░░░░| 178.3/300.0min [eta 121.7min] up 15000 | 2k sps | eval ep nans fall 3.00s
+train  60%|█████████████████░░░░░░░░░░░| 179.6/300.0min [eta 120.4min] up 15100 | 2k sps | eval ep nans fall 3.00s
+train  60%|█████████████████░░░░░░░░░░░| 180.8/300.0min [eta 119.2min] up 15200 | 2k sps | len 20.00s | ret +58.03 | eval ep nans fall 3.00s
+train  61%|█████████████████░░░░░░░░░░░| 182.0/300.0min [eta 118.0min] up 15300 | 2k sps | len 20.00s | ret +58.06 | eval ep nans fall 3.00s
+train  61%|█████████████████░░░░░░░░░░░| 183.2/300.0min [eta 116.8min] up 15400 | 2k sps | eval ep nans fall 3.00s
+train  61%|█████████████████░░░░░░░░░░░| 184.4/300.0min [eta 115.6min] up 15500 | 2k sps | eval ep nans fall 3.00s
+train  62%|█████████████████░░░░░░░░░░░| 185.6/300.0min [eta 114.4min] up 15600 | 2k sps | eval ep nans fall 3.00s
+train  62%|█████████████████░░░░░░░░░░░| 186.8/300.0min [eta 113.2min] up 15700 | 2k sps | len 20.00s | ret +58.14 | eval ep nans fall 3.00s
+train  63%|██████████████████░░░░░░░░░░| 188.0/300.0min [eta 112.0min] up 15800 | 2k sps | len 20.00s | ret +58.13 | eval ep nans fall 3.00s
+train  63%|██████████████████░░░░░░░░░░| 189.2/300.0min [eta 110.8min] up 15900 | 2k sps | eval ep nans fall 3.00s
+train  63%|██████████████████░░░░░░░░░░| 190.4/300.0min [eta 109.6min] up 16000 | 2k sps | eval ep nans fall 3.00s
+train  64%|██████████████████░░░░░░░░░░| 191.6/300.0min [eta 108.4min] up 16100 | 2k sps | eval ep nans fall 3.00s
+train  64%|██████████████████░░░░░░░░░░| 192.8/300.0min [eta 107.2min] up 16200 | 2k sps | len 20.00s | ret +58.02 | eval ep nans fall 3.00s
+train  65%|██████████████████░░░░░░░░░░| 194.0/300.0min [eta 106.0min] up 16300 | 2k sps | len 20.00s | ret +58.01 | eval ep nans fall 3.00s
+train  65%|██████████████████░░░░░░░░░░| 195.2/300.0min [eta 104.8min] up 16400 | 2k sps | eval ep nans fall 3.00s
+train  65%|██████████████████░░░░░░░░░░| 196.4/300.0min [eta 103.6min] up 16500 | 2k sps | eval ep nans fall 3.00s
+train  66%|██████████████████░░░░░░░░░░| 197.5/300.0min [eta 102.5min] up 16600 | 2k sps | eval ep nans fall 3.00s
+train  66%|███████████████████░░░░░░░░░| 198.7/300.0min [eta 101.3min] up 16700 | 2k sps | len 20.00s | ret +58.19 | eval ep nans fall 3.00s
+train  67%|███████████████████░░░░░░░░░| 199.9/300.0min [eta 100.1min] up 16800 | 2k sps | len 20.00s | ret +58.18 | eval ep nans fall 3.00s
+train  67%|███████████████████░░░░░░░░░| 201.1/300.0min [eta 98.9min] up 16900 | 2k sps | eval ep nans fall 3.00s
+train  67%|███████████████████░░░░░░░░░| 202.3/300.0min [eta 97.7min] up 17000 | 2k sps | eval ep nans fall 3.00s
+train  68%|███████████████████░░░░░░░░░| 203.5/300.0min [eta 96.5min] up 17100 | 2k sps | eval ep nans fall 3.00s
+train  68%|███████████████████░░░░░░░░░| 204.7/300.0min [eta 95.3min] up 17200 | 2k sps | len 20.00s | ret +58.19 | eval ep nans fall 3.00s
+train  69%|███████████████████░░░░░░░░░| 205.9/300.0min [eta 94.1min] up 17300 | 2k sps | len 20.00s | ret +58.17 | eval ep nans fall 3.00s
+train  69%|███████████████████░░░░░░░░░| 207.1/300.0min [eta 92.9min] up 17400 | 2k sps | eval ep nans fall 3.00s
+train  69%|███████████████████░░░░░░░░░| 208.3/300.0min [eta 91.7min] up 17500 | 2k sps | eval ep nans fall 3.00s
+train  70%|████████████████████░░░░░░░░| 209.5/300.0min [eta 90.5min] up 17600 | 2k sps | eval ep nans fall 3.00s
+train  70%|████████████████████░░░░░░░░| 210.7/300.0min [eta 89.3min] up 17700 | 2k sps | len 20.00s | ret +58.20 | eval ep nans fall 3.00s
+train  71%|████████████████████░░░░░░░░| 211.9/300.0min [eta 88.1min] up 17800 | 2k sps | len 20.00s | ret +58.21 | eval ep nans fall 3.00s
+train  71%|████████████████████░░░░░░░░| 213.1/300.0min [eta 86.9min] up 17900 | 2k sps | len 1.88s | ret +3.48 | eval ep nans fall 3.00s
+train  71%|████████████████████░░░░░░░░| 214.3/300.0min [eta 85.7min] up 18000 | 2k sps | eval ep nans fall 3.00s
+train  72%|████████████████████░░░░░░░░| 215.6/300.0min [eta 84.4min] up 18100 | 2k sps | eval ep nans fall 3.00s
+train  72%|████████████████████░░░░░░░░| 216.8/300.0min [eta 83.2min] up 18200 | 2k sps | len 20.00s | ret +57.90 | eval ep nans fall 3.00s
+train  73%|████████████████████░░░░░░░░| 218.0/300.0min [eta 82.0min] up 18300 | 2k sps | len 20.00s | ret +57.43 | eval ep nans fall 3.00s
+train  73%|████████████████████░░░░░░░░| 219.1/300.0min [eta 80.9min] up 18400 | 2k sps | len 20.00s | ret +57.62 | eval ep nans fall 3.00s
+train  73%|█████████████████████░░░░░░░| 220.3/300.0min [eta 79.7min] up 18500 | 2k sps | eval ep nans fall 3.00s
+train  74%|█████████████████████░░░░░░░| 221.5/300.0min [eta 78.5min] up 18600 | 2k sps | len 20.00s | ret +57.87 | eval ep nans fall 3.00s
+train  74%|█████████████████████░░░░░░░| 222.7/300.0min [eta 77.3min] up 18700 | 2k sps | len 20.00s | ret +57.98 | eval ep nans fall 3.00s
+train  75%|█████████████████████░░░░░░░| 223.9/300.0min [eta 76.1min] up 18800 | 2k sps | len 20.00s | ret +57.88 | eval ep nans fall 3.00s
+train  75%|█████████████████████░░░░░░░| 225.1/300.0min [eta 74.9min] up 18900 | 2k sps | len 20.00s | ret +57.99 | eval ep nans fall 3.00s
+train  75%|█████████████████████░░░░░░░| 226.3/300.0min [eta 73.7min] up 19000 | 2k sps | eval ep nans fall 3.00s
+train  76%|█████████████████████░░░░░░░| 227.5/300.0min [eta 72.5min] up 19100 | 2k sps | len 20.00s | ret +58.09 | eval ep nans fall 3.00s
+train  76%|█████████████████████░░░░░░░| 228.7/300.0min [eta 71.3min] up 19200 | 2k sps | len 20.00s | ret +58.17 | eval ep nans fall 3.00s
+train  77%|█████████████████████░░░░░░░| 230.0/300.0min [eta 70.0min] up 19300 | 2k sps | len 20.00s | ret +58.17 | eval ep nans fall 3.00s
+train  77%|██████████████████████░░░░░░| 231.1/300.0min [eta 68.9min] up 19400 | 2k sps | len 20.00s | ret +58.13 | eval ep nans fall 3.00s
+train  77%|██████████████████████░░░░░░| 232.3/300.0min [eta 67.7min] up 19500 | 2k sps | eval ep nans fall 3.00s
+train  78%|██████████████████████░░░░░░| 233.4/300.0min [eta 66.6min] up 19600 | 2k sps | len 20.00s | ret +58.17 | eval ep nans fall 3.00s
+train  78%|██████████████████████░░░░░░| 234.6/300.0min [eta 65.4min] up 19700 | 2k sps | len 20.00s | ret +58.22 | eval ep nans fall 3.00s
+train  79%|██████████████████████░░░░░░| 235.8/300.0min [eta 64.2min] up 19800 | 2k sps | len 20.00s | ret +58.13 | eval ep nans fall 3.00s
+train  79%|██████████████████████░░░░░░| 237.0/300.0min [eta 63.0min] up 19900 | 2k sps | len 20.00s | ret +58.21 | eval ep nans fall 3.00s
+train  79%|██████████████████████░░░░░░| 238.2/300.0min [eta 61.8min] up 20000 | 2k sps | eval ep nans fall 3.00s
+train  80%|██████████████████████░░░░░░| 239.3/300.0min [eta 60.7min] up 20100 | 2k sps | len 20.00s | ret +58.12 | eval ep nans fall 3.00s
+train  80%|██████████████████████░░░░░░| 240.5/300.0min [eta 59.5min] up 20200 | 2k sps | len 20.00s | ret +58.20 | eval ep nans fall 3.00s
+train  81%|███████████████████████░░░░░| 241.7/300.0min [eta 58.3min] up 20300 | 2k sps | len 20.00s | ret +58.08 | eval ep nans fall 3.00s
+train  81%|███████████████████████░░░░░| 242.9/300.0min [eta 57.1min] up 20400 | 2k sps | len 20.00s | ret +58.12 | eval ep nans fall 3.00s
+train  81%|███████████████████████░░░░░| 244.1/300.0min [eta 55.9min] up 20500 | 2k sps | eval ep nans fall 3.00s
+train  82%|███████████████████████░░░░░| 245.3/300.0min [eta 54.7min] up 20600 | 2k sps | len 20.00s | ret +58.18 | eval ep nans fall 3.00s
+train  82%|███████████████████████░░░░░| 246.5/300.0min [eta 53.5min] up 20700 | 2k sps | len 20.00s | ret +58.17 | eval ep nans fall 3.00s
+train  83%|███████████████████████░░░░░| 247.7/300.0min [eta 52.3min] up 20800 | 2k sps | len 20.00s | ret +58.21 | eval ep nans fall 3.00s
+train  83%|███████████████████████░░░░░| 248.9/300.0min [eta 51.1min] up 20900 | 2k sps | len 20.00s | ret +58.22 | eval ep nans fall 3.00s
+train  83%|███████████████████████░░░░░| 250.1/300.0min [eta 49.9min] up 21000 | 2k sps | eval ep nans fall 3.00s
+train  84%|███████████████████████░░░░░| 251.5/300.0min [eta 48.5min] up 21100 | 2k sps | len 20.00s | ret +58.13 | eval ep nans fall 3.00s
+train  84%|████████████████████████░░░░| 252.7/300.0min [eta 47.3min] up 21200 | 2k sps | len 20.00s | ret +58.19 | eval ep nans fall 3.00s
+train  85%|████████████████████████░░░░| 253.9/300.0min [eta 46.1min] up 21300 | 2k sps | len 12.50s | ret +33.84 | eval ep nans fall 3.00s
+train  85%|████████████████████████░░░░| 255.0/300.0min [eta 45.0min] up 21400 | 2k sps | eval ep nans fall 3.00s
+train  85%|████████████████████████░░░░| 256.2/300.0min [eta 43.8min] up 21500 | 2k sps | eval ep nans fall 3.00s
+train  86%|████████████████████████░░░░| 257.4/300.0min [eta 42.6min] up 21600 | 2k sps | eval ep nans fall 3.00s
+train  86%|████████████████████████░░░░| 258.6/300.0min [eta 41.4min] up 21700 | 2k sps | eval ep nans fall 3.00s
+train  87%|████████████████████████░░░░| 259.8/300.0min [eta 40.2min] up 21800 | 2k sps | len 20.00s | ret +57.89 | eval ep nans fall 3.00s
+train  87%|████████████████████████░░░░| 261.0/300.0min [eta 39.0min] up 21900 | 2k sps | eval ep nans fall 3.00s
+train  87%|████████████████████████░░░░| 262.2/300.0min [eta 37.8min] up 22000 | 2k sps | eval ep nans fall 3.00s
+train  88%|█████████████████████████░░░| 263.4/300.0min [eta 36.6min] up 22100 | 2k sps | eval ep nans fall 3.00s
+train  88%|█████████████████████████░░░| 264.6/300.0min [eta 35.4min] up 22200 | 2k sps | eval ep nans fall 3.00s
+train  89%|█████████████████████████░░░| 265.8/300.0min [eta 34.2min] up 22300 | 2k sps | len 20.00s | ret +58.16 | eval ep nans fall 3.00s
+train  89%|█████████████████████████░░░| 267.0/300.0min [eta 33.0min] up 22400 | 2k sps | eval ep nans fall 3.00s
+train  89%|█████████████████████████░░░| 268.2/300.0min [eta 31.8min] up 22500 | 2k sps | eval ep nans fall 3.00s
+train  90%|█████████████████████████░░░| 269.4/300.0min [eta 30.6min] up 22600 | 2k sps | eval ep nans fall 3.00s
+train  90%|█████████████████████████░░░| 270.6/300.0min [eta 29.4min] up 22700 | 2k sps | eval ep nans fall 3.00s
+train  91%|█████████████████████████░░░| 271.8/300.0min [eta 28.2min] up 22800 | 2k sps | len 20.00s | ret +58.14 | eval ep nans fall 3.00s
+train  91%|█████████████████████████░░░| 273.0/300.0min [eta 27.0min] up 22900 | 2k sps | eval ep nans fall 3.00s
+train  91%|██████████████████████████░░| 274.1/300.0min [eta 25.9min] up 23000 | 2k sps | eval ep nans fall 3.00s
+train  92%|██████████████████████████░░| 275.3/300.0min [eta 24.7min] up 23100 | 2k sps | eval ep nans fall 3.00s
+train  92%|██████████████████████████░░| 276.5/300.0min [eta 23.5min] up 23200 | 2k sps | eval ep nans fall 3.00s
+train  93%|██████████████████████████░░| 277.8/300.0min [eta 22.2min] up 23300 | 2k sps | len 20.00s | ret +58.17 | eval ep nans fall 3.00s
+train  93%|██████████████████████████░░| 279.0/300.0min [eta 21.0min] up 23400 | 2k sps | eval ep nans fall 3.00s
+train  93%|██████████████████████████░░| 280.2/300.0min [eta 19.8min] up 23500 | 2k sps | eval ep nans fall 3.00s
+train  94%|██████████████████████████░░| 281.4/300.0min [eta 18.6min] up 23600 | 2k sps | eval ep nans fall 3.00s
+train  94%|██████████████████████████░░| 282.6/300.0min [eta 17.4min] up 23700 | 2k sps | eval ep nans fall 3.00s
+train  95%|██████████████████████████░░| 283.7/300.0min [eta 16.3min] up 23800 | 2k sps | len 20.00s | ret +57.28 | eval ep nans fall 3.00s
+train  95%|███████████████████████████░| 284.9/300.0min [eta 15.1min] up 23900 | 2k sps | eval ep nans fall 3.00s
+train  95%|███████████████████████████░| 286.1/300.0min [eta 13.9min] up 24000 | 2k sps | eval ep nans fall 3.00s
+train  96%|███████████████████████████░| 287.5/300.0min [eta 12.5min] up 24100 | 2k sps | eval ep nans fall 3.00s
+train  96%|███████████████████████████░| 288.7/300.0min [eta 11.3min] up 24200 | 2k sps | eval ep nans fall 3.00s
+train  97%|███████████████████████████░| 289.9/300.0min [eta 10.1min] up 24300 | 2k sps | len 20.00s | ret +58.08 | eval ep nans fall 3.00s
+train  97%|███████████████████████████░| 291.1/300.0min [eta 8.9min] up 24400 | 2k sps | eval ep nans fall 3.00s
+train  97%|███████████████████████████░| 292.3/300.0min [eta 7.7min] up 24500 | 2k sps | eval ep nans fall 3.00s
+train  98%|███████████████████████████░| 293.4/300.0min [eta 6.6min] up 24600 | 2k sps | eval ep nans fall 3.00s
+train  98%|████████████████████████████| 294.6/300.0min [eta 5.4min] up 24700 | 2k sps | eval ep nans fall 3.00s
+train  99%|████████████████████████████| 295.8/300.0min [eta 4.2min] up 24800 | 2k sps | len 20.00s | ret +58.16 | eval ep nans fall 3.00s
+train  99%|████████████████████████████| 297.0/300.0min [eta 3.0min] up 24900 | 2k sps | eval ep nans fall 3.00s
+train  99%|████████████████████████████| 298.2/300.0min [eta 1.8min] up 25000 | 2k sps | eval ep nans fall 3.00s
+train 100%|████████████████████████████| 299.4/300.0min [eta 0.6min] up 25100 | 2k sps | eval ep nans fall 3.00s
+  final eval (deterministic, 600 steps): survival 6.00s p10 6.00s alive 100% h±0.001 m tilt 0.6 deg vx±0.018
+  note: this short deterministic window is a training signal only; acceptance is `evaluate-stand` (64 seeds x 60 s, CPU model)
+
+  updates   : 25149 this run / 25149 total  (stop: deadline)
+  env steps : 38,628,864
+  elapsed   : 18003.8 s (2,146 env-steps/s)
+  checkpoint: /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/r0_stand_5h/model_last.pt
+  report    : /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/reports/gpu_train.json

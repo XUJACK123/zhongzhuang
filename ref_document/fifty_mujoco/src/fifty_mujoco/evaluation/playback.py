@@ -23,7 +23,16 @@ def play_onnx(
     policy = OnnxPolicy(onnx_path)
     env = FiftyVecEnv(
         config,
-        EnvOptions(num_envs=1, seed=0, variant=variant, fixed_command=(command[0], command[1], 0.464751)),
+        EnvOptions(
+            num_envs=1,
+            seed=0,
+            variant=variant,
+            fixed_command=(command[0], command[1], 0.464751),
+            # The default 20 s episode limit would end a ``--seconds 120``
+            # playback at 20 s and report it as a fall.  Playback is one long
+            # window, so the limit has to follow the request.
+            episode_length_s=float(seconds) + 1.0,
+        ),
     )
     env.commands.values[:, 2] = env.nominal_height
     obs, history = env.get_observations()
@@ -52,7 +61,10 @@ def play_onnx(
                 if delay > 0:
                     time.sleep(delay)
                 if done[0]:
-                    print(f"  episode ended at {survived * env.dt:.2f} s")
+                    print(
+                        f"  episode ended at {survived * env.dt:.2f} s"
+                        f"  ({env.termination_reason[0] or 'done'})"
+                    )
                     break
     else:
         for _ in range(steps):
@@ -60,6 +72,10 @@ def play_onnx(
             obs, privileged, reward, done, infos, history = env.step(action)
             survived += 1
             if done[0]:
+                print(
+                    f"  episode ended at {survived * env.dt:.2f} s"
+                    f"  ({env.termination_reason[0] or 'done'})"
+                )
                 break
 
     print(f"  survived: {survived * env.dt:.2f} s of {seconds:.2f} s")

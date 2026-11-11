@@ -613,6 +613,7 @@ def cmd_train_gpu(args: argparse.Namespace, config: Config) -> int:
         eval_every=args.eval_every,
         eval_steps=args.eval_steps,
         save_every=args.save_every,
+        save_minutes=args.save_minutes,
         entropy_coef=args.entropy_coef,
         max_std=args.max_std,
         adaptive_lr=not args.no_adaptive_lr,
@@ -1344,6 +1345,14 @@ def build_parser() -> argparse.ArgumentParser:
         default=25,
         help="checkpoint + history.json every N updates (0 = only at the end); "
         "default matches the experiment baseline in progress.md",
+    )
+    gpu.add_argument(
+        "--save-minutes",
+        type=float,
+        default=60.0,
+        help="checkpoint + history.json every N wall-clock minutes, whichever "
+        "trigger (this or --save-every) fires first; 0 disables it. An "
+        "unattended multi-hour run must leave an hourly snapshot",
     )
     gpu.add_argument("--entropy-coef", type=float, default=0.005, help="entropy bonus")
     gpu.add_argument("--max-std", type=float, default=1.0, help="clamp on the action std")
