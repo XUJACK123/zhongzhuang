@@ -1,0 +1,1 @@
+build_dm8009_four_idscan/startup_stm32h723xx.o: startup_stm32h723xx.s

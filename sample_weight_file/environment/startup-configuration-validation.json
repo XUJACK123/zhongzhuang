@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "source_commit": "019a4b63f2e33f2473a656ae0cbda1a1b3a6e4e0",
+  "resume_from": {
+    "run": "20261030-144955_round42_moving_yaw200_16384",
+    "checkpoint": "model_2950.pt",
+    "sha256": "869bb9f8ca3421c0228c544ce47ab57cd656eae1059e174b3c645b69b12ba3f2",
+    "iteration": 2950,
+    "archive_tag": "evidence/20261030-144955-round42-evaluation-video-v1"
+  },
+  "physical_artifacts_match_parent": {
+    "actuator_hardware.json": "ba7c40aa6634478e1f95b22648b697821110ec5ce54ded474e3d8f01774b7845",
+    "actuator_model.py": "4302fc5d57f95d349ef432ec3941ae04f78a0f53ff01b2861753654e5b9a3902",
+    "gas_spring_resolved.json": "faafc0131b5bc9edff3eb264b87d2e22d493f69ca28a063c9ba650c2100a60d0",
+    "gas_spring.py": "49886b805984a1e96a7100f43a4838ba4a959adcc412ce084ae19982474f4183",
+    "mechanical_limits.json": "2aeb09fe162068765a5f3142ef8b932aa3c744bb8425c942d1546761f6b08aba",
+    "fifty_training.urdf": "a85b689e6d7e7ffbe62125b54391c7971fdb1d9060feaf7052332193ea1e73b8"
+  },
+  "speed_range_m_s": [
+    0.1,
+    0.3
+  ],
+  "wheel_target_headroom_m_s": 2.2,
+  "arc_fraction": 0.5,
+  "turn_fraction": 0.2,
+  "command_endpoint_probability": 0.5,
+  "yaw_stage_rad_s": 2.5,
+  "moving_yaw_tracking_weight": 0.2,
+  "height_dense_weight_m_inv": 10.0,
+  "orientation_reward_scale": -30.0,
+  "target_yaw_rad_s": [
+    3.141592653589793,
+    12.566370614359172
+  ],
+  "yaw_rate_scale": -10.0,
+  "training_command_slew": true,
+  "nominal_environments": 16384,
+  "external_training_pushes": false,
+  "policy": "Feedforward ActorCritic31 inputs;no inference overlay",
+  "isolated_log_directory": "\\\\?\\UNC\\wsl.localhost\\Ubuntu-22.04-RL\\home\\rl\\training-runs\\jobs\\20261030-163843_round45_yaw250_level30_16384\\project\\ref_document\\fudan_rl_wheel_leg-main\\plane\\logs\\fifty_wheel_legged\\Oct30_16-39-21_20261030-163843_round45_yaw250_level30_16384"
+}

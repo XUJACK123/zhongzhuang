@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "supply_voltage_v": 24,
+  "wheel_diameter_m": 0.11,
+  "user_confirmed": {
+    "date": "2026-10-28",
+    "both_leg_motors_fixed_to_chassis": true,
+    "hip_external_ratio": 1.0,
+    "wheel_total_rotor_to_wheel_ratio": 15.88,
+    "wheel_controller": "C620",
+    "wheel_controller_current_limit_a": 20
+  },
+  "linkage": {
+    "active_arm_m": 0.1134,
+    "passive_arm_m": 0.135,
+    "fixed_offsets_cancel": true,
+    "signed_branch": "-2*pi < alpha < 0, -pi < beta < 0; exclude coincident-arm endpoints",
+    "position_relation": "beta = alpha/2 + asin((113.4/135)*sin(alpha/2)); alpha = m_knee - m_hip",
+    "motor_angle_convention": "canonical output-arm angles; encoder zero offsets/signs still require hardware calibration"
+  },
+  "leg_motor": {
+    "model": "DAMIAO DM-J8009P-2EC",
+    "specification_shaft": "integrated 9:1 gearbox OUTPUT; never multiply these torque values by 9 again",
+    "internal_reduction_ratio": 9.0,
+    "rated_torque_nm": 20.0,
+    "peak_torque_nm": 40.0,
+    "rated_current_a": 20.0,
+    "peak_current_a": 40.0,
+    "rated_speed_rpm_at_24v": 100.0,
+    "no_load_speed_rpm_at_24v": 160.0,
+    "phase_resistance_ohm": 0.145,
+    "phase_inductance_h": 8e-05,
+    "pole_pairs": 21,
+    "mass_kg_catalog_only": 0.963,
+    "rotor_inertia_kg_m2": null,
+    "source_url": "https://www.mdmbot.com/index.php?c=show&id=105",
+    "parameter_image_url": "https://www.mdmbot.com/uploadfile/ueditor/image/202606/1781768522e6afa8.png",
+    "version_note": "Current manufacturer table: peak 40 A, about 963 g. Older V1.0 PDF says 50 A / 930 g. CAD mass is not overwritten."
+  },
+  "wheel_motor": {
+    "model": "DJI M3508 with user-specified 15.88:1 gearbox",
+    "total_reduction_ratio": 15.88,
+    "controller": "C620",
+    "controller_current_limit_a": 20.0,
+    "reference_p19": {
+      "reduction_ratio_numerator": 3591,
+      "reduction_ratio_denominator": 187,
+      "rated_output_torque_nm": 3.0,
+      "rated_output_speed_rpm": 469.0,
+      "no_load_output_speed_rpm": 482.0,
+      "output_torque_constant_nm_a": 0.3,
+      "rated_esc_input_current_a": 10.0,
+      "stall_torque_nm": 4.5
+    },
+    "performance_model": "ratio_scaled_P19_proxy_assuming_same_rotor_and_equal_gearbox_efficiency",
+    "actual_gearbox_efficiency": null,
+    "actual_output_torque_calibrated": false,
+    "current_note": "20 A controller current limit is recorded, not equated to the manual's ESC input current or a continuous torque rating.",
+    "source_url": "https://cdn-hz.robomaster.com/robomasters/public/document/RoboMaster%20M3508%20P19%20Brushless%20DC%20Gear%20Motor%20V1.0.pdf"
+  },
+  "training_envelope": {
+    "mode": "rated_torque_only",
+    "speed_model": "constant rated torque up to rated speed, linear motoring taper to no-load speed; braking retains rated cap",
+    "peak_torque_enabled": false,
+    "thermal_model_calibrated": false,
+    "gearbox_losses_calibrated": false,
+    "reflected_rotor_inertia_calibrated": false
+  },
+  "hip_continuous": true,
+  "range_policy": {
+    "knee": "gas spring length feasible interval intersected with red assembly branch",
+    "hip": "continuous",
+    "new_linkage_collision_checks": false,
+    "source": "User correction on 2026-10-28"
+  }
+}

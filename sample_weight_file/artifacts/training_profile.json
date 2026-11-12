@@ -1,0 +1,90 @@
+{
+  "id": "tracking-v43-moving-yaw250-level30",
+  "episode_length_s": 40.0,
+  "motion_hold_resamples": 3,
+  "entropy_coef": 0.001,
+  "defer_loss_statistics": true,
+  "command_endpoint_probability": 0.5,
+  "native_cylinder_sides": 32,
+  "task": "hold_and_track",
+  "reference_observations": true,
+  "forward_command_range": [
+    0.1,
+    0.3
+  ],
+  "standing_fraction": 0.2,
+  "push_force_n": 0.0,
+  "push_yaw_torque_nm": 0.0,
+  "push_interval_s": 5.0,
+  "push_duration_s": 0.2,
+  "clip_single_reward": 10.0,
+  "upright_sharpness": 50.0,
+  "height_m": 0.2749762,
+  "joint_angles_rad": {
+    "rf0_Joint": 3.1063109024878943,
+    "rf1_Joint": -3.6606010515197696,
+    "r_wheel_Joint": 0.0,
+    "lf0_Joint": -3.1063109024878943,
+    "lf1_Joint": 3.6606010515197696,
+    "l_wheel_Joint": 0.0
+  },
+  "initial_velocity_noise": 0.02,
+  "wheel_velocity_kp": 0.3,
+  "wheel_velocity_action_scale": 20.0,
+  "policy_initial_std": 0.35,
+  "reward_scales": {
+    "alive": 1.5,
+    "upright": 3.0,
+    "base_height": 2.0,
+    "reference_position": 1.5,
+    "reference_velocity": 1.5,
+    "heading": 2.0,
+    "yaw_rate": -10.0,
+    "ang_vel_xy": -0.1,
+    "lin_vel_z": -0.1,
+    "action_rate": -0.005,
+    "action_smooth": -0.005,
+    "dof_acc": -1e-07,
+    "dof_vel": -1e-05,
+    "torques": -1e-05,
+    "dof_pos_limits": -1.0,
+    "collision": -0.5,
+    "termination": -10.0,
+    "wheel_alignment": -0.5,
+    "orientation": -30.0
+  },
+  "se2_reference": true,
+  "yaw_command_range": [
+    -2.5,
+    2.5
+  ],
+  "straight_fraction": 0.1,
+  "turn_fraction": 0.2,
+  "clearance_control": true,
+  "clearance_m": 0.1,
+  "clearance_range_m": [
+    0.1,
+    0.1
+  ],
+  "motion_reference_offset_xy_m": [
+    -0.07828434314112345,
+    0.003702250000000018
+  ],
+  "command_slew_rates": [
+    1.5,
+    6.283185307179586,
+    0.12
+  ],
+  "wheel_alignment": {
+    "scale_m": 0.02,
+    "settle_s": 0.5,
+    "definition": "Right minus left wheel center in chassis forward axis; squared normalized distance.",
+    "gating": "Zero yaw and nonnegative forward request unchanged for >=0.5 s; after first stable get-up if applicable."
+  },
+  "height_tracking_sigma_m": 0.015,
+  "wheel_action_limit": 2.0,
+  "checkpoint_interval_updates": 25,
+  "height_tracking_dense_weight_m_inv": 10.0,
+  "training_command_slew": true,
+  "moving_yaw_tracking_weight": 0.2
+}

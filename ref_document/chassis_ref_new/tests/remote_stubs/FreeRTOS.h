@@ -1,3 +1,0 @@
-#ifndef REMOTE_TEST_FREERTOS_H
-#define REMOTE_TEST_FREERTOS_H
-#endif

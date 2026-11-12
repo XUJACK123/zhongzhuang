@@ -1,0 +1,108 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build task",
+            "type": "process",
+            "command": "D:/vscode/Mingw/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "-j4",
+                "all",
+                "GCC_PATH=${config:cortex-debug.armToolchainPath.windows}",
+                "DEBUG=1"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "clean task",
+            "type": "process",
+            "command": "D:/vscode/Mingw/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "clean",
+                "GCC_PATH=${config:cortex-debug.armToolchainPath.windows}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "download stlink",
+            "type": "process",
+            "command": "D:/vscode/Mingw/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "-j4",
+                "download_stlink",
+                "GCC_PATH=${config:cortex-debug.armToolchainPath.windows}",
+                "DEBUG=1"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "download dap",
+            "type": "process",
+            "command": "D:/vscode/Mingw/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "-j4",
+                "download_dap",
+                "GCC_PATH=${config:cortex-debug.armToolchainPath.windows}",
+                "DEBUG=1"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "download jlink",
+            "type": "process",
+            "command": "D:/vscode/Mingw/mingw64/bin/mingw32-make.exe",
+            "args": [
+                "-j4",
+                "download_jlink",
+                "GCC_PATH=${config:cortex-debug.armToolchainPath.windows}",
+                "DEBUG=1"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        }
+    ]
+}

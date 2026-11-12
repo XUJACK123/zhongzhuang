@@ -1,0 +1,1405 @@
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"bsp_can.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "bsp/bsp_can.c"
+  20              		.section	.text.CANFIFOxCallback,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	CANFIFOxCallback:
+  27              	.LVL0:
+  28              	.LFB240:
+   1:bsp/bsp_can.c **** #include "bsp_can.h"
+   2:bsp/bsp_can.c **** #include <string.h>
+   3:bsp/bsp_can.c **** 
+   4:bsp/bsp_can.c **** /* This example owns CAN1 and the 0x200 group (motors 1..4). */
+   5:bsp/bsp_can.c **** static CANInstance motor_group;
+   6:bsp/bsp_can.c **** static volatile MotorFeedback feedback;
+   7:bsp/bsp_can.c **** 
+   8:bsp/bsp_can.c **** void CANServiceInit(void)
+   9:bsp/bsp_can.c **** {
+  10:bsp/bsp_can.c ****     if (HAL_CAN_Start(&hcan1) != HAL_OK ||
+  11:bsp/bsp_can.c ****         HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+  12:bsp/bsp_can.c ****         Error_Handler();
+  13:bsp/bsp_can.c **** }
+  14:bsp/bsp_can.c **** 
+  15:bsp/bsp_can.c **** CANInstance *CANRegister(uint32_t tx_id, uint32_t rx_id)
+  16:bsp/bsp_can.c **** {
+  17:bsp/bsp_can.c ****     CAN_FilterTypeDef filter = {0};
+  18:bsp/bsp_can.c ****     memset(&motor_group, 0, sizeof(motor_group));
+  19:bsp/bsp_can.c ****     memset((void *)&feedback, 0, sizeof(feedback));
+  20:bsp/bsp_can.c ****     motor_group.can_handle = &hcan1;
+  21:bsp/bsp_can.c ****     motor_group.tx_id = tx_id;
+  22:bsp/bsp_can.c ****     motor_group.rx_id = rx_id;
+  23:bsp/bsp_can.c ****     motor_group.txconf.StdId = tx_id;
+  24:bsp/bsp_can.c ****     motor_group.txconf.IDE = CAN_ID_STD;
+  25:bsp/bsp_can.c ****     motor_group.txconf.RTR = CAN_RTR_DATA;
+  26:bsp/bsp_can.c ****     motor_group.txconf.DLC = 8;
+  27:bsp/bsp_can.c ****     filter.FilterBank = 0;
+  28:bsp/bsp_can.c ****     filter.FilterMode = CAN_FILTERMODE_IDMASK;
+  29:bsp/bsp_can.c ****     filter.FilterScale = CAN_FILTERSCALE_32BIT;
+  30:bsp/bsp_can.c ****     filter.FilterIdHigh = rx_id << 5;
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 2
+
+
+  31:bsp/bsp_can.c ****     filter.FilterMaskIdHigh = 0x7FFU << 5;
+  32:bsp/bsp_can.c ****     filter.FilterMaskIdLow = 0x06U;
+  33:bsp/bsp_can.c ****     filter.FilterFIFOAssignment = CAN_RX_FIFO0;
+  34:bsp/bsp_can.c ****     filter.FilterActivation = ENABLE;
+  35:bsp/bsp_can.c ****     filter.SlaveStartFilterBank = 14;
+  36:bsp/bsp_can.c ****     if (HAL_CAN_ConfigFilter(&hcan1, &filter) != HAL_OK) Error_Handler();
+  37:bsp/bsp_can.c ****     return &motor_group;
+  38:bsp/bsp_can.c **** }
+  39:bsp/bsp_can.c **** 
+  40:bsp/bsp_can.c **** HAL_StatusTypeDef CANTransmit(CANInstance *instance)
+  41:bsp/bsp_can.c **** {
+  42:bsp/bsp_can.c ****     if (HAL_CAN_GetTxMailboxesFreeLevel(instance->can_handle) == 0) return HAL_BUSY;
+  43:bsp/bsp_can.c ****     return HAL_CAN_AddTxMessage(instance->can_handle, &instance->txconf,
+  44:bsp/bsp_can.c ****                                 instance->tx_buff, &instance->tx_mailbox);
+  45:bsp/bsp_can.c **** }
+  46:bsp/bsp_can.c **** 
+  47:bsp/bsp_can.c **** void CANSetMotorCurrent(CANInstance *instance, uint8_t id, int16_t current)
+  48:bsp/bsp_can.c **** {
+  49:bsp/bsp_can.c ****     if (id < 1 || id > 4) return;
+  50:bsp/bsp_can.c ****     if (current > 16384) current = 16384;
+  51:bsp/bsp_can.c ****     if (current < -16384) current = -16384;
+  52:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2] = (uint16_t)current >> 8;
+  53:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2 + 1] = (uint16_t)current & 0xFF;
+  54:bsp/bsp_can.c **** }
+  55:bsp/bsp_can.c **** 
+  56:bsp/bsp_can.c **** void CANGetMotorFeedback(MotorFeedback *out)
+  57:bsp/bsp_can.c **** {
+  58:bsp/bsp_can.c ****     uint32_t mask = __get_PRIMASK();
+  59:bsp/bsp_can.c ****     __disable_irq();
+  60:bsp/bsp_can.c ****     *out = feedback;
+  61:bsp/bsp_can.c ****     __set_PRIMASK(mask);
+  62:bsp/bsp_can.c **** }
+  63:bsp/bsp_can.c **** 
+  64:bsp/bsp_can.c **** static void CANFIFOxCallback(CAN_HandleTypeDef *hcan, uint32_t fifo)
+  65:bsp/bsp_can.c **** {
+  29              		.loc 1 65 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 40
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 65 1 is_stmt 0 view .LVU1
+  34 0000 70B5     		push	{r4, r5, r6, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 4, -16
+  38              		.cfi_offset 5, -12
+  39              		.cfi_offset 6, -8
+  40              		.cfi_offset 14, -4
+  41 0002 8AB0     		sub	sp, sp, #40
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 56
+  44 0004 0446     		mov	r4, r0
+  45 0006 0D46     		mov	r5, r1
+  66:bsp/bsp_can.c ****     CAN_RxHeaderTypeDef header;
+  46              		.loc 1 66 5 is_stmt 1 view .LVU2
+  67:bsp/bsp_can.c ****     uint8_t data[8];
+  47              		.loc 1 67 5 view .LVU3
+  68:bsp/bsp_can.c ****     while (HAL_CAN_GetRxFifoFillLevel(hcan, fifo) != 0)
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 3
+
+
+  48              		.loc 1 68 5 view .LVU4
+  49              	.LVL1:
+  50              	.L2:
+  51              		.loc 1 68 51 view .LVU5
+  52              		.loc 1 68 12 is_stmt 0 view .LVU6
+  53 0008 2946     		mov	r1, r5
+  54 000a 2046     		mov	r0, r4
+  55 000c FFF7FEFF 		bl	HAL_CAN_GetRxFifoFillLevel
+  56              	.LVL2:
+  57              		.loc 1 68 51 discriminator 1 view .LVU7
+  58 0010 0028     		cmp	r0, #0
+  59 0012 52D0     		beq	.L1
+  60              	.LBB8:
+  69:bsp/bsp_can.c ****     {
+  70:bsp/bsp_can.c ****         if (HAL_CAN_GetRxMessage(hcan, fifo, &header, data) != HAL_OK) break;
+  61              		.loc 1 70 9 is_stmt 1 view .LVU8
+  62              		.loc 1 70 13 is_stmt 0 view .LVU9
+  63 0014 01AB     		add	r3, sp, #4
+  64 0016 03AA     		add	r2, sp, #12
+  65 0018 2946     		mov	r1, r5
+  66 001a 2046     		mov	r0, r4
+  67 001c FFF7FEFF 		bl	HAL_CAN_GetRxMessage
+  68              	.LVL3:
+  69              		.loc 1 70 12 discriminator 1 view .LVU10
+  70 0020 0028     		cmp	r0, #0
+  71 0022 4AD1     		bne	.L1
+  71:bsp/bsp_can.c ****         if (hcan != &hcan1 || header.IDE != CAN_ID_STD ||
+  72              		.loc 1 71 9 is_stmt 1 view .LVU11
+  73              		.loc 1 71 12 is_stmt 0 view .LVU12
+  74 0024 264B     		ldr	r3, .L10
+  75 0026 9C42     		cmp	r4, r3
+  76 0028 EED1     		bne	.L2
+  77              		.loc 1 71 37 discriminator 2 view .LVU13
+  78 002a 059B     		ldr	r3, [sp, #20]
+  79              		.loc 1 71 28 discriminator 2 view .LVU14
+  80 002c 002B     		cmp	r3, #0
+  81 002e EBD1     		bne	.L2
+  72:bsp/bsp_can.c ****             header.RTR != CAN_RTR_DATA || header.DLC != 8 ||
+  82              		.loc 1 72 19 view .LVU15
+  83 0030 069B     		ldr	r3, [sp, #24]
+  71:bsp/bsp_can.c ****         if (hcan != &hcan1 || header.IDE != CAN_ID_STD ||
+  84              		.loc 1 71 56 discriminator 4 view .LVU16
+  85 0032 002B     		cmp	r3, #0
+  86 0034 E8D1     		bne	.L2
+  87              		.loc 1 72 49 view .LVU17
+  88 0036 079B     		ldr	r3, [sp, #28]
+  89              		.loc 1 72 40 view .LVU18
+  90 0038 082B     		cmp	r3, #8
+  91 003a E5D1     		bne	.L2
+  73:bsp/bsp_can.c ****             header.StdId != motor_group.rx_id) continue;
+  92              		.loc 1 73 40 view .LVU19
+  93 003c 214B     		ldr	r3, .L10+4
+  94 003e 5B6B     		ldr	r3, [r3, #52]
+  72:bsp/bsp_can.c ****             header.RTR != CAN_RTR_DATA || header.DLC != 8 ||
+  95              		.loc 1 72 59 discriminator 1 view .LVU20
+  96 0040 039A     		ldr	r2, [sp, #12]
+  97 0042 9A42     		cmp	r2, r3
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 4
+
+
+  98 0044 E0D1     		bne	.L2
+  74:bsp/bsp_can.c ****         uint16_t encoder = ((uint16_t)data[0] << 8) | data[1];
+  99              		.loc 1 74 9 is_stmt 1 view .LVU21
+ 100              		.loc 1 74 43 is_stmt 0 view .LVU22
+ 101 0046 9DF80420 		ldrb	r2, [sp, #4]	@ zero_extendqisi2
+ 102              		.loc 1 74 59 view .LVU23
+ 103 004a 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 104              		.loc 1 74 18 view .LVU24
+ 105 004e 43EA0223 		orr	r3, r3, r2, lsl #8
+ 106              	.LVL4:
+  75:bsp/bsp_can.c ****         if (encoder > 8191) continue;
+ 107              		.loc 1 75 9 is_stmt 1 view .LVU25
+ 108              		.loc 1 75 12 is_stmt 0 view .LVU26
+ 109 0052 B3F5005F 		cmp	r3, #8192
+ 110 0056 D7D2     		bcs	.L2
+  76:bsp/bsp_can.c ****         if (feedback.received)
+ 111              		.loc 1 76 9 is_stmt 1 view .LVU27
+ 112              		.loc 1 76 21 is_stmt 0 view .LVU28
+ 113 0058 1B4A     		ldr	r2, .L10+8
+ 114 005a D27B     		ldrb	r2, [r2, #15]	@ zero_extendqisi2
+ 115              		.loc 1 76 12 view .LVU29
+ 116 005c 62B1     		cbz	r2, .L5
+ 117              	.LBB9:
+  77:bsp/bsp_can.c ****         {
+  78:bsp/bsp_can.c ****             int32_t delta = (int32_t)encoder - feedback.encoder;
+ 118              		.loc 1 78 13 is_stmt 1 view .LVU30
+ 119              		.loc 1 78 56 is_stmt 0 view .LVU31
+ 120 005e 1A4A     		ldr	r2, .L10+8
+ 121 0060 1289     		ldrh	r2, [r2, #8]
+ 122 0062 92B2     		uxth	r2, r2
+ 123              		.loc 1 78 21 view .LVU32
+ 124 0064 9A1A     		subs	r2, r3, r2
+ 125              	.LVL5:
+  79:bsp/bsp_can.c ****             if (delta > 4096) delta -= 8192;
+ 126              		.loc 1 79 13 is_stmt 1 view .LVU33
+ 127              		.loc 1 79 16 is_stmt 0 view .LVU34
+ 128 0066 B2F5805F 		cmp	r2, #4096
+ 129 006a 20DD     		ble	.L6
+ 130              		.loc 1 79 31 is_stmt 1 discriminator 1 view .LVU35
+ 131              		.loc 1 79 37 is_stmt 0 discriminator 1 view .LVU36
+ 132 006c A2F50052 		sub	r2, r2, #8192
+ 133              	.LVL6:
+  80:bsp/bsp_can.c ****             if (delta < -4096) delta += 8192;
+ 134              		.loc 1 80 13 is_stmt 1 view .LVU37
+ 135              	.L7:
+  81:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ 136              		.loc 1 81 13 view .LVU38
+ 137              		.loc 1 81 21 is_stmt 0 view .LVU39
+ 138 0070 1548     		ldr	r0, .L10+8
+ 139 0072 0168     		ldr	r1, [r0]
+ 140              		.loc 1 81 35 view .LVU40
+ 141 0074 0A44     		add	r2, r2, r1
+ 142              	.LVL7:
+ 143              		.loc 1 81 35 view .LVU41
+ 144 0076 0260     		str	r2, [r0]
+ 145              	.LVL8:
+ 146              	.L5:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 5
+
+
+ 147              		.loc 1 81 35 view .LVU42
+ 148              	.LBE9:
+  82:bsp/bsp_can.c ****         }
+  83:bsp/bsp_can.c ****         feedback.encoder = encoder;
+ 149              		.loc 1 83 9 is_stmt 1 view .LVU43
+ 150              		.loc 1 83 26 is_stmt 0 view .LVU44
+ 151 0078 134E     		ldr	r6, .L10+8
+ 152 007a 3381     		strh	r3, [r6, #8]	@ movhi
+  84:bsp/bsp_can.c ****         feedback.speed_rpm = (int16_t)(((uint16_t)data[2] << 8) | data[3]);
+ 153              		.loc 1 84 9 is_stmt 1 view .LVU45
+ 154              		.loc 1 84 55 is_stmt 0 view .LVU46
+ 155 007c 9DF80620 		ldrb	r2, [sp, #6]	@ zero_extendqisi2
+ 156              		.loc 1 84 71 view .LVU47
+ 157 0080 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 158              	.LVL9:
+ 159              		.loc 1 84 30 view .LVU48
+ 160 0084 43EA0223 		orr	r3, r3, r2, lsl #8
+ 161 0088 1BB2     		sxth	r3, r3
+ 162              		.loc 1 84 28 view .LVU49
+ 163 008a 7381     		strh	r3, [r6, #10]	@ movhi
+ 164              	.LVL10:
+  85:bsp/bsp_can.c ****         feedback.current_raw = (int16_t)(((uint16_t)data[4] << 8) | data[5]);
+ 165              		.loc 1 85 9 is_stmt 1 view .LVU50
+ 166              		.loc 1 85 57 is_stmt 0 view .LVU51
+ 167 008c 9DF80820 		ldrb	r2, [sp, #8]	@ zero_extendqisi2
+ 168              		.loc 1 85 73 view .LVU52
+ 169 0090 9DF80930 		ldrb	r3, [sp, #9]	@ zero_extendqisi2
+ 170              		.loc 1 85 32 view .LVU53
+ 171 0094 43EA0223 		orr	r3, r3, r2, lsl #8
+ 172 0098 1BB2     		sxth	r3, r3
+ 173              		.loc 1 85 30 view .LVU54
+ 174 009a B381     		strh	r3, [r6, #12]	@ movhi
+  86:bsp/bsp_can.c ****         feedback.temperature = data[6];
+ 175              		.loc 1 86 9 is_stmt 1 view .LVU55
+ 176              		.loc 1 86 36 is_stmt 0 view .LVU56
+ 177 009c 9DF80A30 		ldrb	r3, [sp, #10]	@ zero_extendqisi2
+ 178              		.loc 1 86 30 view .LVU57
+ 179 00a0 B373     		strb	r3, [r6, #14]
+  87:bsp/bsp_can.c ****         feedback.last_rx_ms = HAL_GetTick();
+ 180              		.loc 1 87 9 is_stmt 1 view .LVU58
+ 181              		.loc 1 87 31 is_stmt 0 view .LVU59
+ 182 00a2 FFF7FEFF 		bl	HAL_GetTick
+ 183              	.LVL11:
+ 184              		.loc 1 87 29 discriminator 1 view .LVU60
+ 185 00a6 7060     		str	r0, [r6, #4]
+  88:bsp/bsp_can.c ****         feedback.received = 1;
+ 186              		.loc 1 88 9 is_stmt 1 view .LVU61
+ 187              		.loc 1 88 27 is_stmt 0 view .LVU62
+ 188 00a8 0123     		movs	r3, #1
+ 189 00aa F373     		strb	r3, [r6, #15]
+ 190 00ac ACE7     		b	.L2
+ 191              	.LVL12:
+ 192              	.L6:
+ 193              	.LBB10:
+  80:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ 194              		.loc 1 80 13 is_stmt 1 view .LVU63
+  80:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 6
+
+
+ 195              		.loc 1 80 16 is_stmt 0 view .LVU64
+ 196 00ae 12F5805F 		cmn	r2, #4096
+ 197 00b2 DDDA     		bge	.L7
+  80:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ 198              		.loc 1 80 32 is_stmt 1 discriminator 1 view .LVU65
+  80:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ 199              		.loc 1 80 38 is_stmt 0 discriminator 1 view .LVU66
+ 200 00b4 02F50052 		add	r2, r2, #8192
+ 201              	.LVL13:
+  80:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ 202              		.loc 1 80 38 discriminator 1 view .LVU67
+ 203 00b8 DAE7     		b	.L7
+ 204              	.LVL14:
+ 205              	.L1:
+  80:bsp/bsp_can.c ****             feedback.total_counts += delta;
+ 206              		.loc 1 80 38 discriminator 1 view .LVU68
+ 207              	.LBE10:
+ 208              	.LBE8:
+  89:bsp/bsp_can.c ****     }
+  90:bsp/bsp_can.c **** }
+ 209              		.loc 1 90 1 view .LVU69
+ 210 00ba 0AB0     		add	sp, sp, #40
+ 211              	.LCFI2:
+ 212              		.cfi_def_cfa_offset 16
+ 213              		@ sp needed
+ 214 00bc 70BD     		pop	{r4, r5, r6, pc}
+ 215              	.LVL15:
+ 216              	.L11:
+ 217              		.loc 1 90 1 view .LVU70
+ 218 00be 00BF     		.align	2
+ 219              	.L10:
+ 220 00c0 00000000 		.word	hcan1
+ 221 00c4 00000000 		.word	motor_group
+ 222 00c8 00000000 		.word	feedback
+ 223              		.cfi_endproc
+ 224              	.LFE240:
+ 226              		.section	.text.CANServiceInit,"ax",%progbits
+ 227              		.align	1
+ 228              		.global	CANServiceInit
+ 229              		.syntax unified
+ 230              		.thumb
+ 231              		.thumb_func
+ 233              	CANServiceInit:
+ 234              	.LFB235:
+   9:bsp/bsp_can.c ****     if (HAL_CAN_Start(&hcan1) != HAL_OK ||
+ 235              		.loc 1 9 1 is_stmt 1 view -0
+ 236              		.cfi_startproc
+ 237              		@ args = 0, pretend = 0, frame = 0
+ 238              		@ frame_needed = 0, uses_anonymous_args = 0
+ 239 0000 08B5     		push	{r3, lr}
+ 240              	.LCFI3:
+ 241              		.cfi_def_cfa_offset 8
+ 242              		.cfi_offset 3, -8
+ 243              		.cfi_offset 14, -4
+  10:bsp/bsp_can.c ****         HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+ 244              		.loc 1 10 5 view .LVU72
+  10:bsp/bsp_can.c ****         HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 7
+
+
+ 245              		.loc 1 10 9 is_stmt 0 view .LVU73
+ 246 0002 0648     		ldr	r0, .L16
+ 247 0004 FFF7FEFF 		bl	HAL_CAN_Start
+ 248              	.LVL16:
+  10:bsp/bsp_can.c ****         HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+ 249              		.loc 1 10 8 discriminator 1 view .LVU74
+ 250 0008 20B9     		cbnz	r0, .L13
+  11:bsp/bsp_can.c ****         Error_Handler();
+ 251              		.loc 1 11 9 view .LVU75
+ 252 000a 0221     		movs	r1, #2
+ 253 000c 0348     		ldr	r0, .L16
+ 254 000e FFF7FEFF 		bl	HAL_CAN_ActivateNotification
+ 255              	.LVL17:
+  10:bsp/bsp_can.c ****         HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING) != HAL_OK)
+ 256              		.loc 1 10 41 discriminator 2 view .LVU76
+ 257 0012 08B1     		cbz	r0, .L12
+ 258              	.L13:
+  12:bsp/bsp_can.c **** }
+ 259              		.loc 1 12 9 is_stmt 1 view .LVU77
+ 260 0014 FFF7FEFF 		bl	Error_Handler
+ 261              	.LVL18:
+ 262              	.L12:
+  13:bsp/bsp_can.c **** 
+ 263              		.loc 1 13 1 is_stmt 0 view .LVU78
+ 264 0018 08BD     		pop	{r3, pc}
+ 265              	.L17:
+ 266 001a 00BF     		.align	2
+ 267              	.L16:
+ 268 001c 00000000 		.word	hcan1
+ 269              		.cfi_endproc
+ 270              	.LFE235:
+ 272              		.section	.text.CANRegister,"ax",%progbits
+ 273              		.align	1
+ 274              		.global	CANRegister
+ 275              		.syntax unified
+ 276              		.thumb
+ 277              		.thumb_func
+ 279              	CANRegister:
+ 280              	.LVL19:
+ 281              	.LFB236:
+  16:bsp/bsp_can.c ****     CAN_FilterTypeDef filter = {0};
+ 282              		.loc 1 16 1 is_stmt 1 view -0
+ 283              		.cfi_startproc
+ 284              		@ args = 0, pretend = 0, frame = 40
+ 285              		@ frame_needed = 0, uses_anonymous_args = 0
+  16:bsp/bsp_can.c ****     CAN_FilterTypeDef filter = {0};
+ 286              		.loc 1 16 1 is_stmt 0 view .LVU80
+ 287 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 288              	.LCFI4:
+ 289              		.cfi_def_cfa_offset 20
+ 290              		.cfi_offset 4, -20
+ 291              		.cfi_offset 5, -16
+ 292              		.cfi_offset 6, -12
+ 293              		.cfi_offset 7, -8
+ 294              		.cfi_offset 14, -4
+ 295 0002 8BB0     		sub	sp, sp, #44
+ 296              	.LCFI5:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 8
+
+
+ 297              		.cfi_def_cfa_offset 64
+ 298 0004 0646     		mov	r6, r0
+ 299 0006 0C46     		mov	r4, r1
+  17:bsp/bsp_can.c ****     memset(&motor_group, 0, sizeof(motor_group));
+ 300              		.loc 1 17 5 is_stmt 1 view .LVU81
+  17:bsp/bsp_can.c ****     memset(&motor_group, 0, sizeof(motor_group));
+ 301              		.loc 1 17 23 is_stmt 0 view .LVU82
+ 302 0008 2822     		movs	r2, #40
+ 303 000a 0021     		movs	r1, #0
+ 304              	.LVL20:
+  17:bsp/bsp_can.c ****     memset(&motor_group, 0, sizeof(motor_group));
+ 305              		.loc 1 17 23 view .LVU83
+ 306 000c 6846     		mov	r0, sp
+ 307              	.LVL21:
+  17:bsp/bsp_can.c ****     memset(&motor_group, 0, sizeof(motor_group));
+ 308              		.loc 1 17 23 view .LVU84
+ 309 000e FFF7FEFF 		bl	memset
+ 310              	.LVL22:
+  18:bsp/bsp_can.c ****     memset((void *)&feedback, 0, sizeof(feedback));
+ 311              		.loc 1 18 5 is_stmt 1 view .LVU85
+ 312 0012 144D     		ldr	r5, .L22
+ 313 0014 3C22     		movs	r2, #60
+ 314 0016 0021     		movs	r1, #0
+ 315 0018 2846     		mov	r0, r5
+ 316 001a FFF7FEFF 		bl	memset
+ 317              	.LVL23:
+  19:bsp/bsp_can.c ****     motor_group.can_handle = &hcan1;
+ 318              		.loc 1 19 5 view .LVU86
+ 319 001e 124B     		ldr	r3, .L22+4
+ 320 0020 0022     		movs	r2, #0
+ 321 0022 1A60     		str	r2, [r3]
+ 322 0024 5A60     		str	r2, [r3, #4]
+ 323 0026 9A60     		str	r2, [r3, #8]
+ 324 0028 DA60     		str	r2, [r3, #12]
+  20:bsp/bsp_can.c ****     motor_group.tx_id = tx_id;
+ 325              		.loc 1 20 5 view .LVU87
+  20:bsp/bsp_can.c ****     motor_group.tx_id = tx_id;
+ 326              		.loc 1 20 28 is_stmt 0 view .LVU88
+ 327 002a 1048     		ldr	r0, .L22+8
+ 328 002c 2860     		str	r0, [r5]
+  21:bsp/bsp_can.c ****     motor_group.rx_id = rx_id;
+ 329              		.loc 1 21 5 is_stmt 1 view .LVU89
+  21:bsp/bsp_can.c ****     motor_group.rx_id = rx_id;
+ 330              		.loc 1 21 23 is_stmt 0 view .LVU90
+ 331 002e EE61     		str	r6, [r5, #28]
+  22:bsp/bsp_can.c ****     motor_group.txconf.StdId = tx_id;
+ 332              		.loc 1 22 5 is_stmt 1 view .LVU91
+  22:bsp/bsp_can.c ****     motor_group.txconf.StdId = tx_id;
+ 333              		.loc 1 22 23 is_stmt 0 view .LVU92
+ 334 0030 6C63     		str	r4, [r5, #52]
+  23:bsp/bsp_can.c ****     motor_group.txconf.IDE = CAN_ID_STD;
+ 335              		.loc 1 23 5 is_stmt 1 view .LVU93
+  23:bsp/bsp_can.c ****     motor_group.txconf.IDE = CAN_ID_STD;
+ 336              		.loc 1 23 30 is_stmt 0 view .LVU94
+ 337 0032 6E60     		str	r6, [r5, #4]
+  24:bsp/bsp_can.c ****     motor_group.txconf.RTR = CAN_RTR_DATA;
+ 338              		.loc 1 24 5 is_stmt 1 view .LVU95
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 9
+
+
+  25:bsp/bsp_can.c ****     motor_group.txconf.DLC = 8;
+ 339              		.loc 1 25 5 view .LVU96
+  26:bsp/bsp_can.c ****     filter.FilterBank = 0;
+ 340              		.loc 1 26 5 view .LVU97
+  26:bsp/bsp_can.c ****     filter.FilterBank = 0;
+ 341              		.loc 1 26 28 is_stmt 0 view .LVU98
+ 342 0034 0823     		movs	r3, #8
+ 343 0036 6B61     		str	r3, [r5, #20]
+  27:bsp/bsp_can.c ****     filter.FilterMode = CAN_FILTERMODE_IDMASK;
+ 344              		.loc 1 27 5 is_stmt 1 view .LVU99
+  28:bsp/bsp_can.c ****     filter.FilterScale = CAN_FILTERSCALE_32BIT;
+ 345              		.loc 1 28 5 view .LVU100
+  29:bsp/bsp_can.c ****     filter.FilterIdHigh = rx_id << 5;
+ 346              		.loc 1 29 5 view .LVU101
+  29:bsp/bsp_can.c ****     filter.FilterIdHigh = rx_id << 5;
+ 347              		.loc 1 29 24 is_stmt 0 view .LVU102
+ 348 0038 0123     		movs	r3, #1
+ 349 003a 0793     		str	r3, [sp, #28]
+  30:bsp/bsp_can.c ****     filter.FilterMaskIdHigh = 0x7FFU << 5;
+ 350              		.loc 1 30 5 is_stmt 1 view .LVU103
+  30:bsp/bsp_can.c ****     filter.FilterMaskIdHigh = 0x7FFU << 5;
+ 351              		.loc 1 30 33 is_stmt 0 view .LVU104
+ 352 003c 6401     		lsls	r4, r4, #5
+ 353              	.LVL24:
+  30:bsp/bsp_can.c ****     filter.FilterMaskIdHigh = 0x7FFU << 5;
+ 354              		.loc 1 30 25 view .LVU105
+ 355 003e 0094     		str	r4, [sp]
+  31:bsp/bsp_can.c ****     filter.FilterMaskIdLow = 0x06U;
+ 356              		.loc 1 31 5 is_stmt 1 view .LVU106
+  31:bsp/bsp_can.c ****     filter.FilterMaskIdLow = 0x06U;
+ 357              		.loc 1 31 29 is_stmt 0 view .LVU107
+ 358 0040 4FF6E072 		movw	r2, #65504
+ 359 0044 0292     		str	r2, [sp, #8]
+  32:bsp/bsp_can.c ****     filter.FilterFIFOAssignment = CAN_RX_FIFO0;
+ 360              		.loc 1 32 5 is_stmt 1 view .LVU108
+  32:bsp/bsp_can.c ****     filter.FilterFIFOAssignment = CAN_RX_FIFO0;
+ 361              		.loc 1 32 28 is_stmt 0 view .LVU109
+ 362 0046 0622     		movs	r2, #6
+ 363 0048 0392     		str	r2, [sp, #12]
+  33:bsp/bsp_can.c ****     filter.FilterActivation = ENABLE;
+ 364              		.loc 1 33 5 is_stmt 1 view .LVU110
+  34:bsp/bsp_can.c ****     filter.SlaveStartFilterBank = 14;
+ 365              		.loc 1 34 5 view .LVU111
+  34:bsp/bsp_can.c ****     filter.SlaveStartFilterBank = 14;
+ 366              		.loc 1 34 29 is_stmt 0 view .LVU112
+ 367 004a 0893     		str	r3, [sp, #32]
+  35:bsp/bsp_can.c ****     if (HAL_CAN_ConfigFilter(&hcan1, &filter) != HAL_OK) Error_Handler();
+ 368              		.loc 1 35 5 is_stmt 1 view .LVU113
+  35:bsp/bsp_can.c ****     if (HAL_CAN_ConfigFilter(&hcan1, &filter) != HAL_OK) Error_Handler();
+ 369              		.loc 1 35 33 is_stmt 0 view .LVU114
+ 370 004c 0E23     		movs	r3, #14
+ 371 004e 0993     		str	r3, [sp, #36]
+  36:bsp/bsp_can.c ****     return &motor_group;
+ 372              		.loc 1 36 5 is_stmt 1 view .LVU115
+  36:bsp/bsp_can.c ****     return &motor_group;
+ 373              		.loc 1 36 9 is_stmt 0 view .LVU116
+ 374 0050 6946     		mov	r1, sp
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 10
+
+
+ 375 0052 FFF7FEFF 		bl	HAL_CAN_ConfigFilter
+ 376              	.LVL25:
+  36:bsp/bsp_can.c ****     return &motor_group;
+ 377              		.loc 1 36 8 discriminator 1 view .LVU117
+ 378 0056 10B9     		cbnz	r0, .L21
+ 379              	.L19:
+  37:bsp/bsp_can.c **** }
+ 380              		.loc 1 37 5 is_stmt 1 view .LVU118
+  38:bsp/bsp_can.c **** 
+ 381              		.loc 1 38 1 is_stmt 0 view .LVU119
+ 382 0058 0248     		ldr	r0, .L22
+ 383 005a 0BB0     		add	sp, sp, #44
+ 384              	.LCFI6:
+ 385              		.cfi_remember_state
+ 386              		.cfi_def_cfa_offset 20
+ 387              		@ sp needed
+ 388 005c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 389              	.LVL26:
+ 390              	.L21:
+ 391              	.LCFI7:
+ 392              		.cfi_restore_state
+  36:bsp/bsp_can.c ****     return &motor_group;
+ 393              		.loc 1 36 58 is_stmt 1 discriminator 2 view .LVU120
+ 394 005e FFF7FEFF 		bl	Error_Handler
+ 395              	.LVL27:
+ 396 0062 F9E7     		b	.L19
+ 397              	.L23:
+ 398              		.align	2
+ 399              	.L22:
+ 400 0064 00000000 		.word	motor_group
+ 401 0068 00000000 		.word	feedback
+ 402 006c 00000000 		.word	hcan1
+ 403              		.cfi_endproc
+ 404              	.LFE236:
+ 406              		.section	.text.CANTransmit,"ax",%progbits
+ 407              		.align	1
+ 408              		.global	CANTransmit
+ 409              		.syntax unified
+ 410              		.thumb
+ 411              		.thumb_func
+ 413              	CANTransmit:
+ 414              	.LVL28:
+ 415              	.LFB237:
+  41:bsp/bsp_can.c ****     if (HAL_CAN_GetTxMailboxesFreeLevel(instance->can_handle) == 0) return HAL_BUSY;
+ 416              		.loc 1 41 1 view -0
+ 417              		.cfi_startproc
+ 418              		@ args = 0, pretend = 0, frame = 0
+ 419              		@ frame_needed = 0, uses_anonymous_args = 0
+  41:bsp/bsp_can.c ****     if (HAL_CAN_GetTxMailboxesFreeLevel(instance->can_handle) == 0) return HAL_BUSY;
+ 420              		.loc 1 41 1 is_stmt 0 view .LVU122
+ 421 0000 10B5     		push	{r4, lr}
+ 422              	.LCFI8:
+ 423              		.cfi_def_cfa_offset 8
+ 424              		.cfi_offset 4, -8
+ 425              		.cfi_offset 14, -4
+ 426 0002 0446     		mov	r4, r0
+  42:bsp/bsp_can.c ****     return HAL_CAN_AddTxMessage(instance->can_handle, &instance->txconf,
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 11
+
+
+ 427              		.loc 1 42 5 is_stmt 1 view .LVU123
+  42:bsp/bsp_can.c ****     return HAL_CAN_AddTxMessage(instance->can_handle, &instance->txconf,
+ 428              		.loc 1 42 9 is_stmt 0 view .LVU124
+ 429 0004 0068     		ldr	r0, [r0]
+ 430              	.LVL29:
+  42:bsp/bsp_can.c ****     return HAL_CAN_AddTxMessage(instance->can_handle, &instance->txconf,
+ 431              		.loc 1 42 9 view .LVU125
+ 432 0006 FFF7FEFF 		bl	HAL_CAN_GetTxMailboxesFreeLevel
+ 433              	.LVL30:
+  42:bsp/bsp_can.c ****     return HAL_CAN_AddTxMessage(instance->can_handle, &instance->txconf,
+ 434              		.loc 1 42 8 discriminator 1 view .LVU126
+ 435 000a 48B1     		cbz	r0, .L26
+  43:bsp/bsp_can.c ****                                 instance->tx_buff, &instance->tx_mailbox);
+ 436              		.loc 1 43 5 is_stmt 1 view .LVU127
+  43:bsp/bsp_can.c ****                                 instance->tx_buff, &instance->tx_mailbox);
+ 437              		.loc 1 43 12 is_stmt 0 view .LVU128
+ 438 000c 2146     		mov	r1, r4
+ 439 000e 51F8040B 		ldr	r0, [r1], #4
+ 440 0012 04F12003 		add	r3, r4, #32
+ 441 0016 04F12402 		add	r2, r4, #36
+ 442 001a FFF7FEFF 		bl	HAL_CAN_AddTxMessage
+ 443              	.LVL31:
+ 444              	.L25:
+  45:bsp/bsp_can.c **** 
+ 445              		.loc 1 45 1 view .LVU129
+ 446 001e 10BD     		pop	{r4, pc}
+ 447              	.LVL32:
+ 448              	.L26:
+  42:bsp/bsp_can.c ****     return HAL_CAN_AddTxMessage(instance->can_handle, &instance->txconf,
+ 449              		.loc 1 42 76 discriminator 2 view .LVU130
+ 450 0020 0220     		movs	r0, #2
+ 451 0022 FCE7     		b	.L25
+ 452              		.cfi_endproc
+ 453              	.LFE237:
+ 455              		.section	.text.CANSetMotorCurrent,"ax",%progbits
+ 456              		.align	1
+ 457              		.global	CANSetMotorCurrent
+ 458              		.syntax unified
+ 459              		.thumb
+ 460              		.thumb_func
+ 462              	CANSetMotorCurrent:
+ 463              	.LVL33:
+ 464              	.LFB238:
+  48:bsp/bsp_can.c ****     if (id < 1 || id > 4) return;
+ 465              		.loc 1 48 1 is_stmt 1 view -0
+ 466              		.cfi_startproc
+ 467              		@ args = 0, pretend = 0, frame = 0
+ 468              		@ frame_needed = 0, uses_anonymous_args = 0
+ 469              		@ link register save eliminated.
+  49:bsp/bsp_can.c ****     if (current > 16384) current = 16384;
+ 470              		.loc 1 49 5 view .LVU132
+  49:bsp/bsp_can.c ****     if (current > 16384) current = 16384;
+ 471              		.loc 1 49 16 is_stmt 0 view .LVU133
+ 472 0000 4B1E     		subs	r3, r1, #1
+ 473 0002 DBB2     		uxtb	r3, r3
+  49:bsp/bsp_can.c ****     if (current > 16384) current = 16384;
+ 474              		.loc 1 49 8 view .LVU134
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 12
+
+
+ 475 0004 032B     		cmp	r3, #3
+ 476 0006 15D8     		bhi	.L28
+  50:bsp/bsp_can.c ****     if (current < -16384) current = -16384;
+ 477              		.loc 1 50 5 is_stmt 1 view .LVU135
+  50:bsp/bsp_can.c ****     if (current < -16384) current = -16384;
+ 478              		.loc 1 50 8 is_stmt 0 view .LVU136
+ 479 0008 B2F5804F 		cmp	r2, #16384
+ 480 000c 04DC     		bgt	.L31
+  51:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2] = (uint16_t)current >> 8;
+ 481              		.loc 1 51 5 is_stmt 1 view .LVU137
+  51:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2] = (uint16_t)current >> 8;
+ 482              		.loc 1 51 8 is_stmt 0 view .LVU138
+ 483 000e 12F5804F 		cmn	r2, #16384
+ 484 0012 03DA     		bge	.L30
+  51:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2] = (uint16_t)current >> 8;
+ 485              		.loc 1 51 35 discriminator 1 view .LVU139
+ 486 0014 084A     		ldr	r2, .L33
+ 487              	.LVL34:
+  51:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2] = (uint16_t)current >> 8;
+ 488              		.loc 1 51 35 discriminator 1 view .LVU140
+ 489 0016 01E0     		b	.L30
+ 490              	.LVL35:
+ 491              	.L31:
+  50:bsp/bsp_can.c ****     if (current < -16384) current = -16384;
+ 492              		.loc 1 50 34 discriminator 1 view .LVU141
+ 493 0018 4FF48042 		mov	r2, #16384
+ 494              	.LVL36:
+ 495              	.L30:
+  52:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2 + 1] = (uint16_t)current & 0xFF;
+ 496              		.loc 1 52 5 is_stmt 1 view .LVU142
+  52:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2 + 1] = (uint16_t)current & 0xFF;
+ 497              		.loc 1 52 27 is_stmt 0 view .LVU143
+ 498 001c 0139     		subs	r1, r1, #1
+ 499              	.LVL37:
+  52:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2 + 1] = (uint16_t)current & 0xFF;
+ 500              		.loc 1 52 32 view .LVU144
+ 501 001e 4B00     		lsls	r3, r1, #1
+  52:bsp/bsp_can.c ****     instance->tx_buff[(id - 1) * 2 + 1] = (uint16_t)current & 0xFF;
+ 502              		.loc 1 52 37 view .LVU145
+ 503 0020 00EB4101 		add	r1, r0, r1, lsl #1
+ 504 0024 C2F3072C 		ubfx	ip, r2, #8, #8
+ 505 0028 81F824C0 		strb	ip, [r1, #36]
+  53:bsp/bsp_can.c **** }
+ 506              		.loc 1 53 5 is_stmt 1 view .LVU146
+  53:bsp/bsp_can.c **** }
+ 507              		.loc 1 53 36 is_stmt 0 view .LVU147
+ 508 002c 0133     		adds	r3, r3, #1
+  53:bsp/bsp_can.c **** }
+ 509              		.loc 1 53 41 view .LVU148
+ 510 002e 1844     		add	r0, r0, r3
+ 511              	.LVL38:
+  53:bsp/bsp_can.c **** }
+ 512              		.loc 1 53 41 view .LVU149
+ 513 0030 80F82420 		strb	r2, [r0, #36]
+ 514              	.L28:
+  54:bsp/bsp_can.c **** 
+ 515              		.loc 1 54 1 view .LVU150
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 13
+
+
+ 516 0034 7047     		bx	lr
+ 517              	.L34:
+ 518 0036 00BF     		.align	2
+ 519              	.L33:
+ 520 0038 00C0FFFF 		.word	-16384
+ 521              		.cfi_endproc
+ 522              	.LFE238:
+ 524              		.section	.text.CANGetMotorFeedback,"ax",%progbits
+ 525              		.align	1
+ 526              		.global	CANGetMotorFeedback
+ 527              		.syntax unified
+ 528              		.thumb
+ 529              		.thumb_func
+ 531              	CANGetMotorFeedback:
+ 532              	.LVL39:
+ 533              	.LFB239:
+  57:bsp/bsp_can.c ****     uint32_t mask = __get_PRIMASK();
+ 534              		.loc 1 57 1 is_stmt 1 view -0
+ 535              		.cfi_startproc
+ 536              		@ args = 0, pretend = 0, frame = 0
+ 537              		@ frame_needed = 0, uses_anonymous_args = 0
+  57:bsp/bsp_can.c ****     uint32_t mask = __get_PRIMASK();
+ 538              		.loc 1 57 1 is_stmt 0 view .LVU152
+ 539 0000 00B5     		push	{lr}
+ 540              	.LCFI9:
+ 541              		.cfi_def_cfa_offset 4
+ 542              		.cfi_offset 14, -4
+ 543 0002 8446     		mov	ip, r0
+  58:bsp/bsp_can.c ****     __disable_irq();
+ 544              		.loc 1 58 5 is_stmt 1 view .LVU153
+ 545              	.LBB11:
+ 546              	.LBI11:
+ 547              		.file 2 "Drivers/CMSIS/Include/cmsis_gcc.h"
+   1:Drivers/CMSIS/Include/cmsis_gcc.h **** /**************************************************************************//**
+   2:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @file     cmsis_gcc.h
+   3:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @brief    CMSIS compiler GCC header file
+   4:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @version  V5.0.4
+   5:Drivers/CMSIS/Include/cmsis_gcc.h ****  * @date     09. April 2018
+   6:Drivers/CMSIS/Include/cmsis_gcc.h ****  ******************************************************************************/
+   7:Drivers/CMSIS/Include/cmsis_gcc.h **** /*
+   8:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Copyright (c) 2009-2018 Arm Limited. All rights reserved.
+   9:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  10:Drivers/CMSIS/Include/cmsis_gcc.h ****  * SPDX-License-Identifier: Apache-2.0
+  11:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  12:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Licensed under the Apache License, Version 2.0 (the License); you may
+  13:Drivers/CMSIS/Include/cmsis_gcc.h ****  * not use this file except in compliance with the License.
+  14:Drivers/CMSIS/Include/cmsis_gcc.h ****  * You may obtain a copy of the License at
+  15:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  16:Drivers/CMSIS/Include/cmsis_gcc.h ****  * www.apache.org/licenses/LICENSE-2.0
+  17:Drivers/CMSIS/Include/cmsis_gcc.h ****  *
+  18:Drivers/CMSIS/Include/cmsis_gcc.h ****  * Unless required by applicable law or agreed to in writing, software
+  19:Drivers/CMSIS/Include/cmsis_gcc.h ****  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  20:Drivers/CMSIS/Include/cmsis_gcc.h ****  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  21:Drivers/CMSIS/Include/cmsis_gcc.h ****  * See the License for the specific language governing permissions and
+  22:Drivers/CMSIS/Include/cmsis_gcc.h ****  * limitations under the License.
+  23:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+  24:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 14
+
+
+  25:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __CMSIS_GCC_H
+  26:Drivers/CMSIS/Include/cmsis_gcc.h **** #define __CMSIS_GCC_H
+  27:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  28:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ignore some GCC warnings */
+  29:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic push
+  30:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wsign-conversion"
+  31:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wconversion"
+  32:Drivers/CMSIS/Include/cmsis_gcc.h **** #pragma GCC diagnostic ignored "-Wunused-parameter"
+  33:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  34:Drivers/CMSIS/Include/cmsis_gcc.h **** /* Fallback for __has_builtin */
+  35:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef __has_builtin
+  36:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __has_builtin(x) (0)
+  37:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  38:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+  39:Drivers/CMSIS/Include/cmsis_gcc.h **** /* CMSIS compiler specific defines */
+  40:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ASM
+  41:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ASM                                  __asm
+  42:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  43:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __INLINE
+  44:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __INLINE                               inline
+  45:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  46:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_INLINE
+  47:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_INLINE                        static inline
+  48:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  49:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __STATIC_FORCEINLINE                 
+  50:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __STATIC_FORCEINLINE                   __attribute__((always_inline)) static inline
+  51:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif                                           
+  52:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __NO_RETURN
+  53:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __NO_RETURN                            __attribute__((__noreturn__))
+  54:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  55:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __USED
+  56:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __USED                                 __attribute__((used))
+  57:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  58:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __WEAK
+  59:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __WEAK                                 __attribute__((weak))
+  60:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  61:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED
+  62:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED                               __attribute__((packed, aligned(1)))
+  63:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  64:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_STRUCT
+  65:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_STRUCT                        struct __attribute__((packed, aligned(1)))
+  66:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  67:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __PACKED_UNION
+  68:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __PACKED_UNION                         union __attribute__((packed, aligned(1)))
+  69:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  70:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32        /* deprecated */
+  71:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  72:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  73:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  74:Drivers/CMSIS/Include/cmsis_gcc.h ****   struct __attribute__((packed)) T_UINT32 { uint32_t v; };
+  75:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  76:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32(x)                  (((struct T_UINT32 *)(x))->v)
+  77:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  78:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_WRITE
+  79:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  80:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  81:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 15
+
+
+  82:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_WRITE { uint16_t v; };
+  83:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  84:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_WRITE(addr, val)    (void)((((struct T_UINT16_WRITE *)(void *)(addr))-
+  85:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  86:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT16_READ
+  87:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  88:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  89:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  90:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT16_READ { uint16_t v; };
+  91:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+  92:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT16_READ(addr)          (((const struct T_UINT16_READ *)(const void *)(add
+  93:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+  94:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_WRITE
+  95:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+  96:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+  97:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+  98:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_WRITE { uint32_t v; };
+  99:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 100:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_WRITE(addr, val)    (void)((((struct T_UINT32_WRITE *)(void *)(addr))-
+ 101:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 102:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __UNALIGNED_UINT32_READ
+ 103:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic push
+ 104:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wpacked"
+ 105:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic ignored "-Wattributes"
+ 106:Drivers/CMSIS/Include/cmsis_gcc.h ****   __PACKED_STRUCT T_UINT32_READ { uint32_t v; };
+ 107:Drivers/CMSIS/Include/cmsis_gcc.h ****   #pragma GCC diagnostic pop
+ 108:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __UNALIGNED_UINT32_READ(addr)          (((const struct T_UINT32_READ *)(const void *)(add
+ 109:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 110:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __ALIGNED
+ 111:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __ALIGNED(x)                           __attribute__((aligned(x)))
+ 112:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 113:Drivers/CMSIS/Include/cmsis_gcc.h **** #ifndef   __RESTRICT
+ 114:Drivers/CMSIS/Include/cmsis_gcc.h ****   #define __RESTRICT                             __restrict
+ 115:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 116:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 117:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 118:Drivers/CMSIS/Include/cmsis_gcc.h **** /* ###########################  Core Function Access  ########################### */
+ 119:Drivers/CMSIS/Include/cmsis_gcc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+ 120:Drivers/CMSIS/Include/cmsis_gcc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+ 121:Drivers/CMSIS/Include/cmsis_gcc.h ****   @{
+ 122:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 123:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 124:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 125:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Enable IRQ Interrupts
+ 126:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
+ 127:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ 128:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 129:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __enable_irq(void)
+ 130:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 131:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+ 132:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 133:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 134:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 135:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 136:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Disable IRQ Interrupts
+ 137:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
+ 138:Drivers/CMSIS/Include/cmsis_gcc.h ****            Can only be executed in Privileged modes.
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 16
+
+
+ 139:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 140:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __disable_irq(void)
+ 141:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 142:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+ 143:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 144:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 145:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 146:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 147:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Control Register
+ 148:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the Control Register.
+ 149:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               Control Register value
+ 150:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 151:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_CONTROL(void)
+ 152:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 153:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 154:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 155:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, control" : "=r" (result) );
+ 156:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 157:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 158:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 159:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 160:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 161:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 162:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Control Register (non-secure)
+ 163:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the non-secure Control Register when in secure mode.
+ 164:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               non-secure Control Register value
+ 165:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 166:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __TZ_get_CONTROL_NS(void)
+ 167:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 168:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 169:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 170:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, control_ns" : "=r" (result) );
+ 171:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 172:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 173:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 174:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 175:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 176:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 177:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Control Register
+ 178:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Writes the given value to the Control Register.
+ 179:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    control  Control Register value to set
+ 180:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 181:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __set_CONTROL(uint32_t control)
+ 182:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 183:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR control, %0" : : "r" (control) : "memory");
+ 184:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 185:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 186:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 187:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 188:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 189:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Control Register (non-secure)
+ 190:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Writes the given value to the non-secure Control Register when in secure state.
+ 191:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    control  Control Register value to set
+ 192:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 193:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __TZ_set_CONTROL_NS(uint32_t control)
+ 194:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 195:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR control_ns, %0" : : "r" (control) : "memory");
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 17
+
+
+ 196:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 197:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 198:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 199:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 200:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 201:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get IPSR Register
+ 202:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the IPSR Register.
+ 203:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               IPSR Register value
+ 204:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 205:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_IPSR(void)
+ 206:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 207:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 208:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 209:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
+ 210:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 211:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 212:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 213:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 214:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 215:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get APSR Register
+ 216:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the APSR Register.
+ 217:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               APSR Register value
+ 218:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 219:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_APSR(void)
+ 220:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 221:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 222:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 223:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, apsr" : "=r" (result) );
+ 224:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 225:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 226:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 227:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 228:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 229:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get xPSR Register
+ 230:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the content of the xPSR Register.
+ 231:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               xPSR Register value
+ 232:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 233:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_xPSR(void)
+ 234:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 235:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 236:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 237:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, xpsr" : "=r" (result) );
+ 238:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 239:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 240:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 241:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 242:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 243:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Process Stack Pointer
+ 244:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the Process Stack Pointer (PSP).
+ 245:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               PSP Register value
+ 246:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 247:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_PSP(void)
+ 248:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 249:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 250:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 251:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, psp"  : "=r" (result) );
+ 252:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 18
+
+
+ 253:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 254:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 255:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 256:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 257:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 258:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Process Stack Pointer (non-secure)
+ 259:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the non-secure Process Stack Pointer (PSP) when in secure s
+ 260:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               PSP Register value
+ 261:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 262:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __TZ_get_PSP_NS(void)
+ 263:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 264:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 265:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 266:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, psp_ns"  : "=r" (result) );
+ 267:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 268:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 269:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 270:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 271:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 272:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 273:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Process Stack Pointer
+ 274:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the Process Stack Pointer (PSP).
+ 275:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfProcStack  Process Stack Pointer value to set
+ 276:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 277:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __set_PSP(uint32_t topOfProcStack)
+ 278:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 279:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR psp, %0" : : "r" (topOfProcStack) : );
+ 280:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 281:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 282:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 283:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 284:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 285:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Process Stack Pointer (non-secure)
+ 286:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the non-secure Process Stack Pointer (PSP) when in secure sta
+ 287:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfProcStack  Process Stack Pointer value to set
+ 288:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 289:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __TZ_set_PSP_NS(uint32_t topOfProcStack)
+ 290:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 291:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR psp_ns, %0" : : "r" (topOfProcStack) : );
+ 292:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 293:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 294:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 295:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 296:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 297:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Main Stack Pointer
+ 298:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the Main Stack Pointer (MSP).
+ 299:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               MSP Register value
+ 300:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 301:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_MSP(void)
+ 302:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 303:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 304:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 305:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, msp" : "=r" (result) );
+ 306:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 307:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 308:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 309:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 19
+
+
+ 310:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 311:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 312:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Main Stack Pointer (non-secure)
+ 313:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the non-secure Main Stack Pointer (MSP) when in secure stat
+ 314:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               MSP Register value
+ 315:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 316:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __TZ_get_MSP_NS(void)
+ 317:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 318:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 319:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 320:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, msp_ns" : "=r" (result) );
+ 321:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 322:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 323:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 324:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 325:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 326:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 327:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Main Stack Pointer
+ 328:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the Main Stack Pointer (MSP).
+ 329:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfMainStack  Main Stack Pointer value to set
+ 330:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 331:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __set_MSP(uint32_t topOfMainStack)
+ 332:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 333:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR msp, %0" : : "r" (topOfMainStack) : );
+ 334:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 335:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 336:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 337:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 338:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 339:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Main Stack Pointer (non-secure)
+ 340:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the non-secure Main Stack Pointer (MSP) when in secure state.
+ 341:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfMainStack  Main Stack Pointer value to set
+ 342:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 343:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __TZ_set_MSP_NS(uint32_t topOfMainStack)
+ 344:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 345:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR msp_ns, %0" : : "r" (topOfMainStack) : );
+ 346:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 347:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 348:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 349:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 350:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 351:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 352:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Stack Pointer (non-secure)
+ 353:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current value of the non-secure Stack Pointer (SP) when in secure state.
+ 354:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               SP Register value
+ 355:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 356:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __TZ_get_SP_NS(void)
+ 357:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 358:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 359:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 360:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, sp_ns" : "=r" (result) );
+ 361:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 362:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 363:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 364:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 365:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 366:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Stack Pointer (non-secure)
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 20
+
+
+ 367:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the non-secure Stack Pointer (SP) when in secure state.
+ 368:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    topOfStack  Stack Pointer value to set
+ 369:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 370:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __TZ_set_SP_NS(uint32_t topOfStack)
+ 371:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 372:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR sp_ns, %0" : : "r" (topOfStack) : );
+ 373:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 374:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 375:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 376:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 377:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 378:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Priority Mask
+ 379:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current state of the priority mask bit from the Priority Mask Register.
+ 380:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               Priority Mask value
+ 381:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 382:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __get_PRIMASK(void)
+ 548              		.loc 2 382 31 view .LVU154
+ 549              	.LBB12:
+ 383:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 384:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 550              		.loc 2 384 3 view .LVU155
+ 385:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 386:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, primask" : "=r" (result) :: "memory");
+ 551              		.loc 2 386 3 view .LVU156
+ 552              		.syntax unified
+ 553              	@ 386 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 554 0004 EFF3108E 		MRS lr, primask
+ 555              	@ 0 "" 2
+ 387:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 556              		.loc 2 387 3 view .LVU157
+ 557              	.LVL40:
+ 558              		.loc 2 387 3 is_stmt 0 view .LVU158
+ 559              		.thumb
+ 560              		.syntax unified
+ 561              	.LBE12:
+ 562              	.LBE11:
+  59:bsp/bsp_can.c ****     *out = feedback;
+ 563              		.loc 1 59 5 is_stmt 1 view .LVU159
+ 564              	.LBB13:
+ 565              	.LBI13:
+ 140:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 566              		.loc 2 140 27 view .LVU160
+ 567              	.LBB14:
+ 142:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 568              		.loc 2 142 3 view .LVU161
+ 569              		.syntax unified
+ 570              	@ 142 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 571 0008 72B6     		cpsid i
+ 572              	@ 0 "" 2
+ 573              		.thumb
+ 574              		.syntax unified
+ 575              	.LBE14:
+ 576              	.LBE13:
+  60:bsp/bsp_can.c ****     __set_PRIMASK(mask);
+ 577              		.loc 1 60 5 view .LVU162
+  60:bsp/bsp_can.c ****     __set_PRIMASK(mask);
+ 578              		.loc 1 60 10 is_stmt 0 view .LVU163
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 21
+
+
+ 579 000a 034B     		ldr	r3, .L37
+ 580 000c 0FCB     		ldm	r3, {r0, r1, r2, r3}
+ 581              	.LVL41:
+  60:bsp/bsp_can.c ****     __set_PRIMASK(mask);
+ 582              		.loc 1 60 10 view .LVU164
+ 583 000e 8CE80F00 		stm	ip, {r0, r1, r2, r3}
+  61:bsp/bsp_can.c **** }
+ 584              		.loc 1 61 5 is_stmt 1 view .LVU165
+ 585              	.LVL42:
+ 586              	.LBB15:
+ 587              	.LBI15:
+ 388:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 389:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 390:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 391:Drivers/CMSIS/Include/cmsis_gcc.h **** #if (defined (__ARM_FEATURE_CMSE ) && (__ARM_FEATURE_CMSE == 3))
+ 392:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 393:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Get Priority Mask (non-secure)
+ 394:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Returns the current state of the non-secure priority mask bit from the Priority Mask Reg
+ 395:Drivers/CMSIS/Include/cmsis_gcc.h ****   \return               Priority Mask value
+ 396:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 397:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE uint32_t __TZ_get_PRIMASK_NS(void)
+ 398:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 399:Drivers/CMSIS/Include/cmsis_gcc.h ****   uint32_t result;
+ 400:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 401:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MRS %0, primask_ns" : "=r" (result) :: "memory");
+ 402:Drivers/CMSIS/Include/cmsis_gcc.h ****   return(result);
+ 403:Drivers/CMSIS/Include/cmsis_gcc.h **** }
+ 404:Drivers/CMSIS/Include/cmsis_gcc.h **** #endif
+ 405:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 406:Drivers/CMSIS/Include/cmsis_gcc.h **** 
+ 407:Drivers/CMSIS/Include/cmsis_gcc.h **** /**
+ 408:Drivers/CMSIS/Include/cmsis_gcc.h ****   \brief   Set Priority Mask
+ 409:Drivers/CMSIS/Include/cmsis_gcc.h ****   \details Assigns the given value to the Priority Mask Register.
+ 410:Drivers/CMSIS/Include/cmsis_gcc.h ****   \param [in]    priMask  Priority Mask
+ 411:Drivers/CMSIS/Include/cmsis_gcc.h ****  */
+ 412:Drivers/CMSIS/Include/cmsis_gcc.h **** __STATIC_FORCEINLINE void __set_PRIMASK(uint32_t priMask)
+ 588              		.loc 2 412 27 view .LVU166
+ 589              	.LBB16:
+ 413:Drivers/CMSIS/Include/cmsis_gcc.h **** {
+ 414:Drivers/CMSIS/Include/cmsis_gcc.h ****   __ASM volatile ("MSR primask, %0" : : "r" (priMask) : "memory");
+ 590              		.loc 2 414 3 view .LVU167
+ 591              		.syntax unified
+ 592              	@ 414 "Drivers/CMSIS/Include/cmsis_gcc.h" 1
+ 593 0012 8EF31088 		MSR primask, lr
+ 594              	@ 0 "" 2
+ 595              	.LVL43:
+ 596              		.loc 2 414 3 is_stmt 0 view .LVU168
+ 597              		.thumb
+ 598              		.syntax unified
+ 599              	.LBE16:
+ 600              	.LBE15:
+  62:bsp/bsp_can.c **** 
+ 601              		.loc 1 62 1 view .LVU169
+ 602 0016 00BD     		pop	{pc}
+ 603              	.L38:
+ 604              		.align	2
+ 605              	.L37:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 22
+
+
+ 606 0018 00000000 		.word	feedback
+ 607              		.cfi_endproc
+ 608              	.LFE239:
+ 610              		.section	.text.HAL_CAN_RxFifo0MsgPendingCallback,"ax",%progbits
+ 611              		.align	1
+ 612              		.global	HAL_CAN_RxFifo0MsgPendingCallback
+ 613              		.syntax unified
+ 614              		.thumb
+ 615              		.thumb_func
+ 617              	HAL_CAN_RxFifo0MsgPendingCallback:
+ 618              	.LVL44:
+ 619              	.LFB241:
+  91:bsp/bsp_can.c **** 
+  92:bsp/bsp_can.c **** void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
+  93:bsp/bsp_can.c **** {
+ 620              		.loc 1 93 1 is_stmt 1 view -0
+ 621              		.cfi_startproc
+ 622              		@ args = 0, pretend = 0, frame = 0
+ 623              		@ frame_needed = 0, uses_anonymous_args = 0
+ 624              		.loc 1 93 1 is_stmt 0 view .LVU171
+ 625 0000 08B5     		push	{r3, lr}
+ 626              	.LCFI10:
+ 627              		.cfi_def_cfa_offset 8
+ 628              		.cfi_offset 3, -8
+ 629              		.cfi_offset 14, -4
+  94:bsp/bsp_can.c ****     CANFIFOxCallback(hcan, CAN_RX_FIFO0);
+ 630              		.loc 1 94 5 is_stmt 1 view .LVU172
+ 631 0002 0021     		movs	r1, #0
+ 632 0004 FFF7FEFF 		bl	CANFIFOxCallback
+ 633              	.LVL45:
+  95:bsp/bsp_can.c **** }
+ 634              		.loc 1 95 1 is_stmt 0 view .LVU173
+ 635 0008 08BD     		pop	{r3, pc}
+ 636              		.cfi_endproc
+ 637              	.LFE241:
+ 639              		.section	.text.HAL_CAN_RxFifo1MsgPendingCallback,"ax",%progbits
+ 640              		.align	1
+ 641              		.global	HAL_CAN_RxFifo1MsgPendingCallback
+ 642              		.syntax unified
+ 643              		.thumb
+ 644              		.thumb_func
+ 646              	HAL_CAN_RxFifo1MsgPendingCallback:
+ 647              	.LVL46:
+ 648              	.LFB242:
+  96:bsp/bsp_can.c **** 
+  97:bsp/bsp_can.c **** void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
+  98:bsp/bsp_can.c **** {
+ 649              		.loc 1 98 1 is_stmt 1 view -0
+ 650              		.cfi_startproc
+ 651              		@ args = 0, pretend = 0, frame = 0
+ 652              		@ frame_needed = 0, uses_anonymous_args = 0
+ 653              		.loc 1 98 1 is_stmt 0 view .LVU175
+ 654 0000 08B5     		push	{r3, lr}
+ 655              	.LCFI11:
+ 656              		.cfi_def_cfa_offset 8
+ 657              		.cfi_offset 3, -8
+ 658              		.cfi_offset 14, -4
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 23
+
+
+  99:bsp/bsp_can.c ****     CANFIFOxCallback(hcan, CAN_RX_FIFO1);
+ 659              		.loc 1 99 5 is_stmt 1 view .LVU176
+ 660 0002 0121     		movs	r1, #1
+ 661 0004 FFF7FEFF 		bl	CANFIFOxCallback
+ 662              	.LVL47:
+ 100:bsp/bsp_can.c **** }
+ 663              		.loc 1 100 1 is_stmt 0 view .LVU177
+ 664 0008 08BD     		pop	{r3, pc}
+ 665              		.cfi_endproc
+ 666              	.LFE242:
+ 668              		.section	.bss.feedback,"aw",%nobits
+ 669              		.align	2
+ 672              	feedback:
+ 673 0000 00000000 		.space	16
+ 673      00000000 
+ 673      00000000 
+ 673      00000000 
+ 674              		.section	.bss.motor_group,"aw",%nobits
+ 675              		.align	2
+ 678              	motor_group:
+ 679 0000 00000000 		.space	60
+ 679      00000000 
+ 679      00000000 
+ 679      00000000 
+ 679      00000000 
+ 680              		.text
+ 681              	.Letext0:
+ 682              		.file 3 "D:/robomaster_material/electric_contol/gun-arm-embedded/arm-none-eabi/include/machine/_de
+ 683              		.file 4 "D:/robomaster_material/electric_contol/gun-arm-embedded/arm-none-eabi/include/sys/_stdint
+ 684              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 685              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 686              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 687              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 688              		.file 9 "bsp/bsp_can.h"
+ 689              		.file 10 "D:/robomaster_material/electric_contol/gun-arm-embedded/arm-none-eabi/include/string.h"
+ 690              		.file 11 "Inc/can.h"
+ 691              		.file 12 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 692              		.file 13 "Inc/main.h"
+ 693              		.file 14 "<built-in>"
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 bsp_can.c
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:21     .text.CANFIFOxCallback:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:26     .text.CANFIFOxCallback:00000000 CANFIFOxCallback
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:220    .text.CANFIFOxCallback:000000c0 $d
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:678    .bss.motor_group:00000000 motor_group
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:672    .bss.feedback:00000000 feedback
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:227    .text.CANServiceInit:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:233    .text.CANServiceInit:00000000 CANServiceInit
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:268    .text.CANServiceInit:0000001c $d
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:273    .text.CANRegister:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:279    .text.CANRegister:00000000 CANRegister
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:400    .text.CANRegister:00000064 $d
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:407    .text.CANTransmit:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:413    .text.CANTransmit:00000000 CANTransmit
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:456    .text.CANSetMotorCurrent:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:462    .text.CANSetMotorCurrent:00000000 CANSetMotorCurrent
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:520    .text.CANSetMotorCurrent:00000038 $d
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:525    .text.CANGetMotorFeedback:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:531    .text.CANGetMotorFeedback:00000000 CANGetMotorFeedback
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:606    .text.CANGetMotorFeedback:00000018 $d
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:611    .text.HAL_CAN_RxFifo0MsgPendingCallback:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:617    .text.HAL_CAN_RxFifo0MsgPendingCallback:00000000 HAL_CAN_RxFifo0MsgPendingCallback
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:640    .text.HAL_CAN_RxFifo1MsgPendingCallback:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:646    .text.HAL_CAN_RxFifo1MsgPendingCallback:00000000 HAL_CAN_RxFifo1MsgPendingCallback
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:669    .bss.feedback:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\ccaeDsb2.s:675    .bss.motor_group:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_CAN_GetRxFifoFillLevel
+HAL_CAN_GetRxMessage
+HAL_GetTick
+hcan1
+HAL_CAN_Start
+HAL_CAN_ActivateNotification
+Error_Handler
+memset
+HAL_CAN_ConfigFilter
+HAL_CAN_GetTxMailboxesFreeLevel
+HAL_CAN_AddTxMessage

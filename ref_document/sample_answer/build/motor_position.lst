@@ -1,0 +1,1018 @@
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"motor_position.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "bsp/motor_position.c"
+  20              		.section	.text.clamp,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	clamp:
+  27              	.LVL0:
+  28              	.LFB235:
+   1:bsp/motor_position.c **** #include "motor_position.h"
+   2:bsp/motor_position.c **** #include "bsp_can.h"
+   3:bsp/motor_position.c **** #include <math.h>
+   4:bsp/motor_position.c **** 
+   5:bsp/motor_position.c **** volatile MotorState motor_state = MOTOR_WAITING;
+   6:bsp/motor_position.c **** volatile float motor_angle_deg;
+   7:bsp/motor_position.c **** volatile float motor_reference_deg;
+   8:bsp/motor_position.c **** static CANInstance *group;
+   9:bsp/motor_position.c **** static uint32_t boot_ms, last_ms, move_ms, settled_ms;
+  10:bsp/motor_position.c **** static int32_t origin;
+  11:bsp/motor_position.c **** static float integral;
+  12:bsp/motor_position.c **** 
+  13:bsp/motor_position.c **** static float clamp(float value, float limit)
+  14:bsp/motor_position.c **** {
+  29              		.loc 1 14 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              		.loc 1 14 1 is_stmt 0 view .LVU1
+  35 0000 F0EE407A 		vmov.f32	s15, s0
+  36 0004 B0EE600A 		vmov.f32	s0, s1
+  37              	.LVL1:
+  15:bsp/motor_position.c ****     return value > limit ? limit : (value < -limit ? -limit : value);
+  38              		.loc 1 15 5 is_stmt 1 view .LVU2
+  39              		.loc 1 15 34 is_stmt 0 view .LVU3
+  40 0008 F4EEE07A 		vcmpe.f32	s15, s1
+  41 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  42 0010 08DC     		bgt	.L2
+  43              		.loc 1 15 45 discriminator 2 view .LVU4
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 2
+
+
+  44 0012 B1EE600A 		vneg.f32	s0, s1
+  45              		.loc 1 15 61 discriminator 2 view .LVU5
+  46 0016 B4EEE70A 		vcmpe.f32	s0, s15
+  47 001a F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  48 001e 01DC     		bgt	.L2
+  49              		.loc 1 15 34 discriminator 4 view .LVU6
+  50 0020 B0EE670A 		vmov.f32	s0, s15
+  51              	.L2:
+  16:bsp/motor_position.c **** }
+  52              		.loc 1 16 1 view .LVU7
+  53 0024 7047     		bx	lr
+  54              		.cfi_endproc
+  55              	.LFE235:
+  57              		.section	.text.MotorPositionInit,"ax",%progbits
+  58              		.align	1
+  59              		.global	MotorPositionInit
+  60              		.syntax unified
+  61              		.thumb
+  62              		.thumb_func
+  64              	MotorPositionInit:
+  65              	.LFB236:
+  17:bsp/motor_position.c **** 
+  18:bsp/motor_position.c **** void MotorPositionInit(void)
+  19:bsp/motor_position.c **** {
+  66              		.loc 1 19 1 is_stmt 1 view -0
+  67              		.cfi_startproc
+  68              		@ args = 0, pretend = 0, frame = 0
+  69              		@ frame_needed = 0, uses_anonymous_args = 0
+  70 0000 08B5     		push	{r3, lr}
+  71              	.LCFI0:
+  72              		.cfi_def_cfa_offset 8
+  73              		.cfi_offset 3, -8
+  74              		.cfi_offset 14, -4
+  20:bsp/motor_position.c ****     group = CANRegister(0x200, 0x201);
+  75              		.loc 1 20 5 view .LVU9
+  76              		.loc 1 20 13 is_stmt 0 view .LVU10
+  77 0002 40F20121 		movw	r1, #513
+  78 0006 4FF40070 		mov	r0, #512
+  79 000a FFF7FEFF 		bl	CANRegister
+  80              	.LVL2:
+  81              		.loc 1 20 11 discriminator 1 view .LVU11
+  82 000e 0B4B     		ldr	r3, .L5
+  83 0010 1860     		str	r0, [r3]
+  21:bsp/motor_position.c ****     CANServiceInit();
+  84              		.loc 1 21 5 is_stmt 1 view .LVU12
+  85 0012 FFF7FEFF 		bl	CANServiceInit
+  86              	.LVL3:
+  22:bsp/motor_position.c ****     boot_ms = last_ms = HAL_GetTick();
+  87              		.loc 1 22 5 view .LVU13
+  88              		.loc 1 22 25 is_stmt 0 view .LVU14
+  89 0016 FFF7FEFF 		bl	HAL_GetTick
+  90              	.LVL4:
+  91              		.loc 1 22 23 discriminator 1 view .LVU15
+  92 001a 094B     		ldr	r3, .L5+4
+  93 001c 1860     		str	r0, [r3]
+  94              		.loc 1 22 13 discriminator 1 view .LVU16
+  95 001e 094B     		ldr	r3, .L5+8
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 3
+
+
+  96 0020 1860     		str	r0, [r3]
+  23:bsp/motor_position.c ****     motor_state = MOTOR_WAITING;
+  97              		.loc 1 23 5 is_stmt 1 view .LVU17
+  98              		.loc 1 23 17 is_stmt 0 view .LVU18
+  99 0022 0022     		movs	r2, #0
+ 100 0024 084B     		ldr	r3, .L5+12
+ 101 0026 1A70     		strb	r2, [r3]
+  24:bsp/motor_position.c ****     motor_angle_deg = motor_reference_deg = integral = 0.0f;
+ 102              		.loc 1 24 5 is_stmt 1 view .LVU19
+ 103              		.loc 1 24 54 is_stmt 0 view .LVU20
+ 104 0028 0023     		movs	r3, #0
+ 105 002a 0849     		ldr	r1, .L5+16
+ 106 002c 0B60     		str	r3, [r1]	@ float
+ 107              		.loc 1 24 43 view .LVU21
+ 108 002e 0849     		ldr	r1, .L5+20
+ 109 0030 0B60     		str	r3, [r1]	@ float
+ 110              		.loc 1 24 21 view .LVU22
+ 111 0032 0849     		ldr	r1, .L5+24
+ 112 0034 0B60     		str	r3, [r1]	@ float
+  25:bsp/motor_position.c ****     settled_ms = 0;
+ 113              		.loc 1 25 5 is_stmt 1 view .LVU23
+ 114              		.loc 1 25 16 is_stmt 0 view .LVU24
+ 115 0036 084B     		ldr	r3, .L5+28
+ 116 0038 1A60     		str	r2, [r3]
+  26:bsp/motor_position.c **** }
+ 117              		.loc 1 26 1 view .LVU25
+ 118 003a 08BD     		pop	{r3, pc}
+ 119              	.L6:
+ 120              		.align	2
+ 121              	.L5:
+ 122 003c 00000000 		.word	group
+ 123 0040 00000000 		.word	last_ms
+ 124 0044 00000000 		.word	boot_ms
+ 125 0048 00000000 		.word	motor_state
+ 126 004c 00000000 		.word	integral
+ 127 0050 00000000 		.word	motor_reference_deg
+ 128 0054 00000000 		.word	motor_angle_deg
+ 129 0058 00000000 		.word	settled_ms
+ 130              		.cfi_endproc
+ 131              	.LFE236:
+ 133              		.section	.text.MotorPositionUpdate,"ax",%progbits
+ 134              		.align	1
+ 135              		.global	MotorPositionUpdate
+ 136              		.syntax unified
+ 137              		.thumb
+ 138              		.thumb_func
+ 140              	MotorPositionUpdate:
+ 141              	.LFB237:
+  27:bsp/motor_position.c **** 
+  28:bsp/motor_position.c **** void MotorPositionUpdate(void)
+  29:bsp/motor_position.c **** {
+ 142              		.loc 1 29 1 is_stmt 1 view -0
+ 143              		.cfi_startproc
+ 144              		@ args = 0, pretend = 0, frame = 16
+ 145              		@ frame_needed = 0, uses_anonymous_args = 0
+ 146 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 147              	.LCFI1:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 4
+
+
+ 148              		.cfi_def_cfa_offset 20
+ 149              		.cfi_offset 4, -20
+ 150              		.cfi_offset 5, -16
+ 151              		.cfi_offset 6, -12
+ 152              		.cfi_offset 7, -8
+ 153              		.cfi_offset 14, -4
+ 154 0002 2DED028B 		vpush.64	{d8}
+ 155              	.LCFI2:
+ 156              		.cfi_def_cfa_offset 28
+ 157              		.cfi_offset 80, -28
+ 158              		.cfi_offset 81, -24
+ 159 0006 85B0     		sub	sp, sp, #20
+ 160              	.LCFI3:
+ 161              		.cfi_def_cfa_offset 48
+  30:bsp/motor_position.c ****     MotorFeedback fb;
+ 162              		.loc 1 30 5 view .LVU27
+  31:bsp/motor_position.c ****     uint32_t now = HAL_GetTick();
+ 163              		.loc 1 31 5 view .LVU28
+ 164              		.loc 1 31 20 is_stmt 0 view .LVU29
+ 165 0008 FFF7FEFF 		bl	HAL_GetTick
+ 166              	.LVL5:
+  32:bsp/motor_position.c ****     uint32_t elapsed = now - last_ms;
+ 167              		.loc 1 32 5 is_stmt 1 view .LVU30
+ 168              		.loc 1 32 28 is_stmt 0 view .LVU31
+ 169 000c AC4B     		ldr	r3, .L39
+ 170 000e 1B68     		ldr	r3, [r3]
+ 171              	.LVL6:
+  33:bsp/motor_position.c ****     if (elapsed < 1U) return;
+ 172              		.loc 1 33 5 is_stmt 1 view .LVU32
+ 173              		.loc 1 33 8 is_stmt 0 view .LVU33
+ 174 0010 C31A     		subs	r3, r0, r3
+ 175              	.LVL7:
+ 176              		.loc 1 33 8 view .LVU34
+ 177 0012 03D1     		bne	.L37
+ 178              	.LVL8:
+ 179              	.L7:
+  34:bsp/motor_position.c ****     last_ms = now;
+  35:bsp/motor_position.c ****     CANGetMotorFeedback(&fb);
+  36:bsp/motor_position.c ****     float command = 0.0f;
+  37:bsp/motor_position.c ****     float dt = elapsed * 0.001f;
+  38:bsp/motor_position.c ****     if (HAL_CAN_GetError(&hcan1) != HAL_CAN_ERROR_NONE ||
+  39:bsp/motor_position.c ****         (fb.received && fb.temperature >= 70)) motor_state = MOTOR_FAULT;
+  40:bsp/motor_position.c **** 
+  41:bsp/motor_position.c ****     if (motor_state == MOTOR_WAITING)
+  42:bsp/motor_position.c ****     {
+  43:bsp/motor_position.c ****         if (now - boot_ms > 3000U) motor_state = MOTOR_FAULT;
+  44:bsp/motor_position.c ****         else if (now - boot_ms >= 500U && fb.received &&
+  45:bsp/motor_position.c ****                  now - fb.last_rx_ms <= MOTOR_FEEDBACK_MS &&
+  46:bsp/motor_position.c ****                  fb.speed_rpm >= -5 && fb.speed_rpm <= 5)
+  47:bsp/motor_position.c ****         {
+  48:bsp/motor_position.c ****             origin = fb.total_counts;
+  49:bsp/motor_position.c ****             move_ms = now;
+  50:bsp/motor_position.c ****             motor_state = MOTOR_MOVING;
+  51:bsp/motor_position.c ****         }
+  52:bsp/motor_position.c ****     }
+  53:bsp/motor_position.c ****     if (motor_state == MOTOR_MOVING || motor_state == MOTOR_HOLDING)
+  54:bsp/motor_position.c ****     {
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 5
+
+
+  55:bsp/motor_position.c ****         if (!fb.received || now - fb.last_rx_ms > MOTOR_FEEDBACK_MS || elapsed > 20U)
+  56:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+  57:bsp/motor_position.c ****         else
+  58:bsp/motor_position.c ****         {
+  59:bsp/motor_position.c ****             motor_angle_deg = (fb.total_counts - origin) *
+  60:bsp/motor_position.c ****                              (360.0f / (8192.0f * MOTOR_GEAR_RATIO));
+  61:bsp/motor_position.c ****             motor_reference_deg += clamp(MOTOR_MOVE_DEG - motor_reference_deg,
+  62:bsp/motor_position.c ****                                          MOTOR_MAX_DEG_S * dt);
+  63:bsp/motor_position.c ****             float speed_deg_s = clamp(MOTOR_POSITION_KP *
+  64:bsp/motor_position.c ****                 (motor_reference_deg - motor_angle_deg), MOTOR_MAX_DEG_S);
+  65:bsp/motor_position.c ****             float rpm_error = speed_deg_s * MOTOR_GEAR_RATIO / 6.0f - fb.speed_rpm;
+  66:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+  67:bsp/motor_position.c ****                                     MOTOR_CURRENT_LIMIT);
+  68:bsp/motor_position.c ****             float unsaturated = MOTOR_SPEED_KP * rpm_error + candidate;
+  69:bsp/motor_position.c ****             /* Integrate only when unsaturated or when unwinding saturation. */
+  70:bsp/motor_position.c ****             if (fabsf(unsaturated) <= MOTOR_CURRENT_LIMIT ||
+  71:bsp/motor_position.c ****                 (unsaturated > MOTOR_CURRENT_LIMIT && rpm_error < 0.0f) ||
+  72:bsp/motor_position.c ****                 (unsaturated < -MOTOR_CURRENT_LIMIT && rpm_error > 0.0f))
+  73:bsp/motor_position.c ****                 integral = candidate;
+  74:bsp/motor_position.c ****             command = clamp(MOTOR_SPEED_KP * rpm_error + integral, MOTOR_CURRENT_LIMIT);
+  75:bsp/motor_position.c ****             if (fabsf(MOTOR_MOVE_DEG - motor_angle_deg) < 0.2f &&
+  76:bsp/motor_position.c ****                 fabsf(MOTOR_MOVE_DEG - motor_reference_deg) < 0.001f &&
+  77:bsp/motor_position.c ****                 fb.speed_rpm >= -3 && fb.speed_rpm <= 3)
+  78:bsp/motor_position.c ****             {
+  79:bsp/motor_position.c ****                 if (settled_ms < 200U) settled_ms += elapsed;
+  80:bsp/motor_position.c ****                 if (settled_ms >= 200U) motor_state = MOTOR_HOLDING;
+  81:bsp/motor_position.c ****             }
+  82:bsp/motor_position.c ****             else settled_ms = 0;
+  83:bsp/motor_position.c ****             if (motor_state == MOTOR_MOVING && now - move_ms > MOTOR_MOVE_TIMEOUT_MS)
+  84:bsp/motor_position.c ****                 motor_state = MOTOR_FAULT;
+  85:bsp/motor_position.c ****         }
+  86:bsp/motor_position.c ****     }
+  87:bsp/motor_position.c ****     if (motor_state == MOTOR_FAULT)
+  88:bsp/motor_position.c ****     {
+  89:bsp/motor_position.c ****         command = integral = 0.0f;
+  90:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+  91:bsp/motor_position.c ****     }
+  92:bsp/motor_position.c ****     CANSetMotorCurrent(group, 1, (int16_t)command);
+  93:bsp/motor_position.c ****     if (CANTransmit(group) != HAL_OK)
+  94:bsp/motor_position.c ****     {
+  95:bsp/motor_position.c ****         motor_state = MOTOR_FAULT;
+  96:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+  97:bsp/motor_position.c ****     }
+  98:bsp/motor_position.c **** }
+ 180              		.loc 1 98 1 view .LVU35
+ 181 0014 05B0     		add	sp, sp, #20
+ 182              	.LCFI4:
+ 183              		.cfi_remember_state
+ 184              		.cfi_def_cfa_offset 28
+ 185              		@ sp needed
+ 186 0016 BDEC028B 		vldm	sp!, {d8}
+ 187              	.LCFI5:
+ 188              		.cfi_restore 80
+ 189              		.cfi_restore 81
+ 190              		.cfi_def_cfa_offset 20
+ 191 001a F0BD     		pop	{r4, r5, r6, r7, pc}
+ 192              	.LVL9:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 6
+
+
+ 193              	.L37:
+ 194              	.LCFI6:
+ 195              		.cfi_restore_state
+ 196              		.loc 1 98 1 view .LVU36
+ 197 001c 0446     		mov	r4, r0
+ 198 001e 1D46     		mov	r5, r3
+ 199 0020 1F46     		mov	r7, r3
+  34:bsp/motor_position.c ****     last_ms = now;
+ 200              		.loc 1 34 5 is_stmt 1 view .LVU37
+  34:bsp/motor_position.c ****     last_ms = now;
+ 201              		.loc 1 34 13 is_stmt 0 view .LVU38
+ 202 0022 A74B     		ldr	r3, .L39
+ 203              	.LVL10:
+  34:bsp/motor_position.c ****     last_ms = now;
+ 204              		.loc 1 34 13 view .LVU39
+ 205 0024 1860     		str	r0, [r3]
+ 206              	.LVL11:
+  35:bsp/motor_position.c ****     float command = 0.0f;
+ 207              		.loc 1 35 5 is_stmt 1 view .LVU40
+ 208 0026 6846     		mov	r0, sp
+ 209              	.LVL12:
+  35:bsp/motor_position.c ****     float command = 0.0f;
+ 210              		.loc 1 35 5 is_stmt 0 view .LVU41
+ 211 0028 FFF7FEFF 		bl	CANGetMotorFeedback
+ 212              	.LVL13:
+  36:bsp/motor_position.c ****     float dt = elapsed * 0.001f;
+ 213              		.loc 1 36 5 is_stmt 1 view .LVU42
+  37:bsp/motor_position.c ****     if (HAL_CAN_GetError(&hcan1) != HAL_CAN_ERROR_NONE ||
+ 214              		.loc 1 37 5 view .LVU43
+  37:bsp/motor_position.c ****     if (HAL_CAN_GetError(&hcan1) != HAL_CAN_ERROR_NONE ||
+ 215              		.loc 1 37 24 is_stmt 0 view .LVU44
+ 216 002c 07EE905A 		vmov	s15, r5	@ int
+ 217 0030 B8EE677A 		vcvt.f32.u32	s14, s15
+  37:bsp/motor_position.c ****     if (HAL_CAN_GetError(&hcan1) != HAL_CAN_ERROR_NONE ||
+ 218              		.loc 1 37 11 view .LVU45
+ 219 0034 DFEDA37A 		vldr.32	s15, .L39+4
+ 220 0038 67EE277A 		vmul.f32	s15, s14, s15
+ 221 003c B0EE678A 		vmov.f32	s16, s15
+ 222              	.LVL14:
+  38:bsp/motor_position.c ****         (fb.received && fb.temperature >= 70)) motor_state = MOTOR_FAULT;
+ 223              		.loc 1 38 5 is_stmt 1 view .LVU46
+  38:bsp/motor_position.c ****         (fb.received && fb.temperature >= 70)) motor_state = MOTOR_FAULT;
+ 224              		.loc 1 38 9 is_stmt 0 view .LVU47
+ 225 0040 A148     		ldr	r0, .L39+8
+ 226 0042 FFF7FEFF 		bl	HAL_CAN_GetError
+ 227              	.LVL15:
+  38:bsp/motor_position.c ****         (fb.received && fb.temperature >= 70)) motor_state = MOTOR_FAULT;
+ 228              		.loc 1 38 8 discriminator 1 view .LVU48
+ 229 0046 30B9     		cbnz	r0, .L10
+  39:bsp/motor_position.c **** 
+ 230              		.loc 1 39 12 view .LVU49
+ 231 0048 9DF80F30 		ldrb	r3, [sp, #15]	@ zero_extendqisi2
+  38:bsp/motor_position.c ****         (fb.received && fb.temperature >= 70)) motor_state = MOTOR_FAULT;
+ 232              		.loc 1 38 56 discriminator 2 view .LVU50
+ 233 004c 33B1     		cbz	r3, .L11
+  39:bsp/motor_position.c **** 
+ 234              		.loc 1 39 27 view .LVU51
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 7
+
+
+ 235 004e 9DF80E30 		ldrb	r3, [sp, #14]	@ zero_extendqisi2
+  39:bsp/motor_position.c **** 
+ 236              		.loc 1 39 22 view .LVU52
+ 237 0052 452B     		cmp	r3, #69
+ 238 0054 02D9     		bls	.L11
+ 239              	.L10:
+  39:bsp/motor_position.c **** 
+ 240              		.loc 1 39 48 is_stmt 1 discriminator 1 view .LVU53
+  39:bsp/motor_position.c **** 
+ 241              		.loc 1 39 60 is_stmt 0 discriminator 1 view .LVU54
+ 242 0056 9D4B     		ldr	r3, .L39+12
+ 243 0058 0322     		movs	r2, #3
+ 244 005a 1A70     		strb	r2, [r3]
+ 245              	.L11:
+  41:bsp/motor_position.c ****     {
+ 246              		.loc 1 41 5 is_stmt 1 view .LVU55
+  41:bsp/motor_position.c ****     {
+ 247              		.loc 1 41 21 is_stmt 0 view .LVU56
+ 248 005c 9B4B     		ldr	r3, .L39+12
+ 249 005e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  41:bsp/motor_position.c ****     {
+ 250              		.loc 1 41 8 view .LVU57
+ 251 0060 4BB9     		cbnz	r3, .L12
+  43:bsp/motor_position.c ****         else if (now - boot_ms >= 500U && fb.received &&
+ 252              		.loc 1 43 9 is_stmt 1 view .LVU58
+  43:bsp/motor_position.c ****         else if (now - boot_ms >= 500U && fb.received &&
+ 253              		.loc 1 43 17 is_stmt 0 view .LVU59
+ 254 0062 9B4B     		ldr	r3, .L39+16
+ 255 0064 1B68     		ldr	r3, [r3]
+ 256 0066 E31A     		subs	r3, r4, r3
+  43:bsp/motor_position.c ****         else if (now - boot_ms >= 500U && fb.received &&
+ 257              		.loc 1 43 12 view .LVU60
+ 258 0068 40F6B832 		movw	r2, #3000
+ 259 006c 9342     		cmp	r3, r2
+ 260 006e 0DD9     		bls	.L13
+  43:bsp/motor_position.c ****         else if (now - boot_ms >= 500U && fb.received &&
+ 261              		.loc 1 43 36 is_stmt 1 discriminator 1 view .LVU61
+  43:bsp/motor_position.c ****         else if (now - boot_ms >= 500U && fb.received &&
+ 262              		.loc 1 43 48 is_stmt 0 discriminator 1 view .LVU62
+ 263 0070 964B     		ldr	r3, .L39+12
+ 264 0072 0322     		movs	r2, #3
+ 265 0074 1A70     		strb	r2, [r3]
+ 266              	.L12:
+  53:bsp/motor_position.c ****     {
+ 267              		.loc 1 53 5 is_stmt 1 view .LVU63
+  53:bsp/motor_position.c ****     {
+ 268              		.loc 1 53 21 is_stmt 0 view .LVU64
+ 269 0076 954B     		ldr	r3, .L39+12
+ 270 0078 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  53:bsp/motor_position.c ****     {
+ 271              		.loc 1 53 8 view .LVU65
+ 272 007a 012B     		cmp	r3, #1
+ 273 007c 21D0     		beq	.L14
+  53:bsp/motor_position.c ****     {
+ 274              		.loc 1 53 52 discriminator 1 view .LVU66
+ 275 007e 934B     		ldr	r3, .L39+12
+ 276 0080 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 8
+
+
+  53:bsp/motor_position.c ****     {
+ 277              		.loc 1 53 37 discriminator 1 view .LVU67
+ 278 0082 022B     		cmp	r3, #2
+ 279 0084 1DD0     		beq	.L14
+  36:bsp/motor_position.c ****     float dt = elapsed * 0.001f;
+ 280              		.loc 1 36 11 view .LVU68
+ 281 0086 9FED930A 		vldr.32	s0, .L39+20
+ 282 008a 28E0     		b	.L15
+ 283              	.L13:
+  44:bsp/motor_position.c ****                  now - fb.last_rx_ms <= MOTOR_FEEDBACK_MS &&
+ 284              		.loc 1 44 14 is_stmt 1 view .LVU69
+  44:bsp/motor_position.c ****                  now - fb.last_rx_ms <= MOTOR_FEEDBACK_MS &&
+ 285              		.loc 1 44 17 is_stmt 0 view .LVU70
+ 286 008c B3F5FA7F 		cmp	r3, #500
+ 287 0090 F1D3     		bcc	.L12
+  44:bsp/motor_position.c ****                  now - fb.last_rx_ms <= MOTOR_FEEDBACK_MS &&
+ 288              		.loc 1 44 45 discriminator 1 view .LVU71
+ 289 0092 9DF80F30 		ldrb	r3, [sp, #15]	@ zero_extendqisi2
+  44:bsp/motor_position.c ****                  now - fb.last_rx_ms <= MOTOR_FEEDBACK_MS &&
+ 290              		.loc 1 44 40 discriminator 1 view .LVU72
+ 291 0096 002B     		cmp	r3, #0
+ 292 0098 EDD0     		beq	.L12
+  45:bsp/motor_position.c ****                  fb.speed_rpm >= -5 && fb.speed_rpm <= 5)
+ 293              		.loc 1 45 26 view .LVU73
+ 294 009a 019B     		ldr	r3, [sp, #4]
+  45:bsp/motor_position.c ****                  fb.speed_rpm >= -5 && fb.speed_rpm <= 5)
+ 295              		.loc 1 45 22 view .LVU74
+ 296 009c E31A     		subs	r3, r4, r3
+  44:bsp/motor_position.c ****                  now - fb.last_rx_ms <= MOTOR_FEEDBACK_MS &&
+ 297              		.loc 1 44 55 discriminator 2 view .LVU75
+ 298 009e 322B     		cmp	r3, #50
+ 299 00a0 E9D8     		bhi	.L12
+  46:bsp/motor_position.c ****         {
+ 300              		.loc 1 46 20 view .LVU76
+ 301 00a2 BDF90A30 		ldrsh	r3, [sp, #10]
+  45:bsp/motor_position.c ****                  fb.speed_rpm >= -5 && fb.speed_rpm <= 5)
+ 302              		.loc 1 45 59 view .LVU77
+ 303 00a6 13F1050F 		cmn	r3, #5
+ 304 00aa E4DB     		blt	.L12
+  46:bsp/motor_position.c ****         {
+ 305              		.loc 1 46 37 view .LVU78
+ 306 00ac 052B     		cmp	r3, #5
+ 307 00ae E2DC     		bgt	.L12
+  48:bsp/motor_position.c ****             move_ms = now;
+ 308              		.loc 1 48 13 is_stmt 1 view .LVU79
+  48:bsp/motor_position.c ****             move_ms = now;
+ 309              		.loc 1 48 20 is_stmt 0 view .LVU80
+ 310 00b0 009A     		ldr	r2, [sp]
+ 311 00b2 894B     		ldr	r3, .L39+24
+ 312 00b4 1A60     		str	r2, [r3]
+  49:bsp/motor_position.c ****             motor_state = MOTOR_MOVING;
+ 313              		.loc 1 49 13 is_stmt 1 view .LVU81
+  49:bsp/motor_position.c ****             motor_state = MOTOR_MOVING;
+ 314              		.loc 1 49 21 is_stmt 0 view .LVU82
+ 315 00b6 894B     		ldr	r3, .L39+28
+ 316 00b8 1C60     		str	r4, [r3]
+  50:bsp/motor_position.c ****         }
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 9
+
+
+ 317              		.loc 1 50 13 is_stmt 1 view .LVU83
+  50:bsp/motor_position.c ****         }
+ 318              		.loc 1 50 25 is_stmt 0 view .LVU84
+ 319 00ba 844B     		ldr	r3, .L39+12
+ 320 00bc 0122     		movs	r2, #1
+ 321 00be 1A70     		strb	r2, [r3]
+ 322 00c0 D9E7     		b	.L12
+ 323              	.L14:
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 324              		.loc 1 55 9 is_stmt 1 view .LVU85
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 325              		.loc 1 55 16 is_stmt 0 view .LVU86
+ 326 00c2 9DF80F30 		ldrb	r3, [sp, #15]	@ zero_extendqisi2
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 327              		.loc 1 55 12 view .LVU87
+ 328 00c6 2BB1     		cbz	r3, .L16
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 329              		.loc 1 55 37 discriminator 1 view .LVU88
+ 330 00c8 019B     		ldr	r3, [sp, #4]
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 331              		.loc 1 55 33 discriminator 1 view .LVU89
+ 332 00ca E31A     		subs	r3, r4, r3
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 333              		.loc 1 55 26 discriminator 1 view .LVU90
+ 334 00cc 322B     		cmp	r3, #50
+ 335 00ce 01D8     		bhi	.L16
+  55:bsp/motor_position.c ****             motor_state = MOTOR_FAULT;
+ 336              		.loc 1 55 69 discriminator 2 view .LVU91
+ 337 00d0 142F     		cmp	r7, #20
+ 338 00d2 20D9     		bls	.L17
+ 339              	.L16:
+  56:bsp/motor_position.c ****         else
+ 340              		.loc 1 56 13 is_stmt 1 view .LVU92
+  56:bsp/motor_position.c ****         else
+ 341              		.loc 1 56 25 is_stmt 0 view .LVU93
+ 342 00d4 7D4B     		ldr	r3, .L39+12
+ 343 00d6 0322     		movs	r2, #3
+ 344 00d8 1A70     		strb	r2, [r3]
+  36:bsp/motor_position.c ****     float dt = elapsed * 0.001f;
+ 345              		.loc 1 36 11 view .LVU94
+ 346 00da 9FED7E0A 		vldr.32	s0, .L39+20
+ 347              	.LVL16:
+ 348              	.L15:
+  87:bsp/motor_position.c ****     {
+ 349              		.loc 1 87 5 is_stmt 1 view .LVU95
+  87:bsp/motor_position.c ****     {
+ 350              		.loc 1 87 21 is_stmt 0 view .LVU96
+ 351 00de 7B4B     		ldr	r3, .L39+12
+ 352 00e0 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  87:bsp/motor_position.c ****     {
+ 353              		.loc 1 87 8 view .LVU97
+ 354 00e2 032B     		cmp	r3, #3
+ 355 00e4 00F0E280 		beq	.L38
+ 356              	.LVL17:
+ 357              	.L29:
+  92:bsp/motor_position.c ****     if (CANTransmit(group) != HAL_OK)
+ 358              		.loc 1 92 5 is_stmt 1 view .LVU98
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 10
+
+
+  92:bsp/motor_position.c ****     if (CANTransmit(group) != HAL_OK)
+ 359              		.loc 1 92 34 is_stmt 0 view .LVU99
+ 360 00e8 BDEEC00A 		vcvt.s32.f32	s0, s0
+ 361              	.LVL18:
+  92:bsp/motor_position.c ****     if (CANTransmit(group) != HAL_OK)
+ 362              		.loc 1 92 5 view .LVU100
+ 363 00ec 7C4C     		ldr	r4, .L39+32
+ 364 00ee 10EE103A 		vmov	r3, s0	@ int
+ 365 00f2 1AB2     		sxth	r2, r3
+ 366 00f4 0121     		movs	r1, #1
+ 367 00f6 2068     		ldr	r0, [r4]
+ 368 00f8 FFF7FEFF 		bl	CANSetMotorCurrent
+ 369              	.LVL19:
+  93:bsp/motor_position.c ****     {
+ 370              		.loc 1 93 5 is_stmt 1 view .LVU101
+  93:bsp/motor_position.c ****     {
+ 371              		.loc 1 93 9 is_stmt 0 view .LVU102
+ 372 00fc 2068     		ldr	r0, [r4]
+ 373 00fe FFF7FEFF 		bl	CANTransmit
+ 374              	.LVL20:
+  93:bsp/motor_position.c ****     {
+ 375              		.loc 1 93 8 discriminator 1 view .LVU103
+ 376 0102 0028     		cmp	r0, #0
+ 377 0104 86D0     		beq	.L7
+  95:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+ 378              		.loc 1 95 9 is_stmt 1 view .LVU104
+  95:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+ 379              		.loc 1 95 21 is_stmt 0 view .LVU105
+ 380 0106 714B     		ldr	r3, .L39+12
+ 381 0108 0322     		movs	r2, #3
+ 382 010a 1A70     		strb	r2, [r3]
+  96:bsp/motor_position.c ****     }
+ 383              		.loc 1 96 9 is_stmt 1 view .LVU106
+ 384 010c 0721     		movs	r1, #7
+ 385 010e 6E48     		ldr	r0, .L39+8
+ 386 0110 FFF7FEFF 		bl	HAL_CAN_AbortTxRequest
+ 387              	.LVL21:
+ 388 0114 7EE7     		b	.L7
+ 389              	.LVL22:
+ 390              	.L17:
+ 391              	.LBB2:
+  59:bsp/motor_position.c ****                              (360.0f / (8192.0f * MOTOR_GEAR_RATIO));
+ 392              		.loc 1 59 13 view .LVU107
+  59:bsp/motor_position.c ****                              (360.0f / (8192.0f * MOTOR_GEAR_RATIO));
+ 393              		.loc 1 59 48 is_stmt 0 view .LVU108
+ 394 0116 704B     		ldr	r3, .L39+24
+ 395 0118 1A68     		ldr	r2, [r3]
+ 396 011a 009B     		ldr	r3, [sp]
+ 397 011c 9B1A     		subs	r3, r3, r2
+ 398 011e 07EE903A 		vmov	s15, r3	@ int
+  59:bsp/motor_position.c ****                              (360.0f / (8192.0f * MOTOR_GEAR_RATIO));
+ 399              		.loc 1 59 58 view .LVU109
+ 400 0122 F8EEE77A 		vcvt.f32.s32	s15, s15
+ 401 0126 9FED6F7A 		vldr.32	s14, .L39+36
+ 402 012a 67EE877A 		vmul.f32	s15, s15, s14
+  59:bsp/motor_position.c ****                              (360.0f / (8192.0f * MOTOR_GEAR_RATIO));
+ 403              		.loc 1 59 29 view .LVU110
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 11
+
+
+ 404 012e 6E4E     		ldr	r6, .L39+40
+ 405 0130 C6ED007A 		vstr.32	s15, [r6]
+  61:bsp/motor_position.c ****                                          MOTOR_MAX_DEG_S * dt);
+ 406              		.loc 1 61 13 is_stmt 1 view .LVU111
+  61:bsp/motor_position.c ****                                          MOTOR_MAX_DEG_S * dt);
+ 407              		.loc 1 61 36 is_stmt 0 view .LVU112
+ 408 0134 6D4D     		ldr	r5, .L39+44
+ 409 0136 D5ED007A 		vldr.32	s15, [r5]
+ 410 013a F0EE488A 		vmov.f32	s17, s16
+ 411 013e B1EE047A 		vmov.f32	s14, #5.0e+0
+ 412 0142 68EE070A 		vmul.f32	s1, s16, s14
+ 413 0146 B2EE040A 		vmov.f32	s0, #1.0e+1
+ 414 014a 30EE670A 		vsub.f32	s0, s0, s15
+ 415 014e FFF7FEFF 		bl	clamp
+ 416              	.LVL23:
+  61:bsp/motor_position.c ****                                          MOTOR_MAX_DEG_S * dt);
+ 417              		.loc 1 61 33 discriminator 1 view .LVU113
+ 418 0152 D5ED007A 		vldr.32	s15, [r5]
+ 419 0156 77EE807A 		vadd.f32	s15, s15, s0
+ 420 015a C5ED007A 		vstr.32	s15, [r5]
+  63:bsp/motor_position.c ****                 (motor_reference_deg - motor_angle_deg), MOTOR_MAX_DEG_S);
+ 421              		.loc 1 63 13 is_stmt 1 view .LVU114
+  64:bsp/motor_position.c ****             float rpm_error = speed_deg_s * MOTOR_GEAR_RATIO / 6.0f - fb.speed_rpm;
+ 422              		.loc 1 64 38 is_stmt 0 view .LVU115
+ 423 015e D5ED007A 		vldr.32	s15, [r5]
+ 424 0162 96ED007A 		vldr.32	s14, [r6]
+ 425 0166 77EEC77A 		vsub.f32	s15, s15, s14
+  63:bsp/motor_position.c ****                 (motor_reference_deg - motor_angle_deg), MOTOR_MAX_DEG_S);
+ 426              		.loc 1 63 33 view .LVU116
+ 427 016a F1EE040A 		vmov.f32	s1, #5.0e+0
+ 428 016e B0EE080A 		vmov.f32	s0, #3.0e+0
+ 429 0172 27EE800A 		vmul.f32	s0, s15, s0
+ 430 0176 FFF7FEFF 		bl	clamp
+ 431              	.LVL24:
+  65:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+ 432              		.loc 1 65 13 is_stmt 1 view .LVU117
+  65:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+ 433              		.loc 1 65 43 is_stmt 0 view .LVU118
+ 434 017a F3EE037A 		vmov.f32	s15, #1.9e+1
+ 435 017e 20EE270A 		vmul.f32	s0, s0, s15
+ 436              	.LVL25:
+  65:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+ 437              		.loc 1 65 62 view .LVU119
+ 438 0182 B1EE087A 		vmov.f32	s14, #6.0e+0
+ 439 0186 C0EE077A 		vdiv.f32	s15, s0, s14
+  65:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+ 440              		.loc 1 65 73 view .LVU120
+ 441 018a BDF90A30 		ldrsh	r3, [sp, #10]
+ 442 018e 1D46     		mov	r5, r3
+  65:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+ 443              		.loc 1 65 69 view .LVU121
+ 444 0190 07EE103A 		vmov	s14, r3	@ int
+ 445 0194 B8EEC77A 		vcvt.f32.s32	s14, s14
+  65:bsp/motor_position.c ****             float candidate = clamp(integral + MOTOR_SPEED_KI * rpm_error * dt,
+ 446              		.loc 1 65 19 view .LVU122
+ 447 0198 37EEC78A 		vsub.f32	s16, s15, s14
+ 448              	.LVL26:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 12
+
+
+  66:bsp/motor_position.c ****                                     MOTOR_CURRENT_LIMIT);
+ 449              		.loc 1 66 13 is_stmt 1 view .LVU123
+  66:bsp/motor_position.c ****                                     MOTOR_CURRENT_LIMIT);
+ 450              		.loc 1 66 63 is_stmt 0 view .LVU124
+ 451 019c DFED547A 		vldr.32	s15, .L39+48
+ 452 01a0 68EE277A 		vmul.f32	s15, s16, s15
+  66:bsp/motor_position.c ****                                     MOTOR_CURRENT_LIMIT);
+ 453              		.loc 1 66 75 view .LVU125
+ 454 01a4 67EEA87A 		vmul.f32	s15, s15, s17
+  66:bsp/motor_position.c ****                                     MOTOR_CURRENT_LIMIT);
+ 455              		.loc 1 66 31 view .LVU126
+ 456 01a8 524B     		ldr	r3, .L39+52
+ 457 01aa 93ED000A 		vldr.32	s0, [r3]
+ 458 01ae DFED520A 		vldr.32	s1, .L39+56
+ 459 01b2 37EE800A 		vadd.f32	s0, s15, s0
+ 460 01b6 FFF7FEFF 		bl	clamp
+ 461              	.LVL27:
+  68:bsp/motor_position.c ****             /* Integrate only when unsaturated or when unwinding saturation. */
+ 462              		.loc 1 68 13 is_stmt 1 view .LVU127
+  68:bsp/motor_position.c ****             /* Integrate only when unsaturated or when unwinding saturation. */
+ 463              		.loc 1 68 48 is_stmt 0 view .LVU128
+ 464 01ba DFED507A 		vldr.32	s15, .L39+60
+ 465 01be 68EE277A 		vmul.f32	s15, s16, s15
+  68:bsp/motor_position.c ****             /* Integrate only when unsaturated or when unwinding saturation. */
+ 466              		.loc 1 68 19 view .LVU129
+ 467 01c2 37EE807A 		vadd.f32	s14, s15, s0
+ 468              	.LVL28:
+  70:bsp/motor_position.c ****                 (unsaturated > MOTOR_CURRENT_LIMIT && rpm_error < 0.0f) ||
+ 469              		.loc 1 70 13 is_stmt 1 view .LVU130
+  70:bsp/motor_position.c ****                 (unsaturated > MOTOR_CURRENT_LIMIT && rpm_error < 0.0f) ||
+ 470              		.loc 1 70 17 is_stmt 0 view .LVU131
+ 471 01c6 F0EEC76A 		vabs.f32	s13, s14
+  70:bsp/motor_position.c ****                 (unsaturated > MOTOR_CURRENT_LIMIT && rpm_error < 0.0f) ||
+ 472              		.loc 1 70 16 view .LVU132
+ 473 01ca 9FED4B6A 		vldr.32	s12, .L39+56
+ 474 01ce F4EEC66A 		vcmpe.f32	s13, s12
+ 475 01d2 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 476 01d6 15D9     		bls	.L18
+  70:bsp/motor_position.c ****                 (unsaturated > MOTOR_CURRENT_LIMIT && rpm_error < 0.0f) ||
+ 477              		.loc 1 70 59 discriminator 1 view .LVU133
+ 478 01d8 B4EEC67A 		vcmpe.f32	s14, s12
+ 479 01dc F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 480 01e0 04DD     		ble	.L19
+  71:bsp/motor_position.c ****                 (unsaturated < -MOTOR_CURRENT_LIMIT && rpm_error > 0.0f))
+ 481              		.loc 1 71 52 view .LVU134
+ 482 01e2 B5EEC08A 		vcmpe.f32	s16, #0
+ 483 01e6 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 484 01ea 0BD4     		bmi	.L18
+ 485              	.L19:
+  71:bsp/motor_position.c ****                 (unsaturated < -MOTOR_CURRENT_LIMIT && rpm_error > 0.0f))
+ 486              		.loc 1 71 73 discriminator 1 view .LVU135
+ 487 01ec DFED446A 		vldr.32	s13, .L39+64
+ 488 01f0 B4EEE67A 		vcmpe.f32	s14, s13
+ 489 01f4 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 490 01f8 07D5     		bpl	.L21
+  72:bsp/motor_position.c ****                 integral = candidate;
+ 491              		.loc 1 72 53 view .LVU136
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 13
+
+
+ 492 01fa B5EEC08A 		vcmpe.f32	s16, #0
+ 493 01fe F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 494 0202 02DD     		ble	.L21
+ 495              	.L18:
+  73:bsp/motor_position.c ****             command = clamp(MOTOR_SPEED_KP * rpm_error + integral, MOTOR_CURRENT_LIMIT);
+ 496              		.loc 1 73 17 is_stmt 1 view .LVU137
+  73:bsp/motor_position.c ****             command = clamp(MOTOR_SPEED_KP * rpm_error + integral, MOTOR_CURRENT_LIMIT);
+ 497              		.loc 1 73 26 is_stmt 0 view .LVU138
+ 498 0204 3B4B     		ldr	r3, .L39+52
+ 499 0206 83ED000A 		vstr.32	s0, [r3]
+ 500              	.L21:
+  74:bsp/motor_position.c ****             if (fabsf(MOTOR_MOVE_DEG - motor_angle_deg) < 0.2f &&
+ 501              		.loc 1 74 13 is_stmt 1 view .LVU139
+  74:bsp/motor_position.c ****             if (fabsf(MOTOR_MOVE_DEG - motor_angle_deg) < 0.2f &&
+ 502              		.loc 1 74 23 is_stmt 0 view .LVU140
+ 503 020a 3A4B     		ldr	r3, .L39+52
+ 504 020c 93ED000A 		vldr.32	s0, [r3]
+ 505              	.LVL29:
+  74:bsp/motor_position.c ****             if (fabsf(MOTOR_MOVE_DEG - motor_angle_deg) < 0.2f &&
+ 506              		.loc 1 74 23 view .LVU141
+ 507 0210 DFED390A 		vldr.32	s1, .L39+56
+ 508 0214 37EE800A 		vadd.f32	s0, s15, s0
+ 509 0218 FFF7FEFF 		bl	clamp
+ 510              	.LVL30:
+  75:bsp/motor_position.c ****                 fabsf(MOTOR_MOVE_DEG - motor_reference_deg) < 0.001f &&
+ 511              		.loc 1 75 13 is_stmt 1 view .LVU142
+  75:bsp/motor_position.c ****                 fabsf(MOTOR_MOVE_DEG - motor_reference_deg) < 0.001f &&
+ 512              		.loc 1 75 38 is_stmt 0 view .LVU143
+ 513 021c 324B     		ldr	r3, .L39+40
+ 514 021e 93ED007A 		vldr.32	s14, [r3]
+ 515 0222 F2EE047A 		vmov.f32	s15, #1.0e+1
+ 516 0226 77EEC77A 		vsub.f32	s15, s15, s14
+  75:bsp/motor_position.c ****                 fabsf(MOTOR_MOVE_DEG - motor_reference_deg) < 0.001f &&
+ 517              		.loc 1 75 17 view .LVU144
+ 518 022a F0EEE77A 		vabs.f32	s15, s15
+  75:bsp/motor_position.c ****                 fabsf(MOTOR_MOVE_DEG - motor_reference_deg) < 0.001f &&
+ 519              		.loc 1 75 16 view .LVU145
+ 520 022e 9FED357A 		vldr.32	s14, .L39+68
+ 521 0232 F4EEC77A 		vcmpe.f32	s15, s14
+ 522 0236 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 523 023a 23D5     		bpl	.L24
+  76:bsp/motor_position.c ****                 fb.speed_rpm >= -3 && fb.speed_rpm <= 3)
+ 524              		.loc 1 76 38 view .LVU146
+ 525 023c 2B4B     		ldr	r3, .L39+44
+ 526 023e 93ED007A 		vldr.32	s14, [r3]
+ 527 0242 F2EE047A 		vmov.f32	s15, #1.0e+1
+ 528 0246 77EEC77A 		vsub.f32	s15, s15, s14
+  76:bsp/motor_position.c ****                 fb.speed_rpm >= -3 && fb.speed_rpm <= 3)
+ 529              		.loc 1 76 17 view .LVU147
+ 530 024a F0EEE77A 		vabs.f32	s15, s15
+  75:bsp/motor_position.c ****                 fabsf(MOTOR_MOVE_DEG - motor_reference_deg) < 0.001f &&
+ 531              		.loc 1 75 64 discriminator 1 view .LVU148
+ 532 024e 9FED1D7A 		vldr.32	s14, .L39+4
+ 533 0252 F4EEC77A 		vcmpe.f32	s15, s14
+ 534 0256 F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ 535 025a 13D5     		bpl	.L24
+  76:bsp/motor_position.c ****                 fb.speed_rpm >= -3 && fb.speed_rpm <= 3)
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 14
+
+
+ 536              		.loc 1 76 70 view .LVU149
+ 537 025c 15F1030F 		cmn	r5, #3
+ 538 0260 10DB     		blt	.L24
+  77:bsp/motor_position.c ****             {
+ 539              		.loc 1 77 36 view .LVU150
+ 540 0262 032D     		cmp	r5, #3
+ 541 0264 0EDC     		bgt	.L24
+  79:bsp/motor_position.c ****                 if (settled_ms >= 200U) motor_state = MOTOR_HOLDING;
+ 542              		.loc 1 79 17 is_stmt 1 view .LVU151
+  79:bsp/motor_position.c ****                 if (settled_ms >= 200U) motor_state = MOTOR_HOLDING;
+ 543              		.loc 1 79 32 is_stmt 0 view .LVU152
+ 544 0266 284B     		ldr	r3, .L39+72
+ 545 0268 1B68     		ldr	r3, [r3]
+  79:bsp/motor_position.c ****                 if (settled_ms >= 200U) motor_state = MOTOR_HOLDING;
+ 546              		.loc 1 79 20 view .LVU153
+ 547 026a C72B     		cmp	r3, #199
+ 548 026c 02D8     		bhi	.L27
+  79:bsp/motor_position.c ****                 if (settled_ms >= 200U) motor_state = MOTOR_HOLDING;
+ 549              		.loc 1 79 40 is_stmt 1 discriminator 1 view .LVU154
+  79:bsp/motor_position.c ****                 if (settled_ms >= 200U) motor_state = MOTOR_HOLDING;
+ 550              		.loc 1 79 51 is_stmt 0 discriminator 1 view .LVU155
+ 551 026e 3B44     		add	r3, r3, r7
+ 552 0270 254A     		ldr	r2, .L39+72
+ 553 0272 1360     		str	r3, [r2]
+ 554              	.L27:
+  80:bsp/motor_position.c ****             }
+ 555              		.loc 1 80 17 is_stmt 1 view .LVU156
+  80:bsp/motor_position.c ****             }
+ 556              		.loc 1 80 32 is_stmt 0 view .LVU157
+ 557 0274 244B     		ldr	r3, .L39+72
+ 558 0276 1B68     		ldr	r3, [r3]
+  80:bsp/motor_position.c ****             }
+ 559              		.loc 1 80 20 view .LVU158
+ 560 0278 C72B     		cmp	r3, #199
+ 561 027a 06D9     		bls	.L28
+  80:bsp/motor_position.c ****             }
+ 562              		.loc 1 80 41 is_stmt 1 discriminator 1 view .LVU159
+  80:bsp/motor_position.c ****             }
+ 563              		.loc 1 80 53 is_stmt 0 discriminator 1 view .LVU160
+ 564 027c 134B     		ldr	r3, .L39+12
+ 565 027e 0222     		movs	r2, #2
+ 566 0280 1A70     		strb	r2, [r3]
+ 567 0282 02E0     		b	.L28
+ 568              	.L24:
+  82:bsp/motor_position.c ****             if (motor_state == MOTOR_MOVING && now - move_ms > MOTOR_MOVE_TIMEOUT_MS)
+ 569              		.loc 1 82 18 is_stmt 1 view .LVU161
+  82:bsp/motor_position.c ****             if (motor_state == MOTOR_MOVING && now - move_ms > MOTOR_MOVE_TIMEOUT_MS)
+ 570              		.loc 1 82 29 is_stmt 0 view .LVU162
+ 571 0284 204B     		ldr	r3, .L39+72
+ 572 0286 0022     		movs	r2, #0
+ 573 0288 1A60     		str	r2, [r3]
+ 574              	.L28:
+  83:bsp/motor_position.c ****                 motor_state = MOTOR_FAULT;
+ 575              		.loc 1 83 13 is_stmt 1 view .LVU163
+  83:bsp/motor_position.c ****                 motor_state = MOTOR_FAULT;
+ 576              		.loc 1 83 29 is_stmt 0 view .LVU164
+ 577 028a 104B     		ldr	r3, .L39+12
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 15
+
+
+ 578 028c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  83:bsp/motor_position.c ****                 motor_state = MOTOR_FAULT;
+ 579              		.loc 1 83 16 view .LVU165
+ 580 028e 012B     		cmp	r3, #1
+ 581 0290 7FF425AF 		bne	.L15
+  83:bsp/motor_position.c ****                 motor_state = MOTOR_FAULT;
+ 582              		.loc 1 83 52 discriminator 1 view .LVU166
+ 583 0294 114B     		ldr	r3, .L39+28
+ 584 0296 1B68     		ldr	r3, [r3]
+ 585 0298 E41A     		subs	r4, r4, r3
+ 586              	.LVL31:
+  83:bsp/motor_position.c ****                 motor_state = MOTOR_FAULT;
+ 587              		.loc 1 83 45 discriminator 1 view .LVU167
+ 588 029a 42F21073 		movw	r3, #10000
+ 589 029e 9C42     		cmp	r4, r3
+ 590 02a0 7FF61DAF 		bls	.L15
+  84:bsp/motor_position.c ****         }
+ 591              		.loc 1 84 17 is_stmt 1 view .LVU168
+  84:bsp/motor_position.c ****         }
+ 592              		.loc 1 84 29 is_stmt 0 view .LVU169
+ 593 02a4 094B     		ldr	r3, .L39+12
+ 594 02a6 0322     		movs	r2, #3
+ 595 02a8 1A70     		strb	r2, [r3]
+ 596 02aa 18E7     		b	.L15
+ 597              	.LVL32:
+ 598              	.L38:
+  84:bsp/motor_position.c ****         }
+ 599              		.loc 1 84 29 view .LVU170
+ 600              	.LBE2:
+  89:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+ 601              		.loc 1 89 9 is_stmt 1 view .LVU171
+  89:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+ 602              		.loc 1 89 28 is_stmt 0 view .LVU172
+ 603 02ac 0024     		movs	r4, #0
+ 604 02ae 114B     		ldr	r3, .L39+52
+ 605 02b0 1C60     		str	r4, [r3]	@ float
+ 606              	.LVL33:
+  90:bsp/motor_position.c ****     }
+ 607              		.loc 1 90 9 is_stmt 1 view .LVU173
+ 608 02b2 0721     		movs	r1, #7
+ 609 02b4 0448     		ldr	r0, .L39+8
+ 610 02b6 FFF7FEFF 		bl	HAL_CAN_AbortTxRequest
+ 611              	.LVL34:
+  89:bsp/motor_position.c ****         HAL_CAN_AbortTxRequest(&hcan1, CAN_TX_MAILBOX0 | CAN_TX_MAILBOX1 | CAN_TX_MAILBOX2);
+ 612              		.loc 1 89 17 is_stmt 0 view .LVU174
+ 613 02ba 00EE104A 		vmov	s0, r4
+ 614 02be 13E7     		b	.L29
+ 615              	.L40:
+ 616              		.align	2
+ 617              	.L39:
+ 618 02c0 00000000 		.word	last_ms
+ 619 02c4 6F12833A 		.word	981668463
+ 620 02c8 00000000 		.word	hcan1
+ 621 02cc 00000000 		.word	motor_state
+ 622 02d0 00000000 		.word	boot_ms
+ 623 02d4 00000000 		.word	0
+ 624 02d8 00000000 		.word	origin
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 16
+
+
+ 625 02dc 00000000 		.word	move_ms
+ 626 02e0 00000000 		.word	group
+ 627 02e4 3694173B 		.word	991401014
+ 628 02e8 00000000 		.word	motor_angle_deg
+ 629 02ec 00000000 		.word	motor_reference_deg
+ 630 02f0 0000A042 		.word	1117782016
+ 631 02f4 00000000 		.word	integral
+ 632 02f8 0000FA44 		.word	1157234688
+ 633 02fc 00000C42 		.word	1108082688
+ 634 0300 0000FAC4 		.word	-990248960
+ 635 0304 CDCC4C3E 		.word	1045220557
+ 636 0308 00000000 		.word	settled_ms
+ 637              		.cfi_endproc
+ 638              	.LFE237:
+ 640              		.section	.bss.integral,"aw",%nobits
+ 641              		.align	2
+ 644              	integral:
+ 645 0000 00000000 		.space	4
+ 646              		.section	.bss.origin,"aw",%nobits
+ 647              		.align	2
+ 650              	origin:
+ 651 0000 00000000 		.space	4
+ 652              		.section	.bss.settled_ms,"aw",%nobits
+ 653              		.align	2
+ 656              	settled_ms:
+ 657 0000 00000000 		.space	4
+ 658              		.section	.bss.move_ms,"aw",%nobits
+ 659              		.align	2
+ 662              	move_ms:
+ 663 0000 00000000 		.space	4
+ 664              		.section	.bss.last_ms,"aw",%nobits
+ 665              		.align	2
+ 668              	last_ms:
+ 669 0000 00000000 		.space	4
+ 670              		.section	.bss.boot_ms,"aw",%nobits
+ 671              		.align	2
+ 674              	boot_ms:
+ 675 0000 00000000 		.space	4
+ 676              		.section	.bss.group,"aw",%nobits
+ 677              		.align	2
+ 680              	group:
+ 681 0000 00000000 		.space	4
+ 682              		.global	motor_reference_deg
+ 683              		.section	.bss.motor_reference_deg,"aw",%nobits
+ 684              		.align	2
+ 687              	motor_reference_deg:
+ 688 0000 00000000 		.space	4
+ 689              		.global	motor_angle_deg
+ 690              		.section	.bss.motor_angle_deg,"aw",%nobits
+ 691              		.align	2
+ 694              	motor_angle_deg:
+ 695 0000 00000000 		.space	4
+ 696              		.global	motor_state
+ 697              		.section	.bss.motor_state,"aw",%nobits
+ 700              	motor_state:
+ 701 0000 00       		.space	1
+ 702              		.text
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 17
+
+
+ 703              	.Letext0:
+ 704              		.file 2 "bsp/motor_position.h"
+ 705              		.file 3 "D:/robomaster_material/electric_contol/gun-arm-embedded/arm-none-eabi/include/machine/_de
+ 706              		.file 4 "D:/robomaster_material/electric_contol/gun-arm-embedded/arm-none-eabi/include/sys/_stdint
+ 707              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 708              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 709              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 710              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 711              		.file 9 "Inc/can.h"
+ 712              		.file 10 "bsp/bsp_can.h"
+ 713              		.file 11 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 motor_position.c
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:21     .text.clamp:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:26     .text.clamp:00000000 clamp
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:58     .text.MotorPositionInit:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:64     .text.MotorPositionInit:00000000 MotorPositionInit
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:122    .text.MotorPositionInit:0000003c $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:680    .bss.group:00000000 group
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:668    .bss.last_ms:00000000 last_ms
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:674    .bss.boot_ms:00000000 boot_ms
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:700    .bss.motor_state:00000000 motor_state
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:644    .bss.integral:00000000 integral
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:687    .bss.motor_reference_deg:00000000 motor_reference_deg
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:694    .bss.motor_angle_deg:00000000 motor_angle_deg
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:656    .bss.settled_ms:00000000 settled_ms
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:134    .text.MotorPositionUpdate:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:140    .text.MotorPositionUpdate:00000000 MotorPositionUpdate
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:618    .text.MotorPositionUpdate:000002c0 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:650    .bss.origin:00000000 origin
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:662    .bss.move_ms:00000000 move_ms
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:641    .bss.integral:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:647    .bss.origin:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:653    .bss.settled_ms:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:659    .bss.move_ms:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:665    .bss.last_ms:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:671    .bss.boot_ms:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:677    .bss.group:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:684    .bss.motor_reference_deg:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:691    .bss.motor_angle_deg:00000000 $d
+C:\Users\xuyue\AppData\Local\Temp\cco90qQc.s:701    .bss.motor_state:00000000 $d
+
+UNDEFINED SYMBOLS
+CANRegister
+CANServiceInit
+HAL_GetTick
+CANGetMotorFeedback
+HAL_CAN_GetError
+CANSetMotorCurrent
+CANTransmit
+HAL_CAN_AbortTxRequest
+hcan1

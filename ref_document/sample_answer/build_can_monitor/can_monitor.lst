@@ -1,0 +1,678 @@
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"can_monitor.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "bsp/can_monitor.c"
+  20              		.section	.text.init_bus,"ax",%progbits
+  21              		.align	1
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  26              	init_bus:
+  27              	.LVL0:
+  28              	.LFB235:
+   1:bsp/can_monitor.c **** #include "can_monitor.h"
+   2:bsp/can_monitor.c **** #include "can.h"
+   3:bsp/can_monitor.c **** #include "main.h"
+   4:bsp/can_monitor.c **** 
+   5:bsp/can_monitor.c **** volatile CanObservedBus can_observed[2];
+   6:bsp/can_monitor.c **** 
+   7:bsp/can_monitor.c **** static void init_bus(CAN_HandleTypeDef *can, uint32_t bank)
+   8:bsp/can_monitor.c **** {
+  29              		.loc 1 8 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 40
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 8 1 is_stmt 0 view .LVU1
+  34 0000 70B5     		push	{r4, r5, r6, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 4, -16
+  38              		.cfi_offset 5, -12
+  39              		.cfi_offset 6, -8
+  40              		.cfi_offset 14, -4
+  41 0002 8AB0     		sub	sp, sp, #40
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 56
+  44 0004 0446     		mov	r4, r0
+  45 0006 0D46     		mov	r5, r1
+   9:bsp/can_monitor.c ****     CAN_FilterTypeDef filter = {0};
+  46              		.loc 1 9 5 is_stmt 1 view .LVU2
+  47              		.loc 1 9 23 is_stmt 0 view .LVU3
+  48 0008 2822     		movs	r2, #40
+  49 000a 0021     		movs	r1, #0
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 2
+
+
+  50              	.LVL1:
+  51              		.loc 1 9 23 view .LVU4
+  52 000c 6846     		mov	r0, sp
+  53              	.LVL2:
+  54              		.loc 1 9 23 view .LVU5
+  55 000e FFF7FEFF 		bl	memset
+  56              	.LVL3:
+  10:bsp/can_monitor.c ****     filter.FilterBank = bank;
+  57              		.loc 1 10 5 is_stmt 1 view .LVU6
+  58              		.loc 1 10 23 is_stmt 0 view .LVU7
+  59 0012 0595     		str	r5, [sp, #20]
+  11:bsp/can_monitor.c ****     filter.FilterMode = CAN_FILTERMODE_IDMASK;
+  60              		.loc 1 11 5 is_stmt 1 view .LVU8
+  12:bsp/can_monitor.c ****     filter.FilterScale = CAN_FILTERSCALE_32BIT;
+  61              		.loc 1 12 5 view .LVU9
+  62              		.loc 1 12 24 is_stmt 0 view .LVU10
+  63 0014 0123     		movs	r3, #1
+  64 0016 0793     		str	r3, [sp, #28]
+  13:bsp/can_monitor.c ****     /* ID=0 and mask=0 accept all standard/extended, data/remote frames. */
+  14:bsp/can_monitor.c ****     filter.FilterFIFOAssignment = CAN_RX_FIFO0;
+  65              		.loc 1 14 5 is_stmt 1 view .LVU11
+  15:bsp/can_monitor.c ****     filter.FilterActivation = ENABLE;
+  66              		.loc 1 15 5 view .LVU12
+  67              		.loc 1 15 29 is_stmt 0 view .LVU13
+  68 0018 0893     		str	r3, [sp, #32]
+  16:bsp/can_monitor.c ****     filter.SlaveStartFilterBank = 14;
+  69              		.loc 1 16 5 is_stmt 1 view .LVU14
+  70              		.loc 1 16 33 is_stmt 0 view .LVU15
+  71 001a 0E23     		movs	r3, #14
+  72 001c 0993     		str	r3, [sp, #36]
+  17:bsp/can_monitor.c ****     if (HAL_CAN_ConfigFilter(can, &filter) != HAL_OK || HAL_CAN_Start(can) != HAL_OK)
+  73              		.loc 1 17 5 is_stmt 1 view .LVU16
+  74              		.loc 1 17 9 is_stmt 0 view .LVU17
+  75 001e 6946     		mov	r1, sp
+  76 0020 2046     		mov	r0, r4
+  77 0022 FFF7FEFF 		bl	HAL_CAN_ConfigFilter
+  78              	.LVL4:
+  79              		.loc 1 17 8 discriminator 1 view .LVU18
+  80 0026 18B9     		cbnz	r0, .L2
+  81              		.loc 1 17 57 discriminator 1 view .LVU19
+  82 0028 2046     		mov	r0, r4
+  83 002a FFF7FEFF 		bl	HAL_CAN_Start
+  84              	.LVL5:
+  85              		.loc 1 17 54 discriminator 1 view .LVU20
+  86 002e 08B1     		cbz	r0, .L1
+  87              	.L2:
+  18:bsp/can_monitor.c ****         Error_Handler();
+  88              		.loc 1 18 9 is_stmt 1 view .LVU21
+  89 0030 FFF7FEFF 		bl	Error_Handler
+  90              	.LVL6:
+  91              	.L1:
+  19:bsp/can_monitor.c **** }
+  92              		.loc 1 19 1 is_stmt 0 view .LVU22
+  93 0034 0AB0     		add	sp, sp, #40
+  94              	.LCFI2:
+  95              		.cfi_def_cfa_offset 16
+  96              		@ sp needed
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 3
+
+
+  97 0036 70BD     		pop	{r4, r5, r6, pc}
+  98              		.loc 1 19 1 view .LVU23
+  99              		.cfi_endproc
+ 100              	.LFE235:
+ 102              		.section	.text.store_frame,"ax",%progbits
+ 103              		.align	1
+ 104              		.syntax unified
+ 105              		.thumb
+ 106              		.thumb_func
+ 108              	store_frame:
+ 109              	.LVL7:
+ 110              	.LFB237:
+  20:bsp/can_monitor.c **** 
+  21:bsp/can_monitor.c **** void CanMonitorInit(void)
+  22:bsp/can_monitor.c **** {
+  23:bsp/can_monitor.c ****     init_bus(&hcan1, 0);
+  24:bsp/can_monitor.c ****     init_bus(&hcan2, 14);
+  25:bsp/can_monitor.c **** }
+  26:bsp/can_monitor.c **** 
+  27:bsp/can_monitor.c **** static void store_frame(volatile CanObservedFrame *out, const CAN_RxHeaderTypeDef *hdr,
+  28:bsp/can_monitor.c ****                         const uint8_t *data, uint32_t count)
+  29:bsp/can_monitor.c **** {
+ 111              		.loc 1 29 1 is_stmt 1 view -0
+ 112              		.cfi_startproc
+ 113              		@ args = 0, pretend = 0, frame = 0
+ 114              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115              		.loc 1 29 1 is_stmt 0 view .LVU25
+ 116 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 117              	.LCFI3:
+ 118              		.cfi_def_cfa_offset 24
+ 119              		.cfi_offset 3, -24
+ 120              		.cfi_offset 4, -20
+ 121              		.cfi_offset 5, -16
+ 122              		.cfi_offset 6, -12
+ 123              		.cfi_offset 7, -8
+ 124              		.cfi_offset 14, -4
+ 125 0002 0446     		mov	r4, r0
+ 126 0004 0E46     		mov	r6, r1
+ 127 0006 1546     		mov	r5, r2
+ 128 0008 1F46     		mov	r7, r3
+  30:bsp/can_monitor.c ****     out->tick_ms = HAL_GetTick();
+ 129              		.loc 1 30 5 is_stmt 1 view .LVU26
+ 130              		.loc 1 30 20 is_stmt 0 view .LVU27
+ 131 000a FFF7FEFF 		bl	HAL_GetTick
+ 132              	.LVL8:
+ 133              		.loc 1 30 18 discriminator 1 view .LVU28
+ 134 000e 6060     		str	r0, [r4, #4]
+  31:bsp/can_monitor.c ****     out->id = hdr->IDE == CAN_ID_EXT ? hdr->ExtId : hdr->StdId;
+ 135              		.loc 1 31 5 is_stmt 1 view .LVU29
+ 136              		.loc 1 31 18 is_stmt 0 view .LVU30
+ 137 0010 B368     		ldr	r3, [r6, #8]
+ 138              		.loc 1 31 51 view .LVU31
+ 139 0012 042B     		cmp	r3, #4
+ 140 0014 11D0     		beq	.L11
+ 141              		.loc 1 31 51 discriminator 2 view .LVU32
+ 142 0016 3368     		ldr	r3, [r6]
+ 143              	.L7:
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 4
+
+
+ 144              		.loc 1 31 13 discriminator 4 view .LVU33
+ 145 0018 A360     		str	r3, [r4, #8]
+  32:bsp/can_monitor.c ****     out->extended = hdr->IDE == CAN_ID_EXT;
+ 146              		.loc 1 32 5 is_stmt 1 view .LVU34
+ 147              		.loc 1 32 24 is_stmt 0 view .LVU35
+ 148 001a B368     		ldr	r3, [r6, #8]
+ 149              		.loc 1 32 30 view .LVU36
+ 150 001c 042B     		cmp	r3, #4
+ 151 001e 14BF     		ite	ne
+ 152 0020 0023     		movne	r3, #0
+ 153 0022 0123     		moveq	r3, #1
+ 154              		.loc 1 32 19 view .LVU37
+ 155 0024 E360     		str	r3, [r4, #12]
+  33:bsp/can_monitor.c ****     out->remote = hdr->RTR == CAN_RTR_REMOTE;
+ 156              		.loc 1 33 5 is_stmt 1 view .LVU38
+ 157              		.loc 1 33 22 is_stmt 0 view .LVU39
+ 158 0026 F368     		ldr	r3, [r6, #12]
+ 159              		.loc 1 33 28 view .LVU40
+ 160 0028 022B     		cmp	r3, #2
+ 161 002a 14BF     		ite	ne
+ 162 002c 0023     		movne	r3, #0
+ 163 002e 0123     		moveq	r3, #1
+ 164              		.loc 1 33 17 view .LVU41
+ 165 0030 2361     		str	r3, [r4, #16]
+  34:bsp/can_monitor.c ****     out->dlc = hdr->DLC;
+ 166              		.loc 1 34 5 is_stmt 1 view .LVU42
+ 167              		.loc 1 34 19 is_stmt 0 view .LVU43
+ 168 0032 3369     		ldr	r3, [r6, #16]
+ 169              		.loc 1 34 14 view .LVU44
+ 170 0034 6361     		str	r3, [r4, #20]
+  35:bsp/can_monitor.c ****     for (uint32_t i = 0; i < 8; ++i) out->data[i] = data[i];
+ 171              		.loc 1 35 5 is_stmt 1 view .LVU45
+ 172              	.LBB2:
+ 173              		.loc 1 35 10 view .LVU46
+ 174              	.LVL9:
+ 175              		.loc 1 35 19 is_stmt 0 view .LVU47
+ 176 0036 0021     		movs	r1, #0
+ 177              		.loc 1 35 5 view .LVU48
+ 178 0038 07E0     		b	.L8
+ 179              	.LVL10:
+ 180              	.L11:
+ 181              		.loc 1 35 5 view .LVU49
+ 182              	.LBE2:
+  31:bsp/can_monitor.c ****     out->extended = hdr->IDE == CAN_ID_EXT;
+ 183              		.loc 1 31 51 discriminator 1 view .LVU50
+ 184 003a 7368     		ldr	r3, [r6, #4]
+ 185 003c ECE7     		b	.L7
+ 186              	.LVL11:
+ 187              	.L9:
+ 188              	.LBB3:
+ 189              		.loc 1 35 38 is_stmt 1 discriminator 3 view .LVU51
+ 190              		.loc 1 35 57 is_stmt 0 discriminator 3 view .LVU52
+ 191 003e 15F801C0 		ldrb	ip, [r5, r1]	@ zero_extendqisi2
+ 192              		.loc 1 35 51 discriminator 3 view .LVU53
+ 193 0042 6018     		adds	r0, r4, r1
+ 194 0044 80F818C0 		strb	ip, [r0, #24]
+ 195              		.loc 1 35 33 is_stmt 1 discriminator 3 view .LVU54
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 5
+
+
+ 196 0048 0131     		adds	r1, r1, #1
+ 197              	.LVL12:
+ 198              	.L8:
+ 199              		.loc 1 35 28 discriminator 1 view .LVU55
+ 200 004a 0729     		cmp	r1, #7
+ 201 004c F7D9     		bls	.L9
+ 202              	.LBE3:
+  36:bsp/can_monitor.c ****     out->count = count;
+ 203              		.loc 1 36 5 view .LVU56
+ 204              		.loc 1 36 16 is_stmt 0 view .LVU57
+ 205 004e 2760     		str	r7, [r4]
+  37:bsp/can_monitor.c **** }
+ 206              		.loc 1 37 1 view .LVU58
+ 207 0050 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 208              		.loc 1 37 1 view .LVU59
+ 209              		.cfi_endproc
+ 210              	.LFE237:
+ 212              		.section	.text.poll_bus,"ax",%progbits
+ 213              		.align	1
+ 214              		.syntax unified
+ 215              		.thumb
+ 216              		.thumb_func
+ 218              	poll_bus:
+ 219              	.LVL13:
+ 220              	.LFB238:
+  38:bsp/can_monitor.c **** 
+  39:bsp/can_monitor.c **** static void poll_bus(CAN_HandleTypeDef *can, volatile CanObservedBus *out)
+  40:bsp/can_monitor.c **** {
+ 221              		.loc 1 40 1 is_stmt 1 view -0
+ 222              		.cfi_startproc
+ 223              		@ args = 0, pretend = 0, frame = 40
+ 224              		@ frame_needed = 0, uses_anonymous_args = 0
+ 225              		.loc 1 40 1 is_stmt 0 view .LVU61
+ 226 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 227              	.LCFI4:
+ 228              		.cfi_def_cfa_offset 20
+ 229              		.cfi_offset 4, -20
+ 230              		.cfi_offset 5, -16
+ 231              		.cfi_offset 6, -12
+ 232              		.cfi_offset 7, -8
+ 233              		.cfi_offset 14, -4
+ 234 0002 8BB0     		sub	sp, sp, #44
+ 235              	.LCFI5:
+ 236              		.cfi_def_cfa_offset 64
+ 237 0004 0646     		mov	r6, r0
+ 238 0006 0C46     		mov	r4, r1
+  41:bsp/can_monitor.c ****     CAN_RxHeaderTypeDef header;
+ 239              		.loc 1 41 5 is_stmt 1 view .LVU62
+  42:bsp/can_monitor.c ****     uint8_t data[8];
+ 240              		.loc 1 42 5 view .LVU63
+  43:bsp/can_monitor.c ****     /* Bound each pass so a busy bus cannot starve the other controller. */
+  44:bsp/can_monitor.c ****     for (unsigned n = 0; n < 8 && HAL_CAN_GetRxFifoFillLevel(can, CAN_RX_FIFO0); ++n)
+ 241              		.loc 1 44 5 view .LVU64
+ 242              	.LBB4:
+ 243              		.loc 1 44 10 view .LVU65
+ 244              	.LVL14:
+ 245              		.loc 1 44 19 is_stmt 0 view .LVU66
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 6
+
+
+ 246 0008 0025     		movs	r5, #0
+ 247              		.loc 1 44 5 view .LVU67
+ 248 000a 2EE0     		b	.L13
+ 249              	.LVL15:
+ 250              	.L14:
+ 251              	.LBB5:
+ 252              	.LBB6:
+  45:bsp/can_monitor.c ****     {
+  46:bsp/can_monitor.c ****         for (unsigned i = 0; i < 8; ++i) data[i] = 0;
+ 253              		.loc 1 46 42 is_stmt 1 discriminator 3 view .LVU68
+ 254              		.loc 1 46 50 is_stmt 0 discriminator 3 view .LVU69
+ 255 000c 03F12802 		add	r2, r3, #40
+ 256 0010 6A44     		add	r2, sp, r2
+ 257 0012 4FF0000C 		mov	ip, #0
+ 258 0016 02F824CC 		strb	ip, [r2, #-36]
+ 259              		.loc 1 46 37 is_stmt 1 discriminator 3 view .LVU70
+ 260 001a 0133     		adds	r3, r3, #1
+ 261              	.LVL16:
+ 262              	.L17:
+ 263              		.loc 1 46 32 discriminator 1 view .LVU71
+ 264 001c 072B     		cmp	r3, #7
+ 265 001e F5D9     		bls	.L14
+ 266              	.LBE6:
+  47:bsp/can_monitor.c ****         if (HAL_CAN_GetRxMessage(can, CAN_RX_FIFO0, &header, data) != HAL_OK) break;
+ 267              		.loc 1 47 9 view .LVU72
+ 268              		.loc 1 47 13 is_stmt 0 view .LVU73
+ 269 0020 01AB     		add	r3, sp, #4
+ 270              	.LVL17:
+ 271              		.loc 1 47 13 view .LVU74
+ 272 0022 03AA     		add	r2, sp, #12
+ 273 0024 0021     		movs	r1, #0
+ 274 0026 3046     		mov	r0, r6
+ 275 0028 FFF7FEFF 		bl	HAL_CAN_GetRxMessage
+ 276              	.LVL18:
+ 277              		.loc 1 47 12 discriminator 1 view .LVU75
+ 278 002c 0028     		cmp	r0, #0
+ 279 002e 3ED1     		bne	.L15
+  48:bsp/can_monitor.c ****         uint32_t count = ++out->total;
+ 280              		.loc 1 48 9 is_stmt 1 view .LVU76
+ 281              		.loc 1 48 31 is_stmt 0 view .LVU77
+ 282 0030 2368     		ldr	r3, [r4]
+ 283              		.loc 1 48 26 view .LVU78
+ 284 0032 0133     		adds	r3, r3, #1
+ 285              		.loc 1 48 18 view .LVU79
+ 286 0034 2046     		mov	r0, r4
+ 287 0036 40F8103B 		str	r3, [r0], #16
+ 288              	.LVL19:
+  49:bsp/can_monitor.c ****         store_frame(&out->latest, &header, data, count);
+ 289              		.loc 1 49 9 is_stmt 1 view .LVU80
+ 290 003a 01AA     		add	r2, sp, #4
+ 291 003c 03A9     		add	r1, sp, #12
+ 292 003e FFF7FEFF 		bl	store_frame
+ 293              	.LVL20:
+  50:bsp/can_monitor.c ****         if (header.IDE == CAN_ID_STD)
+ 294              		.loc 1 50 9 view .LVU81
+ 295              		.loc 1 50 19 is_stmt 0 view .LVU82
+ 296 0042 059B     		ldr	r3, [sp, #20]
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 7
+
+
+ 297              		.loc 1 50 12 view .LVU83
+ 298 0044 83B9     		cbnz	r3, .L16
+ 299              	.LBB7:
+  51:bsp/can_monitor.c ****         {
+  52:bsp/can_monitor.c ****             uint32_t id = header.StdId;
+ 300              		.loc 1 52 13 is_stmt 1 view .LVU84
+ 301              		.loc 1 52 22 is_stmt 0 view .LVU85
+ 302 0046 0398     		ldr	r0, [sp, #12]
+ 303              	.LVL21:
+  53:bsp/can_monitor.c ****             out->standard_id_seen[id / 32U] |= 1UL << (id % 32U);
+ 304              		.loc 1 53 13 is_stmt 1 view .LVU86
+ 305              		.loc 1 53 38 is_stmt 0 view .LVU87
+ 306 0048 4309     		lsrs	r3, r0, #5
+ 307              		.loc 1 53 34 view .LVU88
+ 308 004a 4C33     		adds	r3, r3, #76
+ 309 004c 54F82320 		ldr	r2, [r4, r3, lsl #2]
+ 310              		.loc 1 53 59 view .LVU89
+ 311 0050 00F01F07 		and	r7, r0, #31
+ 312              		.loc 1 53 52 view .LVU90
+ 313 0054 0121     		movs	r1, #1
+ 314 0056 B940     		lsls	r1, r1, r7
+ 315              		.loc 1 53 45 view .LVU91
+ 316 0058 0A43     		orrs	r2, r2, r1
+ 317 005a 44F82320 		str	r2, [r4, r3, lsl #2]
+  54:bsp/can_monitor.c ****             if (header.RTR == CAN_RTR_DATA && header.DLC == 8 && id >= 0x201 && id <= 0x208)
+ 318              		.loc 1 54 13 is_stmt 1 view .LVU92
+ 319              		.loc 1 54 23 is_stmt 0 view .LVU93
+ 320 005e 069B     		ldr	r3, [sp, #24]
+ 321              		.loc 1 54 16 view .LVU94
+ 322 0060 13B9     		cbnz	r3, .L16
+ 323              		.loc 1 54 53 discriminator 1 view .LVU95
+ 324 0062 079B     		ldr	r3, [sp, #28]
+ 325              		.loc 1 54 44 discriminator 1 view .LVU96
+ 326 0064 082B     		cmp	r3, #8
+ 327 0066 09D0     		beq	.L21
+ 328              	.LVL22:
+ 329              	.L16:
+ 330              		.loc 1 54 44 discriminator 1 view .LVU97
+ 331              	.LBE7:
+ 332              	.LBE5:
+  44:bsp/can_monitor.c ****     {
+ 333              		.loc 1 44 82 is_stmt 1 discriminator 2 view .LVU98
+ 334 0068 0135     		adds	r5, r5, #1
+ 335              	.LVL23:
+ 336              	.L13:
+  44:bsp/can_monitor.c ****     {
+ 337              		.loc 1 44 32 discriminator 1 view .LVU99
+ 338 006a 072D     		cmp	r5, #7
+ 339 006c 1FD8     		bhi	.L15
+  44:bsp/can_monitor.c ****     {
+ 340              		.loc 1 44 35 is_stmt 0 discriminator 3 view .LVU100
+ 341 006e 0021     		movs	r1, #0
+ 342 0070 3046     		mov	r0, r6
+ 343 0072 FFF7FEFF 		bl	HAL_CAN_GetRxFifoFillLevel
+ 344              	.LVL24:
+  44:bsp/can_monitor.c ****     {
+ 345              		.loc 1 44 32 discriminator 1 view .LVU101
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 8
+
+
+ 346 0076 D0B1     		cbz	r0, .L15
+ 347              	.LBB11:
+ 348              	.LBB9:
+  46:bsp/can_monitor.c ****         if (HAL_CAN_GetRxMessage(can, CAN_RX_FIFO0, &header, data) != HAL_OK) break;
+ 349              		.loc 1 46 23 view .LVU102
+ 350 0078 0023     		movs	r3, #0
+ 351 007a CFE7     		b	.L17
+ 352              	.LVL25:
+ 353              	.L21:
+  46:bsp/can_monitor.c ****         if (HAL_CAN_GetRxMessage(can, CAN_RX_FIFO0, &header, data) != HAL_OK) break;
+ 354              		.loc 1 46 23 view .LVU103
+ 355              	.LBE9:
+ 356              	.LBB10:
+ 357              		.loc 1 54 63 discriminator 2 view .LVU104
+ 358 007c B0F5007F 		cmp	r0, #512
+ 359 0080 F2D9     		bls	.L16
+ 360              		.loc 1 54 78 discriminator 3 view .LVU105
+ 361 0082 B0F5027F 		cmp	r0, #520
+ 362 0086 EFD8     		bhi	.L16
+ 363              	.LBB8:
+  55:bsp/can_monitor.c ****             {
+  56:bsp/can_monitor.c ****                 uint32_t index = id - 0x201;
+ 364              		.loc 1 56 17 is_stmt 1 view .LVU106
+ 365              		.loc 1 56 26 is_stmt 0 view .LVU107
+ 366 0088 A0F20127 		subw	r7, r0, #513
+ 367              	.LVL26:
+  57:bsp/can_monitor.c ****                 uint32_t c = out->c620[index].count + 1;
+ 368              		.loc 1 57 17 is_stmt 1 view .LVU108
+ 369              		.loc 1 57 46 is_stmt 0 view .LVU109
+ 370 008c 7801     		lsls	r0, r7, #5
+ 371              	.LVL27:
+ 372              		.loc 1 57 46 view .LVU110
+ 373 008e 04EB4713 		add	r3, r4, r7, lsl #5
+ 374 0092 1B6B     		ldr	r3, [r3, #48]
+ 375              	.LVL28:
+  58:bsp/can_monitor.c ****                 store_frame(&out->c620[index], &header, data, c);
+ 376              		.loc 1 58 17 is_stmt 1 view .LVU111
+ 377 0094 3030     		adds	r0, r0, #48
+ 378 0096 0133     		adds	r3, r3, #1
+ 379              	.LVL29:
+ 380              		.loc 1 58 17 is_stmt 0 view .LVU112
+ 381 0098 01AA     		add	r2, sp, #4
+ 382 009a 03A9     		add	r1, sp, #12
+ 383              	.LVL30:
+ 384              		.loc 1 58 17 view .LVU113
+ 385 009c 2044     		add	r0, r0, r4
+ 386 009e FFF7FEFF 		bl	store_frame
+ 387              	.LVL31:
+  59:bsp/can_monitor.c ****                 out->c620_seen_mask |= 1UL << index;
+ 388              		.loc 1 59 17 is_stmt 1 view .LVU114
+ 389              		.loc 1 59 20 is_stmt 0 view .LVU115
+ 390 00a2 E368     		ldr	r3, [r4, #12]
+ 391              		.loc 1 59 44 view .LVU116
+ 392 00a4 0122     		movs	r2, #1
+ 393 00a6 BA40     		lsls	r2, r2, r7
+ 394              		.loc 1 59 37 view .LVU117
+ 395 00a8 1343     		orrs	r3, r3, r2
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 9
+
+
+ 396 00aa E360     		str	r3, [r4, #12]
+ 397 00ac DCE7     		b	.L16
+ 398              	.LVL32:
+ 399              	.L15:
+ 400              		.loc 1 59 37 view .LVU118
+ 401              	.LBE8:
+ 402              	.LBE10:
+ 403              	.LBE11:
+ 404              	.LBE4:
+  60:bsp/can_monitor.c ****             }
+  61:bsp/can_monitor.c ****         }
+  62:bsp/can_monitor.c ****     }
+  63:bsp/can_monitor.c ****     if (__HAL_CAN_GET_FLAG(can, CAN_FLAG_FOV0))
+ 405              		.loc 1 63 5 is_stmt 1 view .LVU119
+ 406              		.loc 1 63 9 is_stmt 0 view .LVU120
+ 407 00ae 3368     		ldr	r3, [r6]
+ 408 00b0 DB68     		ldr	r3, [r3, #12]
+ 409              		.loc 1 63 8 view .LVU121
+ 410 00b2 13F0100F 		tst	r3, #16
+ 411 00b6 05D0     		beq	.L18
+  64:bsp/can_monitor.c ****     {
+  65:bsp/can_monitor.c ****         ++out->fifo_overruns;
+ 412              		.loc 1 65 9 is_stmt 1 view .LVU122
+ 413              		.loc 1 65 14 is_stmt 0 view .LVU123
+ 414 00b8 6368     		ldr	r3, [r4, #4]
+ 415              		.loc 1 65 9 view .LVU124
+ 416 00ba 0133     		adds	r3, r3, #1
+ 417 00bc 6360     		str	r3, [r4, #4]
+  66:bsp/can_monitor.c ****         __HAL_CAN_CLEAR_FLAG(can, CAN_FLAG_FOV0);
+ 418              		.loc 1 66 9 is_stmt 1 view .LVU125
+ 419 00be 3368     		ldr	r3, [r6]
+ 420 00c0 1022     		movs	r2, #16
+ 421 00c2 DA60     		str	r2, [r3, #12]
+ 422              	.L18:
+  67:bsp/can_monitor.c ****     }
+  68:bsp/can_monitor.c ****     out->last_error = can->Instance->ESR;
+ 423              		.loc 1 68 5 view .LVU126
+ 424              		.loc 1 68 26 is_stmt 0 view .LVU127
+ 425 00c4 3368     		ldr	r3, [r6]
+ 426              		.loc 1 68 36 view .LVU128
+ 427 00c6 9B69     		ldr	r3, [r3, #24]
+ 428              		.loc 1 68 21 view .LVU129
+ 429 00c8 A360     		str	r3, [r4, #8]
+  69:bsp/can_monitor.c **** }
+ 430              		.loc 1 69 1 view .LVU130
+ 431 00ca 0BB0     		add	sp, sp, #44
+ 432              	.LCFI6:
+ 433              		.cfi_def_cfa_offset 20
+ 434              		@ sp needed
+ 435 00cc F0BD     		pop	{r4, r5, r6, r7, pc}
+ 436              		.loc 1 69 1 view .LVU131
+ 437              		.cfi_endproc
+ 438              	.LFE238:
+ 440              		.section	.text.CanMonitorInit,"ax",%progbits
+ 441              		.align	1
+ 442              		.global	CanMonitorInit
+ 443              		.syntax unified
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 10
+
+
+ 444              		.thumb
+ 445              		.thumb_func
+ 447              	CanMonitorInit:
+ 448              	.LFB236:
+  22:bsp/can_monitor.c ****     init_bus(&hcan1, 0);
+ 449              		.loc 1 22 1 is_stmt 1 view -0
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 0
+ 452              		@ frame_needed = 0, uses_anonymous_args = 0
+ 453 0000 08B5     		push	{r3, lr}
+ 454              	.LCFI7:
+ 455              		.cfi_def_cfa_offset 8
+ 456              		.cfi_offset 3, -8
+ 457              		.cfi_offset 14, -4
+  23:bsp/can_monitor.c ****     init_bus(&hcan2, 14);
+ 458              		.loc 1 23 5 view .LVU133
+ 459 0002 0021     		movs	r1, #0
+ 460 0004 0348     		ldr	r0, .L24
+ 461 0006 FFF7FEFF 		bl	init_bus
+ 462              	.LVL33:
+  24:bsp/can_monitor.c **** }
+ 463              		.loc 1 24 5 view .LVU134
+ 464 000a 0E21     		movs	r1, #14
+ 465 000c 0248     		ldr	r0, .L24+4
+ 466 000e FFF7FEFF 		bl	init_bus
+ 467              	.LVL34:
+  25:bsp/can_monitor.c **** 
+ 468              		.loc 1 25 1 is_stmt 0 view .LVU135
+ 469 0012 08BD     		pop	{r3, pc}
+ 470              	.L25:
+ 471              		.align	2
+ 472              	.L24:
+ 473 0014 00000000 		.word	hcan1
+ 474 0018 00000000 		.word	hcan2
+ 475              		.cfi_endproc
+ 476              	.LFE236:
+ 478              		.section	.text.CanMonitorPoll,"ax",%progbits
+ 479              		.align	1
+ 480              		.global	CanMonitorPoll
+ 481              		.syntax unified
+ 482              		.thumb
+ 483              		.thumb_func
+ 485              	CanMonitorPoll:
+ 486              	.LFB239:
+  70:bsp/can_monitor.c **** 
+  71:bsp/can_monitor.c **** void CanMonitorPoll(void)
+  72:bsp/can_monitor.c **** {
+ 487              		.loc 1 72 1 is_stmt 1 view -0
+ 488              		.cfi_startproc
+ 489              		@ args = 0, pretend = 0, frame = 0
+ 490              		@ frame_needed = 0, uses_anonymous_args = 0
+ 491 0000 10B5     		push	{r4, lr}
+ 492              	.LCFI8:
+ 493              		.cfi_def_cfa_offset 8
+ 494              		.cfi_offset 4, -8
+ 495              		.cfi_offset 14, -4
+  73:bsp/can_monitor.c ****     poll_bus(&hcan1, &can_observed[0]);
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 11
+
+
+ 496              		.loc 1 73 5 view .LVU137
+ 497 0002 054C     		ldr	r4, .L28
+ 498 0004 2146     		mov	r1, r4
+ 499 0006 0548     		ldr	r0, .L28+4
+ 500 0008 FFF7FEFF 		bl	poll_bus
+ 501              	.LVL35:
+  74:bsp/can_monitor.c ****     poll_bus(&hcan2, &can_observed[1]);
+ 502              		.loc 1 74 5 view .LVU138
+ 503 000c 04F50C71 		add	r1, r4, #560
+ 504 0010 0348     		ldr	r0, .L28+8
+ 505 0012 FFF7FEFF 		bl	poll_bus
+ 506              	.LVL36:
+  75:bsp/can_monitor.c **** }
+ 507              		.loc 1 75 1 is_stmt 0 view .LVU139
+ 508 0016 10BD     		pop	{r4, pc}
+ 509              	.L29:
+ 510              		.align	2
+ 511              	.L28:
+ 512 0018 00000000 		.word	can_observed
+ 513 001c 00000000 		.word	hcan1
+ 514 0020 00000000 		.word	hcan2
+ 515              		.cfi_endproc
+ 516              	.LFE239:
+ 518              		.global	can_observed
+ 519              		.section	.bss.can_observed,"aw",%nobits
+ 520              		.align	2
+ 523              	can_observed:
+ 524 0000 00000000 		.space	1120
+ 524      00000000 
+ 524      00000000 
+ 524      00000000 
+ 524      00000000 
+ 525              		.text
+ 526              	.Letext0:
+ 527              		.file 2 "c:/Users/xuyue/.eide/tools/gcc_arm/arm-none-eabi/include/machine/_default_types.h"
+ 528              		.file 3 "c:/Users/xuyue/.eide/tools/gcc_arm/arm-none-eabi/include/sys/_stdint.h"
+ 529              		.file 4 "bsp/can_monitor.h"
+ 530              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f407xx.h"
+ 531              		.file 6 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+ 532              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 533              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h"
+ 534              		.file 9 "Inc/can.h"
+ 535              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ 536              		.file 11 "Inc/main.h"
+ 537              		.file 12 "<built-in>"
+ARM GAS  C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 can_monitor.c
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:21     .text.init_bus:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:26     .text.init_bus:00000000 init_bus
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:103    .text.store_frame:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:108    .text.store_frame:00000000 store_frame
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:213    .text.poll_bus:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:218    .text.poll_bus:00000000 poll_bus
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:441    .text.CanMonitorInit:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:447    .text.CanMonitorInit:00000000 CanMonitorInit
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:473    .text.CanMonitorInit:00000014 $d
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:479    .text.CanMonitorPoll:00000000 $t
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:485    .text.CanMonitorPoll:00000000 CanMonitorPoll
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:512    .text.CanMonitorPoll:00000018 $d
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:523    .bss.can_observed:00000000 can_observed
+C:\Users\xuyue\AppData\Local\Temp\ccYaixFh.s:520    .bss.can_observed:00000000 $d
+
+UNDEFINED SYMBOLS
+memset
+HAL_CAN_ConfigFilter
+HAL_CAN_Start
+Error_Handler
+HAL_GetTick
+HAL_CAN_GetRxMessage
+HAL_CAN_GetRxFifoFillLevel
+hcan1
+hcan2

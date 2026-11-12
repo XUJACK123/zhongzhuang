@@ -1,10 +1,10 @@
 # 轮腿机器人：当前状态、下一步与注意事项
 
-> 更新：2026-11-01 09:40（Asia/Hong_Kong）
+> 更新：2026-11-11 14:31（Asia/Hong_Kong）
 > 项目根：`D:\robomaster_material\electric_contol\zhongzhuang`；实施工程：`ref_document/fifty_mujoco/`；模型资产：`solidwork_graph/`
 > **本文是精简版**，只保留"现在是什么状态、下一步做什么、别踩哪些坑"。
 > 逐轮的详细过程、失败记录与原始输出在 `progress_history_20261031_204938.md`
-> （3489 行，sha256 `51f5edd7…`；每轮直接追加，不再单独做清单）。
+> （已追加 §28计划与§29离线实施；历史SHA-256只对应当时快照）。
 
 **证据等级**（不得跨级标记）：
 `measured`（实物测量）> `cad_confirmed`（人在 CAD 里读到的配合/关系）> `cad_extracted`（解析器从文件提取的几何）
@@ -15,7 +15,9 @@
 
 ## 1. 一句话状态
 
-阶段 ①–⑨ **全部执行完毕**：串链模型的初始化、短时仿真、接触、契约、CPU/GPU 对拍、冒烟、
+**当前路线：先验证新增sample权重的MuJoCo可行性，再扩大动力学随机化；详细执行计划见§5。**
+
+以下为2026-11-01归档结果，本轮只核对既有报告、未重跑：阶段①–⑨在原站立任务范围内执行完毕：串链模型的初始化、短时仿真、接触、契约、CPU/GPU 对拍、冒烟、
 5 h 正式训练、64×60 s 验收全部通过；**首个能站满 60 s 的策略已经落地**
 （`runs/r0_stand_5h/model_best.pt`，CPU 与 warp 双后端都是 64/64）。
 闭链候选模型能编译、能过 CPU 侧全部检查，但对拍仍超预算，因此仍是 `candidate`，不参与训练。
@@ -28,7 +30,7 @@ contact-test        PASS 4/4（两模型）   wheel_load_path / drop / rolling /
 contract-test       PASS 12/12           25/125/6、PD、限幅、历史顺序
 gpu-parity          serial: passed（0 终止标志不符）   closed: failed（见 §6 第 20 条）
 train-gpu 冒烟      20 updates / 30,720 steps / 3.1 s
-正式训练            24000 updates / 5 h / 2.1k sps；**仅前 17 min 有效**（见 §5.1）
+正式训练            24000 updates / 5 h / 2.1k sps；**仅前 17 min 有效**（详见历史 §27.5）
 验收 evaluate-stand 64/64 = 100 %，vx_mae 0.0247，height_mae 0.0000，tilt_p95 0.10°
 ```
 
@@ -101,7 +103,7 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 > **`robot.yaml` 的运行默认角仍是旧姿态**（轮心在髋**前方 22.865346 mm**，弦长 405.396717 mm）。
 > 切换目标已算好并存进 `joint_conventions.yaml: serial_reference_candidate`，
-> 但**尚未应用**，原因见 §5.4。
+> 但**尚未应用**，成套更新要求见 §5.5。
 
 ### 2.4 气弹簧
 
@@ -171,7 +173,7 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 ---
 
-## 4. 从今天到训练：九阶段
+## 4. 原站立任务的九阶段记录（2026-11-01历史结果）
 
 | 阶段 | 内容 | 状态 |
 |---|---|---|
@@ -187,74 +189,94 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 ---
 
-## 5. 下一步
+## 5. 下一步（2026-11-11 更新：先验证现有权重，再扩大随机化）
 
-### 5.1 训练预算的实测结论：1 h 就够
+**当前首要任务：验证 sample_weight_file 的 Isaac Gym 策略能否在 MuJoCo 中完成站立、前进、后退、左转和右转。标称模型与目标模型均通过后，才进入动力学随机化训练。** 详细依据、31维字段、分关卡交付和验收见 [历史 §28](progress_history_20261031_204938.md)。
 
-`runs/r0_stand_5h`（24000 updates / 5 h）的评估时间线：
+已完成不依赖仿真环境的检查工具、31维数学契约和18项标准库测试，详见§5.6；未运行推理、MuJoCo/GPU或训练，原始权重、运行配置和电机均未改动。
 
-```
-upd   250 ( 2.4 min)  eval 0.88 s
-upd   850 (10   min)  eval 2.12 s
-upd  1450 (17   min)  eval 3.00 s   ← 已撑满 3 s 评估窗口
-upd 24000 (300  min)  指标与 17 min 完全相同
-```
+### 5.1 新权重已经核实什么
 
-同期 `std_mean` 0.30 → 0.07、`entropy` +0.27 → **−8.45**、`lr` 掉到 2e-5 下限、
-`reward_mean` 锁死在 +0.029。**后 4.5 h 完全是空转**。下一次训练应改用：
+- 归档：[sample_weight_file](sample_weight_file/README.md)。manifest.json 的 **48/48 文件长度与SHA-256一致**。
+- 首个候选：[model_3050.pt](sample_weight_file/artifacts/model_3050.pt)，iter=3050；SHA-256为 8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11。另保留2975/3000/3025，不自动认定最终快照最佳。
+- 静态读取确认：**31→128→64→32→6的ELU前馈actor，无encoder**；critic为147→256→128→64→1。train_cfg中残留125维encoder配置不是实际网络证据。
+- 现工程是 **25维当前观测＋125维历史→6动作**，且检查点格式不同。不能直接替换.pt、截输入或跳过不匹配层；应新增独立sample_actor31契约与加载器。
+- [独立评估记录](sample_weight_file/evaluation/results.json)仍为not_evaluated，无归档视频；动力学随机化关闭。文件完整、训练完成不等于运动/鲁棒性通过。
+- 训练前向范围为 **0.1–0.3 m/s**，yaw为±2.5 rad/s，另有站立/原地转向模式。后退是待验证的训练分布外能力；“左右”先定义为左右转向，当前没有横向速度命令。
 
-```bash
-train-gpu --stand-command --num-envs 64 --steps 24 --minutes 60 \
-          --save-every 500 --save-minutes 10 --checkpoint-keep 12 \
-          --stop-on-survive 5 --name r0_stand_1h --plot
-```
+### 5.2 迁移前必须对齐的差异
 
-即 1 h 预算 + 早停 + 密集快照（好策略出现在 update ≈1450，而 `--save-every 3000` 的
-第一个快照已经是收敛之后，这次靠 `model_best.pt` 才没丢）。
+| 项目 | sample源配置 | 当前MuJoCo基线 | 计划 |
+|---|---|---|---|
+| 观测 | 31维：原25维＋位置/航向参考误差和平面速度6维 | 25＋125历史 | 恢复真实31维输入；额外状态实车需要估计器 |
+| 命令 | [vx,wz,底部净空]，缩放[2,0.25,5] | [vx,wz,根高度]，缩放[3,0.25,5] | 净空0.10 m不等于根高度0.10 m；保留源命令斜坡和SE(2)参考积分 |
+| 控制 | 腿scale0.5、轮scale20；四腿±1/两轮±2；髋Kp40/膝60、腿Kd2、轮0.3 | 轮scale10、腿20/1、轮0.2 | 分通道裁剪、目标限位及逐物理步PD一起移植 |
+| 姿态/限位 | 低姿态reset根高0.2749762 m，腿角约±3.10631/∓3.66060；髋连续 | 旧姿态约±2.05542/∓2.55927，髋/膝窄区间 | 独立源profile；源膝默认角已超出旧MuJoCo限位，禁止直接覆盖旧默认角 |
+| 轮径与电机 | 半径0.055 m，电机耦合和转速—额定力矩包络 | 半径0.060 m、虚拟关节独立限幅 | 复现CoupledActuators，再按目标参数单独评估 |
+| 气弹簧 | 每侧450 N，80 mm源行程与未确认安装假设 | 运行仍300 N旧锚点，本机记录450 N/≈250 mm/75 mm | 三者分别记录；源复现不能覆盖本机规格 |
+| 接触/惯量 | 来源PhysX及归档模型 | 当前校正MJCF | 固定滑动/滚动与短时响应对拍，不能照搬PhysX接触合成/求解参数 |
 
-### 5.2 验收命令（复现结论用）
+底层源码尚待补齐：source-files清单中legged_robot.py、on_policy_runner.py、task_registry.py与当前副本不一致，evaluate_tracking.py缺失；actor_critic.py等网络源码匹配。优先取回匹配source_commit的版本，或重建后提供数值/时序对拍，不能按同名文件猜测。
 
-```bash
-# 权威口径：CPU 参考，64 × 60 s，约 25 min
-./.venv/bin/python -m fifty_mujoco.cli evaluate-stand \
-  --checkpoint runs/r0_stand_5h/model_best.pt --backend cpu --episodes 64 --steps 6000
+### 5.3 执行顺序与放行条件
 
-# 快速口径：warp，同样 64 × 60 s，约 10 s
-./.venv/bin/python -m fifty_mujoco.cli evaluate-stand \
-  --checkpoint runs/r0_stand_5h/model_best.pt --backend warp --episodes 64 --steps 6000
+| 关卡 | 下一步要做什么 | 放行条件 |
+|---|---|---|
+| V0 来源冻结 | 保留4个候选，补齐训练源码、输入定义和引用资产，冻结哈希 | 来源差异、缺失项明确；归档48项已核对 |
+| V1 网络恢复 | 独立31维前馈actor，CPU严格加载，批量1/32/256固定输入和原输出对拍 | 全参数匹配、输出有限；有对照时atol1e-5/rtol1e-4；无对照不称已完成数值对拍 |
+| V2 源模型复现 | 新建sample_source_nominal，恢复低姿态、轮径、PD、耦合限制、源450N弹簧及接触 | 正立、限位、行程、方向、施力唯一和短时动力学通过 |
+| V3 冻结策略冒烟 | 随机化关闭；单环境短回放，再五类各5种子×10s | 无NaN/越界、方向正确；首次失败计失败 |
+| V4 标称运动验收 | 五类各40次×40s，另测停车/反向/转向切换与弧线；独立种子复核所选候选 | 总完成率≥95%、每类≥90%；速度RMSE≤0.10 m/s、yaw≤0.15 rad/s、净空MAE≤0.02 m、倾角P95≤15°；无行程/分支违规 |
+| V5 目标模型迁移 | 逐项切换到本机目标模型/电机/弹簧参数；有差距则新建MuJoCo微调实验 | 目标标称模型通过同一命令评估；源复现成功不替代目标通过 |
+| V6 冻结策略鲁棒性扫描 | 不训练，分别扫摩擦、单电机倍率和质量，找失效边界 | 可重复的标称结果与小范围边界明确 |
+| V7 随机化训练 | 从通过V5的actor初始化，单类小范围→联合→逐类扩大 | 连续3次开发评估达标才扩大；保留标称回归 |
+| V8 最终验收/导出 | 冻结策略与范围；新种子、端点、左右不一致及联合最坏组合；单输入31→6导出与独立CPU回放 | 仅声明已测范围的仿真能力，保留失败边界 |
 
-# 可视化（真实 MuJoCo viewer，600 s）
-./.venv/bin/python -m fifty_mujoco.cli export --checkpoint runs/r0_stand_5h/model_best.pt
-./.venv/bin/python -m fifty_mujoco.cli play --onnx runs/export/model_best.onnx \
-  --variant train --viewer --seconds 600
-```
+先CPU普通MuJoCo，CPU通过后再接Warp批量环境。以上sample专用入口/配置**尚未实现**，不得把旧evaluate-stand/export/train-gpu的25/125路径直接用于新权重。现有evaluate-stand的vx_mae累计|vx|，不是|vx-command|，移动验收必须新增/修正跟踪评估器。
 
-### 5.3 闭链模型的"转正"还差什么
+后退先由-0.05逐级到-0.15/-0.30 m/s；失败则补负速度课程，不宣布“前后移动全部支持”。初期左右转用±0.3 rad/s，±2.5留作后续上界。评估跟踪经过斜坡的applied命令，完整统计首次失败、停止漂移和各电机包络饱和。
 
-闭链候选模型已经能编译、能过 CPU 侧全部检查，但对拍超预算（`obs.joint_vel` 相对误差
-3.3e-2 > 2e-2，CUDA graph 回放 1.5e-4 > 1e-5）。要转正需要：
+### 5.4 随机化的具体参数与初始范围
 
-- 定位 graph 回放差异（怀疑 `mj_step` 的约束 warm-start 状态没进捕获图）；
-- 复核 4 根被动连杆的 `PASSIVE_ARMATURE_KG_M2 = 0.005`——它是数值正则项，不是实测值；
-- 用真实弹簧数据复核 450 N / 锚点（`gas_spring.yaml` 里仍是 Fudan 300 N 占位）。
+“电机之间的摩擦”拆成关节/轴承/减速器/传动阻力，轮地摩擦另建；“每台电机施的力”建成六电机各自的输出力矩gain，并在耦合电机坐标下保留额定转速—力矩限幅。不能向电机无规律注入任意力矩。
 
-在转正之前，**训练与验收都用串链模型**，这也是 `models.yaml` 的 `meta.default`。
+下表都是**待验证工程假设**，不是实测公差，不同时全部开启：
 
-### 5.4 默认角切换：不要单独做
+| 随机量 | 首个小范围（相对已通过标称值） | 扩大候选 |
+|---|---|---|
+| 有效轮地滑动摩擦 | 0.9–1.1倍 | 0.8–1.2，再考虑0.6–1.4 |
+| 关节/传动阻尼、库仑摩擦矩 | 0.9–1.1倍；零基准另设有依据绝对范围 | 0.8–1.2；电机坐标与虚拟关节阻力不得重复计入 |
+| 六电机各自输出gain | 各0.95–1.05 | 各0.9–1.1，再考虑0.8–1.2；误差后再次包络限幅 |
+| 总质量/密度 | 0.95–1.05倍 | 0.9–1.1，再考虑0.8–1.2；同步处理COM惯量 |
+| 左右气弹簧推力 | 初期不随机 | 目标几何/行程合法后各0.95–1.05，再0.9–1.1 |
 
+顺序：**标称通过→单因素扫描→轮地摩擦→关节/传动阻力→电机gain→质量/惯量→左右差异→小范围联合→扩大**。PD、质心、噪声/延迟与推扰随后按依据加入。
 
-`robot.yaml: default_angles_rad` 切到参考姿态会连带 **12 项回归基线失效**：
+机械参数按episode采样并保持，至少20%环境保留标称；保存实际随机向量和读回值。质量变化不能只改重力而不改惯量，增加负载要计算质心与合成惯量；Warp需使用受支持的逐环境更新及派生量刷新，不能所有环境共享一次覆盖。
 
-| 回归 | 数量 | 原因 |
-|---|---:|---|
-| `test_audit`（关节原点、轮视觉偏移向量） | 3 | 基线在旧姿态下测量 |
-| `test_model_release` | 3 | 同上 |
-| `test_urdf_roundtrip`（限位往返） | 1 | 限位随默认角平移 |
-| `test_gas_spring`（Fudan 锚点偏移） | 1 | 按装配姿态对比 |
-| `test_joint_conventions` | 3 | `zero_rad` 一致性与 22.865 mm 断言 |
+每级都重测标称、各命令类、单项端点和组合边界。总体≥95%、每类及预设边界工况≥90%，同时满足V4误差/姿态/行程约束；报告样本数与置信区间。标称完成率下降>5个百分点或硬约束失败，回退上一通过checkpoint并收窄范围。最终随机保留集建议每类至少100次×40s，另测确定性边界；有限样本不能保证所有连续参数组合均成功。
 
-这必须与 `policy_contract.yaml` 的 `rf1` 语义、reset 实现**同一次**改动，并重建上述基线。
-单独改配置会留下"配置已切、基线还是旧的"的半坏状态。
+### 5.5 训练和旧路线的边界
+
+- 已完成V0/V1可离线核查的部分及V2源URDF静态准备；六项历史源码仍缺匹配版本。Torch推理、MuJoCo/GPU、训练按用户要求暂缓，不先扩大随机范围。
+- 首次MuJoCo微调优先复用31维actor，按目标schema新建critic/优化器并预热；源147维critic与旧工程152维critic不直接混用。新实验不标记为Isaac原实验完整resume。
+- 旧站立5h中后4.5h收益停滞是该任务的历史事实，不能据此承诺本次随机化训练“1h一定够”。先冒烟测吞吐；首个正式分段预算建议≤1h（含评估），到时保存退出，按结果和用户预算决定后续。
+- 恢复训练前处理旧gpu_ppo空episode统计0/0；状态NaN与“本窗口没有episode结束”分开。保存密度可沿用每500更新/每10分钟、保留12份的建议，具体先核实实际入口支持。
+- 闭链转正保留独立支线：历史CPU编译通过、GPU对拍未通过；定位graph回放差异、复核被动armature和真实弹簧。sample首轮先做等效串联源复现，不将闭链转正设为纯网络读取前置条件。
+- 原robot.yaml默认角、rf1语义、reset、弹簧与回归基线必须成套更新；本轮不覆盖。旧25/125权重、原始CAD及本机450N/75mm资料保留。
+- 目标是已定义且物理可行的随机范围内可靠运动。零附着、超载或电机能力不足时可能不可行；仿真通过不代表实机通过。
+
+### 5.6 已执行的离线工作（2026-11-11 14:31）
+
+详见[离线交付说明](ref_document/fifty_mujoco/docs/SAMPLE_WEIGHT_OFFLINE.md)与历史§29。
+
+- 新增标准库审计工具和可复用的31维数学契约；48/48归档校验通过，四个checkpoint各17个模型张量形状/有限值检查通过。
+- 源码清单186项中，当前95项原始字节匹配、8项LF匹配，14项不同、69项缺失；使用24个归档快照补上来源映射，合计127项可定位，不覆盖当前源码。
+- 找到并核对7个训练网格的原始哈希；已保存10个输入文件的固定哈希和网格解析映射。原URDF直接从归档目录加载时的相对网格路径问题已记录。
+- 静态FK：两轮最低点约0 m，源姿态机身底部净空0.1000001066 m；总质量23.259630515567018 kg，7个刚体的质量/惯量物理有效性通过。这不证明会站立或运动。
+- 新增actor31、源模型来源、五类命令评估和随机化课程4份JSON规范；均未接入现有运行CLI，运行/随机化保持关闭。
+- **18项离线unittest全部通过**；未导入Torch、MuJoCo、Isaac、NumPy或Warp。审计、测试输出及哈希索引在[reports/sample_weight](ref_document/fifty_mujoco/reports/sample_weight/offline_audit.json)。
+- 尚缺原legged_robot/ppo/runner/task_registry/evaluate_tracking/moving_yaw_rewards六项匹配源码，本地训练提交不存在，已有候选检索也未找到；V0仍为部分完成。V1推理、V2动力学及后续仿真/训练等待环境阶段再做。
 
 ---
 
@@ -289,7 +311,8 @@ train-gpu --stand-command --num-envs 64 --steps 24 --minutes 60 \
 12. **不要用放大 `damping` 掩盖约束发散**，那会把机构问题变成参数问题。
 13. 被动关节落到另一支路时，查初值是否与 `bridge.py` 同支，不要加大迭代次数。
 14. 预算用完未达验收就**停下来记录**，不要延长预算重跑同一配置。
-15. 中途改奖励/课程后不得仍当作同一组对照。16. **控制周期必须由模型 timestep 推导，不能读配置常量。** 串链 XML 是 5 ms、闭链 XML 是
+15. 中途改奖励/课程后不得仍当作同一组对照。
+16. **控制周期必须由模型 timestep 推导，不能读配置常量。** 串链 XML 是 5 ms、闭链 XML 是
     2.5 ms，用 `simulation.timestep_s` 会让闭链的 `dt` 变成 5 ms（应该是 10 ms），
     对拍时两边做的子步数不同。现在用 `Config.decimation_for(model.opt.timestep)`，
     除不尽直接抛错。
@@ -347,6 +370,8 @@ train-gpu --stand-command --num-envs 64 --steps 24 --minutes 60 \
 
 | 文件 | 作用 |
 |---|---|
+| `sample_weight_file/`（项目根） | 新增Isaac Gym来源权重与配置；实际31维前馈actor，尚待MuJoCo验证 |
+| `progress_history_20261031_204938.md` §28（项目根） | 本次完整核查、V0–V8计划、随机化范围与验收门槛 |
 | `configs/mechanism.yaml` | 平面节点、杆长、刚体映射、驱动链、弹簧端点、`link_length_authority` |
 | `configs/gas_spring.yaml` | 运行用 300 N 占位 + `real_spring`（450 N/250/75、锚点、包络、撤回记录） |
 | `configs/joint_conventions.yaml` | 六通道轴/符号/零位、参考姿态（串联候选 + 闭链 qpos）、弹簧行程检查 |
@@ -358,9 +383,9 @@ train-gpu --stand-command --num-envs 64 --steps 24 --minutes 60 \
 | `mechanism/bridge.py` | 串联 ↔ 闭链映射、Jacobian、曲柄根筛选 |
 | `mechanism/closed_pose.py` | 绝对角 → 闭链铰值；参考姿态 qpos |
 | `assets/step_audit.py` | STEP 解析、链轮齿数、齿轮比、弹簧销距 |
-| `assets/build_closed_mjcf.py` | **候选训练模型生成器**（未编译校验） |
+| `assets/build_closed_mjcf.py` | 候选训练模型生成器（历史有CPU编译记录，GPU未转正） |
 | `assets/mjcf/fifty_train.xml` | 现有等效串联模型（所有入口都在用它） |
-| `assets/mjcf/fifty_closed_train.xml` | 候选闭链训练模型（**尚未生成**） |
+| `assets/mjcf/fifty_closed_train.xml` | 历史有候选编译记录；本次目录未发现此产物，复现闭链前需核对/生成 |
 | `docs/STEP_GEOMETRY_AUDIT.md` | STEP 全部证据与推算（§6.9–§6.12 为最新） |
 | `docs/JOINT_CONVENTIONS.md` | 关节约定与参考姿态 |
 | `docs/CLOSED_CHAIN.md` | 候选闭链模型的结构、占位与未验证项 |
@@ -395,5 +420,7 @@ python tools/report_index.py                           # 报告索引，之后�
 | §24.15 | 10-31 | 文档同步、回归源码、启动指南 |
 | §25 | 10-31 | 九阶段启动指南（已抽出为 `docs/STARTUP_GUIDE.md`） |
 | §26 | 10-31 | 阶段 ② 第一批代码：闭链参考 qpos、候选训练模型生成器；默认角切换**回退** |
-| §27 | 10-31 | 阶段 ②–⑦：`models.yaml` 注册表 + `FIFTY_MODEL`、闭链编译与秩检查、被动关节 keyframe 播种、`decimation_for`、NaN 指令、对拍双预算、`wheel_load_path` 新判据、被动连杆 armature、mujoco 锁 3.16.0、20-update 冒烟 |
-| §28 | 11-01 | 阶段 ⑧⑨：5 h PPO（24000 updates，仅前 17 min 有效）、64×60 s 验收 CPU/warp 均 64/64；另修 warp 评估设备不匹配、`play` 窗口截断 |
+| §27（前半） | 10-31 | 阶段 ②–⑦：`models.yaml` 注册表 + `FIFTY_MODEL`、闭链编译与秩检查、被动关节 keyframe 播种、`decimation_for`、NaN 指令、对拍双预算、`wheel_load_path` 新判据、被动连杆 armature、mujoco 锁 3.16.0、20-update 冒烟 |
+| §27（后半） | 11-01 | 阶段 ⑧⑨：5 h PPO（24000 updates，仅前 17 min 有效）、64×60 s 验收 CPU/warp 均 64/64；另修 warp 评估设备不匹配、`play` 窗口截断 |
+| §28 | 11-11 | 核对sample归档48/48，确认31维前馈actor与旧25/125接口不兼容；下一步改为V0–V8：权重验证→目标迁移→逐项/联合随机化（计划，未跑仿真/训练） |
+| §29 | 11-11 | 离线工具/31维数学契约/4份规范落地，4份权重静态检查、7网格哈希和18项标准库测试通过；源静态净空/惯量通过，MuJoCo/GPU及训练暂缓 |

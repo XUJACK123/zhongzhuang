@@ -1,0 +1,100 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DAP",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/c620_m3508.elf",
+            "type": "cortex-debug",
+            "device": "STM32H723VG",
+            "servertype": "openocd",
+            "serverpath": "${config:cortex-debug.openocdPath.windows}",
+            "armToolchainPath": "${config:cortex-debug.armToolchainPath.windows}",
+            "searchDir": [
+                "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+            ],
+            "svdFile": "${env:USERPROFILE}/AppData/Local/Arm/Packs/Keil/STM32H7xx_DFP/4.1.3/CMSIS/SVD/STM32H723.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "request": "launch",
+            "showDevDebugOutput": "raw",
+            "configFiles": [
+                "${workspaceFolder}/openocd_dap.cfg"
+            ],
+            "preLaunchTask": "build task",
+            "runToEntryPoint": "main"
+        },
+        {
+            "name": "STLink-Attach",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/c620_m3508.elf",
+            "type": "cortex-debug",
+            "device": "STM32H723VG",
+            "servertype": "openocd",
+            "serverpath": "${config:cortex-debug.openocdPath.windows}",
+            "armToolchainPath": "${config:cortex-debug.armToolchainPath.windows}",
+            "searchDir": [
+                "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+            ],
+            "svdFile": "${env:USERPROFILE}/AppData/Local/Arm/Packs/Keil/STM32H7xx_DFP/4.1.3/CMSIS/SVD/STM32H723.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "request": "attach",
+            "configFiles": [
+                "${workspaceFolder}/openocd_stlink.cfg"
+            ]
+        },
+        {
+            "name": "STLink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/c620_m3508.elf",
+            "type": "cortex-debug",
+            "device": "STM32H723VG",
+            "servertype": "openocd",
+            "serverpath": "${config:cortex-debug.openocdPath.windows}",
+            "armToolchainPath": "${config:cortex-debug.armToolchainPath.windows}",
+            "searchDir": [
+                "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+            ],
+            "svdFile": "${env:USERPROFILE}/AppData/Local/Arm/Packs/Keil/STM32H7xx_DFP/4.1.3/CMSIS/SVD/STM32H723.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "request": "launch",
+            "configFiles": [
+                "${workspaceFolder}/openocd_stlink.cfg"
+            ],
+            "preLaunchTask": "build task",
+            "runToEntryPoint": "main"
+        },
+        {
+            "name": "JLink",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/c620_m3508.elf",
+            "type": "cortex-debug",
+            "device": "STM32H723VG",
+            "servertype": "openocd",
+            "serverpath": "${config:cortex-debug.openocdPath.windows}",
+            "armToolchainPath": "${config:cortex-debug.armToolchainPath.windows}",
+            "searchDir": [
+                "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+            ],
+            "svdFile": "${env:USERPROFILE}/AppData/Local/Arm/Packs/Keil/STM32H7xx_DFP/4.1.3/CMSIS/SVD/STM32H723.svd",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "request": "launch",
+            "configFiles": [
+                "${workspaceFolder}/openocd_jlink.cfg"
+            ],
+            "preLaunchTask": "build task",
+            "runToEntryPoint": "main"
+        }
+    ]
+}
