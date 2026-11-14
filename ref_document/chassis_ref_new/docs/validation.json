@@ -1,0 +1,192 @@
+{
+  "recorded_at": "2026-11-13T20:51:39.434354+08:00",
+  "scope": "Source implementation, host math/control tests, ARM cross-build only",
+  "hardware_confirmed": {
+    "board": "DM-MC02 STM32H723",
+    "bus": "all six motors CAN2 PB5/PB6 1Mbps",
+    "left_leg": {
+      "hip_dm": 1,
+      "knee_dm": 2
+    },
+    "right_leg": {
+      "hip_dm": 4,
+      "knee_dm": 3
+    },
+    "left_wheel_m3508": 2,
+    "right_wheel_m3508": 3,
+    "wheel_gear_ratio": 15.88,
+    "remote": "DR16 DT7 UART5 PD2",
+    "imu": "BMI088"
+  },
+  "model": {
+    "checkpoint": "model_3050.pt",
+    "sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11",
+    "sizes": [
+      31,
+      128,
+      64,
+      32,
+      6
+    ],
+    "activation": "ELU alpha=1, linear output",
+    "parameter_count": 14630,
+    "weights_are_exact_float32": true,
+    "observation_timing_source_parity": "pending: original legged_robot.py revision unavailable",
+    "hardware_parity": "pending calibration and source/golden-trace review",
+    "sources": {
+      "env_cfg.json": "d86acc6d8b8d881e5a7feb5d71f28c2f8e8899422132ff572e137d8db663998c",
+      "train_cfg.json": "b2e935a8b77d1c9adbef4b937222df6586f17325fc229b569ec2a82f8a6344dc",
+      "actuator_hardware.json": "ba7c40aa6634478e1f95b22648b697821110ec5ce54ded474e3d8f01774b7845",
+      "model_parameters.json": "5673c49eb41295670f684f8f14e94aead88fa2d8e73e0588e1d5a74fbf300e40"
+    },
+    "joint_order": [
+      "rf0_Joint",
+      "rf1_Joint",
+      "r_wheel_Joint",
+      "lf0_Joint",
+      "lf1_Joint",
+      "l_wheel_Joint"
+    ],
+    "default_q": [
+      3.1063109024878943,
+      -3.6606010515197696,
+      0.0,
+      -3.1063109024878943,
+      3.6606010515197696,
+      0.0
+    ],
+    "policy_dt": 0.01,
+    "generated_sha256": {
+      "model.h": "c8da864bd574eec3fe4fa64f41b81559dd18c3b9b345e2b961205fd51c8ffef9",
+      "model.c": "c384fdc27ad678d7ce5f08d4040e37222c2ec92e18c39807b2a26742288c848d"
+    }
+  },
+  "host": {
+    "status": "pass",
+    "weight_float32_words_bit_exact": 14630,
+    "actor_vectors": 273,
+    "actor_max_absolute_error": 5.4640642559888875e-05,
+    "observation_vectors": 100,
+    "observation_max_absolute_error": 8.754883396022706e-08,
+    "protocol_and_control_assertions": "passed",
+    "physical_pose_conversion": "passed",
+    "torch_forward_executed": false,
+    "fake_hal_control_loop": [
+      "default_fake passed",
+      "enabled_fake passed"
+    ],
+    "arm_runtime_tested": false,
+    "hardware_tested": false,
+    "checkpoint_sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11"
+  },
+  "arm_build": {
+    "status": "pass",
+    "forced_rebuild": true,
+    "production_commissioning_flags": {
+      "ENABLE_OUTPUT": 0,
+      "MOTOR_CALIBRATED": 0,
+      "IMU_FRAME_VERIFIED": 0,
+      "POLICY_CONTRACT_VERIFIED": 0,
+      "ODOMETRY_VERIFIED": 0
+    },
+    "arm_toolchain": "arm-none-eabi-gcc (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623",
+    "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n  93228\t    256\t  15168\t 108652\t  1a86c\tD:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\build\\rl\\wheel_leg_rl.elf",
+    "weights_in_flash": {
+      "rl_b0": {
+        "address": "0x8012a78",
+        "bytes": 512,
+        "symbol_type": "R"
+      },
+      "rl_b1": {
+        "address": "0x800a978",
+        "bytes": 256,
+        "symbol_type": "R"
+      },
+      "rl_b2": {
+        "address": "0x80088f8",
+        "bytes": 128,
+        "symbol_type": "R"
+      },
+      "rl_b3": {
+        "address": "0x80085e0",
+        "bytes": 24,
+        "symbol_type": "R"
+      },
+      "rl_w0": {
+        "address": "0x8012c78",
+        "bytes": 15872,
+        "symbol_type": "R"
+      },
+      "rl_w1": {
+        "address": "0x800aa78",
+        "bytes": 32768,
+        "symbol_type": "R"
+      },
+      "rl_w2": {
+        "address": "0x8008978",
+        "bytes": 8192,
+        "symbol_type": "R"
+      },
+      "rl_w3": {
+        "address": "0x80085f8",
+        "bytes": 768,
+        "symbol_type": "R"
+      }
+    },
+    "max_single_user_function_stack_bytes": 256,
+    "warnings": [],
+    "hardware_accessed": false,
+    "board_timing_measured": false
+  },
+  "pending": [
+    "encoder sign and absolute reference calibration",
+    "IMU installation frame validation",
+    "original training observation/reference/velocity timing parity",
+    "physical odometry validation",
+    "board real-time measurements",
+    "motor watchdog and live CAN validation",
+    "simulation and physical balance evaluation"
+  ],
+  "flashed": false,
+  "motors_moved": false,
+  "source_sha256": {
+    "Core/Src/fdcan.c": "388532a18981709613b525ab64dba5b1588c590414c3f8a98d8d329f31117769",
+    "Core/Src/main.c": "dd9f4d2ccb19b7c27dd7fece4f522202df5c78ffdbd537c0b57e81d09eae2d69",
+    "Core/Src/stm32h7xx_hal_msp.c": "1f1ab4097418db7f152214e2378ad0ae7eb04af63f967e132e83bb6e49fc0ac8",
+    "Core/Src/stm32h7xx_it.c": "56928e903b8fa60ba3d348a7b6524cb78c9f68e8db823cac16ddd7752ccfefd5",
+    "Core/Src/syscalls.c": "cf62f3682737308a94014dd7c413eeaada6a04bded284f019b345f9300fbef5c",
+    "Core/Src/system_stm32h7xx.c": "2ea5c2bd1c55e454fcbe26612c0b2a57f321fffb857ccd92844682288dd62518",
+    "Makefile": "255873e49b7970487c7b8859e9268eaae60f26daa4e2d6d9e7e3041eb53da857",
+    "tools/calibration_values.py": "e1de2aab9bd6ff25147bd5e1adc564d61a073bcaf2e4217b0c645d797a9078a2",
+    "tools/export_policy.py": "f730cbd51d19d64db3c2d9ee1283851160909219feefc6981692808cf0bca6b0",
+    "tools/test_host.py": "8ff5e84b3aa2e63c1e430760cd66ff106b5000f0d9ebb8c3d52a21bcbc17770a",
+    "tools/verify_build.py": "dec63f9a2048ae6120022ebf3173aaef9adbcfdfaa7b1e61af1f3321dd1319dc",
+    "user/algorithm/model/model.c": "c384fdc27ad678d7ce5f08d4040e37222c2ec92e18c39807b2a26742288c848d",
+    "user/algorithm/model/model.h": "c8da864bd574eec3fe4fa64f41b81559dd18c3b9b345e2b961205fd51c8ffef9",
+    "user/algorithm/rl.c": "25753c83a26d94cc6a160b9247538c64100421f046c5a685d3ca9f8ec592c82d",
+    "user/algorithm/rl.h": "fced6486d73aa5bd14dbebbb653e0726a29c9822f556368ad4ccc2fecff3a727",
+    "user/board.c": "6c230b5ef3aab474e23a1e916ad4116776eda5db4fdc1cf306fa6f87a1c80080",
+    "user/board.h": "0c715d2a679d4cb95792530c1bf390f295211ae9060475fb519626dbe28d6dd0",
+    "user/chassis.c": "05a8fb53618a3322ec30190e8e1bff27aa8c38f0bb3f168fb1272fbf979f9b91",
+    "user/chassis.h": "ea5771d04daf5aba1435a99d1059d6fe1199a9db6f786bfb04d3d000ee4d0ebe",
+    "user/control_state.c": "c07fed1e6c6aaf9afb79ffef2410268815b9fb18f8d432afbf8ae92e11c46546",
+    "user/control_state.h": "a6b4ba621092b8b0502b1195c75bec19380d132d50a38bbb1aed4b4d17c1ede3",
+    "user/imu.c": "365c83c31a39ddf1b5ba66646fabf3efd9203b3f5728403c16b0608e1cebdb37",
+    "user/imu.h": "2733b6bb1ba5ae3d4d79dcfa84c6fa26368cf3e0ba386bb82d6dadb330b53f16",
+    "user/motor_io.c": "15c8ce36e809d3cff7cb15be31c614ce28865f4bd9cdd1c89fee0f58a6ab5ebf",
+    "user/motor_io.h": "eb5eb708aa56d7097a891615353b9ddf2f9d241dbc12d7304b760c3193100ed6",
+    "user/remote_control.c": "1c0d977113426c95c41913167564c91fddcd27635b92dd0e1a0d5881b02142ce",
+    "user/remote_control.h": "e6942532e72aba2d5571f9f2e6ac6600de1d26d9c6666c9048d147cad8f2133d",
+    "user/robot_config.h": "b25384c19572fb68f4b6e24840ead676a6c5c190e56523903f5adee3de93049a",
+    "user/state_estimator.c": "ef91c483246dc22583ac17aa63942f61149ee2420ea92ea873183809ac79d688",
+    "user/state_estimator.h": "c448ab88132f3d5e47a11fab67193f9710773a537e061161bb36496109489c8a"
+  },
+  "original_backup": {
+    "path": "archive/can_scan_before_rl_20261113.zip",
+    "entries": 11,
+    "sha256": "6e7d2765d3bd5f009adb5bb6acad026df86519de97b86370c956cab976db4cc2"
+  },
+  "diff_whitespace_check": "passed with CRLF-aware Git whitespace check; inherited line endings preserved",
+  "live_can_evidence": "../diagnostics/fifo_can_20261113_215157/result.json",
+  "hardware_scope": "Six live feedback IDs confirmed by halted-CPU hardware FIFO; no firmware flash or motion test"
+}

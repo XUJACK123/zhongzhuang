@@ -1,0 +1,43 @@
+{
+  "checkpoint": "model_3050.pt",
+  "sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11",
+  "sizes": [
+    31,
+    128,
+    64,
+    32,
+    6
+  ],
+  "activation": "ELU alpha=1, linear output",
+  "parameter_count": 14630,
+  "weights_are_exact_float32": true,
+  "observation_timing_source_parity": "pending: original legged_robot.py revision unavailable",
+  "hardware_parity": "pending calibration and source/golden-trace review",
+  "sources": {
+    "env_cfg.json": "d86acc6d8b8d881e5a7feb5d71f28c2f8e8899422132ff572e137d8db663998c",
+    "train_cfg.json": "b2e935a8b77d1c9adbef4b937222df6586f17325fc229b569ec2a82f8a6344dc",
+    "actuator_hardware.json": "ba7c40aa6634478e1f95b22648b697821110ec5ce54ded474e3d8f01774b7845",
+    "model_parameters.json": "5673c49eb41295670f684f8f14e94aead88fa2d8e73e0588e1d5a74fbf300e40"
+  },
+  "joint_order": [
+    "rf0_Joint",
+    "rf1_Joint",
+    "r_wheel_Joint",
+    "lf0_Joint",
+    "lf1_Joint",
+    "l_wheel_Joint"
+  ],
+  "default_q": [
+    3.1063109024878943,
+    -3.6606010515197696,
+    0.0,
+    -3.1063109024878943,
+    3.6606010515197696,
+    0.0
+  ],
+  "policy_dt": 0.01,
+  "generated_sha256": {
+    "model.h": "c8da864bd574eec3fe4fa64f41b81559dd18c3b9b345e2b961205fd51c8ffef9",
+    "model.c": "c384fdc27ad678d7ce5f08d4040e37222c2ec92e18c39807b2a26742288c848d"
+  }
+}
