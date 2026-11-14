@@ -1,0 +1,47 @@
+{
+  "can": {
+    "all_six_fresh": true,
+    "counts_after_rx_ack": {
+      "0x303": 5,
+      "0x301": 4,
+      "0x203": 3,
+      "0x302": 4,
+      "0x304": 5,
+      "0x202": 3
+    },
+    "evidence": "../fifo_can_20261113_215157/result.json"
+  },
+  "observed_cpu_state": "halted; hardware FIFO remained active",
+  "old_program_ram_tick_a": 37579,
+  "old_program_ram_tick_b": 37579,
+  "old_program_command": {
+    "torques": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "tick": 37578,
+    "sequence": 0,
+    "valid": 0,
+    "invalid_latched": 0
+  },
+  "old_program_remote": {
+    "valid_frames": 2602,
+    "left_switch": 2,
+    "right_switch": 2
+  },
+  "firmware_identity": {
+    "current_flash_vectors": "old chassis_torque_base startup fingerprint, not current RL",
+    "exact_full_old_candidate_match": false,
+    "note": "Full backup did not equal the old candidate binary; old ELF RAM layout used as diagnostic interpretation, not exact firmware-build verification"
+  },
+  "backup_sha256": "88931bccddb07c11a9cba39a614cc5112f0d38eefb6b5188cb1e5ad747676c5e",
+  "flash_written_this_run": false,
+  "cpu_resumed_this_run": false,
+  "motor_enable_sent_this_run": false,
+  "production_rl_output_enabled": false,
+  "build_fix": "Disabled Make built-in suffix rules and restored tracked startup; Reset_Handler/vector/weights validated; 0 warnings"
+}

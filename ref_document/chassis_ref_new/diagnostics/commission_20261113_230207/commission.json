@@ -1,0 +1,229 @@
+{
+  "created_at": "2026-11-13T23:02:07.516893+08:00",
+  "snapshots": [
+    {
+      "label": "baseline",
+      "at": "2026-11-13T23:02:08.693814+08:00",
+      "dir": "diagnostics/commission_20261113_230207/snapshots/baseline",
+      "motors": [
+        {
+          "label": "right_hip_DM4",
+          "raw": 4068,
+          "total": 4068,
+          "temp": 24,
+          "status": 1
+        },
+        {
+          "label": "right_knee_DM3",
+          "raw": 3715,
+          "total": 3715,
+          "temp": 24,
+          "status": 0
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "raw": 1761,
+          "total": 1761,
+          "temp": 23,
+          "status": 0
+        },
+        {
+          "label": "left_hip_DM1",
+          "raw": 819,
+          "total": 819,
+          "temp": 24,
+          "status": 1
+        },
+        {
+          "label": "left_knee_DM2",
+          "raw": 3222,
+          "total": 3222,
+          "temp": 24,
+          "status": 1
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "raw": 26,
+          "total": -24550,
+          "temp": 23,
+          "status": 0
+        }
+      ],
+      "imu": {
+        "yaw_rad": -2.6488893032073975,
+        "gravity_body": [
+          -0.028819238767027855,
+          0.08517846465110779,
+          -0.9959520697593689
+        ],
+        "calibrated": true
+      },
+      "chassis": {
+        "tick": 1504422,
+        "inhibit": 33,
+        "fault": 0,
+        "cycles": 752113,
+        "policy_runs": 0,
+        "inference_us": 0,
+        "max_loop_us": 7,
+        "overruns": 0,
+        "mode": 0,
+        "actor_selftest": 1
+      },
+      "remote": {
+        "channels": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "s1": 2,
+        "s2": 2,
+        "tick": 1504735,
+        "valid_frames": 107176,
+        "rejected": 0,
+        "valid": true
+      }
+    },
+    {
+      "label": "fold_straight",
+      "at": "2026-11-13T23:23:33.945431+08:00",
+      "dir": "diagnostics/commission_20261113_230207/snapshots/fold_straight",
+      "motors": [
+        {
+          "label": "right_hip_DM4",
+          "raw": 6581,
+          "total": 6566,
+          "temp": 24,
+          "status": 13
+        },
+        {
+          "label": "right_knee_DM3",
+          "raw": 6237,
+          "total": 6205,
+          "temp": 24,
+          "status": 0
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "raw": 7120,
+          "total": 112276,
+          "temp": 23,
+          "status": 0
+        },
+        {
+          "label": "left_hip_DM1",
+          "raw": 826,
+          "total": 825,
+          "temp": 24,
+          "status": 1
+        },
+        {
+          "label": "left_knee_DM2",
+          "raw": 3233,
+          "total": 3232,
+          "temp": 24,
+          "status": 1
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "raw": 2359,
+          "total": -87753,
+          "temp": 23,
+          "status": 0
+        }
+      ],
+      "imu": {
+        "yaw_rad": -2.812317371368408,
+        "gravity_body": [
+          -0.023091547191143036,
+          0.07951799035072327,
+          -0.9965677857398987
+        ],
+        "calibrated": true
+      },
+      "chassis": {
+        "tick": 2789792,
+        "inhibit": 37,
+        "fault": 0,
+        "cycles": 1394798,
+        "policy_runs": 0,
+        "inference_us": 0,
+        "max_loop_us": 7,
+        "overruns": 0,
+        "mode": 0,
+        "actor_selftest": 1
+      },
+      "remote": {
+        "channels": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "s1": 2,
+        "s2": 2,
+        "tick": 2790096,
+        "valid_frames": 198860,
+        "rejected": 0,
+        "valid": true
+      }
+    }
+  ],
+  "applied": [
+    {
+      "at": "2026-11-14T00:01:29.010736+08:00",
+      "counts": [
+        3587,
+        3213,
+        3608,
+        1354,
+        3746,
+        2647
+      ],
+      "signs": [
+        -1,
+        1,
+        1,
+        1,
+        1,
+        -1
+      ],
+      "joint_rad": [
+        3.150098107818935,
+        -2.989579302649323,
+        0,
+        -3.150098107818935,
+        2.989579302649323,
+        0
+      ],
+      "source": "hip-height pose solve",
+      "ROBOT_ENCODER_SIGNS": [
+        -1,
+        1,
+        1,
+        1,
+        1,
+        -1
+      ],
+      "ROBOT_ENCODER_REFERENCE_RAD": [
+        2.7511945430728972,
+        2.4643401357382824,
+        0.17426330864897335,
+        1.038504993398579,
+        2.873146015709806,
+        0.12784783203820188
+      ],
+      "ROBOT_ARM_REFERENCE_RAD": [
+        3.150098107818935,
+        1.5822922061391458,
+        0,
+        3.150098107818935,
+        1.5822922061391458,
+        0
+      ]
+    }
+  ]
+}
