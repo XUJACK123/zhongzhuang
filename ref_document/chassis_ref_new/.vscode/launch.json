@@ -2,53 +2,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "台架：单电机慢速测试 (ST-LINK)",
+      "name": "RL: DAP flash and run",
       "type": "cortex-debug",
       "request": "launch",
       "cwd": "${workspaceFolder}",
-      "executable": "${workspaceFolder}/build/bench/chassis_torque_base.elf",
+      "executable": "${workspaceFolder}/build/rl/wheel_leg_rl.elf",
       "servertype": "openocd",
-      "serverpath": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
-      "gdbPath": "C:/Users/xuyue/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
+      "serverpath": "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+      "gdbPath": "${env:USERPROFILE}/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
       "searchDir": [
-        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+        "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
       ],
       "configFiles": [
-        "interface/stlink.cfg",
-        "target/stm32h7x.cfg"
+        "${workspaceFolder}/openocd_dap.cfg"
       ],
-      "preLaunchTask": "make: bench",
-      "runToEntryPoint": "main",
-      "rtos": "FreeRTOS",
+      "preLaunchTask": "RL: build",
+      "postLaunchCommands": [
+        "monitor reset run"
+      ],
+      "postRestartCommands": [
+        "monitor reset run"
+      ],
       "showDevDebugOutput": "none",
       "liveWatch": {
         "enabled": true,
-        "samplesPerSecond": 4
-      }
-    },
-    {
-      "name": "正式底座：等待力矩命令 (ST-LINK)",
-      "type": "cortex-debug",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "executable": "${workspaceFolder}/build/default/chassis_torque_base.elf",
-      "servertype": "openocd",
-      "serverpath": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
-      "gdbPath": "C:/Users/xuyue/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
-      "searchDir": [
-        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
-      ],
-      "configFiles": [
-        "interface/stlink.cfg",
-        "target/stm32h7x.cfg"
-      ],
-      "preLaunchTask": "make: default",
-      "runToEntryPoint": "main",
-      "rtos": "FreeRTOS",
-      "showDevDebugOutput": "none",
-      "liveWatch": {
-        "enabled": true,
-        "samplesPerSecond": 4
+        "samplesPerSecond": 1
       }
     }
   ]

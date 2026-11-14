@@ -1,142 +1,87 @@
 #include "fdcan.h"
-
-FDCAN_HandleTypeDef hfdcan1;
-
-static const can_pin_option_t *active_option;
-
-static void fdcan_apply_defaults(FDCAN_HandleTypeDef *fdcan, uint32_t mode, uint32_t prescaler)
-{
-    fdcan->Init.FrameFormat = FDCAN_FRAME_CLASSIC;
-    fdcan->Init.Mode = mode;
-    fdcan->Init.AutoRetransmission = (mode == FDCAN_MODE_NORMAL) ? DISABLE : ENABLE;
-    fdcan->Init.TransmitPause = DISABLE;
-    fdcan->Init.ProtocolException = DISABLE;
-    fdcan->Init.NominalPrescaler = prescaler;
-    fdcan->Init.NominalSyncJumpWidth = 1;
-    fdcan->Init.NominalTimeSeg1 = 23;
-    fdcan->Init.NominalTimeSeg2 = 8;
-    fdcan->Init.DataPrescaler = prescaler;
-    fdcan->Init.DataSyncJumpWidth = 10;
-    fdcan->Init.DataTimeSeg1 = 23;
-    fdcan->Init.DataTimeSeg2 = 8;
-    fdcan->Init.MessageRAMOffset = 0;
-    fdcan->Init.StdFiltersNbr = 1;
-    fdcan->Init.ExtFiltersNbr = 0;
-    fdcan->Init.RxFifo0ElmtsNbr = 16;
-    fdcan->Init.RxFifo0ElmtSize = FDCAN_DATA_BYTES_8;
-    fdcan->Init.RxFifo1ElmtsNbr = 0;
-    fdcan->Init.RxFifo1ElmtSize = FDCAN_DATA_BYTES_8;
-    fdcan->Init.RxBuffersNbr = 0;
-    fdcan->Init.RxBufferSize = FDCAN_DATA_BYTES_8;
-    fdcan->Init.TxEventsNbr = 0;
-    fdcan->Init.TxBuffersNbr = 0;
-    fdcan->Init.TxFifoQueueElmtsNbr = 4;
-    fdcan->Init.TxFifoQueueMode = FDCAN_TX_FIFO_OPERATION;
-    fdcan->Init.TxElmtSize = FDCAN_DATA_BYTES_8;
+#include "chassis.h"
+FDCAN_HandleTypeDef hfdcan2;
+volatile uint32_t g_can_tx_fail, g_can_rx_overflow;
+volatile CanMonitor g_can_monitor={.node={{.id=0x304},{.id=0x303},{.id=0x203},
+                                        {.id=0x301},{.id=0x302},{.id=0x202}}};
+bool can2_init(void) {
+    hfdcan2.Instance=FDCAN2;
+    hfdcan2.Init.FrameFormat=FDCAN_FRAME_CLASSIC;
+    hfdcan2.Init.Mode=FDCAN_MODE_NORMAL;
+    /* Do not retransmit a stale torque indefinitely when a node disappears. */
+    hfdcan2.Init.AutoRetransmission=DISABLE;
+    hfdcan2.Init.TransmitPause=DISABLE;
+    hfdcan2.Init.ProtocolException=DISABLE;
+    hfdcan2.Init.NominalPrescaler=3; /* 96MHz / 3 / (1+23+8) = 1Mbps */
+    hfdcan2.Init.NominalSyncJumpWidth=1;
+    hfdcan2.Init.NominalTimeSeg1=23; hfdcan2.Init.NominalTimeSeg2=8;
+    hfdcan2.Init.DataPrescaler=3; hfdcan2.Init.DataSyncJumpWidth=1;
+    hfdcan2.Init.DataTimeSeg1=23; hfdcan2.Init.DataTimeSeg2=8;
+    hfdcan2.Init.MessageRAMOffset=0; /* only CAN2 is initialized */
+    hfdcan2.Init.StdFiltersNbr=1; hfdcan2.Init.ExtFiltersNbr=0;
+    hfdcan2.Init.RxFifo0ElmtsNbr=24; hfdcan2.Init.RxFifo0ElmtSize=FDCAN_DATA_BYTES_8;
+    hfdcan2.Init.RxFifo1ElmtsNbr=0; hfdcan2.Init.RxFifo1ElmtSize=FDCAN_DATA_BYTES_8;
+    hfdcan2.Init.RxBuffersNbr=0; hfdcan2.Init.RxBufferSize=FDCAN_DATA_BYTES_8;
+    hfdcan2.Init.TxEventsNbr=0; hfdcan2.Init.TxBuffersNbr=0;
+    hfdcan2.Init.TxFifoQueueElmtsNbr=8; hfdcan2.Init.TxFifoQueueMode=FDCAN_TX_FIFO_OPERATION;
+    hfdcan2.Init.TxElmtSize=FDCAN_DATA_BYTES_8;
+    if (HAL_FDCAN_Init(&hfdcan2)!=HAL_OK) return false;
+    FDCAN_FilterTypeDef f={0};
+    f.IdType=FDCAN_STANDARD_ID; f.FilterType=FDCAN_FILTER_RANGE;
+    f.FilterConfig=FDCAN_FILTER_TO_RXFIFO0; f.FilterID1=0x201; f.FilterID2=0x304;
+    return HAL_FDCAN_ConfigFilter(&hfdcan2,&f)==HAL_OK &&
+        HAL_FDCAN_ConfigGlobalFilter(&hfdcan2,FDCAN_REJECT,FDCAN_REJECT,FDCAN_REJECT_REMOTE,FDCAN_REJECT_REMOTE)==HAL_OK &&
+        HAL_FDCAN_ActivateNotification(&hfdcan2,FDCAN_IT_RX_FIFO0_NEW_MESSAGE|FDCAN_IT_RX_FIFO0_MESSAGE_LOST,0)==HAL_OK &&
+        HAL_FDCAN_Start(&hfdcan2)==HAL_OK;
 }
-
-bool can_probe_open(const can_pin_option_t *option, uint32_t mode)
-{
-    can_probe_close();
-    if (option == NULL)
-    {
-        return false;
-    }
-
-    active_option = option;
-    hfdcan1.Instance = option->instance;
-    fdcan_apply_defaults(&hfdcan1, mode, option->prescaler);
-
-    if (HAL_FDCAN_Init(&hfdcan1) != HAL_OK)
-    {
-        can_probe_close();
-        return false;
-    }
-
-    /* 掩码全零 = 接受所有标准帧，便于扫描未知 ID。 */
-    FDCAN_FilterTypeDef filter = {0};
-    filter.IdType = FDCAN_STANDARD_ID;
-    filter.FilterIndex = 0U;
-    filter.FilterType = FDCAN_FILTER_MASK;
-    filter.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
-    filter.FilterID1 = 0U;
-    filter.FilterID2 = 0U;
-
-    if (HAL_FDCAN_ConfigFilter(&hfdcan1, &filter) != HAL_OK ||
-        HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_ACCEPT_IN_RX_FIFO0, FDCAN_ACCEPT_IN_RX_FIFO0,
-                                     FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK ||
-        HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0U) != HAL_OK ||
-        HAL_FDCAN_Start(&hfdcan1) != HAL_OK)
-    {
-        can_probe_close();
-        return false;
-    }
-
+bool can2_send(uint16_t id, const uint8_t d[8]) {
+    FDCAN_TxHeaderTypeDef h={0};
+    h.Identifier=id; h.IdType=FDCAN_STANDARD_ID; h.TxFrameType=FDCAN_DATA_FRAME;
+    h.DataLength=FDCAN_DLC_BYTES_8; h.ErrorStateIndicator=FDCAN_ESI_ACTIVE;
+    h.BitRateSwitch=FDCAN_BRS_OFF; h.FDFormat=FDCAN_CLASSIC_CAN;
+    h.TxEventFifoControl=FDCAN_NO_TX_EVENTS;
+    if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2,&h,d)!=HAL_OK) { ++g_can_tx_fail; return false; }
+    ++g_can_monitor.tx_queued;
+    if (id==0x3fe || id==0x200) {
+        for (unsigned i=0;i<8;++i) if (d[i]) { ++g_can_monitor.nonzero_torque_frames; break; }
+    } else if (id>=1 && id<=4 && d[0]==0xff && d[7]==0xfc) ++g_can_monitor.enable_commands;
     return true;
 }
-
-void can_probe_close(void)
-{
-    if (hfdcan1.Instance != NULL)
-    {
-        (void)HAL_FDCAN_Stop(&hfdcan1);
-        (void)HAL_FDCAN_DeInit(&hfdcan1);
-    }
-    active_option = NULL;
+void can2_cancel_pending(void) { (void)HAL_FDCAN_AbortTxRequest(&hfdcan2,0xffffffffU); }
+bool can2_healthy(void) {
+    FDCAN_ProtocolStatusTypeDef s={0}; FDCAN_ErrorCountersTypeDef c={0};
+    if (HAL_FDCAN_GetProtocolStatus(&hfdcan2,&s)!=HAL_OK ||
+        HAL_FDCAN_GetErrorCounters(&hfdcan2,&c)!=HAL_OK) return false;
+    g_can_monitor.tx_error=c.TxErrorCnt; g_can_monitor.rx_error=c.RxErrorCnt;
+    g_can_monitor.bus_off=s.BusOff; g_can_monitor.last_error=s.LastErrorCode;
+    ++g_can_monitor.status_samples;
+    return !s.BusOff && !s.ErrorPassive && c.TxErrorCnt<32 && c.RxErrorCnt<32;
 }
-
-static IRQn_Type can_irq(FDCAN_GlobalTypeDef *instance)
-{
-    if (instance == FDCAN1)
-    {
-        return FDCAN1_IT0_IRQn;
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *h, uint32_t flags) {
+    if (flags&FDCAN_IT_RX_FIFO0_MESSAGE_LOST) ++g_can_rx_overflow;
+    if (h->Instance!=FDCAN2) return;
+    while (HAL_FDCAN_GetRxFifoFillLevel(h,FDCAN_RX_FIFO0)>0) {
+        FDCAN_RxHeaderTypeDef rx; uint8_t data[64];
+        if (HAL_FDCAN_GetRxMessage(h,FDCAN_RX_FIFO0,&rx,data)!=HAL_OK) break;
+        if (rx.IdType==FDCAN_STANDARD_ID && rx.RxFrameType==FDCAN_DATA_FRAME &&
+            rx.FDFormat==FDCAN_CLASSIC_CAN && rx.DataLength==FDCAN_DLC_BYTES_8) {
+            ++g_can_monitor.received;
+            bool found=false;
+            for (unsigned i=0;i<6;++i) if (rx.Identifier==g_can_monitor.node[i].id) {
+                ++g_can_monitor.node[i].received; g_can_monitor.node[i].last_ms=HAL_GetTick();
+                for (unsigned j=0;j<8;++j) g_can_monitor.node[i].data[j]=data[j];
+                found=true; break;
+            }
+            if (!found) ++g_can_monitor.other;
+            chassis_receive((uint16_t)rx.Identifier,data,HAL_GetTick());
+        }
     }
-    if (instance == FDCAN2)
-    {
-        return FDCAN2_IT0_IRQn;
-    }
-    return FDCAN3_IT0_IRQn;
 }
-
-void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef *fdcan)
-{
-    GPIO_InitTypeDef gpio = {0};
-
-    if (active_option == NULL || fdcan->Instance != active_option->instance)
-    {
-        return;
-    }
-
-    __HAL_RCC_FDCAN_CLK_ENABLE();
-
-    if (active_option->port == GPIOA) __HAL_RCC_GPIOA_CLK_ENABLE();
-    else if (active_option->port == GPIOB) __HAL_RCC_GPIOB_CLK_ENABLE();
-    else if (active_option->port == GPIOC) __HAL_RCC_GPIOC_CLK_ENABLE();
-    else if (active_option->port == GPIOD) __HAL_RCC_GPIOD_CLK_ENABLE();
-    else if (active_option->port == GPIOE) __HAL_RCC_GPIOE_CLK_ENABLE();
-    else if (active_option->port == GPIOF) __HAL_RCC_GPIOF_CLK_ENABLE();
-    else if (active_option->port == GPIOG) __HAL_RCC_GPIOG_CLK_ENABLE();
-    else if (active_option->port == GPIOH) __HAL_RCC_GPIOH_CLK_ENABLE();
-
-    gpio.Pin = active_option->tx_pin | active_option->rx_pin;
-    gpio.Mode = GPIO_MODE_AF_PP;
-    gpio.Pull = GPIO_NOPULL;
-    gpio.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    gpio.Alternate = active_option->alternate;
-    HAL_GPIO_Init(active_option->port, &gpio);
-
-    HAL_NVIC_SetPriority(can_irq(active_option->instance), 5U, 0U);
-    HAL_NVIC_EnableIRQ(can_irq(active_option->instance));
-}
-
-void HAL_FDCAN_MspDeInit(FDCAN_HandleTypeDef *fdcan)
-{
-    if (active_option == NULL || fdcan->Instance != active_option->instance)
-    {
-        return;
-    }
-
-    HAL_GPIO_DeInit(active_option->port, active_option->tx_pin | active_option->rx_pin);
-    HAL_NVIC_DisableIRQ(can_irq(active_option->instance));
-    __HAL_RCC_FDCAN_CLK_DISABLE();
+void HAL_FDCAN_MspInit(FDCAN_HandleTypeDef *h) {
+    if (h->Instance!=FDCAN2) return;
+    __HAL_RCC_FDCAN_CLK_ENABLE(); __HAL_RCC_GPIOB_CLK_ENABLE();
+    GPIO_InitTypeDef g={0}; g.Pin=GPIO_PIN_5|GPIO_PIN_6; g.Mode=GPIO_MODE_AF_PP;
+    g.Pull=GPIO_NOPULL; g.Speed=GPIO_SPEED_FREQ_VERY_HIGH; g.Alternate=GPIO_AF9_FDCAN2;
+    HAL_GPIO_Init(GPIOB,&g);
+    HAL_NVIC_SetPriority(FDCAN2_IT0_IRQn,3,0); HAL_NVIC_EnableIRQ(FDCAN2_IT0_IRQn);
 }

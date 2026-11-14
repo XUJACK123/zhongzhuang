@@ -1,6 +1,14 @@
+# On case-insensitive Windows, built-in .S -> .s rules can overwrite startup.
+MAKEFLAGS += --no-builtin-rules
+.SUFFIXES:
+.DELETE_ON_ERROR:
 .DEFAULT_GOAL := all
-TARGET := m3508_can_test
-BUILD_DIR ?= build/minimal
+TARGET := wheel_leg_rl
+BUILD_DIR ?= build/rl
+PYTHON ?= python
+OPENOCD ?=
+OPENOCD_CONFIG ?= openocd_dap.cfg
+OPENOCD_ARG = $(if $(strip $(OPENOCD)),--openocd "$(OPENOCD)",)
 
 TOOLCHAIN_DIR ?=
 CROSS_COMPILE ?= $(TOOLCHAIN_DIR)arm-none-eabi-
@@ -20,7 +28,7 @@ endif
 CPU_FLAGS := -mcpu=cortex-m7 -mthumb -mfpu=fpv5-d16 -mfloat-abi=hard
 DEFINES := -DUSE_HAL_DRIVER -DSTM32H723xx -DUSE_PWR_LDO_SUPPLY
 INCLUDES := \
-  -ICore/Inc \
+  -ICore/Inc -Iuser -Iuser/algorithm \
   -IDrivers/STM32H7xx_HAL_Driver/Inc \
   -IDrivers/STM32H7xx_HAL_Driver/Inc/Legacy \
   -IDrivers/CMSIS/Device/ST/STM32H7xx/Include \
@@ -32,6 +40,10 @@ C_SOURCES := \
   Core/Src/stm32h7xx_it.c \
   Core/Src/stm32h7xx_hal_msp.c \
   Core/Src/system_stm32h7xx.c \
+  Core/Src/syscalls.c \
+  user/board.c user/imu.c user/chassis.c user/control_state.c \
+  user/motor_io.c user/remote_control.c user/state_estimator.c \
+  user/algorithm/rl.c user/algorithm/model/model.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c \
@@ -40,6 +52,13 @@ C_SOURCES := \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fdcan.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c \
+  Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_iwdg.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c
 
@@ -49,17 +68,17 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(ASM_SOURCES:.s=.o))
 DEPS := $(OBJECTS:.o=.d)
 OBJECT_DIRS := $(sort $(dir $(OBJECTS)))
 
-CFLAGS := $(CPU_FLAGS) $(DEFINES) $(INCLUDES) -Og -g3 -DDEBUG -std=gnu11 \
+CFLAGS := $(CPU_FLAGS) $(DEFINES) $(INCLUDES) -O2 -g3 -DDEBUG -std=gnu11 \
           -ffunction-sections -fdata-sections -fstack-usage \
           -Wall -Wextra -Wshadow -MMD -MP
 ASFLAGS := $(CPU_FLAGS) $(DEFINES) $(INCLUDES) -x assembler-with-cpp -MMD -MP
 LDSCRIPT := STM32H723VGTx_FLASH.ld
 LDFLAGS := $(CPU_FLAGS) -specs=nano.specs -specs=nosys.specs \
            -T$(LDSCRIPT) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref \
-           -Wl,--gc-sections -Wl,--print-memory-usage
+           -Wl,--gc-sections -Wl,--print-memory-usage -Wl,--require-defined=Reset_Handler
 LDLIBS := -Wl,--start-group -lc -lm -lnosys -Wl,--end-group
 
-.PHONY: all clean size
+.PHONY: all clean size export-policy test flash flash-check monitor
 
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin size
 
@@ -86,6 +105,22 @@ $(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf
 
 size: $(BUILD_DIR)/$(TARGET).elf
 	$(SIZE) $<
+
+export-policy:
+	$(PYTHON) tools/export_policy.py
+
+test:
+	$(PYTHON) tools/test_host.py
+
+# Explicit user-invoked target; make/all never accesses a debugger or motor.
+flash: all
+	$(PYTHON) tools/flash_firmware.py --config "$(OPENOCD_CONFIG)" $(OPENOCD_ARG)
+
+flash-check: all
+	$(PYTHON) tools/flash_firmware.py --config "$(OPENOCD_CONFIG)" $(OPENOCD_ARG) --dry-run
+
+monitor:
+	$(PYTHON) tools/monitor_can.py $(OPENOCD_ARG)
 
 clean:
 	@$(call REMOVE_DIR,build)

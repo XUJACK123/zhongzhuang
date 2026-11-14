@@ -2,12 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "make: bench",
+      "label": "RL: build",
       "type": "process",
       "command": "make",
       "args": [
-        "-j32",
-        "TEST_MOTOR=1"
+        "-j4"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -21,37 +20,55 @@
       }
     },
     {
-      "label": "make: default",
+      "label": "RL: test",
       "type": "process",
       "command": "make",
       "args": [
-        "-j32",
-        "TEST_MOTOR=0"
+        "test"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "problemMatcher": []
     },
     {
-      "label": "make: test",
+      "label": "RL: flash-check",
       "type": "process",
       "command": "make",
       "args": [
-        "test",
-        "-j8"
+        "flash-check"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": [
-        "$gcc"
-      ]
+      "problemMatcher": []
     },
     {
-      "label": "make: clean",
+      "label": "RL: flash (Horco DAP)",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "flash"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "RL: monitor",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "monitor"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "RL: clean",
       "type": "process",
       "command": "make",
       "args": [
@@ -60,42 +77,6 @@
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "problemMatcher": [
-        "$gcc"
-      ]
-    },
-    {
-      "label": "flash: bench (ST-LINK)",
-      "type": "process",
-      "command": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
-      "args": [
-        "-s",
-        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts",
-        "-f",
-        "interface/stlink.cfg",
-        "-f",
-        "target/stm32h7x.cfg",
-        "-c",
-        "program {${workspaceFolder}/build/bench/chassis_torque_base.elf} verify reset exit"
-      ],
-      "dependsOn": "make: bench",
-      "problemMatcher": []
-    },
-    {
-      "label": "flash: default (ST-LINK)",
-      "type": "process",
-      "command": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
-      "args": [
-        "-s",
-        "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts",
-        "-f",
-        "interface/stlink.cfg",
-        "-f",
-        "target/stm32h7x.cfg",
-        "-c",
-        "program {${workspaceFolder}/build/default/chassis_torque_base.elf} verify reset exit"
-      ],
-      "dependsOn": "make: default",
       "problemMatcher": []
     }
   ]

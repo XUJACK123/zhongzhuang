@@ -1,25 +1,21 @@
 #ifndef FDCAN_H
 #define FDCAN_H
-
-#include <stdbool.h>
-
 #include "main.h"
-
-/* 一个候选的 CAN 引脚组合：TX 与 RX 位于同一端口。 */
-typedef struct
-{
-    FDCAN_GlobalTypeDef *instance;
-    GPIO_TypeDef *port;
-    uint16_t tx_pin;
-    uint16_t rx_pin;
-    uint32_t alternate;
-    uint32_t prescaler; /* 仲裁段预分频：3=1Mbps，6=500kbps，12=250kbps */
-} can_pin_option_t;
-
-/* 复用一个句柄，逐个候选组合切换 Instance。 */
-extern FDCAN_HandleTypeDef hfdcan1;
-
-bool can_probe_open(const can_pin_option_t *option, uint32_t mode);
-void can_probe_close(void);
-
+#include <stdbool.h>
+extern FDCAN_HandleTypeDef hfdcan2;
+bool can2_init(void);
+bool can2_send(uint16_t id, const uint8_t data[8]);
+void can2_cancel_pending(void);
+bool can2_healthy(void);
+extern volatile uint32_t g_can_tx_fail, g_can_rx_overflow;
+typedef struct {
+    uint32_t id, received, last_ms;
+    uint8_t data[8];
+} CanMonitorNode;
+typedef struct {
+    uint32_t received, other, tx_error, rx_error, bus_off, last_error;
+    uint32_t tx_queued, nonzero_torque_frames, enable_commands, status_samples;
+    CanMonitorNode node[6];
+} CanMonitor;
+extern volatile CanMonitor g_can_monitor;
 #endif

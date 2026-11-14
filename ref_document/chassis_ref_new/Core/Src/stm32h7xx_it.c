@@ -1,6 +1,7 @@
 #include "main.h"
 #include "stm32h7xx_it.h"
 #include "fdcan.h"
+#include "board.h"
 
 void NMI_Handler(void)
 {
@@ -48,15 +49,16 @@ void SysTick_Handler(void)
 
 void FDCAN1_IT0_IRQHandler(void)
 {
-    HAL_FDCAN_IRQHandler(&hfdcan1);
 }
 
 void FDCAN2_IT0_IRQHandler(void)
 {
-    HAL_FDCAN_IRQHandler(&hfdcan1);
+    HAL_FDCAN_IRQHandler(&hfdcan2);
 }
 
 void FDCAN3_IT0_IRQHandler(void)
 {
-    HAL_FDCAN_IRQHandler(&hfdcan1);
 }
+
+void UART5_IRQHandler(void) { board_uart_irq(); }
+void EXTI15_10_IRQHandler(void) { HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_12); }

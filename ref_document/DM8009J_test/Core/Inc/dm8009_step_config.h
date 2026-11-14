@@ -9,7 +9,7 @@
 #define DM_ID_SCAN_ONLY 0U
 #endif
 /* 0 = discover all IDs. Control target verified on 2026-11-11: CAN_ID=2, MST_ID=0.
- * Only connect ONE DM motor on this isolated CAN2 bus during commissioning. */
+ * Only connect ONE DM motor on this isolated CAN2`bus during commissioning. */
 #ifndef DM_FIXED_CAN_ID
 #define DM_FIXED_CAN_ID 2U
 #endif
