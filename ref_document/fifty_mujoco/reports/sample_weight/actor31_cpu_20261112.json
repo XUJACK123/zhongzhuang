@@ -1,0 +1,482 @@
+{
+  "tool": "sample-actor31-validation",
+  "schema": 1,
+  "generated_at": "2026-11-12T14:33:41+00:00",
+  "status": "passed",
+  "atol": 1e-05,
+  "rtol": 0.0001,
+  "source_network": {
+    "path": "ref_document/fudan_rl_wheel_leg-main/plane/wheel_legged_gym/rsl_rl/modules/actor_critic.py",
+    "sha256": "92fe333bbd5ce0e74f5fb0569adbcfae13736585ac5ba07711dee635874d18e2",
+    "hash_verified": true
+  },
+  "environment": {
+    "python": "3.12.13",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.4",
+    "cuda_tested": false,
+    "gpu": null
+  },
+  "checkpoints": [
+    {
+      "checkpoint": "model_2975.pt",
+      "sha256": "c4c18681aaa236bf77565c7264f38deb77b20486ea9543d9068cd0a3ec4699b5",
+      "iteration": 2975,
+      "model_tensor_count": 17,
+      "actor_parameters": 14630,
+      "critic_restored": false,
+      "optimizer_restored": false,
+      "full_training_resume": false,
+      "strict_load": true,
+      "passed": true,
+      "batches": [
+        {
+          "input": "random_1",
+          "batch": 1,
+          "input_sha256": "f0dd522222fca435664148c36ed7f17bb36cc387676c44d46b4aa694c0474100",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 7.927955381070717e-08,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_32",
+          "batch": 32,
+          "input_sha256": "af2095477b3dfe2443d1129eca679f0311af46d508536136ee1b4b172a1fe2d5",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.3524149782284667e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_256",
+          "batch": 256,
+          "input_sha256": "7d601bdbe4e3c8c5464f580d239a8194a68b5280b64406928e5e161fd46f6f83",
+          "output_shape": [
+            256,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.3633899476062084e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "zero_1",
+          "batch": 1,
+          "input_sha256": "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 3.5932671837990426e-08,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "clip_endpoints_32",
+          "batch": 32,
+          "input_sha256": "8b000030e42478ed156cf8fa94dc265ce4214f7b279bd07856d2ce29930a110c",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 0.00010262417833928339,
+              "passed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "checkpoint": "model_3000.pt",
+      "sha256": "433a17cac955808f5b6d77f444ab2e3c1fb4950c0806578cec9d685c7f5bb915",
+      "iteration": 3000,
+      "model_tensor_count": 17,
+      "actor_parameters": 14630,
+      "critic_restored": false,
+      "optimizer_restored": false,
+      "full_training_resume": false,
+      "strict_load": true,
+      "passed": true,
+      "batches": [
+        {
+          "input": "random_1",
+          "batch": 1,
+          "input_sha256": "f0dd522222fca435664148c36ed7f17bb36cc387676c44d46b4aa694c0474100",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.3879654336967917e-07,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_32",
+          "batch": 32,
+          "input_sha256": "af2095477b3dfe2443d1129eca679f0311af46d508536136ee1b4b172a1fe2d5",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.3322597771647793e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_256",
+          "batch": 256,
+          "input_sha256": "7d601bdbe4e3c8c5464f580d239a8194a68b5280b64406928e5e161fd46f6f83",
+          "output_shape": [
+            256,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.7503433751286934e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "zero_1",
+          "batch": 1,
+          "input_sha256": "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 6.07202900737569e-08,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "clip_endpoints_32",
+          "batch": 32,
+          "input_sha256": "8b000030e42478ed156cf8fa94dc265ce4214f7b279bd07856d2ce29930a110c",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 8.584023788671402e-05,
+              "passed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "checkpoint": "model_3025.pt",
+      "sha256": "baaa14246b4da8848a010278c395672cfa3c0f0a7e5c06e6bf7e7639c2b699a7",
+      "iteration": 3025,
+      "model_tensor_count": 17,
+      "actor_parameters": 14630,
+      "critic_restored": false,
+      "optimizer_restored": false,
+      "full_training_resume": false,
+      "strict_load": true,
+      "passed": true,
+      "batches": [
+        {
+          "input": "random_1",
+          "batch": 1,
+          "input_sha256": "f0dd522222fca435664148c36ed7f17bb36cc387676c44d46b4aa694c0474100",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 2.507470562296277e-07,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_32",
+          "batch": 32,
+          "input_sha256": "af2095477b3dfe2443d1129eca679f0311af46d508536136ee1b4b172a1fe2d5",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.1140369471362987e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_256",
+          "batch": 256,
+          "input_sha256": "7d601bdbe4e3c8c5464f580d239a8194a68b5280b64406928e5e161fd46f6f83",
+          "output_shape": [
+            256,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.695478300867137e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "zero_1",
+          "batch": 1,
+          "input_sha256": "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 3.3031481938561313e-08,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "clip_endpoints_32",
+          "batch": 32,
+          "input_sha256": "8b000030e42478ed156cf8fa94dc265ce4214f7b279bd07856d2ce29930a110c",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 7.78972486159546e-05,
+              "passed": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "checkpoint": "model_3050.pt",
+      "sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11",
+      "iteration": 3050,
+      "model_tensor_count": 17,
+      "actor_parameters": 14630,
+      "critic_restored": false,
+      "optimizer_restored": false,
+      "full_training_resume": false,
+      "strict_load": true,
+      "passed": true,
+      "batches": [
+        {
+          "input": "random_1",
+          "batch": 1,
+          "input_sha256": "f0dd522222fca435664148c36ed7f17bb36cc387676c44d46b4aa694c0474100",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 2.8922804307107697e-07,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_32",
+          "batch": 32,
+          "input_sha256": "af2095477b3dfe2443d1129eca679f0311af46d508536136ee1b4b172a1fe2d5",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.5421445374030895e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "random_256",
+          "batch": 256,
+          "input_sha256": "7d601bdbe4e3c8c5464f580d239a8194a68b5280b64406928e5e161fd46f6f83",
+          "output_shape": [
+            256,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 1.5820712579994733e-06,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "zero_1",
+          "batch": 1,
+          "input_sha256": "7b8ec8dd836b564f0c85ad088fc744de820345204e154bc1503e04e9d6fdd9f1",
+          "output_shape": [
+            1,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 3.209503074419473e-08,
+              "passed": true
+            }
+          }
+        },
+        {
+          "input": "clip_endpoints_32",
+          "batch": 32,
+          "input_sha256": "8b000030e42478ed156cf8fa94dc265ce4214f7b279bd07856d2ce29930a110c",
+          "output_shape": [
+            32,
+            6
+          ],
+          "all_finite": true,
+          "comparisons": {
+            "recovered_source_cpu": {
+              "max_abs_error": 0.0,
+              "passed": true
+            },
+            "numpy_float64": {
+              "max_abs_error": 7.395258853648556e-05,
+              "passed": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "source_runtime_golden_samples_available": false,
+  "physics_executed": false,
+  "training_executed": false,
+  "scope": "Fixed-input network parity only; original environment observation/reset timing remains unverified."
+}

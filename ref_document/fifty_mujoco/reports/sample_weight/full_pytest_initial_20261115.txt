@@ -1,0 +1,37 @@
+........................................................................ [ 19%]
+.................................ss..................................... [ 38%]
+........................................................................ [ 57%]
+...................................F.................................... [ 76%]
+............................s........................................... [ 95%]
+........ssssssss                                                         [100%]
+=================================== FAILURES ===================================
+________ ArchiveTests.test_no_physics_or_learning_dependencies_imported ________
+
+self = <test_sample_offline.ArchiveTests testMethod=test_no_physics_or_learning_dependencies_imported>
+
+    def test_no_physics_or_learning_dependencies_imported(self):
+>       self.assertFalse(set(sys.modules) & {"torch", "mujoco", "isaacgym", "numpy", "warp"})
+E       AssertionError: {'numpy', 'torch', 'mujoco'} is not false
+
+tests/test_sample_offline.py:204: AssertionError
+=============================== warnings summary ===============================
+tests/test_learning_pipeline.py::test_onnx_export_round_trip
+  /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/src/fifty_mujoco/transfer/export.py:29: UserWarning: # 'dynamic_axes' is not recommended when dynamo=True, and may lead to 'torch._dynamo.exc.UserError: Constraints violated.' Supply the 'dynamic_shapes' argument instead if export is unsuccessful.
+    torch.onnx.export(
+
+tests/test_learning_pipeline.py::test_onnx_export_round_trip
+  /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_compat.py:112: DeprecationWarning: from_dynamic_axes_to_dynamic_shapes is deprecated and will be removed in a future release. This function converts 'dynamic_axes' format (including custom axis names) to 'dynamic_shapes' format. Instead of relying on this conversion, provide 'dynamic_shapes' directly with custom names.
+    _dynamic_shapes.from_dynamic_axes_to_dynamic_shapes(
+
+tests/test_learning_pipeline.py::test_onnx_export_round_trip
+  /home/xy/snap/code/263/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/copyreg.py:99: FutureWarning: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+    return cls.__new__(cls, *args)
+
+tests/test_learning_pipeline.py::test_onnx_export_round_trip
+  /home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/.venv/lib/python3.12/site-packages/torch/onnx/_internal/exporter/_onnx_program.py:487: UserWarning: # The axis name: batch will not be used, since it shares the same shape constraints with another axis: batch.
+    rename_mapping = _dynamic_shapes.create_rename_mapping(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_sample_offline.py::ArchiveTests::test_no_physics_or_learning_dependencies_imported
+1 failed, 364 passed, 11 skipped, 4 warnings in 14.42s

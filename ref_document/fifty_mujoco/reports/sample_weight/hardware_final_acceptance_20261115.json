@@ -1,0 +1,806 @@
+{
+  "tool": "hardware-final-reconstruction-acceptance",
+  "status": "passed_limited_reconstruction_scope",
+  "candidate": {
+    "status": "frozen_for_final_development_and_heldout",
+    "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+    "sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+    "deployment_control": {
+      "wheel_kd": 0.14,
+      "target_knee_margin_rad": 0.03,
+      "external_pd_dt_s": 0.002,
+      "estimator_dt_s": 0.005,
+      "policy_dt_s": 0.01,
+      "wheel_radius_m": 0.055,
+      "wheel_ratio": 15.88
+    },
+    "training_control": {
+      "wheel_kd": 0.1,
+      "target_knee_margin_rad": 0.03
+    },
+    "selection_scope": "development_only_9_regressions_and10matched40s_trials; no heldout used",
+    "control_retuned_after_training": true,
+    "no_more_tuning_from_heldout": true,
+    "real_robot_accepted": false
+  },
+  "checks": {
+    "development": {
+      "report": "reports/sample_weight/hardware_guarded_final_development_20261115.json",
+      "sha256": "2ba97203bca8d56c479fead54815b30692b77c814cf7d35a88189fe7b20b990b",
+      "checkpoint_sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+      "seed_scope": "development",
+      "primary_trials": 200,
+      "primary_passed": 200,
+      "tracking_metrics_eligible_primary_trials": 200,
+      "extra_protocols": 3,
+      "extra_passed": 3,
+      "physical_failures": 0,
+      "all_metrics_finite": true,
+      "strict_all_trials_passed": true,
+      "metrics": {
+        "point_vx_rmse_m_s": 0.012789827887499973,
+        "yaw_rate_rmse_rad_s": 0.03523779176644604,
+        "clearance_mae_m": 0.004880001697051723,
+        "worst_motor_saturation_fraction": 0.00025,
+        "minimum_reported_spring_margin_m": 0.0021624369860035186,
+        "worst_roll_p95_deg": 0.7856062809787527,
+        "worst_pitch_p95_deg": 2.9912672729376975
+      },
+      "classes": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            }
+          },
+          "total": 200,
+          "passed": 200,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9811546736227335,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "wheel_kd": 0.14,
+      "knee_margin_rad": 0.03
+    },
+    "heldout_nominal": {
+      "report": "reports/sample_weight/hardware_final_heldout_nominal_20261115.json",
+      "sha256": "7487d1de851bcdb21f3b512105803d1b6b6522331273dc170ea3217edb9af8a6",
+      "checkpoint_sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+      "seed_scope": "heldout",
+      "primary_trials": 200,
+      "primary_passed": 200,
+      "tracking_metrics_eligible_primary_trials": 200,
+      "extra_protocols": 3,
+      "extra_passed": 3,
+      "physical_failures": 0,
+      "all_metrics_finite": true,
+      "strict_all_trials_passed": true,
+      "metrics": {
+        "point_vx_rmse_m_s": 0.012790664545057126,
+        "yaw_rate_rmse_rad_s": 0.03523741036311802,
+        "clearance_mae_m": 0.004880078813819784,
+        "worst_motor_saturation_fraction": 0.00025,
+        "minimum_reported_spring_margin_m": 0.0021786849948035036,
+        "worst_roll_p95_deg": 0.7855885369461014,
+        "worst_pitch_p95_deg": 2.991274426651167
+      },
+      "classes": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            }
+          },
+          "total": 200,
+          "passed": 200,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9811546736227335,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "wheel_kd": 0.14,
+      "knee_margin_rad": 0.03
+    },
+    "heldout_dm_gain": {
+      "report": "reports/sample_weight/hardware_final_heldout_dm_20261115.json",
+      "sha256": "bf08528ed6731880360f2a353f22bbad93b49f67fb37a21c382c9b2c40fdbf60",
+      "checkpoint_sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+      "seed_scope": "heldout",
+      "primary_trials": 500,
+      "primary_passed": 500,
+      "tracking_metrics_eligible_primary_trials": 500,
+      "extra_protocols": 0,
+      "extra_passed": 0,
+      "physical_failures": 0,
+      "all_metrics_finite": true,
+      "strict_all_trials_passed": true,
+      "metrics": {
+        "point_vx_rmse_m_s": 0.015195404011007057,
+        "yaw_rate_rmse_rad_s": 0.04030119664397131,
+        "clearance_mae_m": 0.005615439246124859,
+        "worst_motor_saturation_fraction": 0.00025,
+        "minimum_reported_spring_margin_m": 0.0021937400310646504,
+        "worst_roll_p95_deg": 1.358990383203828,
+        "worst_pitch_p95_deg": 3.283788016664052
+      },
+      "classes": {
+        "dm_random_080_100": {
+          "classes": {
+            "stand": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            }
+          },
+          "total": 500,
+          "passed": 500,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9923756595384479,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "wheel_kd": 0.14,
+      "knee_margin_rad": 0.03
+    }
+  },
+  "nominal_reconstruction_heldout_passed": true,
+  "dm_gain_reconstruction_heldout_passed": true,
+  "request_scope": {
+    "nominal_vx_m_s": [
+      0,
+      0.15,
+      -0.15
+    ],
+    "nominal_wz_rad_s": [
+      0,
+      0.3,
+      -0.3
+    ],
+    "clearance_m": 0.1,
+    "extra_protocols": "specified 40s reversal/turning and fast-backward diagnostics"
+  },
+  "dm_gain_scope": "Independent four DM gains uniform0.8..1, held per episode; wheels1; exactly20% nominal cases; engineering hypothesis, not measured probability.",
+  "boundary": {
+    "trials": 63,
+    "passed": 51,
+    "all_completed": true,
+    "not_passing_commands": [
+      {
+        "vx": 0,
+        "wz": -2.5,
+        "trials": 3,
+        "passed": 0,
+        "failures": [],
+        "max_saturation": 0.00025
+      },
+      {
+        "vx": 0.15,
+        "wz": -2.5,
+        "trials": 3,
+        "passed": 0,
+        "failures": [],
+        "max_saturation": 0.0002
+      },
+      {
+        "vx": 0.3,
+        "wz": 1.2,
+        "trials": 3,
+        "passed": 0,
+        "failures": [],
+        "max_saturation": 0.00025
+      },
+      {
+        "vx": 0.3,
+        "wz": -2.5,
+        "trials": 3,
+        "passed": 0,
+        "failures": [],
+        "max_saturation": 0.0016
+      }
+    ]
+  },
+  "surveyed_pose_release_completed": 0,
+  "surveyed_pose_release_trials": 2,
+  "target_model_accepted": false,
+  "real_robot_accepted": false,
+  "original_PhysX_parity": false,
+  "not_claimed": [
+    "Unassisted startup from the supported surveyed pose",
+    "Full current-firmware high-speed/yaw request range",
+    "Joint friction, mass/inertia, spring-curve or combined domain-randomization robustness",
+    "MCU timing or physical robot balance"
+  ],
+  "additional_sensitivity_development": {
+    "report": "reports/sample_weight/hardware_final_sensitivity_20261115.json",
+    "sha256": "3295cb51ce3aafd50f5707f78092cba0c134f75da9eb62e355a2da64fbcb42dc",
+    "trials": 175,
+    "passed": 175,
+    "physical_failures": 0,
+    "conditions": {
+      "nominal": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      },
+      "dm_gain_080": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      },
+      "dm_gain_090": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      },
+      "friction_060": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      },
+      "friction_090": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      },
+      "spring_090": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      },
+      "spring_110": {
+        "classes": {
+          "stand": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "forward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "backward": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "left": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          },
+          "right": {
+            "trials": 5,
+            "completed": 5,
+            "passed": 5,
+            "rate": 1.0,
+            "wilson_95": [
+              0.5655175352168251,
+              1.0
+            ]
+          }
+        },
+        "total": 25,
+        "passed": 25,
+        "rate": 1.0,
+        "wilson_95": [
+          0.8668077490609515,
+          0.9999999999999999
+        ],
+        "point_rate_thresholds_met": true
+      }
+    },
+    "scope": "5 seeds/class x40s per fixed condition; effective friction0.6/0.9, constant spring force405/495N, uniform DM gains0.8/0.9; not spring curve identification or joint randomization acceptance"
+  }
+}

@@ -1,5 +1,7 @@
 # sample 权重离线工作交付
 
+> 最新状态：2026-11-12已获准运行Torch/MuJoCo/GPU及训练，并完成网络对拍和源模型短诊断，见[SAMPLE_WEIGHT_RUNTIME.md](SAMPLE_WEIGHT_RUNTIME.md)。本页以下为11-11历史记录；当前归档严格审计已发现换行与缺失项，不能沿用历史48/48结论。
+
 更新：2026-11-11 14:29（Asia/Hong_Kong）。当前仅为标准库数学与文件检查；不包含Torch推理、MuJoCo/GPU仿真或训练。
 
 ## 已交付

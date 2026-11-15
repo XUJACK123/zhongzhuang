@@ -1,0 +1,173 @@
+{
+  "checkpoint": "actor31.pt",
+  "sha256": "d2a0b74b97916bf7e09c6b25394e61c1285c658cb53dc77e72650a3a17b0bedc",
+  "sizes": [
+    31,
+    128,
+    64,
+    32,
+    6
+  ],
+  "activation": "ELU alpha=1, linear output",
+  "parameter_count": 14630,
+  "weights_are_exact_float32": true,
+  "observation_timing_source_parity": "pending: original legged_robot.py revision unavailable",
+  "hardware_parity": "pending calibration and source/golden-trace review",
+  "sources": {
+    "env_cfg.json": "d86acc6d8b8d881e5a7feb5d71f28c2f8e8899422132ff572e137d8db663998c",
+    "train_cfg.json": "b2e935a8b77d1c9adbef4b937222df6586f17325fc229b569ec2a82f8a6344dc",
+    "actuator_hardware.json": "ba7c40aa6634478e1f95b22648b697821110ec5ce54ded474e3d8f01774b7845",
+    "model_parameters.json": "30330d13cddffeb8b27959a93f072fc479d4085d54ba251d76934125d9a763c6"
+  },
+  "joint_order": [
+    "rf0_Joint",
+    "rf1_Joint",
+    "r_wheel_Joint",
+    "lf0_Joint",
+    "lf1_Joint",
+    "l_wheel_Joint"
+  ],
+  "default_q": [
+    3.1063109024878943,
+    -3.6606010515197696,
+    0.0,
+    -3.1063109024878943,
+    3.6606010515197696,
+    0.0
+  ],
+  "policy_dt": 0.01,
+  "generated_sha256": {
+    "model.c": "e502d35f78fc2fdb6ef7811da951a9212bc40a90c44a628a4adc454a79e6c355",
+    "model.h": "fe2d03efbaa0851431d8caa10c5a9c248dbe15630c7e7b628178b11e2d05102d",
+    "actor31.pt": "d2a0b74b97916bf7e09c6b25394e61c1285c658cb53dc77e72650a3a17b0bedc"
+  },
+  "target_knee_limits_rad": [
+    [
+      -3.6938299526359955,
+      -2.5592683579936732
+    ],
+    [
+      2.559268357993676,
+      3.6946676914733847
+    ]
+  ],
+  "physical_knee_limits_rad": [
+    -3.7238299526359953,
+    -2.55926835799367,
+    2.55926835799368,
+    3.7246676914733845
+  ],
+  "requires_chassis_state_guard_patch": true,
+  "source_training_checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000050.pt",
+  "source_training_checkpoint_sha256": "8a4921869318310409a51d27185ffa7a8e3f59cf481987ebbc307ac474e9e081",
+  "source_training_update": 50,
+  "environment_contract": {
+    "environment": "sample_commissioned_guarded_cpu31_v4",
+    "reward": "sample_hardware_tracking_effort_reward_v2",
+    "actuator_backend": "scalar_float64",
+    "action_knee_limits": [
+      [
+        -3.6938299526359955,
+        -2.5592683579936732
+      ],
+      [
+        2.559268357993676,
+        3.6946676914733847
+      ]
+    ],
+    "knee_margin_rad": 0.03,
+    "model_xml": "ded3a6bf59272c97ff5d3204bb54b2810808d1f613c501282ba04d3427b620c8",
+    "code": {
+      "envs/sample_env31.py": "2dfd62c61283de504849d1fe94db04bae2ec309af5beebb3d1d3364590fdeda9",
+      "learning/sample_ppo.py": "013f6111c9affad295a44cb48b357388d8ebe9351b135edccd192975fed77807",
+      "contracts/sample_actor31.py": "4dc7d43acade252b05f3297dc821aad854b5c32cbc79e3669e9d76ed1a61be07",
+      "transfer/sample_source.py": "e734e6a0fb72c328dd6085b3ff27d4d1be8e7a276aa048807bca9210791c7a6a",
+      "transfer/sample_checkpoint.py": "0af8eb1ee4736cc5ee437513a12e2a4dcd292e49c8a9e98c892cd98ebf540c0e",
+      "envs/sample_env31_hardware.py": "81187e1ea4402713173c8fd812773828f66d539fb3b8282064800c8f6b471b06",
+      "envs/sample_env31_hardware_fast.py": "c16cad8a63ab2b687918506eb3ef15a878625ac20aea679c4eef83870af9e41b",
+      "envs/sample_env31_hardware_guarded.py": "36c28f63145656129433d7e13b1f37c2964817c236d032ef14018ec0db3fa64e",
+      "transfer/sample_target.py": "3fcd1c914d125657485d6ea53d75d40fcb895f1762a9a472633856fb11c1fd29",
+      "envs/sample_env31_target.py": "6df5d4d87182604499b6be7c218072f9712059ba51bf03dbc60440343801dfc1"
+    },
+    "episode_steps": 2000,
+    "hardware_profile": {
+      "schema": "sample_commissioned_hardware_v1",
+      "date": "2026-11-15",
+      "wheel_radius_m": 0.055,
+      "wheel_ratio": 15.88,
+      "wheel_torque_cap_nm": 2.0,
+      "leg_torque_cap_nm": 20.0,
+      "external_pd_dt_s": 0.002,
+      "policy_dt_s": 0.01,
+      "natural_joint_pose_rad": [
+        3.1500981078,
+        -2.9896,
+        0,
+        -3.1500981078,
+        2.9896,
+        0
+      ],
+      "spring_force_n": 450.0,
+      "spring_stroke_m": 0.075,
+      "joint_effort_nm": [
+        40.0,
+        54.82787762486449,
+        2.4808354218880537,
+        40.0,
+        54.82787762486449,
+        2.4808354218880537
+      ],
+      "evidence": {
+        "wheel": "User confirmed 2026-11-15: 55 mm / 15.88 supersedes the older CAD-derived target profile.",
+        "control_and_caps": "chassis_ref_new/user/robot_config.h and user/algorithm/rl.c",
+        "natural_pose": "COMMISSIONING_LOG_20261113.md 23:55; surveyed supported pose, also near spring-driven resting position; not an unassisted equilibrium measurement.",
+        "motor_gain": "5.88/7.37 feedback-to-command suggests ~0.8; an uncertainty hypothesis, not calibrated torque.",
+        "spring": "progress.md 450 N nominal / 250 mm free / 75 mm stroke; force progression and friction unmeasured."
+      },
+      "limitations": [
+        "Wheel no-slip odometry and held 5 ms difference velocities ported from firmware; ideal encoder/gyro sensors, no transport delays/quantization or packet loss.",
+        "Serial equivalent linkage and archived inertias; no new inertia measurements.",
+        "Constant spring force, no measured breakaway or force-displacement curve.",
+        "Original Isaac/PhysX parity remains unavailable."
+      ],
+      "physics_dt_s": 0.001,
+      "estimator_dt_s": 0.005,
+      "firmware_target_knee_limits_rad": [
+        [
+          -4.296127953784042,
+          -2.5592683579936732
+        ],
+        [
+          2.559268357993676,
+          4.296127953784042
+        ]
+      ]
+    },
+    "reset_mode": "default",
+    "motor_gain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "spring_scale": 1.0,
+    "wheel_kd": 0.1,
+    "trainer_sha256": "ccc2793e6669f8dab8b6de03654b293171c5dc0f3a0683f3ebb4a722bcc7c69f"
+  },
+  "wheel_kd": 0.1,
+  "external_pd_dt_s": 0.002,
+  "estimator_dt_s": 0.005,
+  "source_exporter_sha256": "f730cbd51d19d64db3c2d9ee1283851160909219feefc6981692808cf0bca6b0",
+  "host_c_parity": {
+    "vectors": 256,
+    "max_abs_error": 2.86102294921875e-06,
+    "atol": 1e-05,
+    "rtol": 0.0001,
+    "passed": true
+  },
+  "physical_deployment_executed": false,
+  "real_robot_accepted": false,
+  "requires_control_parameter_sync": true
+}

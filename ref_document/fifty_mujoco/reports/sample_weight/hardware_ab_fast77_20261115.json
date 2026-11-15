@@ -1,0 +1,748 @@
+{
+  "tool": "hardware-parallel-command-evaluation",
+  "status": "reconstruction_evaluation",
+  "generated_at": "2026-11-14T19:44:14.768322+00:00",
+  "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000077.pt",
+  "checkpoint_sha256": "7063c647899e1d7aa906ef204ae1af77fbca09dd657b110a18b2d5279dea4321",
+  "suite": "nominal",
+  "backend": "scalar",
+  "seed_scope": "development",
+  "seed_base": 42000,
+  "duration_s": 40.0,
+  "seeds_per_class": 2,
+  "workers": 4,
+  "wheel_kd": 0.1,
+  "wall_seconds": 47.94874870199965,
+  "hardware_profile": {
+    "schema": "sample_commissioned_hardware_v1",
+    "date": "2026-11-15",
+    "wheel_radius_m": 0.055,
+    "wheel_ratio": 15.88,
+    "wheel_torque_cap_nm": 2.0,
+    "leg_torque_cap_nm": 20.0,
+    "external_pd_dt_s": 0.002,
+    "policy_dt_s": 0.01,
+    "natural_joint_pose_rad": [
+      3.1500981078,
+      -2.9896,
+      0,
+      -3.1500981078,
+      2.9896,
+      0
+    ],
+    "spring_force_n": 450.0,
+    "spring_stroke_m": 0.075,
+    "joint_effort_nm": [
+      40.0,
+      54.82787762486449,
+      2.4808354218880537,
+      40.0,
+      54.82787762486449,
+      2.4808354218880537
+    ],
+    "evidence": {
+      "wheel": "User confirmed 2026-11-15: 55 mm / 15.88 supersedes the older CAD-derived target profile.",
+      "control_and_caps": "chassis_ref_new/user/robot_config.h and user/algorithm/rl.c",
+      "natural_pose": "COMMISSIONING_LOG_20261113.md 23:55; surveyed supported pose, also near spring-driven resting position; not an unassisted equilibrium measurement.",
+      "motor_gain": "5.88/7.37 feedback-to-command suggests ~0.8; an uncertainty hypothesis, not calibrated torque.",
+      "spring": "progress.md 450 N nominal / 250 mm free / 75 mm stroke; force progression and friction unmeasured."
+    },
+    "limitations": [
+      "Wheel no-slip odometry and held 5 ms difference velocities ported from firmware; ideal encoder/gyro sensors, no transport delays/quantization or packet loss.",
+      "Serial equivalent linkage and archived inertias; no new inertia measurements.",
+      "Constant spring force, no measured breakaway or force-displacement curve.",
+      "Original Isaac/PhysX parity remains unavailable."
+    ],
+    "physics_dt_s": 0.001,
+    "estimator_dt_s": 0.005,
+    "firmware_target_knee_limits_rad": [
+      [
+        -4.296127953784042,
+        -2.5592683579936732
+      ],
+      [
+        2.559268357993676,
+        4.296127953784042
+      ]
+    ]
+  },
+  "implementation_sha256": {
+    "tools/sample_hardware_batch_evaluate.py": "fbb0de3a504f61e7e74dc8ed0e284d3011c9990a29f2c2e2bf9da277a2215fc7",
+    "tools/sample_hardware_evaluate.py": "08d5218e8c697d5e3b147d578958d7304e26926f594bc4d2bd0e2cc4996ef492",
+    "src/fifty_mujoco/envs/sample_env31_hardware.py": "81187e1ea4402713173c8fd812773828f66d539fb3b8282064800c8f6b471b06",
+    "configs/sample_hardware_profile.json": "7e5b8f83a6bad59a76c281e0928e8c91f350ff118dc082dd5030223ab2d5ec45",
+    "src/fifty_mujoco/envs/sample_env31_hardware_fast.py": "c16cad8a63ab2b687918506eb3ef15a878625ac20aea679c4eef83870af9e41b"
+  },
+  "summaries": {
+    "nominal": {
+      "classes": {
+        "stand": {
+          "trials": 2,
+          "completed": 2,
+          "passed": 2,
+          "rate": 1.0,
+          "wilson_95": [
+            0.34238022750665303,
+            1.0
+          ]
+        },
+        "forward": {
+          "trials": 2,
+          "completed": 2,
+          "passed": 2,
+          "rate": 1.0,
+          "wilson_95": [
+            0.34238022750665303,
+            1.0
+          ]
+        },
+        "backward": {
+          "trials": 2,
+          "completed": 2,
+          "passed": 2,
+          "rate": 1.0,
+          "wilson_95": [
+            0.34238022750665303,
+            1.0
+          ]
+        },
+        "left": {
+          "trials": 2,
+          "completed": 2,
+          "passed": 2,
+          "rate": 1.0,
+          "wilson_95": [
+            0.34238022750665303,
+            1.0
+          ]
+        },
+        "right": {
+          "trials": 2,
+          "completed": 2,
+          "passed": 2,
+          "rate": 1.0,
+          "wilson_95": [
+            0.34238022750665303,
+            1.0
+          ]
+        }
+      },
+      "total": 10,
+      "passed": 10,
+      "rate": 1.0,
+      "wilson_95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "point_rate_thresholds_met": true
+    }
+  },
+  "rows": [
+    {
+      "scenario": "backward",
+      "seed": 42080,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0379382389612585,
+        "point_vy_rmse_m_s": 0.019071696512468927,
+        "yaw_rate_rmse_rad_s": 0.0497233526607978,
+        "clearance_mae_m": 0.004594503551249574,
+        "roll_abs_p95_deg": 1.1913283169999822,
+        "pitch_abs_p95_deg": 2.9934139357546488,
+        "reference_position_rmse_m": 0.03180805778336826,
+        "reference_heading_mae_rad": 0.007178969628643359
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        4.550804392799885,
+        6.183457109565199,
+        26.57960873911773,
+        3.60888866636104,
+        5.480588393377033,
+        21.28007415775504
+      ],
+      "minimum_spring_margin_m": 0.0022006282521565,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "backward",
+      "seed": 42081,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03792383699864433,
+        "point_vy_rmse_m_s": 0.019079734190408867,
+        "yaw_rate_rmse_rad_s": 0.04962079118650102,
+        "clearance_mae_m": 0.004593895966816799,
+        "roll_abs_p95_deg": 1.1912528159890037,
+        "pitch_abs_p95_deg": 2.992544955469763,
+        "reference_position_rmse_m": 0.031721090005101385,
+        "reference_heading_mae_rad": 0.0071910175585314
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        4.026842307298658,
+        5.726129758190843,
+        23.850965124718627,
+        3.143988038227616,
+        4.853419379237572,
+        18.294933063683956
+      ],
+      "minimum_spring_margin_m": 0.0026060716034171094,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "forward",
+      "seed": 42040,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03868956829150879,
+        "point_vy_rmse_m_s": 0.01691916676040161,
+        "yaw_rate_rmse_rad_s": 0.07531931498632072,
+        "clearance_mae_m": 0.004957048333928117,
+        "roll_abs_p95_deg": 2.052140543079555,
+        "pitch_abs_p95_deg": 2.4430676661728037,
+        "reference_position_rmse_m": 0.09914508961859728,
+        "reference_heading_mae_rad": 0.017460376433863337
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        3.9432537635660974,
+        5.544657139819736,
+        28.247024698475933,
+        3.4835533258604525,
+        5.351397518998205,
+        26.46255919444797
+      ],
+      "minimum_spring_margin_m": 0.0029957327345195017,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "forward",
+      "seed": 42041,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03870573366506925,
+        "point_vy_rmse_m_s": 0.016993236089809582,
+        "yaw_rate_rmse_rad_s": 0.07539643910589383,
+        "clearance_mae_m": 0.004957754651282545,
+        "roll_abs_p95_deg": 2.0566838523940514,
+        "pitch_abs_p95_deg": 2.4417020040305992,
+        "reference_position_rmse_m": 0.09913961167842711,
+        "reference_heading_mae_rad": 0.017527883373367043
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        3.569268996296412,
+        5.441390695734244,
+        27.722557872024062,
+        3.3414892487634487,
+        4.8818672249069985,
+        24.770401560343448
+      ],
+      "minimum_spring_margin_m": 0.00301737965814744,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "left",
+      "seed": 42120,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03845827321169113,
+        "point_vy_rmse_m_s": 0.016457690289839594,
+        "yaw_rate_rmse_rad_s": 0.03570324148920484,
+        "clearance_mae_m": 0.004108642931020545,
+        "roll_abs_p95_deg": 0.922457364539531,
+        "pitch_abs_p95_deg": 3.5063970553673984,
+        "reference_position_rmse_m": 0.06917012753741061,
+        "reference_heading_mae_rad": 0.007684220926280884
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        2.6769342651048085,
+        4.036287995435272,
+        20.391742316593422,
+        2.2675317641301094,
+        3.64349348154591,
+        14.788628566050152
+      ],
+      "minimum_spring_margin_m": 0.0028373659537791474,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "left",
+      "seed": 42121,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03844067112503242,
+        "point_vy_rmse_m_s": 0.016470925413477406,
+        "yaw_rate_rmse_rad_s": 0.03583168292077819,
+        "clearance_mae_m": 0.004108498160846379,
+        "roll_abs_p95_deg": 0.9243660862209794,
+        "pitch_abs_p95_deg": 3.505578283671724,
+        "reference_position_rmse_m": 0.06915715548992046,
+        "reference_heading_mae_rad": 0.007692069599435536
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        2.6861954842897733,
+        4.035522630468693,
+        20.474820718050903,
+        2.3137582575782445,
+        3.6704856966967636,
+        14.827117665664103
+      ],
+      "minimum_spring_margin_m": 0.002520513546122427,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "right",
+      "seed": 42160,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.042177105635744554,
+        "point_vy_rmse_m_s": 0.01829939497303523,
+        "yaw_rate_rmse_rad_s": 0.09531129915116335,
+        "clearance_mae_m": 0.004824383745081608,
+        "roll_abs_p95_deg": 1.6509948700943986,
+        "pitch_abs_p95_deg": 2.2557951546792165,
+        "reference_position_rmse_m": 0.02822790295936087,
+        "reference_heading_mae_rad": 0.020529430234006583
+      },
+      "motor_saturation_fractions": [
+        0.00475,
+        0.0035,
+        0.00255,
+        0.0049,
+        0.00095,
+        0.00165
+      ],
+      "motor_max_speeds_rad_s": [
+        7.2894072409676,
+        16.74388370141678,
+        57.53287256852889,
+        6.517418216254883,
+        11.390516946576511,
+        45.32324038590406
+      ],
+      "minimum_spring_margin_m": 0.0017437385350509704,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "right",
+      "seed": 42161,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.04215534820091033,
+        "point_vy_rmse_m_s": 0.018516471983960888,
+        "yaw_rate_rmse_rad_s": 0.09199718433068571,
+        "clearance_mae_m": 0.004852366753130474,
+        "roll_abs_p95_deg": 1.669188929722552,
+        "pitch_abs_p95_deg": 2.257562237031234,
+        "reference_position_rmse_m": 0.011291955965956661,
+        "reference_heading_mae_rad": 0.02073529374546326
+      },
+      "motor_saturation_fractions": [
+        0.0021,
+        0.00145,
+        0.00055,
+        0.00225,
+        0.0004,
+        0.0004
+      ],
+      "motor_max_speeds_rad_s": [
+        7.3577400597212455,
+        16.041320098524203,
+        59.514871475006615,
+        5.277843156085367,
+        8.784469617630469,
+        35.14019525276863
+      ],
+      "minimum_spring_margin_m": 0.001939428050847375,
+      "max_settled_stop_drift_m": null,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "stand",
+      "seed": 42000,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03620640412607427,
+        "point_vy_rmse_m_s": 0.017041363394531172,
+        "yaw_rate_rmse_rad_s": 0.04543814923159683,
+        "clearance_mae_m": 0.004354406291987909,
+        "roll_abs_p95_deg": 1.3338947018119345,
+        "pitch_abs_p95_deg": 2.700701652026967,
+        "reference_position_rmse_m": 0.01869278059556015,
+        "reference_heading_mae_rad": 0.012005494039256043
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        3.1241231012577813,
+        4.69454775756451,
+        21.618034165977203,
+        2.607366926823413,
+        4.196860434077347,
+        18.745216632011495
+      ],
+      "minimum_spring_margin_m": 0.002988274276798042,
+      "max_settled_stop_drift_m": 0.025325844737379696,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    },
+    {
+      "scenario": "stand",
+      "seed": 42001,
+      "duration_s": 40.0,
+      "reset_mode": "default",
+      "motor_gain": 1.0,
+      "spring_scale": 1.0,
+      "friction": 0.75,
+      "initial_pose": [
+        0.0,
+        0.0,
+        0.27497620000000605,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        3.1063109024878943,
+        -3.6606010515197696,
+        0.0,
+        -3.1063109024878943,
+        3.6606010515197696,
+        0.0
+      ],
+      "wheel_kd": 0.1,
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03616597657112162,
+        "point_vy_rmse_m_s": 0.01700520555205299,
+        "yaw_rate_rmse_rad_s": 0.04556295118468973,
+        "clearance_mae_m": 0.004349688400132518,
+        "roll_abs_p95_deg": 1.3343342703520285,
+        "pitch_abs_p95_deg": 2.699991841080168,
+        "reference_position_rmse_m": 0.01851633995932251,
+        "reference_heading_mae_rad": 0.01201034647132411
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "motor_max_speeds_rad_s": [
+        3.124040377629567,
+        4.691283788773147,
+        21.615183772329093,
+        2.606569011419353,
+        4.198527268556161,
+        18.739303210585778
+      ],
+      "minimum_spring_margin_m": 0.0029587971350292785,
+      "max_settled_stop_drift_m": 0.02587880043735793,
+      "condition": "nominal",
+      "sampled_parameters": {}
+    }
+  ],
+  "adequate_nominal_protocol": false,
+  "adequate_random_protocol": false,
+  "all_conditions_point_rate_thresholds_met": true,
+  "real_robot_accepted": false,
+  "original_PhysX_parity": false,
+  "randomization_scope": null
+}

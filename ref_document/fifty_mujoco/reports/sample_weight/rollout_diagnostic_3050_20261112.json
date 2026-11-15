@@ -1,0 +1,724 @@
+{
+  "tool": "sample-rollout-diagnostic",
+  "schema": 1,
+  "generated_at": "2026-11-12T14:38:44+00:00",
+  "status": "diagnostic_only",
+  "checkpoint": "model_3050.pt",
+  "iteration": 3050,
+  "model_tensor_count": 17,
+  "actor_parameters": 14630,
+  "critic_restored": false,
+  "optimizer_restored": false,
+  "full_training_resume": false,
+  "checkpoint_sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11",
+  "completed": 25,
+  "trials": 25,
+  "duration_s": 10.0,
+  "V3_accepted": false,
+  "training_executed": false,
+  "randomization_enabled": false,
+  "initial_velocity_noise": 0.02,
+  "rows": [
+    {
+      "seed": 10000,
+      "command": [
+        0,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 1.5699670328896628e-05,
+        "yaw_rmse": 3.405538330458637e-05,
+        "clearance_mae": 0.002252554280715206,
+        "total_tilt_p95_deg": 2.232774922163333
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "stand"
+    },
+    {
+      "seed": 10001,
+      "command": [
+        0,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 2.6725019256709582e-05,
+        "yaw_rmse": 6.117355820189865e-05,
+        "clearance_mae": 0.0022514996605588517,
+        "total_tilt_p95_deg": 2.2327120471782633
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "stand"
+    },
+    {
+      "seed": 10002,
+      "command": [
+        0,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 2.394214468103745e-05,
+        "yaw_rmse": 5.418269604764327e-05,
+        "clearance_mae": 0.0022536387213631546,
+        "total_tilt_p95_deg": 2.233031248264392
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "stand"
+    },
+    {
+      "seed": 10003,
+      "command": [
+        0,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 2.495598192485864e-05,
+        "yaw_rmse": 5.6957192888293415e-05,
+        "clearance_mae": 0.002250446819236149,
+        "total_tilt_p95_deg": 2.2325336769849105
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "stand"
+    },
+    {
+      "seed": 10004,
+      "command": [
+        0,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 3.47438519471851e-05,
+        "yaw_rmse": 8.044888046186483e-05,
+        "clearance_mae": 0.0022530481552564636,
+        "total_tilt_p95_deg": 2.233067828484136
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "stand"
+    },
+    {
+      "seed": 10100,
+      "command": [
+        0.15,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.0003101406372579953,
+        "yaw_rmse": 0.0002217601098058818,
+        "clearance_mae": 0.0027642133054427004,
+        "total_tilt_p95_deg": 2.0262993284306368
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "forward"
+    },
+    {
+      "seed": 10101,
+      "command": [
+        0.15,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.0003098846040950516,
+        "yaw_rmse": 0.0002216953491635678,
+        "clearance_mae": 0.0027631469665886556,
+        "total_tilt_p95_deg": 2.0260528555708537
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "forward"
+    },
+    {
+      "seed": 10102,
+      "command": [
+        0.15,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.00030978316149590335,
+        "yaw_rmse": 0.0002212703331069891,
+        "clearance_mae": 0.0027610359953375895,
+        "total_tilt_p95_deg": 2.0255667413116623
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "forward"
+    },
+    {
+      "seed": 10103,
+      "command": [
+        0.15,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.0003098807083678662,
+        "yaw_rmse": 0.00022141237035575844,
+        "clearance_mae": 0.0027620040640724164,
+        "total_tilt_p95_deg": 2.0257902127809606
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "forward"
+    },
+    {
+      "seed": 10104,
+      "command": [
+        0.15,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.00030956209768406254,
+        "yaw_rmse": 0.00022097291188903553,
+        "clearance_mae": 0.0027584185967021745,
+        "total_tilt_p95_deg": 2.024964470499446
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "forward"
+    },
+    {
+      "seed": 10200,
+      "command": [
+        -0.05,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.0001143887068138139,
+        "yaw_rmse": 0.00017363605406541457,
+        "clearance_mae": 0.0020416521542891883,
+        "total_tilt_p95_deg": 2.3132766986256863
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "backward_ood"
+    },
+    {
+      "seed": 10201,
+      "command": [
+        -0.05,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.00011620200306612558,
+        "yaw_rmse": 0.00018100012827498255,
+        "clearance_mae": 0.0020414248861101193,
+        "total_tilt_p95_deg": 2.3132405654802466
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "backward_ood"
+    },
+    {
+      "seed": 10202,
+      "command": [
+        -0.05,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.00011196898719441635,
+        "yaw_rmse": 0.00016338501265587084,
+        "clearance_mae": 0.002042399165006507,
+        "total_tilt_p95_deg": 2.3133599446606192
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "backward_ood"
+    },
+    {
+      "seed": 10203,
+      "command": [
+        -0.05,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.00011082275054012361,
+        "yaw_rmse": 0.00015830194334453626,
+        "clearance_mae": 0.0020435538252771097,
+        "total_tilt_p95_deg": 2.313466203346635
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "backward_ood"
+    },
+    {
+      "seed": 10204,
+      "command": [
+        -0.05,
+        0,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.00012441782529506613,
+        "yaw_rmse": 0.00021232907746196925,
+        "clearance_mae": 0.0020378075821717062,
+        "total_tilt_p95_deg": 2.3129354908081003
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "backward_ood"
+    },
+    {
+      "seed": 10300,
+      "command": [
+        0,
+        0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.006171588948758636,
+        "yaw_rmse": 0.00025088773285242077,
+        "clearance_mae": 0.0032055281798879774,
+        "total_tilt_p95_deg": 2.686653078296547
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "left"
+    },
+    {
+      "seed": 10301,
+      "command": [
+        0,
+        0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.006142226665600383,
+        "yaw_rmse": 0.00025227300062986494,
+        "clearance_mae": 0.0032090379586356805,
+        "total_tilt_p95_deg": 2.6864775832142893
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "left"
+    },
+    {
+      "seed": 10302,
+      "command": [
+        0,
+        0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.006125305154932982,
+        "yaw_rmse": 0.0002515818911380879,
+        "clearance_mae": 0.003211088794935527,
+        "total_tilt_p95_deg": 2.6863777678757024
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "left"
+    },
+    {
+      "seed": 10303,
+      "command": [
+        0,
+        0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.006161418902765784,
+        "yaw_rmse": 0.0002502806844709111,
+        "clearance_mae": 0.003206767476527595,
+        "total_tilt_p95_deg": 2.6865940044664582
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "left"
+    },
+    {
+      "seed": 10304,
+      "command": [
+        0,
+        0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.006118523059293993,
+        "yaw_rmse": 0.0002537010609759214,
+        "clearance_mae": 0.0032118896385922913,
+        "total_tilt_p95_deg": 2.68633548771148
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "left"
+    },
+    {
+      "seed": 10400,
+      "command": [
+        0,
+        -0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.005135273557377392,
+        "yaw_rmse": 0.00019598473783702895,
+        "clearance_mae": 2.174126961196541e-05,
+        "total_tilt_p95_deg": 2.337906933613216
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "right"
+    },
+    {
+      "seed": 10401,
+      "command": [
+        0,
+        -0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.005289015302715923,
+        "yaw_rmse": 0.00016015941734484143,
+        "clearance_mae": 2.269376478669198e-05,
+        "total_tilt_p95_deg": 2.3476298041533203
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "right"
+    },
+    {
+      "seed": 10402,
+      "command": [
+        0,
+        -0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.005161836429334103,
+        "yaw_rmse": 0.0002078289108952236,
+        "clearance_mae": 2.1814165344640965e-05,
+        "total_tilt_p95_deg": 2.3395504884434493
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.001,
+        0.0,
+        0.0
+      ],
+      "scenario": "right"
+    },
+    {
+      "seed": 10403,
+      "command": [
+        0,
+        -0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.005206929516858701,
+        "yaw_rmse": 0.0001591660704856435,
+        "clearance_mae": 2.2065852326258843e-05,
+        "total_tilt_p95_deg": 2.3424180135551653
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "right"
+    },
+    {
+      "seed": 10404,
+      "command": [
+        0,
+        -0.3,
+        0.1
+      ],
+      "completed": true,
+      "elapsed_s": 10.000000000000153,
+      "first_failure": null,
+      "metrics_after_2s": {
+        "samples": 800,
+        "root_vx_rmse": 0.0051315417891488295,
+        "yaw_rmse": 0.00022775272569361635,
+        "clearance_mae": 2.1733853933959443e-05,
+        "total_tilt_p95_deg": 2.33759653417223
+      },
+      "motor_saturation_fraction": [
+        0.0,
+        0.0,
+        0.0,
+        0.0005,
+        0.0,
+        0.0
+      ],
+      "scenario": "right"
+    }
+  ],
+  "trace": {
+    "file": "rollout_diagnostic_3050_20261112.npz",
+    "sha256": "22fd964e5c90f17db1bc283e157886723ffbbae43171ae250a6462597fdca61d",
+    "columns": [
+      "time",
+      "qpos[13]",
+      "qvel[12]",
+      "applied_command[3]",
+      "action[6]",
+      "active_generalized_torque[6]",
+      "passive_generalized_torque[6]",
+      "spring_length[2]",
+      "clearance",
+      "tilt",
+      "action_start_observation[31]",
+      "end_joint_velocity_estimate[6]"
+    ],
+    "state_timestamp": "post-step; action/observation timestamp is step start; torque/length is last external PD update"
+  },
+  "limitations": [
+    "Original base environment revision/timing missing; finite differences reconstructed from local candidate.",
+    "MuJoCo contact parameters provisional; no PhysX response parity.",
+    "Root forward velocity metric; command-point offset not applied to velocity error.",
+    "Strict first failure; no automatic reset or duration stitching.",
+    "These diagnostic seeds are excluded from future acceptance sets."
+  ]
+}

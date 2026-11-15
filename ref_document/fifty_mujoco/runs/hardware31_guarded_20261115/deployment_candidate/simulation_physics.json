@@ -1,0 +1,919 @@
+{
+  "schema": "hardware_reconstruction_snapshot_v1",
+  "physics_dt_s": 0.001,
+  "external_pd_dt_s": 0.002,
+  "policy_dt_s": 0.01,
+  "estimator_dt_s": 0.005,
+  "hardware_profile": {
+    "schema": "sample_commissioned_hardware_v1",
+    "date": "2026-11-15",
+    "wheel_radius_m": 0.055,
+    "wheel_ratio": 15.88,
+    "wheel_torque_cap_nm": 2.0,
+    "leg_torque_cap_nm": 20.0,
+    "external_pd_dt_s": 0.002,
+    "policy_dt_s": 0.01,
+    "natural_joint_pose_rad": [
+      3.1500981078,
+      -2.9896,
+      0,
+      -3.1500981078,
+      2.9896,
+      0
+    ],
+    "spring_force_n": 450.0,
+    "spring_stroke_m": 0.075,
+    "joint_effort_nm": [
+      40.0,
+      54.82787762486449,
+      2.4808354218880537,
+      40.0,
+      54.82787762486449,
+      2.4808354218880537
+    ],
+    "evidence": {
+      "wheel": "User confirmed 2026-11-15: 55 mm / 15.88 supersedes the older CAD-derived target profile.",
+      "control_and_caps": "chassis_ref_new/user/robot_config.h and user/algorithm/rl.c",
+      "natural_pose": "COMMISSIONING_LOG_20261113.md 23:55; surveyed supported pose, also near spring-driven resting position; not an unassisted equilibrium measurement.",
+      "motor_gain": "5.88/7.37 feedback-to-command suggests ~0.8; an uncertainty hypothesis, not calibrated torque.",
+      "spring": "progress.md 450 N nominal / 250 mm free / 75 mm stroke; force progression and friction unmeasured."
+    },
+    "limitations": [
+      "Wheel no-slip odometry and held 5 ms difference velocities ported from firmware; ideal encoder/gyro sensors, no transport delays/quantization or packet loss.",
+      "Serial equivalent linkage and archived inertias; no new inertia measurements.",
+      "Constant spring force, no measured breakaway or force-displacement curve.",
+      "Original Isaac/PhysX parity remains unavailable."
+    ],
+    "physics_dt_s": 0.001,
+    "estimator_dt_s": 0.005,
+    "firmware_target_knee_limits_rad": [
+      [
+        -4.296127953784042,
+        -2.5592683579936732
+      ],
+      [
+        2.559268357993676,
+        4.296127953784042
+      ]
+    ]
+  },
+  "actuator_hardware": {
+    "schema_version": 1,
+    "supply_voltage_v": 24,
+    "wheel_diameter_m": 0.11,
+    "user_confirmed": {
+      "date": "2026-10-28",
+      "both_leg_motors_fixed_to_chassis": true,
+      "hip_external_ratio": 1.0,
+      "wheel_total_rotor_to_wheel_ratio": 15.88,
+      "wheel_controller": "C620",
+      "wheel_controller_current_limit_a": 20,
+      "target_profile_note": "2026-11-12 target profile derived from progress.md \u00a72.5; archive unchanged"
+    },
+    "linkage": {
+      "active_arm_m": 0.1134,
+      "passive_arm_m": 0.135,
+      "fixed_offsets_cancel": true,
+      "signed_branch": "-2*pi < alpha < 0, -pi < beta < 0; exclude coincident-arm endpoints",
+      "position_relation": "beta = alpha/2 + asin((113.4/135)*sin(alpha/2)); alpha = m_knee - m_hip",
+      "motor_angle_convention": "canonical output-arm angles; encoder zero offsets/signs still require hardware calibration"
+    },
+    "leg_motor": {
+      "model": "DAMIAO DM-J8009P-2EC",
+      "specification_shaft": "integrated 9:1 gearbox OUTPUT; never multiply these torque values by 9 again",
+      "internal_reduction_ratio": 9.0,
+      "rated_torque_nm": 20.0,
+      "peak_torque_nm": 40.0,
+      "rated_current_a": 20.0,
+      "peak_current_a": 40.0,
+      "rated_speed_rpm_at_24v": 100.0,
+      "no_load_speed_rpm_at_24v": 160.0,
+      "phase_resistance_ohm": 0.145,
+      "phase_inductance_h": 8e-05,
+      "pole_pairs": 21,
+      "mass_kg_catalog_only": 0.963,
+      "rotor_inertia_kg_m2": null,
+      "source_url": "https://www.mdmbot.com/index.php?c=show&id=105",
+      "parameter_image_url": "https://www.mdmbot.com/uploadfile/ueditor/image/202606/1781768522e6afa8.png",
+      "version_note": "Current manufacturer table: peak 40 A, about 963 g. Older V1.0 PDF says 50 A / 930 g. CAD mass is not overwritten."
+    },
+    "wheel_motor": {
+      "model": "DJI M3508 with built-in 3591/187 and 16T->19T chain",
+      "total_reduction_ratio": 15.88,
+      "controller": "C620",
+      "controller_current_limit_a": 20.0,
+      "reference_p19": {
+        "reduction_ratio_numerator": 3591,
+        "reduction_ratio_denominator": 187,
+        "rated_output_torque_nm": 3.0,
+        "rated_output_speed_rpm": 469.0,
+        "no_load_output_speed_rpm": 482.0,
+        "output_torque_constant_nm_a": 0.3,
+        "rated_esc_input_current_a": 10.0,
+        "stall_torque_nm": 4.5
+      },
+      "performance_model": "ratio_scaled_P19_proxy_assuming_same_rotor_and_equal_gearbox_efficiency",
+      "actual_gearbox_efficiency": null,
+      "actual_output_torque_calibrated": false,
+      "current_note": "20 A controller current limit is recorded, not equated to the manual's ESC input current or a continuous torque rating.",
+      "source_url": "https://cdn-hz.robomaster.com/robomasters/public/document/RoboMaster%20M3508%20P19%20Brushless%20DC%20Gear%20Motor%20V1.0.pdf"
+    },
+    "training_envelope": {
+      "mode": "rated_torque_only",
+      "speed_model": "constant rated torque up to rated speed, linear motoring taper to no-load speed; braking retains rated cap",
+      "peak_torque_enabled": false,
+      "thermal_model_calibrated": false,
+      "gearbox_losses_calibrated": false,
+      "reflected_rotor_inertia_calibrated": false
+    },
+    "hip_continuous": true,
+    "range_policy": {
+      "knee": "gas spring length feasible interval intersected with red assembly branch",
+      "hip": "continuous",
+      "new_linkage_collision_checks": false,
+      "source": "User correction on 2026-10-28"
+    }
+  },
+  "effective_motor_envelope": {
+    "leg_torque_nm": 20.0,
+    "leg_rated_rad_s": 10.471975511965978,
+    "leg_no_load_rad_s": 16.755160819145562,
+    "wheel_torque_nm": 2.0,
+    "wheel_rated_rad_s": 59.39156388746934,
+    "wheel_no_load_rad_s": 61.03781192699408
+  },
+  "gas_spring_resolved": {
+    "enabled": true,
+    "geometry_confirmed": false,
+    "model_label": "1BKB0.45-75",
+    "reported_dimensions": {
+      "nominal_force_n": 450.0,
+      "stroke_m": 0.075,
+      "free_length_m": 0.25,
+      "compressed_length_m": 0.175,
+      "nominal_force_reference_length_m": 0.227760939,
+      "note": "Target 1BKB0.45-75 values from progress.md \u00a72.4; anchors retained from the archived resolved geometry.",
+      "length_definition": "bare nitrogen spring, excludes robot mounting adapters"
+    },
+    "installation_measurements": {
+      "status": "Planar mounting dimensions transcribed from supplied CAD. Full-extension interpretation supplied by user. Lateral anchor offsets and mirror assumption remain unverified.",
+      "leg_side": null,
+      "measurement_frame": "Screenshot +Y downward, +Z left; planar mapping to training +X right, +Z up. Out-of-plane coordinate not supplied.",
+      "thigh_anchor_from_hip": {
+        "distance_m": 0.051,
+        "abs_delta_y_m": 0.03642,
+        "abs_delta_z_m": 0.03571,
+        "delta_x_m": null,
+        "source_image": "model-revisions/gas-spring-450-080/evidence/upper-anchor.jpg",
+        "signed_screenshot_dy_m": 0.03642,
+        "signed_screenshot_dz_m": -0.03571
+      },
+      "shin_anchor_from_knee": {
+        "distance_m": 0.04863,
+        "abs_delta_y_m": 0.04582,
+        "abs_delta_z_m": 0.0163,
+        "delta_x_m": null,
+        "source_image": "model-revisions/gas-spring-450-080/evidence/lower-anchor.jpg",
+        "signed_screenshot_dy_m": 0.04582,
+        "signed_screenshot_dz_m": -0.0163
+      },
+      "note": "Target profile reuses the archived URDF link-frame anchors; local CAD pin distances agree within 0.25 mm but lateral offsets remain unverified.",
+      "urdf_reference_vectors": {
+        "source": "solidwork_graph/fifty_version_with_meshes/urdf/fifty_version_with_meshes.urdf",
+        "frame": "source base_link; source URDF q=0 (exported assembly pose); not yet matched to screenshot measurement frame",
+        "vectors": {
+          "right": {
+            "hip_to_knee_base_mm": [
+              11.5,
+              -97.834122,
+              185.818418
+            ],
+            "knee_to_wheel_base_mm": [
+              -44.6,
+              120.699468,
+              218.932954
+            ]
+          },
+          "left": {
+            "hip_to_knee_base_mm": [
+              -12.045534,
+              -97.834122,
+              185.818418
+            ],
+            "knee_to_wheel_base_mm": [
+              52.55,
+              120.699468,
+              218.932954
+            ]
+          }
+        }
+      },
+      "planar_frame_mapping": {
+        "screenshot_positive_y": "source_base_positive_z",
+        "screenshot_positive_z": "source_base_negative_y",
+        "evidence_images": [
+          "model-revisions/gas-spring-450-080/evidence/thigh-dimensions.jpg",
+          "model-revisions/gas-spring-450-080/evidence/shin-dimensions.jpg"
+        ],
+        "note": "Inferred planar mapping; side and lateral mounting offsets remain unverified. No geometry derived from image pixel scale."
+      },
+      "training_link_anchor_candidates": {
+        "right": {
+          "parent_anchor_m_candidate": [
+            0.015589763279096669,
+            -0.048565211632419863,
+            1.271597503606669e-16
+          ],
+          "child_anchor_m_candidate": [
+            0.04799563714115221,
+            0.007847369968011586,
+            1.5997967494579236e-16
+          ],
+          "length_m_if_zero_anchor_lateral_offsets": 0.22801022999909107
+        },
+        "left": {
+          "parent_anchor_m_candidate": [
+            0.015589763279096103,
+            0.04856521163242004,
+            1.271597503606669e-16
+          ],
+          "child_anchor_m_candidate": [
+            0.04799563714115229,
+            -0.007847369968011051,
+            1.5997967494579236e-16
+          ],
+          "length_m_if_zero_anchor_lateral_offsets": 0.22803839560766062
+        }
+      },
+      "stroke_consistency": {
+        "reference_pose_state": "fully extended, per user clarification on 2026-10-28",
+        "planar_extended_hole_distance_m": 0.2277200364136602,
+        "planar_compressed_hole_distance_m": 0.14772003641366022,
+        "bare_extended_length_m": 0.205,
+        "bare_compressed_length_m": 0.125,
+        "status": "Installed hole distances include adapters. 3D values retain unmeasured lateral-offset assumptions.",
+        "per_leg_model": [
+          {
+            "joint": "rf1_Joint",
+            "parent_link": "r0_link",
+            "child_link": "r1_link",
+            "parent_anchor_world_m": [
+              0.035710000000000006,
+              -0.22769776695296415,
+              -0.03642
+            ],
+            "child_anchor_world_m": [
+              -0.08153412215609407,
+              -0.21619776695297793,
+              -0.23163841819891282
+            ],
+            "planar_extended_hole_distance_m": 0.2277200364136602,
+            "modeled_lateral_separation_m": 0.011499999999986216,
+            "modeled_extended_hole_distance_m": 0.2280102299990911,
+            "modeled_compressed_hole_distance_m": 0.14801022999909108,
+            "implied_adapter_axial_length_m": 0.02301022999909111,
+            "original_joint_limits_rad": [
+              -3.2592683579936743,
+              -1.8592683579936746
+            ],
+            "corrected_joint_limits_rad": [
+              -4.296127953784042,
+              -2.5592683579936732
+            ],
+            "stroke_analysis": {
+              "geometric_min_length_m": 0.15218661647507928,
+              "geometric_max_length_m": 0.24928276797930607,
+              "compression_stop_reachable": false,
+              "branch_margin_rad": 0.001,
+              "feasible_intervals_rad": [
+                [
+                  -4.71138898038469,
+                  -2.5592683579936732
+                ]
+              ],
+              "endpoint_lengths_m": [
+                0.15240021881113527,
+                0.22801022999909115
+              ],
+              "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop.",
+              "spring_only_joint_interval_rad": [
+                -4.71138898038469,
+                -2.5592683579936732
+              ],
+              "combined_joint_interval_rad": [
+                -4.296127953784042,
+                -2.5592683579936732
+              ],
+              "minimum_knee_included_angle_deg": 23.85,
+              "combined_endpoint_lengths_m": [
+                0.15567545323287355,
+                0.22801022999909115
+              ]
+            }
+          },
+          {
+            "joint": "lf1_Joint",
+            "parent_link": "l0_link",
+            "child_link": "l1_link",
+            "parent_anchor_world_m": [
+              0.03570999999999999,
+              0.22769776695296415,
+              -0.036419999999999994
+            ],
+            "child_anchor_world_m": [
+              -0.08153412215609435,
+              0.21565223304703152,
+              -0.23163841819890812
+            ],
+            "planar_extended_hole_distance_m": 0.22772003641365632,
+            "modeled_lateral_separation_m": 0.012045533905932632,
+            "modeled_extended_hole_distance_m": 0.22803839560766062,
+            "modeled_compressed_hole_distance_m": 0.14803839560766063,
+            "implied_adapter_axial_length_m": 0.023038395607660633,
+            "original_joint_limits_rad": [
+              1.859268357993675,
+              3.259268357993675
+            ],
+            "corrected_joint_limits_rad": [
+              2.559268357993676,
+              4.296127953784042
+            ],
+            "stroke_analysis": {
+              "geometric_min_length_m": 0.15222881173158762,
+              "geometric_max_length_m": 0.24930853033641306,
+              "compression_stop_reachable": false,
+              "branch_margin_rad": 0.001,
+              "feasible_intervals_rad": [
+                [
+                  2.559268357993676,
+                  4.71138898038469
+                ]
+              ],
+              "endpoint_lengths_m": [
+                0.22803839560766062,
+                0.1524423549436318
+              ],
+              "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop.",
+              "spring_only_joint_interval_rad": [
+                2.559268357993676,
+                4.71138898038469
+              ],
+              "combined_joint_interval_rad": [
+                2.559268357993676,
+                4.296127953784042
+              ],
+              "minimum_knee_included_angle_deg": 23.85,
+              "combined_endpoint_lengths_m": [
+                0.22803839560766062,
+                0.15571670310643865
+              ]
+            }
+          }
+        ]
+      },
+      "user_clarification": "2026-10-28: \u6c14\u5f39\u7c2745.080\uff0c\u7ed9\u7684\u56fe\u662f\u4f38\u957f\u72b6\u6001\u3002This revision interprets \u4f38\u957f\u72b6\u6001 as the full-extension stop."
+    },
+    "springs": [
+      {
+        "joint": "rf1_Joint",
+        "parent_anchor_m": [
+          0.015589763279096669,
+          -0.048565211632419863,
+          0.0
+        ],
+        "child_anchor_m": [
+          0.04799563714115221,
+          0.007847369968011586,
+          0.0
+        ],
+        "min_length_m": 0.175,
+        "max_length_m": 0.25,
+        "reference_length_m": 0.227760939,
+        "reference_force_n": 450.0,
+        "rod_diameter_m": 0.006,
+        "reference_gas_volume_m3": null,
+        "polytropic_exponent": 1.0,
+        "ambient_pressure_pa": 101325.0,
+        "viscous_damping_ns_m": 0.0,
+        "force_model": "nominal_constant",
+        "joint_origin_m": [
+          0.209999999999999,
+          0.0,
+          0.0114999999999869
+        ],
+        "joint_yaw_rad": 1.5707963267949,
+        "stroke_m": 0.075,
+        "length_limit_tolerance_m": 0.002
+      },
+      {
+        "joint": "lf1_Joint",
+        "parent_anchor_m": [
+          0.015589763279096103,
+          0.04856521163242004,
+          0.0
+        ],
+        "child_anchor_m": [
+          0.04799563714115229,
+          -0.007847369968011051,
+          0.0
+        ],
+        "min_length_m": 0.175,
+        "max_length_m": 0.25,
+        "reference_length_m": 0.227760939,
+        "reference_force_n": 450.0,
+        "rod_diameter_m": 0.006,
+        "reference_gas_volume_m3": null,
+        "polytropic_exponent": 1.0,
+        "ambient_pressure_pa": 101325.0,
+        "viscous_damping_ns_m": 0.0,
+        "force_model": "nominal_constant",
+        "joint_origin_m": [
+          0.209999999999995,
+          0.0,
+          0.0120455339059333
+        ],
+        "joint_yaw_rad": -1.5707963267949,
+        "stroke_m": 0.075,
+        "length_limit_tolerance_m": 0.002
+      }
+    ],
+    "manufacturer_datasheet": {
+      "source_image": "model-revisions/gas-spring-450-080/evidence/datasheet.jpg",
+      "catalog_model": "BKB0.45-080-205",
+      "spring_type": "nitrogen die spring (rod insertion compresses sealed gas)",
+      "nominal_force_n": 450.0,
+      "rod_diameter_m": 0.006,
+      "body_outer_diameter_m": 0.012,
+      "stroke_m": 0.08,
+      "bare_extended_length_m": 0.205,
+      "bare_compressed_length_m": 0.125,
+      "mounting_adapter_total_axial_offset_m": null,
+      "force_curve": {
+        "pressure_labels_mpa": [
+          9,
+          12,
+          15
+        ],
+        "horizontal_axis_range": [
+          0,
+          100
+        ],
+        "horizontal_axis_unit": null,
+        "status": "Series chart retained; not fitted or used by the nominal_constant approximation."
+      },
+      "max_charging_pressure_pa": 18000000.0,
+      "min_charging_pressure_pa": 2500000.0,
+      "max_working_speed_m_s": 1.2,
+      "working_temperature_c": [
+        -20,
+        80
+      ],
+      "temperature_pressure_change_fraction_per_c": 0.003,
+      "recommended_cycles_per_min": [
+        6,
+        50
+      ]
+    },
+    "geometry_approximation": "Planar mounting directions inferred from supplied SW dimensions and source URDF pose; left/right mirrored, unmeasured anchor lateral offsets set to zero in each link frame. Requires hardware calibration.",
+    "simulation_fidelity": {
+      "force_model": "nominal_constant",
+      "description": "450 N nominal constant push force with posture-dependent lever arm; target 75 mm stroke.",
+      "physical_stroke_enforced": true,
+      "reason": "Compression stop at 175 mm is enforced as a knee joint stop in the target MJCF. The 250 mm extension end is unreachable (geometric maximum about 249.3 mm). Force progression remains uncalibrated."
+    }
+  },
+  "action_target_knee_limits_rad": [
+    [
+      -3.6938299526359955,
+      -2.5592683579936732
+    ],
+    [
+      2.559268357993676,
+      3.6946676914733847
+    ]
+  ],
+  "physical_knee_limits_rad": [
+    [
+      -3.7238299526359953,
+      -2.55926835799367
+    ],
+    [
+      2.55926835799368,
+      3.7246676914733845
+    ]
+  ],
+  "source_reset_environment": {
+    "asset": {
+      "angular_damping": 0.0,
+      "armature": 0.0,
+      "collapse_fixed_joints": false,
+      "default_dof_drive_mode": 3,
+      "density": 0.001,
+      "disable_gravity": false,
+      "dof_armature": {
+        "f0": 0.0,
+        "f1": 0.0,
+        "wheel": 0.0
+      },
+      "file": "/home/rl/training-runs/jobs/20261030-163843_round45_yaw250_level30_16384/project/solidwork_graph/fifty_version_training/urdf/fifty_training.urdf",
+      "fix_base_link": false,
+      "flip_visual_attachments": false,
+      "foot_name": "wheel",
+      "l1": 0.2099999999999949,
+      "l2": 0.2500000000000073,
+      "linear_damping": 0.0,
+      "max_angular_velocity": 1000.0,
+      "max_linear_velocity": 1000.0,
+      "name": "fifty",
+      "offset": 0.0,
+      "penalize_contacts_on": [
+        "base_link",
+        "0_link",
+        "1_link"
+      ],
+      "recompute_inertia": false,
+      "replace_cylinder_with_capsule": false,
+      "self_collisions": 0,
+      "slices_per_cylinder": 32,
+      "terminate_after_contacts_on": [
+        "base_link"
+      ],
+      "thickness": 0.001
+    },
+    "commands": {
+      "advanced_max_curriculum": 1.5,
+      "basic_max_curriculum": 2.5,
+      "curriculum": false,
+      "curriculum_threshold": 0.7,
+      "heading_command": false,
+      "num_commands": 3,
+      "ranges": {
+        "ang_vel_yaw": [
+          -2.5,
+          2.5
+        ],
+        "heading": [
+          -3.14,
+          3.14
+        ],
+        "height": [
+          0.1,
+          0.1
+        ],
+        "lin_vel_x": [
+          0.1,
+          0.3
+        ]
+      },
+      "resampling_time": 5.0
+    },
+    "control": {
+      "action_scale": 0.5,
+      "control_type": "P",
+      "damping": {
+        "f0": 2.0,
+        "f1": 2.0,
+        "wheel": 0.3
+      },
+      "decimation": 5,
+      "hip_action_limit": 1.0,
+      "pos_action_scale": 0.5,
+      "stiffness": {
+        "f0": 40.0,
+        "f1": 60.0,
+        "wheel": 0.0
+      },
+      "vel_action_scale": 20.0,
+      "wheel_action_limit": 2.0
+    },
+    "domain_rand": {
+      "added_mass_range": [
+        -1.0,
+        2.0
+      ],
+      "com_nominal_stride": 0,
+      "delay_ms_range": [
+        0,
+        10
+      ],
+      "friction_range": [
+        0.6,
+        1.4
+      ],
+      "max_push_vel_xy": 2.0,
+      "push_interval": 701.0,
+      "push_interval_s": 7,
+      "push_robots": false,
+      "rand_com_vec": [
+        0.02,
+        0.02,
+        0.02
+      ],
+      "randomize_Kd": false,
+      "randomize_Kd_range": [
+        0.95,
+        1.05
+      ],
+      "randomize_Kp": false,
+      "randomize_Kp_range": [
+        0.95,
+        1.05
+      ],
+      "randomize_action_delay": false,
+      "randomize_base_com": false,
+      "randomize_base_mass": false,
+      "randomize_default_dof_pos": false,
+      "randomize_default_dof_pos_range": [
+        -0.03,
+        0.03
+      ],
+      "randomize_friction": false,
+      "randomize_inertia": false,
+      "randomize_inertia_range": [
+        0.9,
+        1.1
+      ],
+      "randomize_motor_torque": false,
+      "randomize_motor_torque_range": [
+        0.95,
+        1.05
+      ],
+      "randomize_restitution": false,
+      "restitution_range": [
+        0.0,
+        0.1
+      ]
+    },
+    "env": {
+      "clearance_box_center": [
+        0.0,
+        -0.0125477663569256,
+        0.0482748097777482
+      ],
+      "clearance_box_halfsize": [
+        0.310998857021332,
+        0.1964250057935715,
+        0.2232509031891825
+      ],
+      "clearance_control": true,
+      "command_endpoint_probability": 0.5,
+      "command_slew_rates": [
+        1.5,
+        6.283185307179586,
+        0.12
+      ],
+      "dof_vel_use_pos_diff": true,
+      "env_spacing": 3.0,
+      "episode_length_s": 40.0,
+      "fail_to_terminal_time_s": 0.1,
+      "initial_velocity_noise": 0.02,
+      "mixed_motion_holds": false,
+      "motion_hold_resamples": 3,
+      "motion_reference_offset_xy_m": [
+        -0.07828434314112345,
+        0.003702250000000018
+      ],
+      "native_contact_materials": {
+        "version": 1,
+        "combine": "average",
+        "robot_sliding_friction": 1.0,
+        "ground_sliding_friction": 0.5,
+        "source": "Imported nominal PhysX shape properties and configured plane; solver sliding test verified average"
+      },
+      "num_actions": 6,
+      "num_envs": 16384,
+      "num_observations": 31,
+      "num_privileged_obs": 147,
+      "obs_history_dec": 1,
+      "obs_history_length": 5,
+      "parameter_randomization": null,
+      "pose_feedback_reward": null,
+      "push_duration_s": 0.2,
+      "push_force_n": 0.0,
+      "push_interval_s": 5.0,
+      "push_yaw_torque_nm": 0.0,
+      "random_pulses": null,
+      "recovery_task": null,
+      "reference_observations": true,
+      "se2_reference": true,
+      "send_timeouts": true,
+      "standing_fraction": 0.2,
+      "straight_fraction": 0.1,
+      "training_command_slew": true,
+      "turn_fraction": 0.2,
+      "wheel_alignment": {
+        "scale_m": 0.02,
+        "settle_s": 0.5,
+        "definition": "Right minus left wheel center in chassis forward axis; squared normalized distance.",
+        "gating": "Zero yaw and nonnegative forward request unchanged for >=0.5 s; after first stable get-up if applicable."
+      }
+    },
+    "init_member_classes": {},
+    "init_state": {
+      "ang_vel": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "default_joint_angles": {
+        "rf0_Joint": 3.1063109024878943,
+        "rf1_Joint": -3.6606010515197696,
+        "r_wheel_Joint": 0.0,
+        "lf0_Joint": -3.1063109024878943,
+        "lf1_Joint": 3.6606010515197696,
+        "l_wheel_Joint": 0.0
+      },
+      "lin_vel": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pos": [
+        0.0,
+        0.0,
+        0.2749762
+      ],
+      "rot": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "noise": {
+      "add_noise": false,
+      "noise_level": 1.0,
+      "noise_scales": {
+        "ang_vel": 0.2,
+        "dof_pos": 0.02,
+        "dof_vel": 1.5,
+        "gravity": 0.05,
+        "height_measurements": 0.1,
+        "lin_vel": 0.1
+      }
+    },
+    "normalization": {
+      "clip_actions": 2.0,
+      "clip_observations": 100.0,
+      "obs_scales": {
+        "ang_vel": 0.25,
+        "dof_acc": 0.0025,
+        "dof_pos": 1.0,
+        "dof_vel": 0.05,
+        "height_measurements": 5.0,
+        "lin_vel": 2.0,
+        "torque": 0.05
+      }
+    },
+    "rewards": {
+      "base_height_target": 0.1,
+      "clip_single_reward": 10.0,
+      "height_tracking_dense_weight_m_inv": 10.0,
+      "height_tracking_variance_m2": 0.000225,
+      "max_contact_force": 100.0,
+      "moving_yaw_tracking_weight": 0.2,
+      "only_positive_rewards": false,
+      "reference_position_error_scale_m": 0.1,
+      "scales": {
+        "action_rate": -0.005,
+        "action_smooth": -0.005,
+        "alive": 1.5,
+        "ang_vel_xy": -0.1,
+        "base_height": 2.0,
+        "collision": -0.5,
+        "dof_acc": -1e-07,
+        "dof_pos_limits": -1.0,
+        "dof_vel": -1e-05,
+        "heading": 2.0,
+        "lin_vel_z": -0.1,
+        "nominal_state": 0.0,
+        "orientation": -30.0,
+        "reference_position": 1.5,
+        "reference_velocity": 1.5,
+        "termination": -10.0,
+        "torques": -1e-05,
+        "tracking_ang_vel": 0.0,
+        "tracking_ang_vel_enhance": 0.0,
+        "tracking_lin_vel": 0.0,
+        "tracking_lin_vel_enhance": 0.0,
+        "upright": 3.0,
+        "wheel_alignment": -0.5,
+        "yaw_rate": -10.0
+      },
+      "soft_dof_pos_limit": 0.97,
+      "soft_dof_vel_limit": 1.0,
+      "soft_torque_limit": 1.0,
+      "tracking_sigma": 0.25,
+      "upright_sharpness": 50.0
+    },
+    "seed": 1,
+    "sim": {
+      "dt": 0.005,
+      "gravity": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "physx": {
+        "bounce_threshold_velocity": 0.5,
+        "contact_collection": 2,
+        "contact_offset": 0.002,
+        "default_buffer_size_multiplier": 5,
+        "max_depenetration_velocity": 1.0,
+        "max_gpu_contact_pairs": 8388608,
+        "num_position_iterations": 8,
+        "num_threads": 10,
+        "num_velocity_iterations": 1,
+        "rest_offset": 0.0,
+        "solver_type": 1
+      },
+      "substeps": 2,
+      "up_axis": 1
+    },
+    "termination": {
+      "contact_force_n": 10.0,
+      "max_tilt_deg": 60.0,
+      "min_base_height_m": 0.15
+    },
+    "terrain": {
+      "border_size": 25,
+      "curriculum": false,
+      "dynamic_friction": 0.5,
+      "horizontal_scale": 0.1,
+      "max_init_terrain_level": 5,
+      "measure_heights": true,
+      "measured_points_x": [
+        -0.5,
+        -0.4,
+        -0.3,
+        -0.2,
+        -0.1,
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5
+      ],
+      "measured_points_y": [
+        -0.3,
+        -0.2,
+        -0.1,
+        0.0,
+        0.1,
+        0.2,
+        0.3
+      ],
+      "mesh_type": "plane",
+      "num_cols": 20,
+      "num_rows": 10,
+      "restitution": 0.0,
+      "selected": false,
+      "slope_treshold": 0.75,
+      "static_friction": 0.5,
+      "terrain_kwargs": null,
+      "terrain_length": 8.0,
+      "terrain_proportions": [
+        0.2,
+        0.2,
+        0.2,
+        0.1,
+        0.2,
+        0.1
+      ],
+      "terrain_width": 8.0,
+      "vertical_scale": 0.005
+    },
+    "viewer": {
+      "lookat": [
+        0,
+        0,
+        0
+      ],
+      "pos": [
+        0,
+        -2,
+        1
+      ],
+      "ref_env": 0
+    },
+    "target_profile": {
+      "schema": "sample_target_profile_v1",
+      "wheel_radius_m": 0.055,
+      "wheel_total_ratio": 15.88,
+      "knee_stop_rad": {
+        "rf1_Joint": -3.7238299526359953,
+        "lf1_Joint": 3.7246676914733845
+      }
+    }
+  },
+  "default_q": [
+    3.1063109024878943,
+    -3.6606010515197696,
+    0.0,
+    -3.1063109024878943,
+    3.6606010515197696,
+    0.0
+  ],
+  "code_required": "XML alone does not apply gas spring/actuator forces or the training reset pose; use the matching environment code."
+}

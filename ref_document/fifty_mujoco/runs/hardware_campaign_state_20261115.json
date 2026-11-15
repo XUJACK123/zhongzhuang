@@ -1,0 +1,39 @@
+{
+  "status": "completed_authorized_training_and_reconstruction_validation",
+  "completed_at_shanghai": "2026-11-15T05:17:00.804386+08:00",
+  "deadline_shanghai": "2026-11-15T06:23:45+08:00",
+  "training_seconds": 3964.873266889,
+  "training_budget_seconds": 14400,
+  "all_training_stopped": true,
+  "active_training": null,
+  "pending_software_work": [],
+  "selected_checkpoint": "runs/hardware31_guarded_20261115/update_000100.pt",
+  "selected_sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+  "deployment_control": {
+    "wheel_kd": 0.14,
+    "knee_target_margin_rad": 0.03
+  },
+  "training_control": {
+    "wheel_kd": 0.1,
+    "knee_target_margin_rad": 0.03
+  },
+  "final_acceptance": "reports/sample_weight/hardware_final_acceptance_20261115.json",
+  "heldout_nominal_passed": 203,
+  "heldout_dm_gain_passed": 500,
+  "additional_sensitivity_passed": 175,
+  "full_tests": {
+    "passed": 365,
+    "skipped": 11
+  },
+  "candidate_bundle": "runs/hardware31_guarded_20261115/deployment_candidate",
+  "candidate_archive": "runs/hardware31_guarded_20261115/deployment_candidate.zip",
+  "unresolved_physical_scope": [
+    "Surveyed-pose unassisted startup still fails in simulation",
+    "Real robot balance not validated",
+    "ARM cross compiler unavailable; MCU build/timing not verified",
+    "High-speed/yaw command envelope not fully passing"
+  ],
+  "reference_firmware_unchanged": true,
+  "archived_weights_unchanged": true,
+  "hardware_accessed": false
+}

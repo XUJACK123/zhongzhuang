@@ -29,6 +29,9 @@ PROJECT = Path(__file__).resolve().parents[1]
 WORKSPACE = PROJECT.parents[1]
 MAX_ENTRY_BYTES = 32 * 1024 * 1024
 FLOAT_STORAGE = "symbolic_torch_float32_storage"
+TEXT_SUFFIXES = {".py", ".json", ".md", ".txt", ".yaml", ".yml", ".xml",
+                 ".urdf", ".srdf", ".sdf", ".launch", ".csv", ".log"}
+CONTENT_MATCH_STATUSES = {"raw_match", "lf_match", "crlf_match"}
 
 
 @dataclasses.dataclass(frozen=True)
@@ -106,14 +109,28 @@ def inside(base: Path, relative: str) -> Path:
 
 def compare_file(path: Path, expected: dict) -> dict:
     if not path.is_file():
-        return {"status": "missing"}
+        return {"status": "missing", "expected_sha256": expected["sha256"],
+                "expected_bytes": expected.get("bytes")}
     raw = path.read_bytes()
     digest = sha256(raw)
-    lf_digest = sha256(raw.replace(b"\r\n", b"\n"))
-    status = ("raw_match" if digest == expected["sha256"] and len(raw) == expected["bytes"]
-              else "lf_match" if lf_digest == expected["sha256"] else "different")
+    def matches(data):
+        return (sha256(data) == expected["sha256"]
+                and ("bytes" not in expected or len(data) == expected["bytes"]))
+
+    status = "raw_match" if matches(raw) else "different"
+    # Only diagnose text EOL changes. Binary PT/STL/event payloads must NEVER
+    # acquire a content match by replacing embedded CR/LF byte sequences.
+    lf = raw.replace(b"\r\n", b"\n")
+    lf_digest = None
+    if path.suffix.lower() in TEXT_SUFFIXES and b"\0" not in raw:
+        lf_digest = sha256(lf)
+        if status == "different" and matches(lf):
+            status = "lf_match"
+        elif status == "different" and matches(lf.replace(b"\n", b"\r\n")):
+            status = "crlf_match"
     return {"status": status, "bytes": len(raw), "sha256": digest,
-            "sha256_lf": lf_digest, "expected_sha256": expected["sha256"]}
+            "sha256_lf": lf_digest, "expected_sha256": expected["sha256"],
+            "expected_bytes": expected.get("bytes")}
 
 
 def read_entry(archive: zipfile.ZipFile, name: str) -> bytes:
@@ -319,13 +336,13 @@ def audit(workspace: Path) -> dict:
     # Resolve archived snapshots without replacing the user's current sources.
     resolved_sources = {}
     for name, expected in source_manifest.items():
-        if source_rows[name]["status"] in ("raw_match", "lf_match"):
+        if source_rows[name]["status"] in CONTENT_MATCH_STATUSES:
             resolved_sources[name] = {"path": name, "origin": "workspace",
                                       "status": source_rows[name]["status"]}
             continue
         archived = source / "artifacts" / Path(name).name
         comparison = compare_file(archived, expected)
-        if comparison["status"] in ("raw_match", "lf_match"):
+        if comparison["status"] in CONTENT_MATCH_STATUSES:
             resolved_sources[name] = {"path": archived.relative_to(workspace).as_posix(),
                                       "origin": "archive_snapshot", "status": comparison["status"]}
     critical_names = {
@@ -344,7 +361,7 @@ def audit(workspace: Path) -> dict:
                 continue
             scanned += 1
             comparison = compare_file(candidate, source_manifest[name])
-            if comparison["status"] in ("raw_match", "lf_match"):
+            if comparison["status"] in CONTENT_MATCH_STATUSES:
                 matches.append(candidate.relative_to(workspace).as_posix())
         candidate_search.append({"source": name, "candidates_checked": scanned, "matches": matches})
         if matches:
@@ -388,6 +405,10 @@ def audit(workspace: Path) -> dict:
     contract = read_json(config)
     source_profile = read_json(config.with_name("sample_source_nominal.json"))
     pinned_inputs = source_profile["source_inputs"]
+    pinned_comparison = {
+        name: compare_file(inside(workspace, row["path"]), row)
+        for name, row in pinned_inputs.items()
+    }
     profile_checks = {
         "runtime_disabled": source_profile["runtime_enabled"] is False,
         "inputs_frozen": bool(pinned_inputs) and all(
@@ -412,13 +433,28 @@ def audit(workspace: Path) -> dict:
     passed = (all(r["status"] == "raw_match" for r in archive_rows.values())
               and bool(checkpoints) and not pose_issues and all(contract_checks.values())
               and all(geometry["checks"].values()) and all(profile_checks.values()))
-    return {"tool": "sample-weight-offline", "schema": 1,
+    archive_counts = dict(collections.Counter(r["status"] for r in archive_rows.values()))
+    blockers = [f"archive:{name}:{row['status']}" for name, row in archive_rows.items()
+                if row["status"] != "raw_match"]
+    blockers.extend(f"source_profile:{name}:hash_mismatch_or_missing"
+                    for name, row in pinned_comparison.items() if row["status"] != "raw_match")
+    blockers.extend(f"contract_check:{name}" for name, ok in contract_checks.items() if not ok)
+    blockers.extend(f"source_profile_check:{name}" for name, ok in profile_checks.items() if not ok)
+    blockers.extend(f"geometry_check:{name}" for name, ok in geometry["checks"].items() if not ok)
+    blockers.extend(f"reset_outside_limits:{name}" for name in pose_issues)
+    if not checkpoints:
+        blockers.append("no_checkpoints")
+    return {"tool": "sample-weight-offline", "schema": 2,
             "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "status": "static_pass_runtime_pending" if passed else "failed",
             "validation_level": "static_only", "source_commit": run["source_commit"],
             "final_checkpoint": run["final_checkpoint"],
             "archive_integrity": {"checked": len(archive_rows),
                                   "matched": sum(r["status"] == "raw_match" for r in archive_rows.values()),
+                                  "content_matched": sum(r["status"] in CONTENT_MATCH_STATUSES
+                                                         for r in archive_rows.values()),
+                                  "counts": archive_counts,
+                                  "strict_bytes_required": True,
                                   "files": archive_rows},
             "source_comparison": {"counts": dict(collections.Counter(
                 r["status"] for r in source_rows.values())), "files": source_rows},
@@ -432,6 +468,8 @@ def audit(workspace: Path) -> dict:
             "source_pose_outside_archived_limits": pose_issues,
             "contract_checks": contract_checks,
             "source_profile_checks": profile_checks,
+            "source_profile_input_comparison": pinned_comparison,
+            "static_blockers": blockers,
             "gates": {"V0": "partial_source_revision_and_assets_pending",
                       "V1": "static_shapes_and_finiteness_only",
                       "V2_V8": "not_run"},
@@ -451,6 +489,8 @@ def main(argv=None) -> int:
         args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"status": report["status"],
                       "archive_matched": report["archive_integrity"]["matched"],
+                      "archive_content_matched": report["archive_integrity"]["content_matched"],
+                      "archive_counts": report["archive_integrity"]["counts"],
                       "checkpoints": len(report["checkpoints"]),
                       "source_counts": report["source_comparison"]["counts"],
                       "out": str(args.out) if args.out else None}, ensure_ascii=False))

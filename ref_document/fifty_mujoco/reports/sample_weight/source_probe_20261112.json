@@ -1,0 +1,2433 @@
+{
+  "tool": "sample-source-probe",
+  "schema": 1,
+  "generated_at": "2026-11-12T14:38:19+00:00",
+  "status": "diagnostic_pass",
+  "checks": {
+    "mass": true,
+    "dimensions": true,
+    "clearance": true,
+    "source_knee_limits": true,
+    "continuous_hips": true,
+    "no_initial_penetration": true,
+    "two_wheel_ground_paths": true,
+    "positive_motor_ratios": true,
+    "spring_generalized_direction": true,
+    "short_pd_finite": true
+  },
+  "failure": null,
+  "initial_contacts": [
+    {
+      "geom1": "floor",
+      "geom2": "right_wheel_collision_0",
+      "distance_m": -4.579669976578771e-15
+    },
+    {
+      "geom1": "floor",
+      "geom2": "right_wheel_collision_0",
+      "distance_m": -4.427014310692812e-15
+    },
+    {
+      "geom1": "floor",
+      "geom2": "left_wheel_collision_0",
+      "distance_m": -6.0645932720149176e-15
+    },
+    {
+      "geom1": "floor",
+      "geom2": "left_wheel_collision_0",
+      "distance_m": -6.050715484207103e-15
+    }
+  ],
+  "initial_clearance_m": 0.10000010658856573,
+  "mass_kg": 23.259630515567014,
+  "initial_spring_lengths_m": [
+    0.17781501914481007,
+    0.17785113415592005
+  ],
+  "initial_spring_torque_nm": [
+    0.0,
+    20.33066595919147,
+    0.0,
+    0.0,
+    -20.326537550168,
+    0.0
+  ],
+  "initial_knee_ratios": [
+    0.7476616426613549,
+    0.7476616426613549
+  ],
+  "timing": {
+    "physics_dt_s": 0.0025,
+    "external_PD_dt_s": 0.005,
+    "policy_dt_s": 0.01
+  },
+  "model_xml_sha256": "88ce3044c1c892bd8a7ae41ecb26b6e5d62d9e2e98c999fce0aaea872b8da290",
+  "mujoco": "3.16.0",
+  "rows": [
+    {
+      "time_s": 0.005,
+      "root_z_m": 0.2751305995569223,
+      "max_joint_velocity_rad_s": 8.844753029672653,
+      "spring_lengths_m": [
+        0.17781501914481007,
+        0.17785113415592005
+      ],
+      "active_torque_nm": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.33066595919147,
+        0.0,
+        0.0,
+        -20.326537550168,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00019506875853955025
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0001895099591308555
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0001932805156811962
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00018772171627268186
+        }
+      ]
+    },
+    {
+      "time_s": 0.01,
+      "root_z_m": 0.2754842990772582,
+      "max_joint_velocity_rad_s": 3.319070358216012,
+      "spring_lengths_m": [
+        0.17800804122906405,
+        0.1780196393402257
+      ],
+      "active_torque_nm": [
+        -2.020552490379473,
+        -1.9634809800619912,
+        1.9939201100785982,
+        1.9860637986747416,
+        1.7146340318798978,
+        1.938367187089857
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.36796195648694,
+        0.0,
+        0.0,
+        -20.359135175266765,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004117083989016723
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0003952297444544117
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004088484129020284
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0003923697584549482
+        }
+      ]
+    },
+    {
+      "time_s": 0.015000000000000001,
+      "root_z_m": 0.27600871481822203,
+      "max_joint_velocity_rad_s": 1.1074972856902205,
+      "spring_lengths_m": [
+        0.17821261461632956,
+        0.1781873191602614
+      ],
+      "active_torque_nm": [
+        -2.248457037684517,
+        -2.333200478453321,
+        1.3449442226498693,
+        2.3497108210532147,
+        1.9271780784149244,
+        1.3875864836044125
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.406880804993587,
+        0.0,
+        0.0,
+        -20.391150357115237,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005702434137363141
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005396862306923031
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005687730247620065
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005382158417181759
+        }
+      ]
+    },
+    {
+      "time_s": 0.02,
+      "root_z_m": 0.2766706504589956,
+      "max_joint_velocity_rad_s": 4.409874194580619,
+      "spring_lengths_m": [
+        0.1783853425370011,
+        0.1783118909553894
+      ],
+      "active_torque_nm": [
+        -2.3457877577797603,
+        -2.2777293855267544,
+        0.46576531284443157,
+        2.460446945072423,
+        1.7097036850611145,
+        0.49908849964641244
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.43925727779349,
+        0.0,
+        0.0,
+        -20.4146637109045,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000664428567880869
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0006176276109169584
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006672140873618809
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006204131303981508
+        }
+      ]
+    },
+    {
+      "time_s": 0.024999999999999998,
+      "root_z_m": 0.2774485884532957,
+      "max_joint_velocity_rad_s": 2.984669378866985,
+      "spring_lengths_m": [
+        0.17860387022369534,
+        0.1784694244353035
+      ],
+      "active_torque_nm": [
+        -3.7374357226195976,
+        -2.966350800240072,
+        1.072021181003746,
+        3.78789269873808,
+        2.2068998775562765,
+        1.0385809763735112
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.479589084175768,
+        0.0,
+        0.0,
+        -20.44406981804406,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0007117454941371337
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000646193552437252
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0007192553878729788
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006537034461732774
+        }
+      ]
+    },
+    {
+      "time_s": 0.029999999999999995,
+      "root_z_m": 0.2783190231630427,
+      "max_joint_velocity_rad_s": 1.7136338243139002,
+      "spring_lengths_m": [
+        0.1788261653430346,
+        0.17862751828946977
+      ],
+      "active_torque_nm": [
+        -4.446753483288504,
+        -3.2884310974906583,
+        0.9481447316688576,
+        4.605251561250139,
+        2.4184858658970665,
+        0.9886293498582884
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.519901106450384,
+        0.0,
+        0.0,
+        -20.473213608228942,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0007374730943684876
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0006508074741402858
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0007485249599489194
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006618593397209119
+        }
+      ]
+    },
+    {
+      "time_s": 0.034999999999999996,
+      "root_z_m": 0.27925508979657865,
+      "max_joint_velocity_rad_s": 2.3034289747674856,
+      "spring_lengths_m": [
+        0.17903351575649704,
+        0.1787649853948438
+      ],
+      "active_torque_nm": [
+        -4.751327361601803,
+        -3.4263685192889692,
+        0.4905976154945143,
+        4.97850324443549,
+        2.4165879548913782,
+        0.5372771248409999
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.55685883215175,
+        0.0,
+        0.0,
+        -20.498258139665875,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0007569028080745208
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0006471891767877644
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0007712782568002757
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006615646255136998
+        }
+      ]
+    },
+    {
+      "time_s": 0.04,
+      "root_z_m": 0.2802346257705025,
+      "max_joint_velocity_rad_s": 2.0279258690834436,
+      "spring_lengths_m": [
+        0.1792585283075527,
+        0.17891143008673535
+      ],
+      "active_torque_nm": [
+        -5.477275063986848,
+        -3.8727548947878088,
+        0.6141102834512102,
+        5.708957985137548,
+        2.686627741414389,
+        0.6040239679640135
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.596267619075242,
+        0.0,
+        0.0,
+        -20.524636421785253,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0007732772147810082
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0006387654781123478
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0007912352075508389
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006567234708823311
+        }
+      ]
+    },
+    {
+      "time_s": 0.045000000000000005,
+      "root_z_m": 0.28123759223306843,
+      "max_joint_velocity_rad_s": 1.9928567899464382,
+      "spring_lengths_m": [
+        0.17948927936619907,
+        0.1790613682910473
+      ],
+      "active_torque_nm": [
+        -6.025716443415874,
+        -4.22128637527698,
+        0.5877294736496566,
+        6.344211232262857,
+        2.9126995857593574,
+        0.6051357571433443
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.635934892920602,
+        0.0,
+        0.0,
+        -20.551323333643918,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000788298584535857
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0006275811921416935
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008094618896724096
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006487444972783987
+        }
+      ]
+    },
+    {
+      "time_s": 0.05000000000000001,
+      "root_z_m": 0.28224449018552283,
+      "max_joint_velocity_rad_s": 2.035068925272367,
+      "spring_lengths_m": [
+        0.17971081366231528,
+        0.17920032128149185
+      ],
+      "active_torque_nm": [
+        -6.336569141892152,
+        -4.426799496304659,
+        0.36062919680175554,
+        6.73034736327029,
+        2.9973542374858475,
+        0.3885419518183647
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.673313072663262,
+        0.0,
+        0.0,
+        -20.575767160543258,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000803872195698413
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0006159895077200578
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008279394761752448
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006400567881970423
+        }
+      ]
+    },
+    {
+      "time_s": 0.055000000000000014,
+      "root_z_m": 0.28323923539465573,
+      "max_joint_velocity_rad_s": 2.034422813121931,
+      "spring_lengths_m": [
+        0.17993211607270798,
+        0.17933537769244046
+      ],
+      "active_torque_nm": [
+        -6.7602090629132405,
+        -4.7100997021771995,
+        0.3381536085563308,
+        7.1812237714924265,
+        3.138992691105189,
+        0.3310625866985972
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.709969154372953,
+        0.0,
+        0.0,
+        -20.599261702522448,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008196001467192376
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000603898361438468
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008466087917068099
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000630907006426179
+        }
+      ]
+    },
+    {
+      "time_s": 0.06000000000000002,
+      "root_z_m": 0.28420869957321865,
+      "max_joint_velocity_rad_s": 1.9628944305167941,
+      "spring_lengths_m": [
+        0.18015045343172834,
+        0.17946701618520597
+      ],
+      "active_torque_nm": [
+        -7.129783590926877,
+        -4.965406738846347,
+        0.31622127221623497,
+        7.608833702723032,
+        3.2802680371173842,
+        0.3122189003741277
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.745471055560454,
+        0.0,
+        0.0,
+        -20.62191278102553,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008349276214593207
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005910802264716616
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008647383414493032
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006208909464617968
+        }
+      ]
+    },
+    {
+      "time_s": 0.06500000000000002,
+      "root_z_m": 0.2851415395960186,
+      "max_joint_velocity_rad_s": 1.899879322619372,
+      "spring_lengths_m": [
+        0.18035839017277824,
+        0.17958907427469115
+      ],
+      "active_torque_nm": [
+        -7.360898728488223,
+        -5.1425108127473695,
+        0.2040941708792421,
+        7.897958088243904,
+        3.3552053760183043,
+        0.20680880812372793
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.778674763452592,
+        0.0,
+        0.0,
+        -20.64269700662864,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008501338103578948
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005781873856973013
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008825507718316361
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006106043471712091
+        }
+      ]
+    },
+    {
+      "time_s": 0.07000000000000002,
+      "root_z_m": 0.2860288917039321,
+      "max_joint_velocity_rad_s": 1.823026736566526,
+      "spring_lengths_m": [
+        0.18055797721008582,
+        0.1797028217107344
+      ],
+      "active_torque_nm": [
+        -7.586682264379672,
+        -5.3265871499225526,
+        0.1576521079701504,
+        8.151115201681893,
+        3.4304505917493877,
+        0.14165072737290896
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.809992689640694,
+        0.0,
+        0.0,
+        -20.661877895380734,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008650172218823138
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005653183262032957
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009000264217130516
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0006003275260342
+        }
+      ]
+    },
+    {
+      "time_s": 0.07500000000000002,
+      "root_z_m": 0.2868642469290897,
+      "max_joint_velocity_rad_s": 1.7087337799401359,
+      "spring_lengths_m": [
+        0.18074923189476338,
+        0.17980971729002126
+      ],
+      "active_torque_nm": [
+        -7.776047586793329,
+        -5.500011135680349,
+        0.13587657307023826,
+        8.373119921198864,
+        3.5095227621714824,
+        0.11470194676208023
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.839499332785508,
+        0.0,
+        0.0,
+        -20.679738664000062,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008791917848926176
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005523660361634528
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009167675722762322
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000589941823547234
+        }
+      ]
+    },
+    {
+      "time_s": 0.08000000000000003,
+      "root_z_m": 0.28764271466449615,
+      "max_joint_velocity_rad_s": 1.5857052630851394,
+      "spring_lengths_m": [
+        0.18092937628784161,
+        0.17990812068844247
+      ],
+      "active_torque_nm": [
+        -7.880975393614306,
+        -5.635101267190716,
+        0.08282365830885152,
+        8.511056201248177,
+        3.5632933833707447,
+        0.06403684277701216
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.866844230504444,
+        0.0,
+        0.0,
+        -20.696040030249318,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008926276655066567
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005395880130915492
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009326887509031115
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005796490984881567
+        }
+      ]
+    },
+    {
+      "time_s": 0.08500000000000003,
+      "root_z_m": 0.2883609542354633,
+      "max_joint_velocity_rad_s": 1.4569401743540829,
+      "spring_lengths_m": [
+        0.18109889180934696,
+        0.179998401076215
+      ],
+      "active_torque_nm": [
+        -7.948127848586157,
+        -5.760715542543737,
+        0.05043757262446213,
+        8.592850213990957,
+        3.6097638393009035,
+        0.022702311563760902
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.892181853862514,
+        0.0,
+        0.0,
+        -20.710877768577017,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000905208575968916
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005271104998560566
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00094773223830346
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005696341621907672
+        }
+      ]
+    },
+    {
+      "time_s": 0.09000000000000004,
+      "root_z_m": 0.2890170184479258,
+      "max_joint_velocity_rad_s": 1.3123213441587709,
+      "spring_lengths_m": [
+        0.18125842668198544,
+        0.1800818474129729
+      ],
+      "active_torque_nm": [
+        -7.98134267590715,
+        -5.879125916444652,
+        0.03804829276463473,
+        8.636143381244779,
+        3.658599229793795,
+        0.004952927423762522
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.91568105673353,
+        0.0,
+        0.0,
+        -20.72449227652352,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009167087219252024
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005149165250332849
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009616702424597445
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005598780455679936
+        }
+      ]
+    },
+    {
+      "time_s": 0.09500000000000004,
+      "root_z_m": 0.2896099083255386,
+      "max_joint_velocity_rad_s": 1.1613165770496985,
+      "spring_lengths_m": [
+        0.18140736438347613,
+        0.1801585981256123
+      ],
+      "active_torque_nm": [
+        -7.961577802362285,
+        -5.978656533893059,
+        0.01949338191542749,
+        8.624617922621365,
+        3.6999684617107675,
+        -0.013076497872483439
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.937317773139302,
+        0.0,
+        0.0,
+        -20.736929807108467,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009270318878289857
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0005031051503523593
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000974352270363868
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000550425532887408
+        }
+      ]
+    },
+    {
+      "time_s": 0.10000000000000005,
+      "root_z_m": 0.29013935270411423,
+      "max_joint_velocity_rad_s": 1.0100719583160567,
+      "spring_lengths_m": [
+        0.18154602427162211,
+        0.18022909557282651
+      ],
+      "active_torque_nm": [
+        -7.905280426522818,
+        -6.067795510620906,
+        0.008976335513113942,
+        8.565612944429244,
+        3.7370861041041348,
+        -0.026855905073121522
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.957201103145835,
+        0.0,
+        0.0,
+        -20.748282808827483,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009360888865013947
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000491748885336242
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009856774613228314
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005413374601578452
+        }
+      ]
+    },
+    {
+      "time_s": 0.10500000000000005,
+      "root_z_m": 0.2906056617832946,
+      "max_joint_velocity_rad_s": 0.8563294991720054,
+      "spring_lengths_m": [
+        0.1816750682403004,
+        0.18029427876655674
+      ],
+      "active_torque_nm": [
+        -7.821724878039672,
+        -6.150336734561249,
+        0.011186396866037507,
+        8.472751240457157,
+        3.7754755706137906,
+        -0.027316764676784122
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.97548121125081,
+        0.0,
+        0.0,
+        -20.758719520810413,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009437463154651771
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004808420479536224
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000995494546971877
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005325902794605167
+        }
+      ]
+    },
+    {
+      "time_s": 0.11000000000000006,
+      "root_z_m": 0.2910094944902183,
+      "max_joint_velocity_rad_s": 0.7033468795958053,
+      "spring_lengths_m": [
+        0.18179464579215696,
+        0.180354694630162
+      ],
+      "active_torque_nm": [
+        -7.706840287800958,
+        -6.22206987775379,
+        0.015610407825448758,
+        8.345353351463576,
+        3.812436487678248,
+        -0.022012505897178736
+      ],
+      "passive_torque_nm": [
+        0.0,
+        20.992228176115436,
+        0.0,
+        0.0,
+        -20.768341164600255,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009499188664954805
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004704043520360468
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010036795161251014
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005241650016658342
+        }
+      ]
+    },
+    {
+      "time_s": 0.11500000000000006,
+      "root_z_m": 0.2913517074965221,
+      "max_joint_velocity_rad_s": 0.5554416605238144,
+      "spring_lengths_m": [
+        0.1819050831678464,
+        0.1804107783841411
+      ],
+      "active_torque_nm": [
+        -7.5678367857886295,
+        -6.284934104438928,
+        0.02468635218087711,
+        8.18715462496403,
+        3.847561040901022,
+        -0.012638221355155133
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.007531580602357,
+        0.0,
+        0.0,
+        -20.777228433339488,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009545572416095119
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004604639772035693
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010101475616638086
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005160542972580603
+        }
+      ]
+    },
+    {
+      "time_s": 0.12000000000000006,
+      "root_z_m": 0.2916332791622501,
+      "max_joint_velocity_rad_s": 0.4131302590318038,
+      "spring_lengths_m": [
+        0.18200688674771862,
+        0.1804631070176442
+      ],
+      "active_torque_nm": [
+        -7.412529693299454,
+        -6.341121933255316,
+        0.04132939525294421,
+        8.007068191388633,
+        3.8828227678593574,
+        0.00436137055661312
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.021500101659495,
+        0.0,
+        0.0,
+        -20.785482134143994,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009576261392003002
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004510350101949792
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.001014810137109988
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005082190081048474
+        }
+      ]
+    },
+    {
+      "time_s": 0.12500000000000006,
+      "root_z_m": 0.2918552261588696,
+      "max_joint_velocity_rad_s": 0.35735752775527924,
+      "spring_lengths_m": [
+        0.18210036669805926,
+        0.18051210833485715
+      ],
+      "active_torque_nm": [
+        -7.242586828589115,
+        -6.3893472321318345,
+        0.06164720433485982,
+        7.809139131343006,
+        3.9174801754044704,
+        0.026916942645491267
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.03420995339273,
+        0.0,
+        0.0,
+        -20.793177381819802,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009591353411158368
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004421548794419153
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010176197123021383
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0005006392506283833
+        }
+      ]
+    },
+    {
+      "time_s": 0.13000000000000006,
+      "root_z_m": 0.29201855226770884,
+      "max_joint_velocity_rad_s": 0.4041684872072704,
+      "spring_lengths_m": [
+        0.1821858209898698,
+        0.18055807175255978
+      ],
+      "active_torque_nm": [
+        -7.062376194712421,
+        -6.4298868973016265,
+        0.08516968367952127,
+        7.5968745304554375,
+        3.9507080750628365,
+        0.05306797831044818
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.04573128635031,
+        0.0,
+        0.0,
+        -20.800366035519744,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009591315968557543
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004338761119017584
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.001018589039513941
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004933335545600839
+        }
+      ]
+    },
+    {
+      "time_s": 0.13500000000000006,
+      "root_z_m": 0.29212423968558054,
+      "max_joint_velocity_rad_s": 0.5089092473399665,
+      "spring_lengths_m": [
+        0.18226361643908098,
+        0.18060129137150366
+      ],
+      "active_torque_nm": [
+        -6.877370457769718,
+        -6.463798461137618,
+        0.11296656553148543,
+        7.375976582137405,
+        3.9829271344858785,
+        0.08358165133332374
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.056139430994968,
+        0.0,
+        0.0,
+        -20.80709954173941,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009576832453193906
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004262503028637371
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010177650270846716
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00048633208462918465
+        }
+      ]
+    },
+    {
+      "time_s": 0.14000000000000007,
+      "root_z_m": 0.292173246482088,
+      "max_joint_velocity_rad_s": 0.6200145614341781,
+      "spring_lengths_m": [
+        0.1823340552635472,
+        0.18064200009745107
+      ],
+      "active_torque_nm": [
+        -6.690462647237966,
+        -6.490914320301658,
+        0.14357916218446676,
+        7.150705711662724,
+        4.01390869725855,
+        0.11781822223181249
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.065497269077763,
+        0.0,
+        0.0,
+        -20.813418832597776,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009548877426831526
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004193389646634377
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010152241705189968
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00047967539249944846
+        }
+      ]
+    },
+    {
+      "time_s": 0.14500000000000007,
+      "root_z_m": 0.2921665125254956,
+      "max_joint_velocity_rad_s": 0.7385658548823337,
+      "spring_lengths_m": [
+        0.18239741654698258,
+        0.18068034451891762
+      ],
+      "active_torque_nm": [
+        -6.5046771094760025,
+        -6.51139224471688,
+        0.17619373586367895,
+        6.924230024055883,
+        4.0430956912215965,
+        0.1544943408498045
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.07386133739405,
+        0.0,
+        0.0,
+        -20.81935071258898,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009508671047420772
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004132108894069689
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010110770125420845
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00047342079720714275
+        }
+      ]
+    },
+    {
+      "time_s": 0.15000000000000008,
+      "root_z_m": 0.292104979605434,
+      "max_joint_velocity_rad_s": 0.861448476959312,
+      "spring_lengths_m": [
+        0.18245401441241,
+        0.18071644985878205
+      ],
+      "active_torque_nm": [
+        -6.323475062343391,
+        -6.525931547413082,
+        0.2109707878669842,
+        6.70021271322545,
+        4.070465753704289,
+        0.19340586272452054
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.081289832321954,
+        0.0,
+        0.0,
+        -20.824918147287416,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009457570770245588
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00040793227905537577
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0010054563965342378
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00046763159856524905
+        }
+      ]
+    },
+    {
+      "time_s": 0.15500000000000008,
+      "root_z_m": 0.291989611589247,
+      "max_joint_velocity_rad_s": 0.9870281054196915,
+      "spring_lengths_m": [
+        0.18250416026025937,
+        0.18075042248403037
+      ],
+      "active_torque_nm": [
+        -6.149209409810704,
+        -6.534904810417954,
+        0.24728987271434633,
+        6.481805361916351,
+        4.095993908110973,
+        0.2342060768470594
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.087837850771045,
+        0.0,
+        0.0,
+        -20.83014074523718,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009397047813457238
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00040356685881409726
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009985093426408964
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004623714201094503
+        }
+      ]
+    },
+    {
+      "time_s": 0.1600000000000001,
+      "root_z_m": 0.2918214108181545,
+      "max_joint_velocity_rad_s": 1.1152695987255175,
+      "spring_lengths_m": [
+        0.18254816883659553,
+        0.18078233831452023
+      ],
+      "active_torque_nm": [
+        -5.983812927191181,
+        -6.538740474712101,
+        0.28455140024536196,
+        6.2713335602498255,
+        4.119515686237936,
+        0.27616007136536724
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.0935584673454,
+        0.0,
+        0.0,
+        -20.835033062813505,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009328632797148267
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004001725056674704
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009903959775540913
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00045770520350688765
+        }
+      ]
+    },
+    {
+      "time_s": 0.1650000000000001,
+      "root_z_m": 0.29160143317929016,
+      "max_joint_velocity_rad_s": 1.2515836767090698,
+      "spring_lengths_m": [
+        0.18258638768132124,
+        0.1808122693807618
+      ],
+      "active_torque_nm": [
+        -5.829204951512583,
+        -6.538159972071096,
+        0.32262485009325825,
+        6.070970823513591,
+        4.1410911939377915,
+        0.3188963980163246
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.098506795290945,
+        0.0,
+        0.0,
+        -20.839608751406118,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009253832725807168
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00039779399465521975
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009813001459888226
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000453710868063506
+        }
+      ]
+    },
+    {
+      "time_s": 0.1700000000000001,
+      "root_z_m": 0.2913307972405696,
+      "max_joint_velocity_rad_s": 1.3969295333260836,
+      "spring_lengths_m": [
+        0.1826191892433099,
+        0.1808403000636564
+      ],
+      "active_torque_nm": [
+        -5.686750180984549,
+        -6.533848938359386,
+        0.361203018283906,
+        5.8825627726635155,
+        4.160936716754291,
+        0.36216589390872356
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.102739152895523,
+        0.0,
+        0.0,
+        -20.843883059967638,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000917408633961711
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00039646004996024553
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009714201066176806
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004504715226163816
+        }
+      ]
+    },
+    {
+      "time_s": 0.1750000000000001,
+      "root_z_m": 0.29101068533297875,
+      "max_joint_velocity_rad_s": 1.541560587018444,
+      "spring_lengths_m": [
+        0.18264696898522928,
+        0.18086652230069566
+      ],
+      "active_torque_nm": [
+        -5.5573932482441,
+        -6.526506122699152,
+        0.3999328377188993,
+        5.70742510295398,
+        4.179236734562579,
+        0.40557194210437403
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.10631303156342,
+        0.0,
+        0.0,
+        -20.84787210500873,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009090723337455489
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000396180994248381
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009609525583198567
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00044806121882285527
+        }
+      ]
+    },
+    {
+      "time_s": 0.1800000000000001,
+      "root_z_m": 0.2906423383412629,
+      "max_joint_velocity_rad_s": 1.685015026435992,
+      "spring_lengths_m": [
+        0.1826701560535902,
+        0.18089104093913086
+      ],
+      "active_torque_nm": [
+        -5.441902684940097,
+        -6.516964331211472,
+        0.4386661522183271,
+        5.5466060749115265,
+        4.196238514159765,
+        0.4488321209386015
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.109288681780185,
+        0.0,
+        0.0,
+        -20.851593691970642,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0009004919944203618
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00039694582540570483
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009500822024280514
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00044653603341356096
+        }
+      ]
+    },
+    {
+      "time_s": 0.1850000000000001,
+      "root_z_m": 0.2902270440656409,
+      "max_joint_velocity_rad_s": 1.8266358069189956,
+      "spring_lengths_m": [
+        0.1826892102304181,
+        0.18091397978543425
+      ],
+      "active_torque_nm": [
+        -5.340723662127829,
+        -6.506069609908547,
+        0.4772503222998825,
+        5.400927011561319,
+        4.212265913169206,
+        0.49178424816090804
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.11172892717833,
+        0.0,
+        0.0,
+        -20.855068233504365,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008917678495728651
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00039872189986225187
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009389746034337565
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00044592865372329593
+        }
+      ]
+    },
+    {
+      "time_s": 0.1900000000000001,
+      "root_z_m": 0.28976611911020766,
+      "max_joint_velocity_rad_s": 1.9660236880582327,
+      "spring_lengths_m": [
+        0.1827046168327055,
+        0.1809354793092352
+      ],
+      "active_torque_nm": [
+        -5.2539952729912365,
+        -6.494657369065626,
+        0.5155131374711674,
+        5.270878186370407,
+        4.227644350283484,
+        0.5342444655273209
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.11369872209392,
+        0.0,
+        0.0,
+        -20.858318399540718,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000882982050211166
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00040145601820350957
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0009277724115578992
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004462463795503954
+        }
+      ]
+    },
+    {
+      "time_s": 0.19500000000000012,
+      "root_z_m": 0.28926088583224924,
+      "max_joint_velocity_rad_s": 2.1030342851022854,
+      "spring_lengths_m": [
+        0.18271688721029256,
+        0.18095569715665163
+      ],
+      "active_torque_nm": [
+        -5.181669922445541,
+        -6.483600858193776,
+        0.5533711283218218,
+        5.156694798479222,
+        4.242725746518863,
+        0.5760724316332677
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.115265422174588,
+        0.0,
+        0.0,
+        -20.861369198096554,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008741984232430514
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004050757886417469
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000916593314449661
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000447470679848537
+        }
+      ]
+    },
+    {
+      "time_s": 0.20000000000000012,
+      "root_z_m": 0.2887126455224127,
+      "max_joint_velocity_rad_s": 2.237520067896013,
+      "spring_lengths_m": [
+        0.1827265548943208,
+        0.18097481011456024
+      ],
+      "active_torque_nm": [
+        -5.123492409882324,
+        -6.473769215861269,
+        0.5907694494733184,
+        5.058418596179166,
+        4.257903592156609,
+        0.6172043379927166
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.116498485476104,
+        0.0,
+        0.0,
+        -20.86424827538397,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000865463485674435
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00040949221391144847
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000905529520128158
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004495582483653379
+        }
+      ]
+    },
+    {
+      "time_s": 0.20500000000000013,
+      "root_z_m": 0.28812264871243903,
+      "max_joint_velocity_rad_s": 2.3694426525792567,
+      "spring_lengths_m": [
+        0.18273416962137962,
+        0.18099301245528582
+      ],
+      "active_torque_nm": [
+        -5.079005541328652,
+        -6.466001751626064,
+        0.6276541153970749,
+        4.97587557345156,
+        4.2735795734611415,
+        0.6575947380175133
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.117468885301403,
+        0.0,
+        0.0,
+        -20.86698566976212,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008568082558456924
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000414603033437988
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008946491062056319
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00045244388379808015
+        }
+      ]
+    },
+    {
+      "time_s": 0.21000000000000013,
+      "root_z_m": 0.2874920639581753,
+      "max_joint_velocity_rad_s": 2.4989207925165235,
+      "spring_lengths_m": [
+        0.18274029370704076,
+        0.181010514430139
+      ],
+      "active_torque_nm": [
+        -5.047608882068122,
+        -6.46112332421283,
+        0.6640115563866826,
+        4.908703830447827,
+        4.290162918775566,
+        0.6972226157217665
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.11824879816871,
+        0.0,
+        0.0,
+        -20.86961358981531,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008482502082425292
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004202960569996972
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008839984228518893
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004560442716092239
+        }
+      ]
+    },
+    {
+      "time_s": 0.21500000000000014,
+      "root_z_m": 0.2868219462929048,
+      "max_joint_velocity_rad_s": 2.626118394678993,
+      "spring_lengths_m": [
+        0.18274549746413277,
+        0.18102754193807413
+      ],
+      "active_torque_nm": [
+        -5.028571687059706,
+        -6.4599302826980685,
+        0.6998530816178694,
+        4.856396237198304,
+        4.308080104769161,
+        0.7361105163676529
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.118911138759245,
+        0.0,
+        0.0,
+        -20.872166368117483,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008397955040055291
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004264526635760421
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008736049809991847
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00046026214056987813
+        }
+      ]
+    },
+    {
+      "time_s": 0.22000000000000014,
+      "root_z_m": 0.2861132062398363,
+      "max_joint_velocity_rad_s": 2.7512533212573467,
+      "spring_lengths_m": [
+        0.18275035367245573,
+        0.18104433504346534
+      ],
+      "active_torque_nm": [
+        -5.021043059981114,
+        -6.463175215847832,
+        0.7351968176597157,
+        4.818307461875122,
+        4.327762997751385,
+        0.7743029523221068
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.11952893894374,
+        0.0,
+        0.0,
+        -20.874680239116778,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008314412985543918
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00043295128672804495
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008634807145594045
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004649907027332381
+        }
+      ]
+    },
+    {
+      "time_s": 0.22500000000000014,
+      "root_z_m": 0.2853665802684512,
+      "max_joint_velocity_rad_s": 2.8746253054620077,
+      "spring_lengths_m": [
+        0.18275543324587706,
+        0.1810611463032254
+      ],
+      "active_torque_nm": [
+        -5.024084144634795,
+        -6.47157148910761,
+        0.7700796173548741,
+        4.7936704384879825,
+        4.349645025470581,
+        0.8118600535137643
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.120174841356658,
+        0.0,
+        0.0,
+        -20.87719308470612,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008231777942086932
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004396705154677688
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008536251944907189
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00047011791574994716
+        }
+      ]
+    },
+    {
+      "time_s": 0.23000000000000015,
+      "root_z_m": 0.2845826034270509,
+      "max_joint_velocity_rad_s": 2.9965700031565827,
+      "spring_lengths_m": [
+        0.18276130113465694,
+        0.18107823984825847
+      ],
+      "active_torque_nm": [
+        -5.0366862150632485,
+        -6.485789853195732,
+        0.8045529160528475,
+        4.781623799653012,
+        4.374166461403384,
+        0.8488644871303708
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.120920583886008,
+        0.0,
+        0.0,
+        -20.87974428710641,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008149900566280788
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00044649184416428733
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008440284598716721
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004755302474080472
+        }
+      ]
+    },
+    {
+      "time_s": 0.23500000000000015,
+      "root_z_m": 0.2837615846328432,
+      "max_joint_velocity_rad_s": 3.1174450207452997,
+      "spring_lengths_m": [
+        0.18276851215037754,
+        0.1810958903362082
+      ],
+      "active_torque_nm": [
+        -5.057783168558299,
+        -6.506452269913562,
+        0.8386728218908458,
+        4.7812258722730405,
+        4.401771913909345,
+        0.8854132030672179
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.12183643621806,
+        0.0,
+        0.0,
+        -20.882374554965498,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0008068595580599316
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0004533020525944384
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008346734383209223
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.00048111593285559556
+        }
+      ]
+    },
+    {
+      "time_s": 0.24000000000000016,
+      "root_z_m": 0.2829035849756027,
+      "max_joint_velocity_rad_s": 3.2376383407927474,
+      "spring_lengths_m": [
+        0.1827776076204621,
+        0.18111438190456833
+      ],
+      "active_torque_nm": [
+        -5.08627159674635,
+        -6.534134516718941,
+        0.8725022059386288,
+        4.7914677068852285,
+        4.432908917607881,
+        0.9216108732809448
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.122990706108084,
+        0.0,
+        0.0,
+        -20.885125740801747,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0007987653404791101
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00045999509573682595
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008255378852865536
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004867676405444499
+        }
+      ]
+    },
+    {
+      "time_s": 0.24500000000000016,
+      "root_z_m": 0.28200839925695986,
+      "max_joint_velocity_rad_s": 3.357547661436142,
+      "spring_lengths_m": [
+        0.18278911262115818,
+        0.18113400765463053
+      ],
+      "active_torque_nm": [
+        -5.121026280866906,
+        -6.569367385764737,
+        0.9061088154005204,
+        4.81129081178981,
+        4.468031770771423,
+        0.9575707407970081
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.124449286906266,
+        0.0,
+        0.0,
+        -20.888040727414687,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.0007906848353703491
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00046647354057429563
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008165957861148362
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.000492384491318977
+        }
+      ]
+    },
+    {
+      "time_s": 0.25000000000000017,
+      "root_z_m": 0.2810755408216476,
+      "max_joint_velocity_rad_s": 3.477565245207192,
+      "spring_lengths_m": [
+        0.18280353352954873,
+        0.18115506935889325
+      ],
+      "active_torque_nm": [
+        -5.1609116654373475,
+        -6.612636082571805,
+        0.939559763978689,
+        4.83959988691172,
+        4.507602996703204,
+        0.993410600820015
+      ],
+      "passive_torque_nm": [
+        0.0,
+        21.12627521787054,
+        0.0,
+        0.0,
+        -20.89116333578893,
+        0.0
+      ],
+      "contacts": [
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.000782594379569998
+        },
+        {
+          "geom1": "floor",
+          "geom2": "right_wheel_collision_0",
+          "distance_m": -0.00047264959361480174
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0008078183001945932
+        },
+        {
+          "geom1": "floor",
+          "geom2": "left_wheel_collision_0",
+          "distance_m": -0.0004978735142395635
+        }
+      ]
+    }
+  ],
+  "source_runtime_timing_verified": false,
+  "V2_accepted": false,
+  "pending": [
+    "PhysX_contact_response_comparison",
+    "original_base_environment_timing",
+    "per_channel_dynamics",
+    "spring_virtual_work_and_contact_tests"
+  ],
+  "contact_assumptions": {
+    "effective_sliding_friction": 0.75,
+    "rolling_and_torsional_friction": 0,
+    "status": "provisional_not_PhysX_calibrated",
+    "adjacent_pairs_excluded": true
+  },
+  "training_executed": false
+}

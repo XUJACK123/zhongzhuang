@@ -1,12 +1,15 @@
-"""Offline unittest suite: use -I -S, never the full physics pytest suite."""
+"""Standard-library offline tests; import purity is checked in isolation."""
 
 from __future__ import annotations
 
 import io
+import hashlib
 import json
 import math
 import pickle
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -19,7 +22,7 @@ from fifty_mujoco.contracts.sample_actor31 import (  # noqa: E402
     build_observation, clip_actions, ramp_commands, reference_features,
 )
 from sample_weight_offline import (  # noqa: E402
-    DescriptorReader, audit, checkpoint_audit, inertia_is_physical, inside,
+    DescriptorReader, audit, checkpoint_audit, compare_file, inertia_is_physical, inside,
 )
 
 
@@ -135,12 +138,63 @@ class ArchiveTests(unittest.TestCase):
     def test_full_source_and_contract_audit_retains_runtime_gates(self):
         report = audit(PROJECT.parents[1])
         self.assertEqual(report["archive_integrity"]["checked"], 48)
-        self.assertEqual(report["archive_integrity"]["matched"], 48)
-        self.assertEqual(report["status"], "static_pass_runtime_pending")
+        # A checkout may lack ignored files or change text EOLs. Test detection,
+        # rather than assuming historical archive completeness on every host.
+        archive = PROJECT.parents[1] / "sample_weight_file"
+        manifest = json.loads((archive / "manifest.json").read_text())["files"]
+        raw_matches = sum(
+            (archive / name).is_file()
+            and len((archive / name).read_bytes()) == row["bytes"]
+            and hashlib.sha256((archive / name).read_bytes()).hexdigest() == row["sha256"]
+            for name, row in manifest.items())
+        self.assertEqual(report["archive_integrity"]["matched"], raw_matches)
+        self.assertTrue(report["archive_integrity"]["strict_bytes_required"])
+        if raw_matches < len(manifest):
+            self.assertEqual(report["status"], "failed")
+            self.assertTrue(report["static_blockers"])
         self.assertTrue(report["source_resolution"]["critical_unresolved"])
         self.assertEqual(report["gates"]["V2_V8"], "not_run")
         self.assertTrue(all(report["source_geometry"]["checks"].values()))
         self.assertTrue(all(r["source_hash_verified"] for r in report["mesh_references"]))
+
+    def test_text_eol_changes_are_diagnosed_without_claiming_raw_integrity(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "profile.json"
+            for original, checked_out, status in (
+                (b'{\r\n  "x": 1\r\n}\r\n', b'{\n  "x": 1\n}\n', "crlf_match"),
+                (b'{\n  "x": 1\n}\n', b'{\r\n  "x": 1\r\n}\r\n', "lf_match"),
+            ):
+                path.write_bytes(checked_out)
+                row = compare_file(path, {"bytes": len(original),
+                                         "sha256": hashlib.sha256(original).hexdigest()})
+                self.assertEqual(row["status"], status)
+                self.assertNotEqual(row["sha256"], row["expected_sha256"])
+                path.write_bytes(checked_out.replace(b"1", b"2"))
+                self.assertEqual(compare_file(path, {"bytes": len(original),
+                    "sha256": hashlib.sha256(original).hexdigest()})["status"], "different")
+
+    def test_binary_and_nul_payloads_cannot_be_eol_normalized(self):
+        with tempfile.TemporaryDirectory() as folder:
+            for name, original, changed in (
+                ("model.pt", b"abc\r\ndef", b"abc\ndef"),
+                ("mesh.STL", b"abc\ndef", b"abc\r\ndef"),
+                ("fake.json", b"\0abc\r\ndef", b"\0abc\ndef"),
+            ):
+                path = Path(folder) / name
+                path.write_bytes(changed)
+                self.assertEqual(compare_file(path, {"bytes": len(original),
+                    "sha256": hashlib.sha256(original).hexdigest()})["status"], "different")
+
+    def test_missing_corrupt_and_wrong_size_inputs_remain_failures(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "input.txt"
+            expected = {"bytes": 2, "sha256": hashlib.sha256(b"a\n").hexdigest()}
+            self.assertEqual(compare_file(path, expected)["status"], "missing")
+            path.write_bytes(b"b\n")
+            self.assertEqual(compare_file(path, expected)["status"], "different")
+            path.write_bytes(b"a\n")
+            self.assertEqual(compare_file(path, expected)["status"], "raw_match")
+            self.assertEqual(compare_file(path, dict(expected, bytes=3))["status"], "different")
 
     def test_positive_inertia_can_still_violate_physical_triangle_inequality(self):
         self.assertEqual(inertia_is_physical(1, 1, 3, 0, 0, 0), (True, False))
@@ -148,7 +202,20 @@ class ArchiveTests(unittest.TestCase):
         self.assertEqual(inertia_is_physical(1, -1, 2, 0, 0, 0), (False, False))
 
     def test_no_physics_or_learning_dependencies_imported(self):
-        self.assertFalse(set(sys.modules) & {"torch", "mujoco", "isaacgym", "numpy", "warp"})
+        # Other pytest modules can import the runtime before this test executes.
+        # A fresh -I -S interpreter checks this tool's imports independently and
+        # also catches accidental reliance on installed third-party packages.
+        probe = "\n".join([
+            "import sys",
+            f"sys.path[:0] = {[str(PROJECT / 'src'), str(PROJECT / 'tools')]!r}",
+            "import fifty_mujoco.contracts.sample_actor31",
+            "import sample_weight_offline",
+            "blocked = set(sys.modules) & {'torch', 'mujoco', 'isaacgym', 'numpy', 'warp'}",
+            "assert not blocked, blocked",
+        ])
+        result = subprocess.run([sys.executable, "-I", "-S", "-c", probe],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_protocol_seed_sets_are_disjoint_and_randomization_disabled(self):
         cfg = PROJECT / "configs"

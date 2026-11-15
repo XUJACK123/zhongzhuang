@@ -1,0 +1,37 @@
+{
+  "tool": "hardware-final-tests",
+  "status": "passed",
+  "targeted_passed": 41,
+  "targeted_skipped": 0,
+  "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest tests/test_sample_hardware.py tests/test_sample_hardware_fast.py tests/test_sample_training.py tests/test_sample_target.py tests/test_sample_runtime.py -q",
+  "test_sha256": {
+    "tests/test_sample_hardware.py": "01014d0003f3310fcc4ef44d2d2b8bdd0f5b57bfdb4dab1b63dd3bdf905a259f",
+    "tests/test_sample_hardware_fast.py": "820a976ec2921def8e8289926cf7003d12d7b8bd00819accce152f03081c96b2",
+    "tests/test_sample_training.py": "7870e9002d41261f16b0a6f66ec4c4fcd26d8013f837065cc3e668546a94f48f",
+    "tests/test_sample_target.py": "2a5e66c55739b323c288403d1f575ba5c1bb73046c7d823dc515985bcd2e579d",
+    "tests/test_sample_runtime.py": "cf73b2e7931f809c3c9782dbae3ece5d031fbbbf9609c2fab5215c928492b5e1"
+  },
+  "stdout": ".........................................                                [100%]\n",
+  "host_c_actor_vectors": 256,
+  "host_c_controller_vectors": 200,
+  "arm_cross_build_executed": false,
+  "hardware_executed": false,
+  "full_project_tests": "pending_final_index_refresh",
+  "full_project_passed": 365,
+  "full_project_skipped": 11,
+  "full_project_warnings": 4,
+  "full_project_seconds": 8.39,
+  "offline_isolated_tests": 21,
+  "offline_isolated_passed": true,
+  "initial_full_suite_failure": {
+    "test": "test_no_physics_or_learning_dependencies_imported",
+    "cause": "shared sys.modules includes runtime imports from other test modules",
+    "fix": "fresh -I -S subprocess checks offline imports without third-party site packages"
+  },
+  "offline_test_sha256": "074bd5105cba77654bf4b56f9eb8f82e6e7e44ba82cf8590fdc8f0afd774b354",
+  "logs": {
+    "full_pytest_initial_20261115.txt": "457900d0e8bfb455be9b194477ccfd0325d86c65f25d04ad7df302bfdb16a2a0",
+    "full_pytest_final_20261115.txt": "aea9da5db760bde63af1100fc56130a3303b81fa5d765d0bc7ef222179ca8c01",
+    "offline_unittest_20261115.txt": "df637606277870874cf1cfef3983536feb8ae8a53dae8daf0c3aa54185bda19c"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "tool": "sample-transfer-training-smoke",
+  "schema": 1,
+  "generated_at": "2026-11-12T14:51:55+00:00",
+  "status": "passed",
+  "training_schema": "sample_transfer_ppo31_v1",
+  "contract": {
+    "environment": "sample_reconstructed_cpu31_v1",
+    "reward": "sample_transfer_tracking_reward_v1",
+    "model_xml": "88ce3044c1c892bd8a7ae41ecb26b6e5d62d9e2e98c999fce0aaea872b8da290",
+    "code": {
+      "envs/sample_env31.py": "2dfd62c61283de504849d1fe94db04bae2ec309af5beebb3d1d3364590fdeda9",
+      "learning/sample_ppo.py": "013f6111c9affad295a44cb48b357388d8ebe9351b135edccd192975fed77807",
+      "contracts/sample_actor31.py": "4dc7d43acade252b05f3297dc821aad854b5c32cbc79e3669e9d76ed1a61be07",
+      "transfer/sample_source.py": "e734e6a0fb72c328dd6085b3ff27d4d1be8e7a276aa048807bca9210791c7a6a",
+      "transfer/sample_checkpoint.py": "0af8eb1ee4736cc5ee437513a12e2a4dcd292e49c8a9e98c892cd98ebf540c0e"
+    },
+    "episode_steps": 50
+  },
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "physics_backend": "CPU_MuJoCo",
+  "start_update": 4,
+  "last_update": 6,
+  "transitions": 512,
+  "source_checkpoint_sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11",
+  "source_actor_initial_max_abs_error": 0.0005367062985897064,
+  "source_critic_restored": false,
+  "source_optimizer_restored": false,
+  "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/sample31_gpu_resume_v3_20261112/update_000006.pt",
+  "checkpoint_sha256": "cae29faea192e06c83d2127566860e6b0fefefc09e9d3769ff40031526d510a0",
+  "checkpoint_inference_roundtrip_max_abs_error": 2.384185791015625e-07,
+  "actor_max_parameter_delta": 7.204711437225342e-06,
+  "episodes_ended": 8,
+  "failures": 0,
+  "rows": [
+    {
+      "update": 5,
+      "value_loss": 0.06085632648319006,
+      "policy_loss": 0.0001300368458032608,
+      "entropy": -15.185013771057129,
+      "kl": 0.00013253308134153485,
+      "critic_warmup": false,
+      "actor_kl_guard_skips": 0,
+      "actor_kl_rollbacks": 0,
+      "final_full_rollout_kl": 0.0004708648193627596,
+      "actor_learning_rate": 1e-06,
+      "episodes_ended": 0,
+      "failures": 0,
+      "elapsed_s": 6.4575267400000484
+    },
+    {
+      "update": 6,
+      "value_loss": 0.025479003321379423,
+      "policy_loss": -0.00016584433615207672,
+      "entropy": -15.1850106716156,
+      "kl": 4.311366228648694e-05,
+      "critic_warmup": false,
+      "actor_kl_guard_skips": 0,
+      "actor_kl_rollbacks": 0,
+      "final_full_rollout_kl": 0.00018922079470939934,
+      "actor_learning_rate": 1e-06,
+      "episodes_ended": 8,
+      "failures": 0,
+      "elapsed_s": 9.922802664000073
+    }
+  ],
+  "randomization_enabled": false,
+  "target_model_accepted": false,
+  "scope": "Source reconstruction training plumbing only; no motion/robustness acceptance.",
+  "resume": "runs/sample31_gpu_smoke_v3_20261112/update_000004.pt",
+  "resume_scope": "PPO_and_RNG_restored_simulators_reset"
+}

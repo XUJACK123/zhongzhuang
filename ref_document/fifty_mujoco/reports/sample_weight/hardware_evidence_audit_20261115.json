@@ -1,0 +1,53 @@
+{
+  "tool": "hardware-evidence-audit",
+  "status": "read_only_local_records",
+  "user_confirmation": {
+    "date": "2026-11-15",
+    "wheel_radius_m": 0.055,
+    "total_wheel_ratio": 15.88
+  },
+  "inputs": {
+    "user/robot_config.h": "ad9af9c1a8eb27c0b3edeb6b9c299f54ef12f9e8fb13a3aa5bc4bc27d0749842",
+    "user/algorithm/rl.c": "25753c83a26d94cc6a160b9247538c64100421f046c5a685d3ca9f8ec592c82d",
+    "user/state_estimator.c": "ef91c483246dc22583ac17aa63942f61149ee2420ea92ea873183809ac79d688",
+    "docs/COMMISSIONING_LOG_20261113.md": "ae17806bef5c8bd38c3d25bd9a6c3ab9e533fa59de239c4adbf500f94e22a775",
+    "docs/BOARD_BRINGUP_20261113.md": "dc9636236f6e9769886af5bffc11953f478c6e9fd4bd9638d89b6dadb18dbb96",
+    "diagnostics/live_can_20261114_010445/result.json": "adea8f57d11f46888b5ab4c9be416038a35af5dfa1585467f3857c29a17c64ae"
+  },
+  "can_record_nodes": [
+    {
+      "label": "right_hip_DM4",
+      "received": 28297
+    },
+    {
+      "label": "right_knee_DM3",
+      "received": 28899
+    },
+    {
+      "label": "right_wheel_M3508_3",
+      "received": 0
+    },
+    {
+      "label": "left_hip_DM1",
+      "received": 29185
+    },
+    {
+      "label": "left_knee_DM2",
+      "received": 28872
+    },
+    {
+      "label": "left_wheel_M3508_2",
+      "received": 29366
+    }
+  ],
+  "observed_right_wheel_feedback_missing": true,
+  "motor_gain_hypothesis": 0.7978290366350067,
+  "motor_gain_calibrated": false,
+  "firmware_modified": false,
+  "hardware_accessed": false,
+  "notes": [
+    "The archive source already models a 450 N gas spring; the target stroke changes to 75 mm.",
+    "Reference joint pose was measured on external supports, not an unassisted balance equilibrium.",
+    "Raw file hashes attest local records, not correctness of their physical interpretations."
+  ]
+}

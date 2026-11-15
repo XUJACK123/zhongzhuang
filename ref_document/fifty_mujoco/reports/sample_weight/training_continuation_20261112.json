@@ -1,0 +1,31 @@
+{
+  "tool": "sample-training-continuation-verification",
+  "schema": 1,
+  "generated_at": "2026-11-12T14:57:47+00:00",
+  "status": "passed",
+  "checks": {
+    "model": true,
+    "actor_optimizer": true,
+    "critic_optimizer": true,
+    "contract": true,
+    "source_checkpoint_sha256": true,
+    "original_four_weights_unchanged": true
+  },
+  "accepted_smoke_versions": [
+    "v3",
+    "resume_v3"
+  ],
+  "superseded_smoke_versions": {
+    "v1": "Exploration std floor caused a discontinuous increase on two source channels.",
+    "v2": "Pre-update KL skips still allowed a single large proposal; replaced with post-update whole-rollout rollback and actor lr1e-6."
+  },
+  "transitions": 1536,
+  "last_update": 6,
+  "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/sample31_gpu_resume_v3_20261112/update_000006.pt",
+  "checkpoint_sha256": "cae29faea192e06c83d2127566860e6b0fefefc09e9d3769ff40031526d510a0",
+  "max_final_full_rollout_kl": 0.0018074405379593372,
+  "physics_failures": 0,
+  "target_model_accepted": false,
+  "performance_improvement_claimed": false,
+  "resume_scope": "Model/optimizers verified exactly at update4; simulator trajectories reset before further collection."
+}

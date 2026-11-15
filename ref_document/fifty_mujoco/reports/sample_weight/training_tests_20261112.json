@@ -1,0 +1,40 @@
+{
+  "tool": "sample-reconstruction-and-training-tests",
+  "schema": 1,
+  "generated_at": "2026-11-12T14:58:10+00:00",
+  "status": "passed",
+  "test_count": 43,
+  "commands": [
+    {
+      "name": "offline",
+      "command": [
+        "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/.venv/bin/python",
+        "-I",
+        "-S",
+        "tests/test_sample_offline.py"
+      ],
+      "exit_code": 0,
+      "output": "test_all_four_real_checkpoints_are_finite_and_feedforward (__main__.ArchiveTests.test_all_four_real_checkpoints_are_finite_and_feedforward) ... ok\ntest_arbitrary_pickle_global_is_rejected_without_import_or_call (__main__.ArchiveTests.test_arbitrary_pickle_global_is_rejected_without_import_or_call) ... ok\ntest_bad_persistent_storage_is_rejected (__main__.ArchiveTests.test_bad_persistent_storage_is_rejected) ... ok\ntest_binary_and_nul_payloads_cannot_be_eol_normalized (__main__.ArchiveTests.test_binary_and_nul_payloads_cannot_be_eol_normalized) ... ok\ntest_full_source_and_contract_audit_retains_runtime_gates (__main__.ArchiveTests.test_full_source_and_contract_audit_retains_runtime_gates) ... ok\ntest_manifest_path_escape_is_rejected (__main__.ArchiveTests.test_manifest_path_escape_is_rejected) ... ok\ntest_missing_corrupt_and_wrong_size_inputs_remain_failures (__main__.ArchiveTests.test_missing_corrupt_and_wrong_size_inputs_remain_failures) ... ok\ntest_no_physics_or_learning_dependencies_imported (__main__.ArchiveTests.test_no_physics_or_learning_dependencies_imported) ... ok\ntest_positive_inertia_can_still_violate_physical_triangle_inequality (__main__.ArchiveTests.test_positive_inertia_can_still_violate_physical_triangle_inequality) ... ok\ntest_protocol_seed_sets_are_disjoint_and_randomization_disabled (__main__.ArchiveTests.test_protocol_seed_sets_are_disjoint_and_randomization_disabled) ... ok\ntest_text_eol_changes_are_diagnosed_without_claiming_raw_integrity (__main__.ArchiveTests.test_text_eol_changes_are_diagnosed_without_claiming_raw_integrity) ... ok\ntest_action_limits_and_physical_wheel_velocity_targets (__main__.ContractTests.test_action_limits_and_physical_wheel_velocity_targets) ... ok\ntest_all_observation_channels_have_expected_units_and_order (__main__.ContractTests.test_all_observation_channels_have_expected_units_and_order) ... ok\ntest_clearance_includes_collision_offset_and_tilt (__main__.ContractTests.test_clearance_includes_collision_offset_and_tilt) ... ok\ntest_continuous_hip_wrap_does_not_wrap_knee (__main__.ContractTests.test_continuous_hip_wrap_does_not_wrap_knee) ... ok\ntest_invalid_dimensions_nonfinite_and_unclipped_history_are_rejected (__main__.ContractTests.test_invalid_dimensions_nonfinite_and_unclipped_history_are_rejected) ... ok\ntest_knee_target_is_clamped_before_control (__main__.ContractTests.test_knee_target_is_clamped_before_control) ... ok\ntest_ramp_sign_reversal_obeys_applied_command (__main__.ContractTests.test_ramp_sign_reversal_obeys_applied_command) ... ok\ntest_reference_error_is_in_body_frame_and_bounded (__main__.ContractTests.test_reference_error_is_in_body_frame_and_bounded) ... ok\ntest_rotating_offset_keeps_commanded_point_fixed (__main__.ContractTests.test_rotating_offset_keeps_commanded_point_fixed) ... ok\ntest_se2_straight_reverse_and_arc_are_analytic (__main__.ContractTests.test_se2_straight_reverse_and_arc_are_analytic) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.998s\n\nOK\n"
+    },
+    {
+      "name": "runtime_and_training",
+      "command": [
+        "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/.venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_sample_runtime.py",
+        "tests/test_sample_training.py"
+      ],
+      "exit_code": 0,
+      "output": "......................                                                   [100%]\n22 passed in 1.71s\n"
+    }
+  ],
+  "implementation_sha256": {
+    "src/fifty_mujoco/envs/sample_env31.py": "2dfd62c61283de504849d1fe94db04bae2ec309af5beebb3d1d3364590fdeda9",
+    "src/fifty_mujoco/learning/sample_ppo.py": "013f6111c9affad295a44cb48b357388d8ebe9351b135edccd192975fed77807",
+    "tools/sample_train_smoke.py": "562dd440228f287ea8fad06c54328d68e5658bc0ead215db1deed9d9d7d9d8d7",
+    "tools/sample_reconstructed_evaluate.py": "3a87457be8dd506e694d1e99fdbdff43af776c20e7601c559b103263250625ce",
+    "tests/test_sample_training.py": "7870e9002d41261f16b0a6f66ec4c4fcd26d8013f837065cc3e668546a94f48f"
+  },
+  "formal_motion_acceptance": false
+}

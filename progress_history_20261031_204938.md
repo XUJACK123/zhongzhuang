@@ -3709,3 +3709,311 @@ MuJoCo 的 joint damping、frictionloss 与 geom/contact friction 含义不同�
 - V3–V8：全部未执行，GPU/Warp、MuJoCo、PPO与随机化训练按用户要求暂缓。
 
 本轮没有安装依赖、改变原权重或当前robot/policy_contract/models配置，没有刷写或运行电机。后续先解决六项来源缺口；需要环境的工作等待用户恢复执行。
+
+
+## 30. 2026-11-12：解除环境暂缓，完成网络CPU/CUDA对拍与源模型短诊断
+
+> 更新：2026-11-12 22:39（Asia/Shanghai）。当前工作根：`/home/xy/Desktop/zhongzhuang/zhongzhuang`。
+> 用户先要求按progress.md继续并在本文件记录，随后明确：可以按需要使用GPU训练，忽略先前暂缓Torch推理、MuJoCo/GPU及训练的要求。自此不再以旧暂停要求作为执行限制。
+
+### 30.1 实际环境与范围
+
+现有`ref_document/fifty_mujoco/.venv/bin/python`为Python3.12.13，已装Torch2.11.0+cu128、NumPy2.5.4、MuJoCo3.16.0及pytest，不需安装依赖。系统python3是3.10.12，也能跑纯标准库审计；本轮最终复核统一使用项目虚拟环境。
+
+沙箱内torch.cuda.is_available()为false，nvidia-smi不能连接驱动；经沙箱外只读检测，RTX5060 Laptop GPU可用、8151MiB显存、驱动595.99.02。随后在沙箱外实际完成CPU/CUDA网络对拍。没有修改驱动或系统设置。
+
+本轮执行了：归档复核、严格Torch加载和网络推理、CPU MuJoCo源诊断模型与0.25s PD探针、冻结3050五类短回放、针对性回归测试。没有执行PPO、目标迁移或动力学随机化训练；这次未训练的原因是目标模型与正式物理/时序关卡尚未通过，旧用户暂停要求已解除。
+
+### 30.2 本机归档发现新差异，历史48/48不能直接沿用
+
+原样重跑审计即返回failed（退出码1），旧18项测试中的“当前归档必为48/48”也实际失败。进一步按manifest预期字节核对：
+
+| 当前状态 | 数量 | 含义 |
+|---|---:|---|
+| raw_match | 34 | 长度与SHA-256逐字节一致，包含4份原权重 |
+| crlf_match | 12 | 当前LF文本转换回CRLF后，长度和哈希与manifest完全一致；仍不是原始字节一致 |
+| missing | 2 | artifacts/console.log、metrics/scalars.csv缺失 |
+
+12项换行差异为：README.md、run.json、source-files.json、artifacts/build_report.json、artifacts/model_parameters.json、environment/conda-explicit.txt、environment/requirements-resolved.txt、environment/gpu-preflight-at-launch.json、environment/gpu-preflight.json、environment/startup-configuration-validation.json、evaluation/results.json、media/README.md。
+
+本地包含隐藏文件的同名检索没有找到两个缺失文件；Git所有引用下这两个路径也没有历史记录。不能据此编造日志或重建“同哈希”的CSV。未修改manifest、冻结哈希或原归档文件，未把换行等价计为严格归档通过。
+
+审计schema升级为2：仅对白名单文本后缀且不含NUL的内容诊断双向换行；二进制PT/STL/event仍按原始字节。保留archive_integrity.matched=34，另报content_matched=46、counts、各输入对照及static_blockers。输入冻结仍检查原始哈希，故审计持续failed。
+
+源码186项：102项raw_match、1项crlf_match、14项different、69项missing；加归档快照映射合计127项可定位。六项关键历史源码仍未恢复，source_commit对象也仍不存在。这个本机计数与11-11的95raw+8LF属于不同检出状态，均保留各自报告。
+
+### 30.3 V1：独立31维actor严格加载和网络对拍
+
+新增`src/fifty_mujoco/transfer/sample_checkpoint.py`，独立31→128→64→32→6 ELU前馈网络，没有encoder和历史输入。torch.load使用weights_only=True/map_location=cpu；全部17个模型张量须键集合、形状、float32与有限值符合冻结schema，std必须为正。actor参数严格恢复，critic与优化器不接入新实验，不冒充原实验完整resume。
+
+新增`tools/sample_actor_validate.py`，实跑2975/3000/3025/3050四份权重，每份原始SHA-256与manifest匹配。固定输入包括：批量1/32/256的seed=20261112随机样本、零输入和[-100,100]观测裁剪端点。
+
+对照包括：
+
+1. source-files哈希逐字节匹配的原ActorCritic类（只加载该文件，未启动Isaac Gym），完整17张量strict恢复后的act_inference。
+2. 独立NumPy float64矩阵乘/ELU实现。
+3. 新actor的CPU与实际CUDA输出。
+
+四份权重所有输入均有限，全部满足atol1e-5/rtol1e-4。CPU报告所有对照最大绝对差约1.02624e-4，CUDA报告约1.52588e-4；这些最大值出现在大幅值端点，仍满足绝对＋相对联合容差，不能误写为“所有绝对误差都≤1e-5”。
+
+这是**固定输入网络数值对拍通过**。source_runtime_golden_samples_available=false，不能延伸成原环境观测生成、reset、命令生命周期或端到端动力学已对拍。
+
+### 30.4 V2：独立源MuJoCo诊断模型与物理单元检查
+
+新增`transfer/sample_source.py`、`tools/sample_source_probe.py`，生成`assets/mjcf/sample_source_diagnostic.xml`；不注册/覆盖旧models、robot或policy_contract。模型从归档fifty_training.urdf直接构造，保留7个刚体质量/COM/惯量及各自坐标旋转、碰撞原语、关节轴/限位，连续髋、轮径0.055m；相邻刚体排除自碰撞，其他配对仍允许。
+
+动态使用的env_cfg、URDF、actuator_model/hardware、gas_spring/resolved与checkpoint均先要求原始字节哈希匹配，再读取或执行。归档Python以验证后的源码加载，避免在冻结目录生成__pycache__。完整归档仍有缺口，但这些局部诊断输入可以单独确认。
+
+模型nq=13/nv=12/nu=0，主动耦合电机力矩与被动弹簧力矩只经qfrc_applied施加一次，没有同时建立另一套独立限幅电机或弹簧执行器。调用原CoupledActuators的电机坐标变换、额定转速—力矩包络、gain后再次限幅；450N/80mm弹簧是**源训练假设**，geometry_confirmed仍false，不替代本机450N/约250mm/75mm资料。
+
+初始结果：总质量23.259630515567018kg，底部净空0.10000010658856573m，仅左右轮接地，接触距离约浮点零误差；两腿knee_ratio均0.7476616426613549。初始弹簧广义膝力矩右+20.33066595919147Nm、左−20.326537550168Nm。
+
+10项探针检查通过；固定零动作目标的限幅PD运行0.25s无非有限/无界状态。探针首跑曾因NumPy布尔值不能直接JSON序列化而中断写报告，统一转为Python bool后重跑成功，没有沿用未写出的首跑结果。物理积分2.5ms×2、外部PD5ms、策略周期10ms，由模型timestep推导。额外14项运行测试通过：坏权重/错误输入拒绝、电机变换功率守恒与逆变换、转速包络制动与gain后再限幅、弹簧有限差分虚功、惯量只旋转一次、六通道正广义力响应、两轮接触路径、reset可重复性与空误差窗口。
+
+**V2尚未正式放行**：MuJoCo implicitfast、有效滑动摩擦0.75、滚动/扭转0、solref=[0.01,1]等只是暂定接触响应，未与PhysX对拍。不得将PhysX的average合成公式当作MuJoCo已校准证据。报告V2_accepted=false。
+
+### 30.5 冻结3050五类短诊断（不是V3/V4验收）
+
+新增`tools/sample_rollout_diagnostic.py`，采用重建的31维观测、分通道动作裁剪、连续髋角误差、膝目标限位、逐外部物理步PD、电机耦合限制和唯一弹簧施力。关节速度按外部PD位置差分绕回；body线速度按策略周期的位置差分；参考轨迹先按本步applied命令积分，再推进斜坡用于下一观测。这些底层细节参考了归档匹配派生类和**哈希不匹配的本地底层候选**，所以仍未恢复原环境时间对齐证据。
+
+随机化关闭，源初始速度扰动按env_cfg保留；每次显式reset全部物理/命令/参考/历史状态。首次非有限、膝超限>1e-4rad、弹簧行程异常、合倾角>60°、根高<0.15m或机身地面合接触力>10N立即计失败，未实现原环境持续失败窗口，未自动reset拼接时长。
+
+五类各5种子×10s，开发及最终保留种子未使用。以下误差均从启动2s后统计，表中是各类5次的最差单次指标；单位分别为m/s、rad/s、m、度：
+
+| 场景 | 指令vx/wz | 完成次数 | 根vx RMSE | yaw RMSE | 净空MAE | 合倾角P95 |
+|---|---|---:|---:|---:|---:|---:|
+| 站立 | 0/0 | 5/5 | 0.000035 | 0.000080 | 0.002254 | 2.233068 |
+| 前进 | +0.15/0 | 5/5 | 0.000310 | 0.000222 | 0.002764 | 2.026299 |
+| 后退（分布外） | −0.05/0 | 5/5 | 0.000124 | 0.000212 | 0.002044 | 2.313466 |
+| 左转 | 0/+0.3 | 5/5 | 0.006172 | 0.000254 | 0.003212 | 2.686653 |
+| 右转 | 0/−0.3 | 5/5 | 0.005289 | 0.000228 | 0.000023 | 2.347630 |
+
+25/25完成，无上述首次硬失败；每台电机包络裁剪比例各次最大0.001。种子分别为10000、10100、10200、10300、10400起各5个，明确仅诊断，未来验收不用这些种子。
+
+逐策略步NPZ保存状态、applied命令、动作、最后一次PD的主动/被动力矩与弹簧长度、净空、合倾角、步初31维观测及步末关节速度估计；JSON注明列和各量时刻。没有原环境黄金轨迹或视频。
+
+限制：当前vx指标是根速度相对applied vx，未补偏置命令点速度；合倾角不等于正式roll/pitch分别统计；后退只测−0.05，未测−0.15/−0.30；还没有40×40s、过渡/弧线、置信区间、独立保留评估或目标模型迁移。报告V3_accepted=false，因此不能宣布“前后左右全部验收通过”或“本机目标模型已通过”。
+
+### 30.6 可复核产物与检查状态
+
+全部相对`ref_document/fifty_mujoco`：
+
+- `reports/sample_weight/offline_audit_20261112.json`：当前归档和源码明细，**status=failed，退出码1符合真实完整性缺口**。
+- `reports/sample_weight/actor31_cpu_20261112.json`、`actor31_cuda_20261112.json`：4份候选固定输入网络对拍，status=passed。
+- `reports/sample_weight/source_probe_20261112.json`：10项源模型探针，status=diagnostic_pass，V2_accepted=false。
+- `reports/sample_weight/rollout_diagnostic_3050_20261112.json`及同名NPZ：25次逐步诊断，status=diagnostic_only，V3_accepted=false。
+- `reports/sample_weight/tests_20261112.json`：21项标准库unittest＋14项针对性运行测试，共35项通过；含命令原始输出与实现SHA-256。测试通过不覆盖归档审计失败。
+- `reports/sample_weight/index.json`：更新全部本轮JSON哈希；NPZ哈希由回放JSON保存。历史11-11报告不覆盖。
+- `docs/SAMPLE_WEIGHT_RUNTIME.md`：Linux复核命令和来源/接触/时序边界；旧离线说明顶部增加最新状态入口。
+
+本轮未运行完整pytest；只运行与新检查器/模型/回放相关的针对性测试。未安装依赖、改原权重、改旧运行默认配置或操作实物电机。
+
+下一轮优先解决六项底层来源或取得原黄金时序，并完成接触响应核对；完善命令点速度、roll/pitch、置信区间与视频后再进入V4正式源模型评估。然后V5逐项迁移本机目标参数、V6冻结策略边界扫描；只有这些结果支持需要微调时才进入GPU PPO/随机化训练，首段仍按计划≤1h含评估，到时保存退出。
+
+
+## 31. 2026-11-12：按现有材料重建，验证预训练.pt的GPU继续训练链路
+
+> 更新：2026-11-12 22:58（Asia/Shanghai）。用户要求继续工作，随后确认暂时没有原训练工程、按现有材料重建，并询问能否直接利用.pt继续训练。
+> 本轮决策：复用源actor，建立明确版本的新MuJoCo环境/critic/PPO。原来源缺口继续保留，不再等待它才能推进重建；原实验的完整resume与新迁移实验的resume分别记录。
+
+### 31.1 对“.pt能否继续训练”的实际回答
+
+可以复用。原sample actor是31→128→64→32→6前馈ELU，已恢复/验证；旧工程25维＋125历史的训练器不能直接加载它续训。本轮新增独立31维PPO入口，actor和源探索std来自原3050，**critic为新建31→128→64→1，actor/critic两套Adam均新建**。未复用原147维critic或原Isaac优化器，未将它称为原Isaac实验无缝resume。
+
+新迁移实验创建自己的checkpoint后，可以恢复该新实验的模型、优化器、更新计数和Torch随机状态。本轮已实际完成这条路径，不再只是计划或“可以做到”的说明。
+
+### 31.2 环境、评估与训练代码
+
+| 文件（相对ref_document/fifty_mujoco） | 实际行为 |
+|---|---|
+| src/fifty_mujoco/envs/sample_env31.py | 新schema sample_reconstructed_cpu31_v1；31维观测、明确时序、分通道动作/限幅、原CoupledActuators和源弹簧、首次失败、独立terminated/truncated；不内部reset |
+| src/fifty_mujoco/learning/sample_ppo.py | 新critic、PPO、显式终止观测GAE、critic预热、源std保留、解析KL和提议越限回退 |
+| tools/sample_train_smoke.py | GPU策略/PPO＋CPU MuJoCo物理；源actor初始化、新实验保存/恢复；原子编号checkpoint和独立输出目录；最大20更新/32环境/128步/120秒 |
+| tools/sample_reconstructed_evaluate.py | 原3050的命令点/heading跟踪、roll/pitch、停车漂移、参考路径、电机速度/饱和、弹簧余量和Wilson区间；只评重建源profile |
+| tests/test_sample_training.py | 8项训练/GAE/时序/重置/命令点几何回归测试 |
+
+source模型仍是§30的URDF/源弹簧和暂定MuJoCo接触参数。没有切换旧models/robot默认值、没有引入随机化，也没有把源450N/80mm安装假设当作本机450N/75mm确认几何。
+
+新奖励schema sample_transfer_tracking_reward_v1：每策略步dt乘前向、yaw与净空三个指数跟踪奖励，减动作变化与roll/pitch平方惩罚，真实失败再扣1；这是新迁移奖励，不是失踪的原Isaac奖励实现。
+
+终止观测返回后，训练器先计算其value，再显式reset。真实失败零bootstrap；timeout用终止观测value并截断跨episode GAE。无episode结束只报数量0，不计算空均值NaN。环境发生真实非有限状态直接终止实验，已完成的原子checkpoint保留，不覆盖为失败中的参数。
+
+### 31.3 GPU冒烟中的两次修正及最终结果
+
+1. v1实跑4更新/1024样本。源std六通道为约[0.0452451,0.0073130,0.0162824,0.0543755,0.0324711,0.0053644]；初版log_std下限−4.6会把两个通道突然抬到约0.01，出现较大KL。本轮主动检查发现，不能将v1当作最终安全更新验证。
+2. v2保留更低std下限并增加更新前KL跳过，仍观察到一次actor提议就能越过0.02，之后跳过不足以撤销这个变化。因此它也保留为被替代版本。
+3. 最终v3：actor lr从1e-5降为**1e-6**，critic lr3e-4；保留源探索尺度，log_std约束[−6.9,0]。每次actor提议后计算**全rollout**的解析对角Gaussian KL；若非有限或>0.02，回退actor、std及Adam状态并减半学习率。另保留更新前KL检查。
+
+最终v3结果：
+
+| 阶段 | 更新 | 样本 | critic预热 | 物理失败 | 全rollout KL最大 |
+|---|---|---:|---|---:|---:|
+| 从原3050初始化 | 1–4 | 1024 | 前2更新仅critic | 0 | 0.00180744054 |
+| 恢复新实验checkpoint | 5–6 | 512 | 不重复预热 | 0 | 0.00047086482 |
+
+最终链路合计1536样本；包含被替代v1/v2在内，本轮四次GPU冒烟共3584样本。两次最终运行均在各自60秒上限内退出，没有正式长训练。
+
+新实验恢复起点update4的完整模型、actor优化器、critic优化器、契约和源checkpoint哈希逐项完全相等核验通过。恢复后update5/6正常更新。**模拟器会显式重置，没有宣称轨迹逐步完全一致续跑**；GPU负责神经网络和PPO，CPU MuJoCo负责物理，未接Warp。
+
+最终actor确实变化：v3首段参数最大变化约7.9870e-6，恢复段相对恢复起点最大变化约7.2047e-6。保存后CPU重新加载的推理检查通过，source四份原.pt SHA-256仍全部匹配。没有覆盖原权重，也没有宣称这些短更新提升任务成绩。
+
+当前可恢复产物：`runs/sample31_gpu_resume_v3_20261112/update_000006.pt`，格式sample_transfer_ppo31_v1。恢复时校验模型、环境、奖励及实现哈希；若这些发生变化，应建立新的迁移实验，不能强制冒充同一实验resume。
+
+### 31.4 原3050的40秒重建源模型评估
+
+正式V4还要求每类40次、独立保留评估等。本轮先用新的重建开发种子（71000起，各类间隔100）做五类各5次×40s，后退从原−0.05扩大到−0.15m/s；另−0.30后退、停车/反向、左右转/弧线协议各1次×40s，共28次、1120s模拟时间。
+
+修正指标：命令点位置为root_world＋R×[reference_offset_x,reference_offset_y,0]，以其世界位移差分投到当前heading框架后计算前向/横向速度；yaw率由绕回后的heading角差分计算，roll/pitch分别统计绝对值P95。按本物理步applied命令计算误差，首2s不计跟踪误差，但完整episode及首次失败仍计完成/失败。报告停车稳定段最大命令点漂移、电机速度/饱和与弹簧余量。
+
+全部28/28完成并满足本轮工程指标。表中为各类最差单次，单位m/s、rad/s、m、度：
+
+| 场景 | 次数 | 命令点vx RMSE | heading率RMSE | 净空MAE | roll P95 | pitch P95 |
+|---|---:|---:|---:|---:|---:|---:|
+| 站立 | 5 | 0.000014 | 0.000032 | 0.002255 | 1.191658 | 1.889113 |
+| 前进+0.15 | 5 | 0.000386 | 0.000395 | 0.003437 | 2.334261 | 1.644177 |
+| 后退−0.15（分布外） | 5 | 0.000132 | 0.000188 | 0.001101 | 1.209919 | 2.247156 |
+| 左转+0.3 | 5 | 0.018213 | 0.000169 | 0.002285 | 0.787240 | 2.763411 |
+| 右转−0.3 | 5 | 0.009226 | 0.000287 | 0.000216 | 2.604589 | 1.344087 |
+| 后退−0.30（分布外） | 1 | 0.000168 | 0.000254 | 0.000367 | 1.199514 | 2.540453 |
+| 停车/前后反向 | 1 | 0.013815 | 0.018402 | 0.002275 | 1.414130 | 2.391565 |
+| 左右转/前后弧线 | 1 | 0.012932 | 0.016250 | 0.001976 | 1.263754 | 2.844520 |
+
+每类5/5的Wilson95%区间约[0.5655,1]，单次1/1约[0.2065,1]；有限开发样本不能宣称高置信度成功率≥90%。该结果针对**未训练的原3050在重建源profile**，不是微调checkpoint性能对照、原PhysX动力学对拍或本机目标验收。没有录制视频，未执行完整开发/独立保留集，也未随机化。
+
+### 31.5 检查与交付
+
+最终针对性测试：**43项通过**，包含21标准库离线＋14运行＋8训练/GAE/几何测试。新增测试独立验证：源actor输出逐值一致；新critic输入31维；critic预热不改actor/std；timeout终止值bootstrap且不跨reset传播；过大KL同时回退权重/Adam；新环境与上轮诊断轨迹0.1s对齐至1e-12；终止观测不被reset覆盖；偏置命令点纯旋转几何。
+
+新增报告均在`reports/sample_weight`：
+
+- `reconstructed_commands_20261112.json`：28次40s评估、逐次指标/区间与实现哈希。
+- `training_v1_20261112.json`、`training_v2_20261112.json`：被替代版本，保留问题和原始运行结果。
+- `training_v3_20261112.json`、`training_resume_v3_20261112.json`：最终GPU初始化/恢复运行。
+- `training_continuation_20261112.json`：模型与两套优化器恢复逐项核验、源权重未改证明、最终checkpoint路径/哈希和被替代版本说明。
+- `training_tests_20261112.json`：43项测试命令原始输出和当前实现哈希。
+- `index.json`：本轮全部JSON索引；checkpoint/NPZ分别由相应JSON保存哈希。
+
+未运行完整pytest、未安装依赖、未改旧模型默认配置或操作实物电机。详见`docs/SAMPLE_WEIGHT_RUNTIME.md`末两节的实际复核命令；重跑训练需使用新输出目录，不覆盖历史checkpoint。
+
+### 31.6 后续需要什么
+
+当前不需要用户补原训练工程；按用户决定继续独立重建，原来源/归档缺口保留记录。下一阶段是**本机目标profile**：按现有资料逐项切换轮径、真实电机/传动及450N/75mm目标弹簧、限位与惯量，逐项跑同一命令回归，明确暂定参数和已核实参数。
+
+只有目标标称基础检查/回归通过，才讨论正式MuJoCo微调及域随机化扩大。源profile的训练链路已经接通，但它不证明目标模型已准备好；短GPU冒烟也不决定正式训练时长。正式首段仍依计划≤1h含评估，到时保存退出，再以开发/保留评估结果决定后续。
+
+## 32. 2026-11-12 至 11-13：目标 profile 落地、1 小时正式微调与 A/B
+
+### 32.1 目标 profile（V5 第一步）
+
+- 新增 `configs/sample_target_profile.json`：轮半径 **0.060 m**（源 0.055）、M3508 内置
+  3591/187 × 16T→19T 链 = **68229/2992 = 22.80381016**、腿电机沿用归档 DM-J8009P 输出侧
+  20/40 N·m、额定/空载 100/160 rpm、弹簧 **450 N / 自由长 0.250 / 行程 0.075 m**
+  （min 0.175 / max 0.250，reference 0.227760939）、出生高度 +0.005 m。
+- 新增 `transfer/sample_target.py`：后处理源 MJCF——先校验源轮半径 = 0.055 m，再改 0.060 m；
+  膝压缩限位由 175 mm 销距反解：右 **−3.723829953 rad**、左 **+3.724667691 rad**；
+  `SampleTargetSource` 镜像冻结的 `SampleSource` 初始化，不修改其文件（哈希属于 v1 训练契约）。
+- 新增 `envs/sample_env31_target.py`（`TARGET_ENV_SCHEMA=sample_target_cpu31_v1`），复用
+  31 维观测/奖励/时序。
+- 发现：默认低姿态销距 0.17782 m 仅比 175 mm 硬限位多 **2.8 mm**；75 mm 行程对现有 reset
+  姿态是紧边界，后续降低车身的课程会先撞到硬限位。
+- `tools/sample_target_probe.py` **13/13 通过**：质量 23.25963 kg、nq/nv/nu 13/12/0、
+  轮半径 0.060、净空 0.1050001 m、膝限位 = 弹簧最短长、两轮接地无穿透、短时 PD 有限、
+  弹簧行程不越界。
+- `tools/sample_target_evaluate.py` 初版（1 seed × 10 s × 8 场景）全部达标；这是诊断，
+  不是 V5 验收。
+- `tests/test_sample_target.py` 6 项通过。
+
+### 32.2 正式分段训练入口
+
+- 新增 `tools/sample_transfer_train.py`：envs≤64、steps≤256、由墙钟 `--max-seconds` 控制
+  分段；可恢复模型、actor/critic 两套优化器、Torch/CUDA RNG、update 号、契约与超参哈希；
+  每 N 次更新保存 checkpoint 并做 5 类 ×10 s 确定性评估；`rows.jsonl`/`evaluations.jsonl`
+  增量落盘。
+- 保留原 KL 守卫（全 rollout KL>0.02 回退 actor/std/Adam 并减半 lr）与 critic 预热
+  （预热不动物理）；resume 校验源代码/模型/奖励/超参数一致性。
+
+### 32.3 1 小时分段结果
+
+- run `runs/sample31_formal_1h_20261112`：32 envs × 32 steps = 1024 样本/update，
+  20 s episode，warmup 2，预算 3600 s。
+- **413 updates / 422,912 样本 / 3607.3 s**；192 段 episode 全部走满、**物理失败 0**；
+  20 次周期评估（update 20–400）**全部 5/5 类达标**；全 rollout KL 最大 **0.014693**
+  （回退/跳过 0）；actor 参数最大变化 0.001758；save/load 回读误差 2.38e-7；
+  完成 episode 回报均值 58.94→59.08。
+- checkpoint `update_000413.pt`，SHA-256
+  `5387fcccd4a8574fa03906b9c8f1046886109857204ee19d2cff6c0d20f86195`。
+- 本机实测吞吐：纯采集约 500 样本/s（32 envs）；含评估与集中重置约 100–160 样本/s。
+  训练期间 GPU 利用率近 0（占用 164 MiB），瓶颈是单进程 CPU MuJoCo；系统 load 约 5。
+
+### 32.4 目标 profile 同种子 A/B（10 s）
+
+- 28 场：五类 × 5 seed + −0.30 后退 / 停止反向 / 转向各 1，种子 71000 起。
+- 原 3050 与 ft413 **均 28/28 阈值达标**。
+- ft413 相对 3050：**vx RMSE 0.0070→0.0029**、**yaw RMSE 0.0231→0.0048**、
+  净空 MAE 0.00922→0.00867、倾角 P95 2.74°→2.80°、最小弹簧余量 2.4→2.5 mm。
+- 结论：速度/转向跟踪精度显著改善，姿态与净空基本持平；不是全面改进，也不构成验收。
+
+### 32.5 测试与索引
+
+- `tests/test_sample_target.py` + `tests/test_sample_training.py`：**14 项通过**。
+- 报告索引 **19 份、0 差异**；新增 `target_probe_20261112.json`、`target_commands_20261112.json`、
+  `target_commands_3050_5seed_20261112.json`、`target_commands_ft413_5seed_20261112.json`。
+- 文档同步：`progress.md` §5.9/§5.10、`docs/SAMPLE_WEIGHT_RUNTIME.md` 目标 profile 与
+  训练 A/B 两节。
+- 未修改：原 `.pt` 权重、归档 `manifest`、`transfer/sample_source.py`、`envs/sample_env31.py`
+  等训练契约文件。
+
+### 32.6 未解决与下一步
+
+- 目标 profile 仍是 **provisional**：轮惯量未按 0.06 m 重算；M3508 包络为 P19 代理 × 1.1875；
+  弹簧为 450 N 常量模型、无力-位移曲线；归档 URDF 的 effort/velocity 限幅仍是源值，
+  `validate_hardware_asset` 未用于目标 profile；随机化关闭。
+- 下一步：
+  1. 目标 profile 上跑 V4 规模评估（5 类 × 40 seeds × 40 s，约 1–2 h）；
+  2. 把 `SampleTargetEnv31` 接入训练入口，用 ft413 初始化做目标 profile 1 h 微调；
+  3. 通过后再进 V6 单因素扫描与 V7 随机化。
+- 注意：目标 profile 默认姿态距弹簧硬限位仅 2.8 mm，任何提高屈膝/降低车身的新课程都必须
+  先检查销距。
+
+
+---
+
+## 33. 实机参数迁移与受限重建验收（2026-11-15）
+
+### 5.11 实机记录驱动的新一轮迁移（2026-11-15，进行中）
+
+- 用户授权本轮训练最多 **4 小时**，本轮开始于北京时间约 **02:23:51**；采用保守全流程截止 **06:23:45**，不延长预算。最终实际训练时长、checkpoint 和评估结果待实跑后回填。
+- 用户已再次明确：**轮半径 55 mm、轮侧总减速比 15.88**，按 `chassis_ref_new` 新实机记录。旧 §5.9 的 60 mm / 22.8038 目标 profile 保留作历史，不再代表当前实车。
+- 核对固件：PD **2 ms**、策略 **10 ms**，电机空间上限腿 **20 Nm**、轮 **2 Nm**；固件先做广义关节 effort 限幅再做耦合与电机包络限幅。新环境独立实现这些约束及固件命令斜坡顺序，旧冻结源模块和归档不改。
+- 新增 `configs/sample_hardware_profile.json`、`envs/sample_env31_hardware.py`、`tools/sample_hardware_train.py`、`tools/sample_hardware_evaluate.py`。弹簧沿用目标 450 N / 自由长 250 mm / 行程 75 mm；惯量仍为归档值，弹簧力曲线/摩擦未标定。
+- 新实机记录的 `q=[3.1501,-2.9896,0,-3.1501,2.9896,0]` 来自**支架支撑的测量姿态**，不能当成无支撑平衡点。新仿真以轮接地反算根高 0.300001 m，ft413 在撤去支撑后约 **0.09–0.10 s** 机身触地（gain=1/0.8 两例）。这只是重建模型诊断；没有连接或操作实物。
+- 实机反馈/指令力矩约 `5.88/7.37≈0.8` 只是力矩兑现率的假设，不是完成测力标定。后续若进行增益扫描或随机化，会单独报告。
+- 固件估计器已接入：1 ms 物理子步，2 ms PD，5 ms 关节差分速度保持和轮无滑移里程计，10 ms actor；命令先斜坡再观测。已用真实固件 C `estimator_update` 对 101 个运动状态逐项核对，误差在 float32 容差内。原固件源码只读。
+- GPU 冒烟完成：3 updates / 768 样本 / 2.67 s，失败 0，最大 rollout KL 0.002347；从 ft413 权重初始化，新建优化器。
+- 新估计器基线暴露**轮力矩长期饱和**：ft413 站立 1 seed×40 s 可完成，vx RMSE 0.00572、yaw RMSE 0.01548，但左右轮饱和比例约 **53.1% / 48.9%**，超过 5% 门槛。因此不以完成率视作达标。首次正式段在 81.4 s / 11 updates 后主动停止，保存到 `runs/hardware31_nominal_20261115/update_000011.pt`，不作为最终候选。
+- 变更训练方法：v3 明确区分固件动作目标限幅与物理弹簧硬限位；增加轮饱和奖励惩罚（独立 reward schema），先扫描轮速度环 Kd。Kd≠0.3 是**待配套部署的控制参数实验**，不代表当前实车已改。
+- Kd 扫描（ft413、每类 1 seed×10 s、25 场）：0.30 五类全未达标，0.15 为 3/5，**0.10 为 5/5**（最大饱和率 0.74%），0.05/0.03 均失稳。报告 `reports/sample_weight/hardware_kd_scan_20261115.json`。
+- **02:51 启动 Kd=0.10 正式候选微调**，目录 `runs/hardware31_kd010_nominal_20261115`：32×32、actor lr=1e-6、10 次 critic 预热、每 50 updates 评估，最多 1800 s，4 次评估停滞早停。同步运行 ft413 的同配置 5 seeds×40 s 基线。
+- 为缩短回放耗时新增 `envs/sample_env31_hardware_fast.py`：只把 CPU 小 Torch 电机张量运算换成 float64 标量实现，不改物理/时序/奖励。500 组随机力矩/高速/不对称增益与参考实现对拍至 1e-11，闭环 1 秒状态/奖励对拍通过；参考实现保留。新增并行评估工具，所有结果记录 backend 与实现哈希。
+- update 50 的进程内五类×10 s 全部达标，现用独立开发集 42000–42199 对该候选进行每类 40×40 s 评估（不使用保留集选模型）。
+- update 100 五类×10 s 全通过，综合归一化跟踪误差分数 1.10987→1.05597（较 u50 下降约 4.9%）；另开发集 2 seeds×5 类×40 s 共 10/10 达标。u50 完整开发集当前已完成至少 40/200 场且全部达标，仍在执行。
+- fast77 完整五类开发集 **200/200** 达标，修复旧 u50 的 seed42172；但额外弧线协议 seed43002 在 **30.216 s** 出现膝硬限位失败，所以完整命令协议仍未通过。
+- 新实验 v4：`envs/sample_env31_hardware_guarded.py` 仅把动作目标限制在物理膝压缩限位内，并留 **0.03 rad** 余量；**物理限位与失败阈值均不放宽**。45 场余量扫描全部走满、膝失败 0，但每组右转跟踪未达标（7/9质量通过），需要针对新约束训练。
+- **03:58 左右启动** `runs/hardware31_guarded_20261115`：从 fast77 初始化、新优化器、最多 900 s，加入弧线、0.30 前后与每 5 s 换命令；这是新的控制配置实验，部署候选需同时导出 Kd 与膝目标限位。
+- 独立保留集已全部结束：**名义200/200 + 附加协议3/3、DM兑现率偏差500/500**，全部达标、物理失败0；名义各类Wilson95%下界0.9124，DM各类0.9630。模型/控制已冻结，无保留集调参。最终报告 `hardware_final_acceptance_20261115.json`，范围仅为当前MuJoCo重建环境，实车接受仍为false。
+- 最终 **Kd0.14/guard0.03** 完整开发协议 **203/203** 达标（五类200 + 高速后退/换向/弧线各1），DM四电机独立0.8–1.0兑现率、20%名义环境开发测试 **50/50**。
+- **04:30 开始一次独立保留集**：名义52000–52199，五类40 seeds×40s并附3个协议；DM偏差62000–62499，五类100 seeds×40s。模型/控制配置已冻结，不依据保留集调参。
+- 边界扫描21个命令点×3 seeds×40s，63场全部走满，但仅 **51/63** 跟踪达标；高角速负向和部分高速弧线不在已接受范围内。基础验证域仍为vx±0.15/wz±0.3及明确报告的协议，不宣称全遥控域验收。
+- **04:17 冻结最终候选**：`runs/hardware31_guarded_20261115/update_000100.pt` + **轮 Kd=0.14 / 膝目标余量0.03 rad**。权重训练时 Kd=0.10，0.14为训练后控制整定，报告与部署生成器显式区分，未修改训练 checkpoint 元数据。冻结前开发依据：9个回归×40 s与同种子10场×40 s全部达标、0.14误差低于0.12。之后仅验证，不用保留集调参。
+- 停止较差 Kd=0.12 的完整对照，部分逐场结果与中断原因保留在 `hardware_guarded_dev100_kd012_interrupted_20261115.json`；最终0.14正在做完整203场开发回归。
+- v4 Kd=0.10 分段已在 **891.14 s** 结束：125 updates / 128,000 样本，64个结束episode失败0，保存 `runs/hardware31_guarded_20261115/update_000125.pt`。
+- v4 第100次短评估：右转 yaw RMSE 0.1541（门槛0.15），仍未全部达标；独立 Kd 扫描显示 **0.12/0.14 各9/9×40s** 通过且硬失败0，0.12作为下一候选进行200场开发集回归。训练配置变化与部署参数配套记录，未启用保留集选参数。
+- u50 完整开发集扩到 170 场时，右转 seed **42172** 首次出现膝硬限位失败；不能把早期全通过外推为全量通过。最终 fast77 在同 10 个 40 s 场景中误差分数最低（1.01530 vs ft413 的 1.19226），已进入完整开发集回归，尚未接触保留集。
+- 性能记录：CPU 多核约 400–800 MHz，用户已切换系统 performance，但实际频率暂未恢复；不延长预算。参考实现分段已在 **1791.12 s** 结束：111 updates / 113,664 样本，33 段结束中 **1 次物理失败**，其余 32 次走满；不是失败 0。保存 `update_000111.pt`。
+- **03:21 启动第二段** `runs/hardware31_kd010_fast_20261115`：从开发指标较好的 u100 actor/critic 初始化、新建优化器、4 次 critic 预热，标量实现最多 **1200 s**，每 25 updates 保存并评估。全流程截止仍为 06:23:45。
+- 第二段已完成：**77 updates / 78,848 样本 / 1198.53 s**，32 个结束 episode 失败 0；最终 `update_000077.pt`。fast25/fast50 的五类短评估均通过，score 1.028736→0.998668。原 v3 的 PPO 已停止；随后因完整弧线回归失败进入独立 v4 目标限位实验，保留集尚未启用。精确预算见 `hardware_campaign_20261115.json`。
+- 敏感性初测发现 405 N（弹簧名义力 −10%）时个别场景虽能走满，但腿电机饱和率超 5%；不计达标。正在区分低力矩兑现率/摩擦与弹簧偏差的影响；这些为工程假设扫描，不是实测分布。
+- 与真实固件 C 的 101 点估计器和 80 点 PD/电机限幅对拍通过；38 项相关测试通过。新环境已区分 5 ms 估计速度保持与每 2 ms PD，保留源固件未改。站立跟踪与支撑姿态启动分别报告。未通过独立保留集或实车平衡前，`target_model_accepted=false`。
+
+
+最终结果见 `ref_document/fifty_mujoco/docs/HARDWARE_TRANSFER_20261115.md`，逐场证据与预算见 `reports/sample_weight/hardware_final_acceptance_20261115.json` / `hardware_campaign_20261115.json`。

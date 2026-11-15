@@ -1,0 +1,2342 @@
+{
+  "tool": "hardware-campaign-summary",
+  "generated_at": "2026-11-14T21:15:06.196641+00:00",
+  "user_budget_seconds": 14400,
+  "conservative_campaign_start_utc": "2026-11-14T18:23:51Z",
+  "conservative_deadline_utc": "2026-11-14T22:23:45Z",
+  "training_seconds": 3964.873266889,
+  "training_hours": 1.1013536852469445,
+  "training_samples": 332544,
+  "training_segments": [
+    {
+      "run": "hardware31_guarded_20261115",
+      "report": "runs/hardware31_guarded_20261115/training_report.json",
+      "report_sha256": "26012be6e4c9540b731f6baa3a2136fb5a0a48a5763487883ce8e470fb4a1f44",
+      "seconds": 891.1446205980001,
+      "updates": 125,
+      "samples": 128000,
+      "failures": 0,
+      "episodes_ended": 64,
+      "stop_reason": "wall_budget",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000125.pt",
+      "max_kl": 0.014704265631735325,
+      "actor_delta": 0.0009682998061180115
+    },
+    {
+      "run": "hardware31_kd010_fast_20261115",
+      "report": "runs/hardware31_kd010_fast_20261115/training_report.json",
+      "report_sha256": "0db0e0dd6fd484f5f8f7b02db780a1aa8a7b0ec3a2672671e5451489c5c3746e",
+      "seconds": 1198.534434016,
+      "updates": 77,
+      "samples": 78848,
+      "failures": 0,
+      "episodes_ended": 32,
+      "stop_reason": "wall_budget",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000077.pt",
+      "max_kl": 0.016950706019997597,
+      "actor_delta": 0.000516645610332489
+    },
+    {
+      "run": "hardware31_kd010_nominal_20261115",
+      "report": "runs/hardware31_kd010_nominal_20261115/training_report.json",
+      "report_sha256": "3b98ad787ca63684f9fa03f1427fecc656a86d0ea84d1045dfded264c3503d58",
+      "seconds": 1791.1207299030002,
+      "updates": 111,
+      "samples": 113664,
+      "failures": 1,
+      "episodes_ended": 33,
+      "stop_reason": "wall_budget",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_nominal_20261115/update_000111.pt",
+      "max_kl": 0.014173964038491249,
+      "actor_delta": 0.0007052943110466003
+    },
+    {
+      "run": "hardware31_nominal_20261115",
+      "report": "runs/hardware31_nominal_20261115/training_report.json",
+      "report_sha256": "992e8c2f55441dcc27c14cd12a281ac56f7be86b87f1b64c77faaf67dda80cee",
+      "seconds": 81.38716432299998,
+      "updates": 11,
+      "samples": 11264,
+      "failures": 0,
+      "episodes_ended": 0,
+      "stop_reason": "requested_stop",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_nominal_20261115/update_000011.pt",
+      "max_kl": 0.009691617451608181,
+      "actor_delta": 1.3573095202445984e-05
+    },
+    {
+      "run": "hardware31_smoke_20261115",
+      "report": "runs/hardware31_smoke_20261115/training_report.json",
+      "report_sha256": "427bd5afca6a035e72b774b92f9b43acf9ff4a4774e29af7f3617117104a0661",
+      "seconds": 2.686318048999965,
+      "updates": 3,
+      "samples": 768,
+      "failures": 0,
+      "episodes_ended": 0,
+      "stop_reason": "update_limit",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_smoke_20261115/update_000003.pt",
+      "max_kl": 0.0023468106519430876,
+      "actor_delta": 7.651746273040771e-06
+    }
+  ],
+  "evaluations": [
+    {
+      "report": "reports/sample_weight/hardware_ab_fast50_20261115.json",
+      "sha256": "463aacb8149aedeb093b68b70bee67ebc0f4fdc534dfbb78caad0b86929e4d6a",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000050.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            }
+          },
+          "total": 10,
+          "passed": 10,
+          "rate": 1.0,
+          "wilson_95": [
+            0.7224672001371107,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_ab_fast77_20261115.json",
+      "sha256": "081818742618000ec82b7481b170070c0527ebacd99960479b3ac169863ea89e",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000077.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            }
+          },
+          "total": 10,
+          "passed": 10,
+          "rate": 1.0,
+          "wilson_95": [
+            0.7224672001371107,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_ab_ft413_kd010_20261115.json",
+      "sha256": "b79974d2149431c0584cb0d94e1a6de26ca7e98944d931717a4dc50cae634e85",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/sample31_formal_1h_20261112/update_000413.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            }
+          },
+          "total": 10,
+          "passed": 10,
+          "rate": 1.0,
+          "wilson_95": [
+            0.7224672001371107,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_ab_u100_20261115.json",
+      "sha256": "b338dcf9c1f9140b0185fb7cf55b7d4f5144b2dd77c23a5639f8407e71023bbb",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_nominal_20261115/update_000100.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            }
+          },
+          "total": 10,
+          "passed": 10,
+          "rate": 1.0,
+          "wilson_95": [
+            0.7224672001371107,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_batch_smoke_u50_20261115.json",
+      "sha256": "a1730a8d231a19e3bdfdc4b06b220d4148a3f564ef8e7b268ecc4cfb8ca7124b",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_nominal_20261115/update_000050.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": null,
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_dev_final77_20261115.json",
+      "sha256": "352f48231cdd419f2894578e537313c479fb15535be09565f03d09f17dafc89e",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000077.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            }
+          },
+          "total": 200,
+          "passed": 200,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9811546736227335,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": true,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_dev_u50_20261115.json",
+      "sha256": "79b24cb116239eeeb77dd1a600abd3538f5c08d1cbcdbb5ed8afe79284f24ff9",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_nominal_20261115/update_000050.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 40,
+              "completed": 39,
+              "passed": 39,
+              "rate": 0.975,
+              "wilson_95": [
+                0.8711863103652591,
+                0.9955731684973186
+              ]
+            }
+          },
+          "total": 200,
+          "passed": 199,
+          "rate": 0.995,
+          "wilson_95": [
+            0.9722262956021069,
+            0.9991168312843989
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": true,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_dm_development_fast25_20261115.json",
+      "sha256": "7d1b5f2f1917d6a9222f57eef1c46e055775401a042a3eccd30c1ada1ac52b9e",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000025.pt",
+      "suite": "dm-random",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "dm_random_080_100": {
+          "classes": {
+            "stand": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "forward": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "backward": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "left": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "right": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            }
+          },
+          "total": 50,
+          "passed": 50,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9286524008666414,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_final_boundary_20261115.json",
+      "sha256": "ae2119896cbc8644c8b59e4ea99e4ac194b7de04192fe3fcb90b0673c42cd4b7",
+      "tool": "hardware-command-boundary",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": null,
+      "scope": "development_88000",
+      "backend": "guarded",
+      "summaries": [
+        {
+          "vx": 0,
+          "wz": 0,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.15,
+          "wz": 0,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.3,
+          "wz": 0,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": -0.15,
+          "wz": 0,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": -0.3,
+          "wz": 0,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": 0.3,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": -0.3,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": 0.6,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": -0.6,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": 1.2,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": -1.2,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": 2.5,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0,
+          "wz": -2.5,
+          "trials": 3,
+          "passed": 0,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.15,
+          "wz": 1.2,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.15,
+          "wz": -1.2,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00045
+        },
+        {
+          "vx": 0.15,
+          "wz": 2.5,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.15,
+          "wz": -2.5,
+          "trials": 3,
+          "passed": 0,
+          "failures": [],
+          "max_saturation": 0.0002
+        },
+        {
+          "vx": 0.3,
+          "wz": 1.2,
+          "trials": 3,
+          "passed": 0,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.3,
+          "wz": -1.2,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.0009
+        },
+        {
+          "vx": 0.3,
+          "wz": 2.5,
+          "trials": 3,
+          "passed": 3,
+          "failures": [],
+          "max_saturation": 0.00025
+        },
+        {
+          "vx": 0.3,
+          "wz": -2.5,
+          "trials": 3,
+          "passed": 0,
+          "failures": [],
+          "max_saturation": 0.0016
+        }
+      ],
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_final_heldout_dm_20261115.json",
+      "sha256": "bf08528ed6731880360f2a353f22bbad93b49f67fb37a21c382c9b2c40fdbf60",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": "dm-random",
+      "scope": "heldout",
+      "backend": "guarded",
+      "summaries": {
+        "dm_random_080_100": {
+          "classes": {
+            "stand": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 100,
+              "completed": 100,
+              "passed": 100,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9630065017930143,
+                1.0
+              ]
+            }
+          },
+          "total": 500,
+          "passed": 500,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9923756595384479,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": true
+    },
+    {
+      "report": "reports/sample_weight/hardware_final_heldout_nominal_20261115.json",
+      "sha256": "7487d1de851bcdb21f3b512105803d1b6b6522331273dc170ea3217edb9af8a6",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": "nominal",
+      "scope": "heldout",
+      "backend": "guarded",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            }
+          },
+          "total": 200,
+          "passed": 200,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9811546736227335,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": true,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_final_sensitivity_20261115.json",
+      "sha256": "3295cb51ce3aafd50f5707f78092cba0c134f75da9eb62e355a2da64fbcb42dc",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": "sensitivity",
+      "scope": "development",
+      "backend": "guarded",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "dm_gain_080": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "dm_gain_090": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "friction_060": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "friction_090": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "spring_090": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "spring_110": {
+          "classes": {
+            "stand": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 5,
+              "completed": 5,
+              "passed": 5,
+              "rate": 1.0,
+              "wilson_95": [
+                0.5655175352168251,
+                1.0
+              ]
+            }
+          },
+          "total": 25,
+          "passed": 25,
+          "rate": 1.0,
+          "wilson_95": [
+            0.8668077490609515,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_ft413_baseline_20261115.json",
+      "sha256": "01bc667b89ca7e81f4c65a25d5804de6936c8b4d022edefaf533a9e8f4a18e64",
+      "tool": "sample-hardware-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/sample31_formal_1h_20261112/update_000413.pt",
+      "suite": null,
+      "scope": null,
+      "backend": null,
+      "summaries": {
+        "stand": {
+          "trials": 5,
+          "completed": 5,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.43448246478317476
+          ]
+        },
+        "forward": {
+          "trials": 5,
+          "completed": 5,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.43448246478317476
+          ]
+        },
+        "backward": {
+          "trials": 5,
+          "completed": 5,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.43448246478317476
+          ]
+        },
+        "left": {
+          "trials": 5,
+          "completed": 5,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.43448246478317476
+          ]
+        },
+        "right": {
+          "trials": 5,
+          "completed": 5,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.43448246478317476
+          ]
+        },
+        "backward_fast_ood": {
+          "trials": 1,
+          "completed": 1,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.7934506856227626
+          ]
+        },
+        "reversal": {
+          "trials": 1,
+          "completed": 1,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.7934506856227626
+          ]
+        },
+        "turning": {
+          "trials": 1,
+          "completed": 1,
+          "thresholds_met": 0,
+          "rate": 0.0,
+          "wilson_95": [
+            0.0,
+            0.7934506856227626
+          ]
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_guarded_ab100_kd014_20261115.json",
+      "sha256": "a833e74e60c44bb8d8fe638bf49db8be1f194e60bf05e97608d8f3e7b404d087",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "guarded",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 2,
+              "completed": 2,
+              "passed": 2,
+              "rate": 1.0,
+              "wilson_95": [
+                0.34238022750665303,
+                1.0
+              ]
+            }
+          },
+          "total": 10,
+          "passed": 10,
+          "rate": 1.0,
+          "wilson_95": [
+            0.7224672001371107,
+            0.9999999999999999
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_guarded_dm_dev100_kd014_20261115.json",
+      "sha256": "a73e1eb51014f5b01369e1b31a7e05a0cb71af18a66414c0ef58c46de42ab0c6",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": "dm-random",
+      "scope": "development",
+      "backend": "guarded",
+      "summaries": {
+        "dm_random_080_100": {
+          "classes": {
+            "stand": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "forward": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "backward": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "left": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            },
+            "right": {
+              "trials": 10,
+              "completed": 10,
+              "passed": 10,
+              "rate": 1.0,
+              "wilson_95": [
+                0.7224672001371107,
+                0.9999999999999999
+              ]
+            }
+          },
+          "total": 50,
+          "passed": 50,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9286524008666414,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_guarded_final_development_20261115.json",
+      "sha256": "2ba97203bca8d56c479fead54815b30692b77c814cf7d35a88189fe7b20b990b",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+      "suite": "nominal",
+      "scope": "development",
+      "backend": "guarded",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 40,
+              "completed": 40,
+              "passed": 40,
+              "rate": 1.0,
+              "wilson_95": [
+                0.9123783988027135,
+                1.0
+              ]
+            }
+          },
+          "total": 200,
+          "passed": 200,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9811546736227335,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": true,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_guarded_kd_scan_20261115.json",
+      "sha256": "6963fbcb3254e4211f647b6fd4eee1734cac8dcbef0729dd682d0692c084116d",
+      "tool": "hardware-guarded-kd-development",
+      "checkpoint": null,
+      "suite": null,
+      "scope": null,
+      "backend": null,
+      "summaries": [
+        {
+          "kd": 0.07,
+          "margin_rad": 0.03,
+          "passed": 2,
+          "trials": 9,
+          "hard_failures": 4
+        },
+        {
+          "kd": 0.08,
+          "margin_rad": 0.03,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "kd": 0.09,
+          "margin_rad": 0.03,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "kd": 0.1,
+          "margin_rad": 0.03,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "kd": 0.11,
+          "margin_rad": 0.03,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "kd": 0.12,
+          "margin_rad": 0.03,
+          "passed": 9,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "kd": 0.14,
+          "margin_rad": 0.03,
+          "passed": 9,
+          "trials": 9,
+          "hard_failures": 0
+        }
+      ],
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_sensitivity_fast25_smoke_20261115.json",
+      "sha256": "f28b05e925b6a2827b209e91c8c08b8392943b77fe1b81286cab439186625277",
+      "tool": "hardware-parallel-command-evaluation",
+      "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_kd010_fast_20261115/update_000025.pt",
+      "suite": "sensitivity",
+      "scope": "development",
+      "backend": "scalar",
+      "summaries": {
+        "nominal": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "dm_gain_080": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "dm_gain_090": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "friction_060": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "friction_090": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        },
+        "spring_090": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 0,
+              "rate": 0.0,
+              "wilson_95": [
+                0.0,
+                0.7934506856227626
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 0,
+              "rate": 0.0,
+              "wilson_95": [
+                0.0,
+                0.7934506856227626
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 3,
+          "rate": 0.6,
+          "wilson_95": [
+            0.2307242812760128,
+            0.882379225767352
+          ],
+          "point_rate_thresholds_met": false
+        },
+        "spring_110": {
+          "classes": {
+            "stand": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "forward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "backward": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "left": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            },
+            "right": {
+              "trials": 1,
+              "completed": 1,
+              "passed": 1,
+              "rate": 1.0,
+              "wilson_95": [
+                0.20654931437723745,
+                1.0
+              ]
+            }
+          },
+          "total": 5,
+          "passed": 5,
+          "rate": 1.0,
+          "wilson_95": [
+            0.5655175352168251,
+            1.0
+          ],
+          "point_rate_thresholds_met": true
+        }
+      },
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    },
+    {
+      "report": "reports/sample_weight/hardware_target_guard_scan_20261115.json",
+      "sha256": "d2020bd99d8e3fc57128f5c1d93470aa449820792d542ef8fe972a08277ca433",
+      "tool": "hardware-target-guard-development",
+      "checkpoint": null,
+      "suite": null,
+      "scope": null,
+      "backend": null,
+      "summaries": [
+        {
+          "margin_rad": 0.0,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "margin_rad": 0.01,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "margin_rad": 0.03,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "margin_rad": 0.05,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        },
+        {
+          "margin_rad": 0.06,
+          "passed": 7,
+          "trials": 9,
+          "hard_failures": 0
+        }
+      ],
+      "adequate_nominal_protocol": false,
+      "adequate_random_protocol": false
+    }
+  ],
+  "selected_checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt",
+  "selected_sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+  "target_model_accepted": false,
+  "real_robot_accepted": false,
+  "limitations": [
+    "Nominal standing resets do not establish recovery from the externally supported surveyed pose.",
+    "Wheel Kd=0.10 requires matching deployment parameters; current firmware remains unchanged.",
+    "Mass/inertias, constant gas spring, torque gains and ground contacts remain partly provisional.",
+    "Original Isaac/PhysX golden-trajectory parity is unavailable."
+  ]
+}
