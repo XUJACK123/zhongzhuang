@@ -1,7 +1,7 @@
 # 轮腿机器人：当前状态、下一步与注意事项
 
-> 更新：2026-11-15（Asia/Shanghai）
-> 当前项目根：`/home/xy/Desktop/zhongzhuang/zhongzhuang`；实施工程：`ref_document/fifty_mujoco/`；模型资产：`solidwork_graph/`
+> 更新：2026-11-15（Asia/Hong_Kong，本次为离线数据复核与下一轮规划）
+> 当前项目根：`D:\robomaster_material\electric_contol\zhongzhuang`；实施工程：`ref_document/fifty_mujoco/`；模型资产：`solidwork_graph/`。上一轮 Linux 训练根为 `/home/xy/Desktop/zhongzhuang/zhongzhuang`。
 > **本文是精简版**，只保留"现在是什么状态、下一步做什么、别踩哪些坑"。
 > 逐轮的详细过程、失败记录与原始输出在 `progress_history_20261031_204938.md`
 > （已追加 §31/§32/§33：重建、1小时微调与本轮实机参数迁移；历史SHA-256只对应当时快照）。
@@ -15,7 +15,7 @@
 
 ## 1. 一句话状态
 
-**本轮实机参数迁移已完成软件训练与受限仿真验证：55 mm轮/15.88总减速比、固件时序和膝目标保护已接入，当前候选为`hardware31_guarded_20261115/update_000100.pt` + Kd0.14/膝余量0.03。PPO累计66.08分钟；独立名义203/203、DM偏差500/500达标。实车平衡与从实测支撑姿态自行启动尚未通过，未烧录。详见§5.11与完整结果文档。**
+**本轮实机参数迁移已完成软件训练与受限仿真验证：55 mm轮/15.88总减速比、固件时序和膝目标保护已接入，当前候选为`hardware31_guarded_20261115/update_000100.pt` + Kd0.14/膝余量0.03。PPO累计66.08分钟；独立名义203/203、DM偏差500/500达标。实车平衡与从实测支撑姿态自行启动尚未通过，本轮新权重尚未烧录。下一轮按§5.12执行起身课程、平衡接管和联合随机化。**
 
 以下为2026-11-01归档结果，本轮只核对既有报告、未重跑：阶段①–⑨在原站立任务范围内执行完毕：串链模型的初始化、短时仿真、接触、契约、CPU/GPU 对拍、冒烟、
 5 h 正式训练、64×60 s 验收全部通过；**首个能站满 60 s 的策略已经落地**
@@ -193,13 +193,13 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 ---
 
-## 5. 下一步（2026-11-12 更新：先验证现有权重，再扩大随机化）
+## 5. 下一步（2026-11-15 更新）
 
-**当前首要任务：验证 sample_weight_file 的 Isaac Gym 策略能否在 MuJoCo 中完成站立、前进、后退、左转和右转。标称模型与目标模型均通过后，才进入动力学随机化训练。** 详细依据、31维字段、分关卡交付和验收见 [历史 §28](progress_history_20261031_204938.md)。
+**当前执行顺序为实测证据复核 → 起身任务可行性和接触建模 → 起身课程 → 接管现有平衡策略 → 联合随机化 → 独立验收。规划见§5.12，离线源码及47项检查的完成记录见§5.13。**
 
-§5.6/5.7保留前两轮记录。用户已解除环境/训练暂停，并确认没有原训练工程、按现有材料重建。现已运行CPU/CUDA网络对拍、CPU MuJoCo重建评估及GPU PPO/恢复冒烟。原始权重、旧模型默认配置和电机未改动；最新证据见§5.8及历史§31。
+§5.1–5.10保留11月11日至12日的决策和过程，其中“尚未实现”等状态以§5.11已完成记录更新。用户已确认缺少原训练工程，并接受重建路线。11月15日本次工作范围为离线复核和准备，仿真、GPU训练及现场测量留在后续阶段。
 
-### 5.1 新权重已经核实什么
+### 5.1 新权重已经核实什么（11月11日至12日历史）
 
 - 归档：[sample_weight_file](sample_weight_file/README.md)。11-11历史曾48/48一致；**本机11-12复核为34/48字节一致、12项仅换行差异、2项缺失**，严格审计仍失败。权重4/4本身哈希一致；详见§5.7。
 - 首个候选：[model_3050.pt](sample_weight_file/artifacts/model_3050.pt)，iter=3050；SHA-256为 8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11。另保留2975/3000/3025，不自动认定最终快照最佳。
@@ -222,7 +222,7 @@ SolidWorks 配合（操作者读）、全圆柱扫描（A 销与两块大腿板�
 
 底层源码尚待补齐：source-files清单中legged_robot.py、on_policy_runner.py、task_registry.py与当前副本不一致，evaluate_tracking.py缺失；actor_critic.py等网络源码匹配。优先取回匹配source_commit的版本，或重建后提供数值/时序对拍，不能按同名文件猜测。
 
-### 5.3 执行顺序与放行条件
+### 5.3 执行顺序与放行条件（原迁移计划，当前进度见§5.11）
 
 | 关卡 | 下一步要做什么 | 放行条件 |
 |---|---|---|
@@ -343,7 +343,131 @@ V5 第一步已落地：**只新增文件，不改归档与被训练契约锁定
 - **明确未通过**：高速度/高角速边界63场虽全部走满，仅 **51/63** 跟踪达标；候选遥控参数限制前进0.15 m/s、yaw±0.30 rad/s。实测支撑姿态直接释放仍 **0/2** 完成（仿真约0.08–0.10s机身触地），54种简单启动脉冲搜索也未成功，不宣称硬件不可能起立。缺ARM交叉编译器，未完成MCU构建、时序或实物平衡验证；未烧录、未移动电机，原固件与四份原始.pt均未改动。
 - **证据范围**：`hardware_final_acceptance_20261115.json` 为 `passed_limited_reconstruction_scope`；`target_model_accepted=false`、`real_robot_accepted=false`、原PhysX对拍false。这里的软件v4不等同于原V0–V8计划全部门槛放行。下一步需现场确认轮反馈、有效力矩与里程计，并另做受支撑的启动姿态准备/启动策略验证；不能把本轮低站姿结论外推成任意姿态自起。
 
+### 5.12 下一轮训练与失能后起身规划（2026-11-15，当前执行版本）
+
+#### 5.12.1 真实数据复核结果
+
+| 已保存的证据 | 本次复核结果 | 对下一轮训练的影响 |
+|---|---|---|
+| 六路反馈 | 11月14日00:02的两次计数均增长。01:04的右轮0x203计数两次均为0，其他五路增长 | 现场重新确认六路新鲜度。训练记录需带反馈有效位和运行模式 |
+| 方向、机械参考位 | 当前源码符号为 `[-1,+1,-1,+1,+1,+1]`，两轮符号已按地面推行修正。支撑下卷尺测量为髋高300 mm、髋轮距350 mm、轮在髋后 | 保留右髋/右膝/右轮/左髋/左膝/左轮顺序。参考关节角由长度反解获得，后续重复测量估计零位误差 |
+| IMU | 整圈人工对线，逐点解缠累计362.2357°。记录中还存在较早的短窗口漂移测量 | IMU轴向有人工参照。陀螺偏置、温漂和观测延迟仍需独立辨识 |
+| 里程计 | 三次记录的估计ΔX分别为−0.716590、+0.573464、+0.532433 m。后两轮轮转角差明显 | 保留最终符号。低滑移外部距离真值待补，`ODOMETRY_VERIFIED=0` |
+| 左膝请求/反馈 | 从中断原始RAM恢复50个完整样本、排除1个残缺样本。35个 `mode=3,inhibit=0` 样本反馈/请求绝对值比的中位数0.79240 | 0.8–1.0兑现率继续作为开发假设。DM上报值和指令同链路，独立负载测量仍需补充 |
+| 起身失败 | 当前候选从支撑测量姿态撤支撑，名义/四腿0.8倍率分别约0.08/0.10 s机身触地，完成0/2 | 新增起身任务、失能静置过程和接管课程 |
+
+上述CAN状态来自已保存的历史采样。源码当前 `ENABLE_OUTPUT=1`、`MOTOR_CALIBRATED=1`、`IMU_FRAME_VERIFIED=1`，契约及里程计标志为0。11月14日已有旧固件实机出力记录。新候选部署包与当前单片机程序需在后续烧录时分别核对。
+
+原始文件与日志已逐项链接，新增[离线证据清单](ref_document/fifty_mujoco/reports/sample_weight/hardware_next_offline_20261115.json)保存输入SHA-256。
+
+| 内容 | 原始JSON或离线派生JSON | OpenOCD日志/原始目录 |
+|---|---|---|
+| 六路均增长 | [00:02 result.json](ref_document/chassis_ref_new/diagnostics/live_can_20261114_000202/result.json) | [00:02日志](ref_document/chassis_ref_new/diagnostics/live_can_20261114_000202/openocd.log) |
+| 右轮无反馈 | [01:04 result.json](ref_document/chassis_ref_new/diagnostics/live_can_20261114_010445/result.json) | [01:04日志](ref_document/chassis_ref_new/diagnostics/live_can_20261114_010445/openocd.log) |
+| 方向复核 | [watch_verify_signs](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_verify_signs/watch.json) | [方向日志](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_verify_signs/openocd.log) |
+| 机械参考位及最终轮符号 | [联调记录23:55、00:12段](ref_document/chassis_ref_new/docs/COMMISSIONING_LOG_20261113.md) | [当前配置](ref_document/chassis_ref_new/user/robot_config.h) |
+| 整圈yaw | [watch_yaw360](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_yaw360/watch.json) | [yaw日志](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_yaw360/openocd.log) |
+| 三次里程计 | [第一次](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_odometry1m/watch.json)、[b](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_odometry1m_b/watch.json)、[c](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_odometry1m_c/watch.json) | [第一次日志](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_odometry1m/openocd.log)、[b日志](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_odometry1m_b/openocd.log)、[c日志](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_odometry1m_c/openocd.log) |
+| 中断的左腿出力试验 | [本次恢复JSON](ref_document/fifty_mujoco/reports/sample_weight/hardware_watch_left_leg_under_torque_recovered_20261115.json) | [原始BIN与watch.tcl](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_left_leg_under_torque/)。该目录缺少OpenOCD日志 |
+| 中断的20 Nm架空试验 | [本次恢复JSON](ref_document/fifty_mujoco/reports/sample_weight/hardware_watch_freeair_cap20_recovered_20261115.json) | [原始日志](ref_document/chassis_ref_new/diagnostics/commission_20261113_230207/watch_freeair_cap20/openocd.log) |
+| 站立模型与起身差距 | [冻结验收](ref_document/fifty_mujoco/reports/sample_weight/hardware_final_acceptance_20261115.json)、[撤支撑试验](ref_document/fifty_mujoco/reports/sample_weight/hardware_final_startup_20261115.json) | [上一轮完整结果](ref_document/fifty_mujoco/docs/HARDWARE_TRANSFER_20261115.md) |
+
+**数据使用修正。** 左腿恢复记录的MCU跨度为51.264 s，脚本请求间隔200 ms对应的名义跨度仅9.8 s，实际相邻MCU采样约1.000–1.108 s。其中后段进入STOP。历史“12秒全程运行”的描述需按本次逐样本恢复结果理解。此类调试器串行读数适合稳态核对，毫秒延迟辨识需要带MCU时间戳的同步遥测。`g_rl.motor_torque` 在STOP时仍可保留计算值，统计实际运行需联合模式、inhibit及反馈。完整试验的原始BIN保留在原目录中。
+
+#### 5.12.2 起身任务定义与代码接入
+
+第一版按**车身正放，腿部失能后自然停位，再使能起立**定义。支架托住的300 mm测量姿态只作为有支撑课程起点。后续要采集或在仿真中产生真正撤支撑、零力矩静置后的姿态、接触和速度。侧翻/倒扣恢复另设任务和机械可行域。
+
+采用独立起身actor接管至冻结平衡actor。起身actor从当前候选的actor参数初始化，奖励、critic和优化器新建。上一轮Kd0.10训练与Kd0.14评估的差异在新实验中统一记录，先以Kd0.14做回归。保留原候选和独立运行目录。
+
+- 观测继续使用31维前馈契约、原缩放和上一周期裁剪动作。真实根高度、接触力、支撑力和随机化参数可用于奖励/critic。actor输入沿用实车可获得的量。若后续增加相位或历史输入，需另建观测版本并同步C导出。
+- 沿用默认角加动作偏移、腿scale0.5和轮scale20、耦合映射、20/2 Nm电机上限、转速包络、膝目标余量0.03 rad以及1/2/5/10 ms时序。先检查自然位至目标位是否落在动作覆盖范围，必要时设计受限参考轨迹并连同固件接口一起版本化。
+- `STOP → GETUP → HANDOFF → BALANCE`的协议源码已实现，见§5.13。失能阶段实际执行零力矩并静置1–3 s，使能斜坡先试0.2–0.5 s。最终时间由可行性试验确定。反馈超时、遥控STOP和硬故障沿用停车路径。当前固件的S1下档停车、其余档使能逻辑后续需接入起身状态机。
+- 使能时以当前估计重置xy/yaw参考，并填充5 ms差分历史，避免首帧伪速度。初始上一动作为0。起身时命令固定 `[0,0,0.10]`，先完成静止起立。切换保持关节、估计器、PD时钟和动作历史连续。源码按0.3 s平滑混合两actor裁剪动作，再经同一目标限位映射，下一帧保存实际混合动作。该时序需要与C控制器一起对拍。
+- 双actor导出后核对Flash/RAM占用，分别测起身、平衡和交接窗口的总推理时间及最大循环时间，检查1 ms采样和2 ms PD截止时间。
+- 原 `reset_mode=natural/mixed` 只插值关节角并将轮放到地面。`SampleHardwareEnv31`及fast版本仍在机身接触力>10 N、根高<0.15 m或倾角>0.70 rad时终止。§5.13新增专用起身适配源码，在失能/起身阶段使用明确的静置接触名单，保留机械与估计器失败，并在BALANCE采用原平衡判据。接触与静置效果需CPU动态检查。
+
+#### 5.12.3 分阶段执行与验收
+
+下表中的时间、成功率和误差为下一轮开发目标，待接触和动作可行性检查后冻结。
+
+| 顺序 | 工作及产物 | 完成条件 |
+|---|---|---|
+| P0 离线准备，已完成 | 冻结候选、恢复数据，完成起身协议、课程、奖励、训练/评估入口及适配源码 | 累计标准库测试47项通过，训练及评估预检查通过，源码与证据哈希保存于§5.13报告 |
+| P1 现场数据补充，可与环境开发并行 | 六路反馈新鲜度、失能后的实际接触与自然位、重复零位、两侧气弹簧行程—力/滞回、低速负载力矩和低滑移里程计 | 每项有原始数据、MCU时间戳、支撑/电池/运行模式及测量误差。未知量仍保留假设标签 |
+| P2 CPU仿真可行性，GPU前执行 | 专用起身环境、碰撞/接触名单、真实零力矩静置、动作可达性、耦合空间重力/弹簧/接触力矩需求。回放有限速参考轨迹 | 名义及0.8腿倍率下至少存在一条满足上限/行程/分支的起立路径，或明确定位动作、机构、力矩或模型瓶颈。输出轨迹和失败原因 |
+| P3 起身课程训练 | 近站姿扰动 → 实测姿态虚拟竖直支撑 → 随机撤支撑并逐级降至零 → 零力矩静置状态库 → 左右差异和联合随机化 | 每级连续3轮开发评估成功率≥90%，且旧平衡回归通过。辅助力在成功判定前归零 |
+| P4 平衡接管 | 固定平衡actor，从起身完成状态连续接管。保持时间递增至10 s，再加入低速命令及停车/换向 | 5 s内起立。稳定1 s后切换。切换及随后10 s无机身触地、限位/行程失败。保留连续遥测和视频 |
+| P5 站立与起身联合鲁棒性 | 四腿gain0.8–1.0、地面摩擦0.6–0.9、弹簧恒力倍率0.9–1.1先分别再联合。20%名义样本。随后按实测加入阻力、惯量、传感器误差和延迟 | 起身和平衡同时报告名义、单因素、左右不一致、联合角点。采样参数逐episode保存 |
+| P6 独立最终验收与部署准备 | 冻结两actor、控制器、reset分布和阈值。200个名义、500个联合随机化保留seed。五类40×40 s旧平衡回归和3个切换协议 | 起身名义≥95%、联合≥90%、各reset类≥90%，硬限位/行程违规0。逐类Wilson95%区间、失败首因和切换后10 s结果完整。随后完成双actor C对拍及MCU计时验证 |
+
+P1用于校准真实分布，P2/P3的探索可先按现有假设开展。P2若发现当前20 Nm及动作空间无法完成路径，先复核弹簧模型、安装几何、碰撞与有效力矩，再决定参考轨迹/动作接口或机构方案。
+
+已有静态扫描中，仅平衡恒力气弹簧所需的单腿电机峰值约18.40 Nm，实测支撑姿态处约18.13 Nm。若按0.8兑现率，20 Nm请求对应16 Nm模型输出。P2需要加入重力、地面反力和动态过程，检查可行路径及力矩裕量，再决定是否进入GPU训练。[扫描原始JSON](ref_document/fifty_mujoco/reports/sample_weight/hardware_final_startup_20261115.json)
+
+起立成功窗口建议为净空相对0.10 m误差≤0.02 m、双轮承重、roll/pitch各≤8°、机体角速度各轴≤0.5 rad/s、前向速度≤0.08 m/s、四腿离平衡默认角各≤0.15 rad、水平位移≤0.30 m，同时无机身触地和辅助力，持续1 s。接管后按现有平衡失败判据连续验收10 s。仿真接触真值可用于验收，实机切换需利用几何/IMU/速度代理量，并单独验证其可靠性。
+
+奖励逐项记录有界姿态/几何进展、稳定驻留、无辅助接管成功、力矩/功率代理、饱和与变化率、轮滑/位移及接触冲量。对高度进展做饱和，避免跳起瞬间刷分。允许静置接触时给有限代价，成功窗口要求离地。随机化按每回合固定动力学参数进行，遥测过期时仍执行固件停车/重使能流程。
+
+开发种子预留100000–199999用于训练、200000–200099用于开发、300000–300199用于名义留出、400000–400499用于联合留出。最终验收前冻结参数和阈值。据留出失败改动后，重新分配独立验收种子。训练预算待运行资源和P2步速明确后设定，每级按开发指标晋级并保留best/last与中断恢复信息。
+
+#### 5.12.4 本次完成的离线产物与重跑方式
+
+- [机器可读课程与验收规格](ref_document/fifty_mujoco/configs/hardware31_next_training_20261115.json)已写入阶段、种子、时序、命令、接管和随机化范围。
+- [reset规范](ref_document/fifty_mujoco/reports/sample_weight/hardware_getup_reset_bank_20261115.json)包含1个支撑测量姿态及原31维契约默认站姿。`simulation_validated=false`，撤支撑静置状态库待P2生成。
+- [离线准备脚本](ref_document/fifty_mujoco/tools/sample_hardware_prepare_next.py)核对候选SHA-256、规格与profile时序、网络结构、种子区间及膝角，复用已有31维默认角常量，解析原ARM布局并保存每个原始BIN哈希。
+- [11项测试](ref_document/fifty_mujoco/tests/test_sample_hardware_prepare_next.py)覆盖ABI偏移、残缺/非有限值样本、撕裂计数标记、缺日志、种子重叠、时序/结构/膝角错配和调试器冻结快照。此次运行11项通过。
+
+在项目根运行以下命令即可重建派生报告，使用Python标准库。
+
+```powershell
+python ref_document/fifty_mujoco/tests/test_sample_hardware_prepare_next.py
+python ref_document/fifty_mujoco/tools/sample_hardware_prepare_next.py
+```
+
+数据准备状态现为 `offline_preparation_passed_physics_validation_pending`。起身运行入口、奖励、课程调度和适配源码已按§5.13完成。下一项工作是P2的CPU动态可行性验证及PyTorch/PPO冒烟，随后进入P3训练。
+
+### 5.13 不依赖仿真的源码与工具已完成（2026-11-15）
+
+按“把不需要仿真的工作都做了”的要求，完成以下源码、接口、命令和记录格式。详细使用方法见[起身离线实现文档](ref_document/fifty_mujoco/docs/GETUP_OFFLINE_20261115.md)，实际检查结果见[离线检查报告](ref_document/fifty_mujoco/reports/sample_weight/hardware_getup_offline_readiness_20261115.json)。
+
+| 交付 | 已实现的行为 |
+|---|---|
+| [起身状态机与目标/奖励](ref_document/fifty_mujoco/src/fifty_mujoco/contracts/getup31.py) | 停机重使能、力矩斜坡、稳定驻留、平滑交接、接管10 s、超时和故障锁存。复用31维动作裁剪/目标映射，连续髋角沿用环绕差值 |
+| [课程与独立验收](ref_document/fifty_mujoco/src/fifty_mujoco/learning/getup_curriculum.py) | 完整开发集连续三次达标晋级、重复报告幂等、课程恢复、按seed可复现随机化、留出完整性/逐类门槛/Wilson区间 |
+| [数据与重放格式](ref_document/fifty_mujoco/src/fifty_mujoco/transfer/getup_trace.py) | JSONL来源/计划/权重检查，时间戳、故障、目标重放，六路CAN/IMU/遥控新鲜度及DM力矩/轮电流单位分开记录 |
+| [MuJoCo起身适配源码](ref_document/fifty_mujoco/src/fifty_mujoco/envs/sample_env31_getup.py) | 复用GuardedHardwareEnv31，加入零主动电流静置、竖直支撑与撤除、按阶段接触判定、起身奖励、冻结平衡actor自主验证 |
+| [训练入口](ref_document/fifty_mujoco/tools/sample_getup_train.py) | 初次复制平衡actor及log_std，新建critic/优化器，复用SamplePPO，保存模型/优化器/RNG/课程/回合参数和源码指纹，可携带晋级状态恢复同一任务 |
+| [评估入口](ref_document/fifty_mujoco/tools/sample_getup_evaluate.py) | 开发100、名义200、联合500预留seed，逐场结果、部分完成标记和课程评估报告 |
+| [离线命令](ref_document/fifty_mujoco/tools/sample_getup_offline.py) | check / replay / curriculum / acceptance，更新证据清单与检查报告 |
+
+协议检查合计 **47项通过，失败0、错误0**，其中原数据准备11项、起身相关36项。覆盖时序跳变、失稳/失联、残缺数据、接管持续时间、停止与重启、角度环绕、课程幂等/恢复、留出完整性、虚拟支撑计时和缩放一致性。适配层辅助逻辑使用替身对象测试。
+
+以下命令已实际执行通过，均为离线检查或预检查。
+
+```powershell
+python ref_document/fifty_mujoco/tools/sample_getup_offline.py check
+python ref_document/fifty_mujoco/tools/sample_getup_train.py --prepare-only
+python ref_document/fifty_mujoco/tools/sample_getup_evaluate.py --prepare-only --split heldout_nominal
+```
+
+**实现时作出的工程选择。** 首版起身限定车身正放。近站姿和有支撑姿态是准备课程，零力矩静置时间取0，后续阶段取1–3 s并真实推进被动弹簧。支撑PD初值5000 N/m、400 N·s/m，上限2倍模型体重，撤除淡出0.5 s。允许接地名单初设机身底部与两轮，非对称重置采用左腿±0.03 rad扰动。这些参数以及奖励初值均在配置中标注待CPU几何/动态验证。
+
+**训练数据时序。** 起身策略完全退出后，适配器自主推进冻结平衡actor至10 s结果，训练器仅收集GETUP/HANDOFF对应的策略动作。末端转移返回平衡验证结果及累计奖励，终止状态观测用于GAE，随后才重置。使能时重置位置/航向参考并填充差分历史，交接时保持状态和实际混合动作历史连续。
+
+**后续依赖。** 本机当前Python缺少Torch、NumPy和MuJoCo运行依赖。新适配器的动力学步进、接触名单、零力矩静置和力矩可行性需P2运行验证，actor复制及PPO更新需CPU冒烟。双actor MCU移植/资源占用/周期计时和现场起立按后续关卡验证。`physics_validation_completed=false`保留在检查报告中。旧站立策略的仿真验收范围仍按§5.11记录。
+
 ---
+
+### 5.14 固件算法改进已实现，实测数据方案已整理（2026-11-15）
+
+在§5.13的离线训练准备基础上，本轮将u100平衡候选及Kd0.14/膝目标余量0.03接入 `chassis_ref_new`，加入起身/接管接口、使能斜坡、里程计质量与参考重对齐、IMU自适应校正、速度辅助轮编码器解缠、过期遥控下档修复和有序号的32帧遥测。完整源码地图、验证结果与限制见[算法实现报告](ref_document/chassis_ref_new/docs/ALGORITHM_IMPROVEMENTS_20261115.md)。
+
+`make test`通过273组actor输入、100组观测、14630权重逐位核对、新算法分支和两套假HAL主循环；完整ARM构建零警告。详见[验证快照](ref_document/chassis_ref_new/docs/validation/algorithm_20261115.json)。未烧录、未访问硬件、未运行仿真或GPU；生产输出总开关/校准记录未提升。§5.11“未改原固件/缺编译器”属于当轮状态，本轮源码已更新且已完成交叉构建，实车镜像仍需现场核对。
+
+起身状态机已接入固件，但没有训练完成的起身actor。近站姿可直接接平衡，其他姿态缺起身actor时fault=5并零输出。真实接触、净空和辅助力尚未观测，当前ready是代理判据。旧仿真验收不能直接继承给新IMU/里程计/参考管理闭环；下一轮训练前必须先对齐仿真链路并重新回归。
+
+用户要求的[实测计划progress_real_data.md](progress_real_data.md)已写入T0–T8的具体操作、记录字段、初始判断标准及训练用途。优先顺序：通信与记录质量→失能自然停位→参考位重复性→独立负载力矩/弹簧→IMU/里程计/时序→有支撑起身与撤支撑。每项区分现有工具、需外部仪器和需连续采集通道的部分，原始JSON/OpenOCD日志有链接。现场数据尚未新增。
 
 ## 6. 注意事项（都是踩过的）
 

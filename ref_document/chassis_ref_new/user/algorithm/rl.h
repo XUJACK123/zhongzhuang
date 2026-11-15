@@ -23,6 +23,10 @@ typedef struct {
 float rl_clip(float x, float lo, float hi);
 float rl_wrap(float x);
 bool rl_actor(RlNetwork *net, const float obs[31], float action[6]);
+typedef bool (*RlActorFn)(RlNetwork *net, const float obs[31], float action[6]);
+bool rl_policy_step_actor(RlController *c, const RlMeasurement *m, const float request[3], float dt, RlActorFn actor);
+bool rl_set_action(RlController *c, const float action[6]);
+void rl_manage_reference(RlController *c, const RlMeasurement *m, bool trusted, bool realign);
 void rl_reset(RlController *c, const RlMeasurement *m);
 bool rl_policy_step(RlController *c, const RlMeasurement *m,
                     const float request[3], float dt);

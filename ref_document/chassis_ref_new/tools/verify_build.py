@@ -8,6 +8,8 @@ import re
 import shutil
 import subprocess
 import struct
+import ctypes
+from telemetry_log import Ring
 ROOT=Path(__file__).resolve().parents[1]
 def main():
     parser=argparse.ArgumentParser()
@@ -39,6 +41,9 @@ def main():
             weights[parts[3]]={"address":hex(address),"bytes":size,"symbol_type":parts[2]}
     if len(weights)!=8 or sum(v["bytes"] for v in weights.values())!=14630*4:
         raise AssertionError("Missing or wrong-sized actor weights in ELF")
+    telemetry=[line.split() for line in nm.splitlines() if line.split()[-1:] == ['g_telemetry']]
+    if len(telemetry)!=1 or int(telemetry[0][1],16)!=ctypes.sizeof(Ring):
+        raise AssertionError('ARM telemetry ABI differs from host decoder')
     size=subprocess.run(["arm-none-eabi-size",str(elf)],capture_output=True,text=True,check=True).stdout.strip()
     usage=[]
     for p in build.rglob("*.su"):
@@ -52,6 +57,7 @@ def main():
             "arm_toolchain":subprocess.run(["arm-none-eabi-gcc","--version"],capture_output=True,text=True,check=True).stdout.splitlines()[0],
             "size":size,"weights_in_flash":weights,"max_single_user_function_stack_bytes":max(n for n,_ in usage),
             "warnings":warnings,"hardware_accessed":False,"board_timing_measured":False}
+    report['telemetry_ring_bytes']=ctypes.sizeof(Ring)
     (build/"build_report.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(size)
     print(f"PASS: 14630 float32 weights in FLASH; largest single user-function stack {report['max_single_user_function_stack_bytes']} bytes")

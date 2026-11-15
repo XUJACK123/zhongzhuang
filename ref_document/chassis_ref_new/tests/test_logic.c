@@ -5,6 +5,9 @@
 #include "remote_control.h"
 #include "state_estimator.h"
 #include "robot_config.h"
+#include "imu_filter.h"
+#include "startup_control.h"
+#include "telemetry.h"
 #include <math.h>
 #include <string.h>
 #define CHECK(x) do { if (!(x)) return __LINE__; } while (0)
@@ -21,6 +24,8 @@ int test_logic(void) {
     control_state_step(&s,42,true,1,3,true,true,true); CHECK(s.mode==CONTROL_ENABLING);
     control_state_step(&s,52,false,1,3,true,true,true); CHECK(s.mode==CONTROL_STOP && !s.down_seen);
     control_state_step(&s,62,true,1,3,true,true,true); CHECK(s.mode==CONTROL_STOP);
+    control_state_step(&s,63,false,2,3,true,true,true); CHECK(s.mode==CONTROL_STOP && !s.down_seen);
+    control_state_step(&s,64,true,1,3,true,true,true); CHECK(s.mode==CONTROL_STOP);
     control_state_step(&s,72,true,2,3,true,true,true); CHECK(s.mode==CONTROL_STOP && s.down_seen);
     /* Hardware fault latches until DOWN is seen again. */
     control_state_step(&s,74,true,1,3,true,true,false); CHECK(s.mode==CONTROL_ENABLING);
@@ -41,7 +46,7 @@ int test_logic(void) {
     CHECK(!remote_decode(&rc,frame,17,102)); CHECK(!remote_fresh(&rc,102));
     frame[5]=8; CHECK(!remote_decode(&rc,frame,18,103));
     rc.channel[1]=-660; rc.channel[0]=660;
-    float request[3]; remote_request(&rc,request); CHECK(request[0]==0 && request[1]<-2.49f);
+    float request[3]; remote_request(&rc,request); CHECK(request[0]==0 && fabsf(request[1]+0.30f)<1e-6f);
 
     /* Shared physical bus: DM3 must resolve to right KNEE, DJI3 to right WHEEL. */
     static const float cfg_signs[6]=ROBOT_ENCODER_SIGNS;
@@ -108,7 +113,7 @@ int test_logic(void) {
     float cmd[3]={0.3f,2.5f,0.1f}; CHECK(rl_policy_step(&c,&m,cmd,0.01f));
     CHECK(fabsf(c.command[0]-0.015f)<1e-6f && c.obs[8]==0.5f);
     CHECK(c.obs[28]==0); CHECK(rl_torque_step(&c,&m));
-    CHECK(fabsf(c.motor_torque[0])<=12 && fabsf(c.motor_torque[2])<=2);
+    CHECK(fabsf(c.motor_torque[0])<=20 && fabsf(c.motor_torque[2])<=2);
     c.target_q[1]=NAN; CHECK(!rl_torque_step(&c,&m));
     rl_reset(&c,&m); m.xy[0]=NAN; CHECK(!rl_policy_step(&c,&m,cmd,0.01f));
     return 0;

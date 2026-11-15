@@ -56,6 +56,19 @@
       "problemMatcher": []
     },
     {
+      "label": "RL: flash (ST-Link)",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "flash",
+        "OPENOCD_CONFIG=openocd_stlink.cfg"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "RL: monitor",
       "type": "process",
       "command": "make",

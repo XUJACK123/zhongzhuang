@@ -25,4 +25,5 @@ extern const float rl_selftest_output[6];
 #define RL_WHEEL_RATED_TORQUE 0x1.3d8c03dde23f3p+1f
 #define RL_WHEEL_RATED_SPEED 0x1.db21ec3f57cdbp+5f
 #define RL_WHEEL_FREE_SPEED 0x1.e84d7056eeb4ep+5f
+extern const float rl_physical_knee_limits[4];
 #endif

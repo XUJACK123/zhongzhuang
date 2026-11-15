@@ -2,6 +2,8 @@
 #include "board.h"
 #include "fdcan.h"
 #include "imu.h"
+#include "imu_filter.h"
+#include "telemetry.h"
 #include "state_estimator.h"
 #include "algorithm/model/model.h"
 #include "robot_config.h"
@@ -11,6 +13,11 @@ ChassisDebug g_chassis;
 RlController g_rl;
 RlMeasurement g_measurement;
 MotorBank g_motor_snapshot;
+StartupControl g_startup;
+EstimatorQuality g_estimator_quality;
+static RlController getup_controller;
+static RlActorFn getup_actor;
+static uint32_t getup_model_version;
 static MotorBank received;
 static StateEstimator estimator;
 static ControlState control;
@@ -23,6 +30,9 @@ void chassis_init(void) {
     memset(&g_chassis,0,sizeof(g_chassis)); memset(&g_rl,0,sizeof(g_rl));
     memset(&g_measurement,0,sizeof(g_measurement)); memset(&received,0,sizeof(received));
     memset(&g_motor_snapshot,0,sizeof(g_motor_snapshot)); memset(&control,0,sizeof(control));
+    memset(&g_startup,0,sizeof(g_startup)); memset(&g_estimator_quality,0,sizeof(g_estimator_quality));
+    memset(&g_motor_diagnostics,0,sizeof(g_motor_diagnostics));
+    getup_actor=0; getup_model_version=0; telemetry_reset();
     have_measurement=false; shadow_started=false;
     float output[6];
     bool ok=rl_actor(&g_rl.network,rl_selftest_obs,output);
@@ -30,6 +40,24 @@ void chassis_init(void) {
     g_chassis.actor_selftest=ok;
     last_loop=last_sample=last_policy=last_special=last_estimator=HAL_GetTick();
     estimator_reset(&estimator);
+}
+bool chassis_register_getup_actor(RlActorFn actor, uint32_t model_version) {
+    if (control.mode!=CONTROL_STOP || !actor || !model_version) return false;
+    getup_actor=actor; getup_model_version=model_version; return true;
+}
+static bool startup_ready(void) {
+    if (g_estimator_quality.confidence<0.5f || g_measurement.gravity[2]>-cosf(8*RL_PI/180) ||
+        fabsf(g_measurement.velocity[0])>0.08f) return false;
+    for (unsigned i=0;i<3;++i) if (fabsf(g_measurement.omega[i])>0.5f) return false;
+    for (unsigned i=0;i<6;++i) {
+        if (i==2 || i==5) continue;
+        float error=g_measurement.q[i]-rl_default_q[i];
+        if (i==0 || i==3) error=rl_wrap(error);
+        if (fabsf(error)>0.15f) return false;
+    }
+    /* Contact/clearance proxy from joint geometry and mutually consistent wheel
+     * odometry. This proxy still needs physical contact validation. */
+    return true;
 }
 static bool special(uint8_t tail) {
     uint8_t d[8]; memset(d,0xff,8); d[7]=tail;
@@ -62,24 +90,33 @@ void chassis_service(uint32_t now) {
     if (!g_chassis.actor_selftest) inhibit|=128;
     memcpy(g_measurement.omega,g_imu.omega,sizeof(g_measurement.omega));
     memcpy(g_measurement.gravity,g_imu.gravity,sizeof(g_measurement.gravity)); g_measurement.yaw=g_imu.yaw;
-    float arm[6],speed[6];
-    for (unsigned i=0;i<6;++i) { arm[i]=g_motor_snapshot.motor[i].arm; speed[i]=g_motor_snapshot.motor[i].velocity; }
+    float arm[6],speed[6]; uint32_t feedback_tick[6];
+    g_imu_fusion.stationary_allowed=remote_ok && rc.s1==2;
+    for (unsigned i=0;i<6;++i) {
+        arm[i]=g_motor_snapshot.motor[i].arm; speed[i]=g_motor_snapshot.motor[i].velocity;
+        feedback_tick[i]=g_motor_snapshot.motor[i].tick;
+        if (fabsf(speed[i])>0.02f) g_imu_fusion.stationary_allowed=false;
+    }
     bool geometry=false;
     if (!(inhibit&(4|8)) && ROBOT_MOTOR_CALIBRATED) {
         if (now-last_estimator>=5) {
-            geometry=estimator_update(&estimator,&g_measurement,g_imu.quaternion,arm,speed,g_imu.omega,
-                                      now,(float)(now-last_estimator)*0.001f);
+            geometry=estimator_update_qualified(&estimator,&g_estimator_quality,&g_measurement,
+                g_imu.quaternion,arm,speed,g_imu.omega,g_imu.accel,feedback_tick,now,(float)(now-last_estimator)*0.001f);
             last_estimator=now; have_measurement=geometry;
         } else {
             float unused[6];
             geometry=have_measurement && rl_motor_to_joint(arm,speed,g_measurement.q,unused);
         }
-    } else { have_measurement=false; estimator.velocity_valid=false; last_estimator=now; }
+    } else {
+        have_measurement=false; estimator.velocity_valid=false; last_estimator=now;
+        g_estimator_quality.confidence=0; g_estimator_quality.initialized=false;
+        g_estimator_quality.degraded_ms=1;
+    }
     if (!geometry) inhibit|=32;
     if (!isfinite(g_imu.gravity[2]) || g_imu.gravity[2]>-cosf(ROBOT_MAX_TILT_RAD)) inhibit|=64;
     if (geometry) {
-        if (g_measurement.q[1]<rl_knee_limits[0]-0.02f || g_measurement.q[1]>rl_knee_limits[1]+0.02f ||
-            g_measurement.q[4]<rl_knee_limits[2]-0.02f || g_measurement.q[4]>rl_knee_limits[3]+0.02f) inhibit|=32;
+        if (g_measurement.q[1]<rl_physical_knee_limits[0]-0.02f || g_measurement.q[1]>rl_physical_knee_limits[1]+0.02f ||
+            g_measurement.q[4]<rl_physical_knee_limits[2]-0.02f || g_measurement.q[4]>rl_physical_knee_limits[3]+0.02f) inhibit|=32;
         for (unsigned i=0;i<6;++i) if (fabsf(g_measurement.qd[i])>(i==2 || i==5 ? 75 : 35)) inhibit|=32;
     }
     g_chassis.inhibit=inhibit;
@@ -88,9 +125,10 @@ void chassis_service(uint32_t now) {
     ControlMode previous=control.mode;
     control_state_step(&control,now,remote_ok,rc.s1,rc.s2,remote_sticks_centered(&rc),
                        inhibit==0,motor_all_enabled(&g_motor_snapshot));
+    if (previous!=CONTROL_ACTIVE && control.mode==CONTROL_ACTIVE) telemetry_reset();
     /* Send one enable frame on entry so group-mode motors see it immediately. */
     if (previous!=CONTROL_ENABLING && control.mode==CONTROL_ENABLING) last_special=now-20;
-    if (remote_ok && rc.s1==2 && rc.s2==3) g_chassis.fault=0;
+    if (remote_ok && rc.s1==2) g_chassis.fault=0;
     if (elapsed>ROBOT_CONTROL_MS+1 && (previous==CONTROL_ACTIVE || previous==CONTROL_ENABLING)) {
         ++g_chassis.overruns; fault(2);
     }
@@ -99,21 +137,68 @@ void chassis_service(uint32_t now) {
     /* Shadow mode executes the real pipeline only with calibrated, fresh measurements.
      * Config flags still prevent enabling motors. No fabricated IMU/joint data. */
     bool measurable=(inhibit&(4|8|16|32|64|128))==0;
+    startup_step(&g_startup,now,control.mode==CONTROL_ACTIVE,startup_ready(),measurable,getup_actor!=0);
+    if (g_startup.phase==STARTUP_FAILED) fault(5);
     if (measurable && (control.mode==CONTROL_ACTIVE || !ROBOT_ENABLE_OUTPUT)) {
         if (!shadow_started || (control.mode==CONTROL_ACTIVE && previous!=CONTROL_ACTIVE)) {
             rl_reset(&g_rl,&g_measurement); last_policy=now-ROBOT_POLICY_MS; shadow_started=true;
+            rl_reset(&getup_controller,&g_measurement);
         }
         if (now-last_policy>=ROBOT_POLICY_MS) {
             float request[3]={0,0,ROBOT_HEIGHT_COMMAND_M};
-            if (control.mode==CONTROL_ACTIVE) remote_request(&rc,request);
+            bool trusted=g_estimator_quality.confidence>=0.25f;
+            if (control.mode==CONTROL_ACTIVE && g_startup.phase==STARTUP_BALANCE && trusted) remote_request(&rc,request);
             uint32_t inference_start=board_cycles();
-            bool ok=rl_policy_step(&g_rl,&g_measurement,request,0.01f);
+            uint32_t policy_elapsed=now-last_policy;
+            if (policy_elapsed>ROBOT_POLICY_MS+1) { ++g_chassis.overruns; fault(2); }
+            rl_manage_reference(&g_rl,&g_measurement,trusted,g_estimator_quality.reference_realign);
+            rl_manage_reference(&getup_controller,&g_measurement,trusted,g_estimator_quality.reference_realign);
+            g_estimator_quality.reference_realign=false;
+            bool ok=rl_policy_step(&g_rl,&g_measurement,request,(float)policy_elapsed*0.001f);
+            if (control.mode==CONTROL_ACTIVE && (g_startup.phase==STARTUP_GETUP || g_startup.phase==STARTUP_HANDOFF)) {
+                float stand[3]={0,0,ROBOT_HEIGHT_COMMAND_M};
+                ok=ok && rl_policy_step_actor(&getup_controller,&g_measurement,stand,(float)policy_elapsed*0.001f,getup_actor);
+                float blended[6],weight=g_startup.balance_weight;
+                for (unsigned i=0;i<6;++i) blended[i]=(1-weight)*getup_controller.action[i]+weight*g_rl.action[i];
+                ok=ok && rl_set_action(&g_rl,blended) && rl_set_action(&getup_controller,blended);
+            }
             g_chassis.inference_us=(board_cycles()-inference_start)/(SystemCoreClock/1000000U);
             last_policy=now; ++g_chassis.policy_runs;
             if (!ok) fault(3);
         }
         if (!rl_torque_step(&g_rl,&g_measurement)) fault(4);
     } else shadow_started=false;
+    TelemetryFrame frame={0};
+    frame.tick=now; frame.cycle=g_chassis.cycles;
+    frame.control_version=ROBOT_CONTROL_VERSION; frame.model_version=ROBOT_MODEL_VERSION;
+    frame.getup_model_version=getup_model_version; frame.phase=g_startup.phase; frame.failure=g_startup.failure;
+    frame.inhibit=inhibit; frame.policy_age_ms=now-last_policy;
+    memcpy(frame.quaternion,g_imu.quaternion,sizeof(frame.quaternion));
+    memcpy(frame.omega,g_imu.omega,sizeof(frame.omega));
+    memcpy(frame.acceleration,g_imu.accel,sizeof(frame.acceleration));
+    memcpy(frame.bias,g_imu.bias,sizeof(frame.bias));
+    memcpy(frame.xy,g_measurement.xy,sizeof(frame.xy));
+    memcpy(frame.velocity,g_measurement.velocity,sizeof(frame.velocity));
+    frame.imu_missed_edges=g_imu_timing.missed_edges;
+    memcpy(frame.q,g_measurement.q,sizeof(frame.q)); memcpy(frame.qd,g_measurement.qd,sizeof(frame.qd));
+    memcpy(frame.obs,g_rl.obs,sizeof(frame.obs)); memcpy(frame.action,g_rl.action,sizeof(frame.action));
+    memcpy(frame.target_q,g_rl.target_q,sizeof(frame.target_q)); memcpy(frame.target_qd,g_rl.target_qd,sizeof(frame.target_qd));
+    float unused_speed[6];
+    (void)rl_joint_to_motor(g_measurement.q,g_measurement.qd,g_rl.joint_torque,frame.requested_motor_torque,unused_speed);
+    for (unsigned i=0;i<6;++i) {
+        frame.motor_tick[i]=feedback_tick[i]; frame.motor_received[i]=g_motor_snapshot.motor[i].received;
+        frame.feedback[i]=g_motor_snapshot.motor[i].current;
+        frame.motor_raw[i]=g_motor_snapshot.motor[i].raw;
+        frame.arm[i]=g_motor_snapshot.motor[i].arm;
+        frame.motor_velocity[i]=g_motor_snapshot.motor[i].velocity;
+        frame.unwrap_ambiguous[i]=g_motor_diagnostics.ambiguous[i];
+        if (control.mode==CONTROL_ACTIVE) g_rl.motor_torque[i]*=g_startup.torque_scale;
+    }
+    memcpy(frame.limited_motor_torque,g_rl.motor_torque,sizeof(frame.limited_motor_torque));
+    frame.odometry_confidence=g_estimator_quality.confidence; frame.wheel_residual=g_estimator_quality.residual;
+    frame.accel_weight=g_imu_fusion.acceleration_weight; frame.imu_dt_s=g_imu_timing.sample_dt_s;
+    frame.torque_scale=g_startup.torque_scale; frame.balance_weight=g_startup.balance_weight;
+    frame.imu_tick=g_imu.tick; frame.remote_tick=rc.tick;
     /* Check elapsed wall time and remote AGAIN after inference, before any torque TX. */
     uint32_t spent=(board_cycles()-start)/(SystemCoreClock/1000000U);
     if (spent>g_chassis.max_loop_us) g_chassis.max_loop_us=spent;
@@ -124,7 +209,13 @@ void chassis_service(uint32_t now) {
     }
     if (control.mode==CONTROL_ACTIVE) {
         uint8_t dm[8],dji[8];
-        if (!motor_encode(g_rl.motor_torque,dm,dji) || !can2_send(0x3fe,dm) || !can2_send(0x200,dji)) fault(1);
+        if (!motor_encode(g_rl.motor_torque,dm,dji)) fault(1);
+        else {
+            memcpy(frame.dm,dm,8); memcpy(frame.dji,dji,8);
+            if (can2_send(0x3fe,dm)) frame.submitted_mask|=1;
+            if (can2_send(0x200,dji)) frame.submitted_mask|=2;
+            if (frame.submitted_mask!=3) fault(1);
+        }
     } else {
         if (!zero_output()) fault(1);
         if (now-last_special>=20) {
@@ -133,5 +224,14 @@ void chassis_service(uint32_t now) {
         }
     }
     g_chassis.mode=control.mode;
+    frame.mode=control.mode; frame.fault=g_chassis.fault; telemetry_publish(&frame);
+    if ((previous==CONTROL_ACTIVE || previous==CONTROL_ENABLING) &&
+        control.mode!=CONTROL_ACTIVE && control.mode!=CONTROL_ENABLING) telemetry_freeze();
+    spent=(board_cycles()-start)/(SystemCoreClock/1000000U);
+    if (spent>g_chassis.max_loop_us) g_chassis.max_loop_us=spent;
+    if (spent>=ROBOT_CONTROL_MS*1000U) {
+        ++g_chassis.overruns; fault(2); g_chassis.mode=control.mode;
+        frame.mode=control.mode; frame.fault=g_chassis.fault; telemetry_publish(&frame); telemetry_freeze();
+    }
     board_watchdog_feed();
 }

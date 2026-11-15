@@ -1,0 +1,137 @@
+{
+  "created_at": "2026-11-15T08:40:00.862758+00:00",
+  "scope": "offline_host_and_arm_build_only",
+  "host": {
+    "status": "pass",
+    "weight_float32_words_bit_exact": 14630,
+    "actor_vectors": 273,
+    "actor_max_absolute_error": 9.644694003441145e-05,
+    "observation_vectors": 100,
+    "observation_max_absolute_error": 8.754883396022706e-08,
+    "protocol_and_control_assertions": "passed",
+    "physical_pose_conversion": "passed",
+    "torch_forward_executed": false,
+    "fake_hal_control_loop": [
+      "default_fake passed",
+      "enabled_fake passed"
+    ],
+    "algorithm_improvements": "prediction_unwrap, odometry_quality, imu_weight, startup, reference, telemetry passed",
+    "arm_runtime_tested": false,
+    "hardware_tested": false,
+    "checkpoint_sha256": "20af49b8d564fa06390e61c96be5cf48b2861155d5855aeb67eee0225ec171ca"
+  },
+  "arm": {
+    "status": "pass",
+    "forced_rebuild": true,
+    "production_commissioning_flags": {
+      "ENABLE_OUTPUT": 1,
+      "MOTOR_CALIBRATED": 1,
+      "IMU_FRAME_VERIFIED": 1,
+      "POLICY_CONTRACT_VERIFIED": 0,
+      "ODOMETRY_VERIFIED": 0
+    },
+    "arm_toolchain": "arm-none-eabi-gcc (Arm GNU Toolchain 15.2.Rel1 (Build arm-15.86)) 15.2.1 20251203",
+    "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n 106444\t    256\t  37024\t 143724\t  2316c\tD:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\build\\rl\\wheel_leg_rl.elf",
+    "weights_in_flash": {
+      "rl_b0": {
+        "address": "0x8015e14",
+        "bytes": 512,
+        "symbol_type": "R"
+      },
+      "rl_b1": {
+        "address": "0x800dd14",
+        "bytes": 256,
+        "symbol_type": "R"
+      },
+      "rl_b2": {
+        "address": "0x800bc94",
+        "bytes": 128,
+        "symbol_type": "R"
+      },
+      "rl_b3": {
+        "address": "0x800b97c",
+        "bytes": 24,
+        "symbol_type": "R"
+      },
+      "rl_w0": {
+        "address": "0x8016014",
+        "bytes": 15872,
+        "symbol_type": "R"
+      },
+      "rl_w1": {
+        "address": "0x800de14",
+        "bytes": 32768,
+        "symbol_type": "R"
+      },
+      "rl_w2": {
+        "address": "0x800bd14",
+        "bytes": 8192,
+        "symbol_type": "R"
+      },
+      "rl_w3": {
+        "address": "0x800b994",
+        "bytes": 768,
+        "symbol_type": "R"
+      }
+    },
+    "max_single_user_function_stack_bytes": 904,
+    "warnings": [],
+    "hardware_accessed": false,
+    "board_timing_measured": false,
+    "telemetry_ring_bytes": 20376
+  },
+  "telemetry_frame_bytes": 636,
+  "telemetry_ring_bytes": 20376,
+  "hardware_accessed": false,
+  "simulation_executed": false,
+  "getup_weights_available": false,
+  "pending": [
+    "dynamic simulation parity for v2 estimator/IMU/reference",
+    "continuous telemetry transport",
+    "independent torque and spring measurements",
+    "getup training and board timing",
+    "hardware validation"
+  ],
+  "source_sha256": {
+    "Makefile": "72e27dea809c0f3a5d7ce7bc58dbd782e1044b192261e453dbe3c8bade81812f",
+    "tests/test_chassis.c": "51ce047c5c553fe5259be931bdfb9984acabe3ba49dabbccd3da5e65691f361c",
+    "tests/test_improvements.c": "fd96529028ae677f5e9f8fcdaea8095df3554ec62ab160e96b6bd79169cfb1c1",
+    "tests/test_logic.c": "26fe150b0f37281223b2109bdbd96b81cb4e7eb2ee1e72bcc2f7707e0b5135e9",
+    "tools/export_policy.py": "e1b868f1d0c1716bc909e95dfac1c101a87bf05878d7d130761af98a1a001eb9",
+    "tools/telemetry_log.py": "0ba2fa4176001981ce5a735478be420c2e97e9154e9afc51f7034b90cc705192",
+    "tools/test_host.py": "ced22859da5c105fcbc3d0e809ad86a18def78b1682e0d38b797383709d1ea78",
+    "tools/verify_build.py": "a62cbb9731ceefda4761a1b0cf87b33b7d2b8ea2ddbf6bdfb2bf6cac332a7a5d",
+    "user/algorithm/model/manifest.json": "982c7716e7681bff59c1aced2ef34e3ab9307c292820488de7871fa0c9d09001",
+    "user/algorithm/model/model.c": "4aa8979a086afabd75ca21a96ee72d0bc6d42d97e216cb9b26f3ab1c4e931cf7",
+    "user/algorithm/model/model.h": "fe2d03efbaa0851431d8caa10c5a9c248dbe15630c7e7b628178b11e2d05102d",
+    "user/algorithm/rl.c": "c1018a1099f0fc379a7fb83676044c4c56175393f8c632d3e76da0cd4f99587c",
+    "user/algorithm/rl.h": "c71d677f5039955c0bf3488cc98705c9b09d7f18ace1af58f4fb743840f0e528",
+    "user/board.c": "f4bf31a562a7bcf92f8a1d2a7d444561885f9cc6986f8676249d2d37c83e2479",
+    "user/board.h": "f0e59a9676bf62b255830cfd477c2a9b3f9d968811de6967191dd7b4abe2632d",
+    "user/chassis.c": "35fd0a269235bb73e52a12ddacd4d88e8ca318bbf7abc25f53674c08647273fe",
+    "user/chassis.h": "730fa8622a14b48f6bf9562cc8bfd098ad1427da1dc5af7307e866d4539d0ea0",
+    "user/control_state.c": "ce154b9167a9928ad1cf528dd8032d31e73ae7e46aabe7fb1c3c632b4cfe43bb",
+    "user/control_state.h": "a6b4ba621092b8b0502b1195c75bec19380d132d50a38bbb1aed4b4d17c1ede3",
+    "user/imu.c": "7425d62c2d7f3803cdc68b5c183df7d4e8db85775813c312c9298bcbe6bf32fa",
+    "user/imu.h": "0d2dbe17f1b00c07b1b8fc016cbb16597d2aa61cbc2439d89c1ebc4b20323682",
+    "user/imu_filter.c": "b39ef943bc4be037fa8680570c8c356f8d95733fae719b46c37444bb8d417f39",
+    "user/imu_filter.h": "991f43791ce8d5e3e0708586c8b775fd8774434b57a92e7c4b3ebd31b4809a50",
+    "user/motor_io.c": "8a98150d4ba2078d0d7409d2c80ed34ca4d6438f18d2f2474db343439c60ffb8",
+    "user/motor_io.h": "844c5492acdcb5ccedf21bbfc7dd201bc4817e5265f2a1351e552880378e2ea2",
+    "user/remote_control.c": "55f202e533547008993feb5deedd97e10185693eb6194a16a78f73395adeb11e",
+    "user/remote_control.h": "e6942532e72aba2d5571f9f2e6ac6600de1d26d9c6666c9048d147cad8f2133d",
+    "user/robot_config.h": "d5e5d399a3987dde86143c537a89782062ed34f60fb78ca781fa44dc74898317",
+    "user/startup_control.c": "a3904f5b5fcad3a5a5ac70bf4bfdcf853c19574564ddaea13b27a32a461e4926",
+    "user/startup_control.h": "2bed4ca5d2a919c7032e0984a332b35a1c08ce8fd31a9c1ba22ce3d17f1d9fe5",
+    "user/state_estimator.c": "ab13c2050c398d737af0930d618bec016c182cd5a6c51b07a089049cf3837451",
+    "user/state_estimator.h": "63c81b12c25780d10d742a261fcf438646aeeaa1225890506eb13c80fe4518c3",
+    "user/telemetry.c": "22cbd100c74b30da00fa0731241b7a02f98e4fbf4c7fabf033f02d04b70e794d",
+    "user/telemetry.h": "ee3fe82cfefb319b59edfa2269d8cf989b16277e2c3a8640c4043e5edc9e2c92"
+  },
+  "artifact_sha256": {
+    "build\\rl\\wheel_leg_rl.elf": "58db4c181227730b630871be84e9167248a3cf25785b0e0a44405af9bb638845",
+    "build\\rl\\wheel_leg_rl.bin": "c52f43e37084b403f2e48f550e6037534a6740c202db8c91a53e803dab4fe7e9",
+    "build\\rl\\build.log": "80ba1fe136de041b27020da4ad346eb574cc84c1fc5f9e499dacaff9f1af82f8",
+    "build\\host\\test_report.json": "eb5374744650a32715bf7f08c0793747d87f8000d92f9ef9bf399b3e383d7068"
+  }
+}

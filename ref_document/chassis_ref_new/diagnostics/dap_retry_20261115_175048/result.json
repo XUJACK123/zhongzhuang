@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-15",
+  "timezone": "Asia/Hong_Kong",
+  "probe": "Horco CMSIS-DAP v2",
+  "serial": "332107148640",
+  "probe_firmware": "Horco v0.2",
+  "swd_dpidr": "0x6ba02477",
+  "attempt_100khz": "Probe responded, SWD DPIDR read, CPU examination returned PARTNO 0x0",
+  "attempt_50khz_ap2": "Cortex-M7 r1p2 detected; memory read at 0x5C001000 returned 0x10016483; further memory access failed",
+  "attempt_50khz_repeat": "Probe CMD_INFO failed again",
+  "connection_stable": false,
+  "flash_executed": false,
+  "motor_commands_sent": false,
+  "configuration_persistently_changed": false,
+  "conclusion": "Intermittent communication affects both probe information exchange and target debug access. SWD connection has worked partially, but stable H723 memory access remains unavailable.",
+  "logs": ["openocd.log", "ap2_check.log", "cpu_50khz.log", "devices.json"]
+}

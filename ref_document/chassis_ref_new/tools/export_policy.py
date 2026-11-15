@@ -12,6 +12,7 @@ import hashlib
 import io
 import json
 import math
+import os
 from pathlib import Path
 import pickle
 import struct
@@ -20,6 +21,38 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT.parents[1] / "sample_weight_file" / "artifacts"
 SIZES = (31, 128, 64, 32, 6)
+CANDIDATE = ROOT.parent / "fifty_mujoco/runs/hardware31_guarded_20261115/deployment_candidate"
+
+def active_checkpoint():
+    manifest = json.loads((ROOT / "user/algorithm/model/manifest.json").read_text())
+    return ROOT / manifest.get("checkpoint_path", "../../sample_weight_file/artifacts/model_3050.pt")
+
+def install_candidate(output):
+    """Install the frozen, previously evaluated export with its provenance."""
+    manifest = json.loads((CANDIDATE / "manifest.json").read_text())
+    newline_normalized = []
+    for name, digest in manifest["generated_sha256"].items():
+        if sha(CANDIDATE / name) != digest:
+            raw = (CANDIDATE / name).read_bytes()
+            if Path(name).suffix not in (".c", ".h", ".patch") or hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest() != digest:
+                raise ValueError(f"Candidate asset changed: {name}")
+            newline_normalized.append(name)
+    training = CANDIDATE.parent / "update_000100.pt"
+    if sha(training) != manifest["source_training_checkpoint_sha256"]:
+        raise ValueError("Training checkpoint hash mismatch")
+    load_actor(CANDIDATE / "actor31.pt")
+    output.mkdir(parents=True, exist_ok=True)
+    for name in ("model.c", "model.h"):
+        (output / name).write_bytes((CANDIDATE / name).read_bytes().replace(b"\r\n", b"\n"))
+    manifest["source_newline_normalized_files"] = newline_normalized
+    manifest["checkpoint_path"] = "../fifty_mujoco/runs/hardware31_guarded_20261115/deployment_candidate/actor31.pt"
+    manifest["deployment_version"] = "hardware31_guarded_20261115_u100"
+    manifest["firmware_control_version"] = "commissioned_v2_20261115_runtime_pending"
+    manifest["generated_sha256"] = {name: sha(output / name) for name in ("model.c", "model.h")}
+    manifest["hardware_parity"] = "source integrated; host verification required; physical validation pending"
+    manifest["source_training_checkpoint"] = "../fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt"
+    (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return manifest
 
 @dataclasses.dataclass
 class Storage:
@@ -145,6 +178,7 @@ def export(checkpoint, output):
               "rl_joint_effort": [params["actuator_envelope"]["effort_nm"][n] for n in order],
               "rl_selftest_obs": [0.0]*31,
               "rl_selftest_output": reference(actor, [0.0]*31)}
+    arrays["rl_physical_knee_limits"] = list(arrays["rl_knee_limits"])
     for name, values in arrays.items():
         header.append(f"extern const float {name}[{len(values)}];")
         source.append(f"const float {name}[{len(values)}] = {{" + ", ".join(map(literal, values)) + "};")
@@ -164,6 +198,8 @@ def export(checkpoint, output):
     (output / "model.h").write_text("\n".join(header)+"\n", encoding="utf-8", newline="\n")
     (output / "model.c").write_text("\n".join(source)+"\n", encoding="utf-8", newline="\n")
     manifest = {"checkpoint": checkpoint.name, "sha256": sha(checkpoint), "sizes": SIZES,
+                "checkpoint_path": Path(os.path.relpath(checkpoint.resolve(), ROOT)).as_posix(),
+                "target_knee_limits_rad": [arrays["rl_knee_limits"][:2], arrays["rl_knee_limits"][2:]],
                 "activation": "ELU alpha=1, linear output", "parameter_count": sum(len(v) for l in actor for v in l),
                 "weights_are_exact_float32": True,
                 "observation_timing_source_parity": "pending: original legged_robot.py revision unavailable",
@@ -177,10 +213,14 @@ def export(checkpoint, output):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--checkpoint", type=Path, default=SAMPLE/"model_3050.pt")
+    p.add_argument("--checkpoint", type=Path, help="Explicit legacy archive export; default installs evaluated candidate")
     p.add_argument("--output", type=Path, default=ROOT/"user/algorithm/model")
     p.add_argument("--torch-check", action="store_true")
     args = p.parse_args()
+    if args.checkpoint is None:
+        manifest = install_candidate(args.output)
+        print(json.dumps({key: manifest[key] for key in ("checkpoint", "sha256", "deployment_version")}))
+        return
     actor, manifest = export(args.checkpoint, args.output)
     if args.torch_check:
         import torch

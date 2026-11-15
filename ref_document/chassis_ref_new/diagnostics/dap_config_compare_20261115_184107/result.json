@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-15",
+  "timezone": "Asia/Hong_Kong",
+  "reference": "../DM8009J_test/.vscode/launch.json and openocd_dap.cfg",
+  "reference_openocd": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+  "current_openocd": "C:/Users/xuyue/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+  "reference_backend": "auto",
+  "reference_speed_khz": 1000,
+  "reference_result": "CMSIS-DAP command CMD_INFO failed",
+  "current_backend": "usb_bulk, interface 0, VID:PID faed:4870",
+  "current_speed_khz": 100,
+  "current_result": "CMSIS-DAP command CMD_INFO failed",
+  "probe_serial": "332107148640",
+  "vscode_difference_notes": {
+    "device_and_svd": "Reference specifies device/SVD for debugger metadata and peripheral display; failure reproduced before these features are used",
+    "executable": "Each project correctly selects its own ELF",
+    "startup": "Reference stops at main; RL launch requests reset run after launch; failure occurs before either startup action",
+    "diagnostics": "Current launch showDevDebugOutput changed from none to raw to expose underlying OpenOCD failures"
+  },
+  "conclusion": "Reference and current target configurations both fail querying probe information. No successful reference connection establishes a launch-configuration fix; USB/probe information exchange remains the observed failing stage.",
+  "flash_executed": false,
+  "reset_executed": false,
+  "motor_commands_sent": false,
+  "logs": ["reference_auto_1000khz.log", "current_bulk_100khz.log"]
+}

@@ -4,6 +4,7 @@
 #include "fdcan.h"
 #include "imu.h"
 #include "robot_config.h"
+#include "telemetry.h"
 #include <math.h>
 #include <string.h>
 #define CHECK(x) do { if (!(x)) return __LINE__; } while (0)
@@ -14,6 +15,11 @@ RemoteControl g_remote;
 UART_HandleTypeDef huart5;
 static uint32_t now,cycle_count,nonzero_frames,enable_frames,cancel_count;
 static bool tx_fail,enabled;
+static uint32_t getup_calls;
+static bool fake_getup(RlNetwork *network, const float obs[31], float action[6]) {
+    (void)network; (void)obs; ++getup_calls;
+    memset(action,0,6*sizeof(float)); return true;
+}
 uint32_t HAL_GetTick(void) { return now; }
 uint32_t board_cycles(void) { cycle_count+=10; return cycle_count; }
 void board_remote_snapshot(RemoteControl *r) { *r=g_remote; }
@@ -96,5 +102,22 @@ int test_chassis(void) {
     reset(); error=arm(); if (error) return error;
     before=nonzero_frames; step(390,1,true,true);
     CHECK(g_chassis.mode==CONTROL_FAULT && g_chassis.fault==2 && nonzero_frames==before);
+    CHECK(g_telemetry.frozen);
+
+    reset(); g_imu.gravity[2]=-.98f; /* valid tilt but outside handoff window */
+    for (uint32_t t=1;t<=20;++t) step(t,2,true,true);
+    for (uint32_t t=21;t<=380;++t) step(t,1,true,true);
+    CHECK(g_chassis.mode==CONTROL_FAULT && g_chassis.fault==5 && nonzero_frames==0);
+    CHECK(g_telemetry.frozen);
+
+    reset(); getup_calls=0; g_imu.gravity[2]=-.98f;
+    CHECK(chassis_register_getup_actor(fake_getup,1));
+    error=arm(); if (error) return error;
+    CHECK(g_startup.phase==STARTUP_GETUP && getup_calls>0);
+    CHECK(!chassis_register_getup_actor(fake_getup,2));
+    g_imu.gravity[2]=-1;
+    for (uint32_t t=381;t<=1800;++t) step(t,1,true,true);
+    CHECK(g_chassis.mode==CONTROL_ACTIVE && g_startup.phase==STARTUP_BALANCE);
+    CHECK(g_startup.balance_weight==1 && g_startup.torque_scale==1);
     return 0;
 }

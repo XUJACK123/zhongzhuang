@@ -1,0 +1,146 @@
+{
+  "schema": "hardware_getup31_protocol_v1",
+  "status": "offline_checks_passed",
+  "tests_run": 47,
+  "failures": 0,
+  "errors": 0,
+  "test_output": "...............................................\n----------------------------------------------------------------------\nRan 47 tests in 0.067s\n\nOK\n",
+  "plan_sha256": "53a944b9a68269161ab0fe64aeaad8f321ae255a46bc84120d31d317b5455064",
+  "source_sha256": {
+    "configs\\hardware31_next_training_20261115.json": "8a96c807506d667d3ca4306eac95a0099f3d4ce844dcf862852788ed4d45e561",
+    "tools\\sample_getup_offline.py": "d4deefaa977f1560514b51fb7ff81d672383a09fa36e63cb6dbf9efdf4dd14fa",
+    "tools\\sample_getup_train.py": "d639e4c7318101f2a03580a1e5022a550f1b7930bcb9884e0cf530e724b5eeb1",
+    "tools\\sample_getup_evaluate.py": "7e96042de9b27f154210d3b0782dce5a358d5385ed148521b336a2d8f93edd8b",
+    "src\\fifty_mujoco\\contracts\\getup31.py": "bd8f4614f79d66ae4d64b133c5f58e4ce8035ee996221a83102acda7425ca6c2",
+    "src\\fifty_mujoco\\learning\\getup_curriculum.py": "2e05ba5405adbe6f7131fa811ffa582d070afab01009f2baa8f4a42e2016f8b8",
+    "src\\fifty_mujoco\\transfer\\getup_trace.py": "7e953afa8823f9ae9e08e15081424c8b5fa2dd66ec2c2a2a6bcdc8b64072fc73",
+    "src\\fifty_mujoco\\envs\\sample_env31_getup.py": "e9dce2ac3fb2841c2c6768be984ea21a2a4f7449139165d7f156264bb1bc5751",
+    "tests\\test_getup31_offline.py": "fdd9aa16d92e129af1f90ef7755cae78d7fb06d7e27ef808a6b2e65006b3d0bf"
+  },
+  "curriculum_examples": [
+    {
+      "seed": 100000,
+      "stage": "near_stand",
+      "nominal": true,
+      "motor_gain": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "effective_friction": 0.75,
+      "spring_scale": 1.0,
+      "settle_zero_torque_s": 0.0,
+      "enable_ramp_s": 0.43626640889975,
+      "reset_specification": {
+        "name": "near_stand",
+        "description": "small_valid_pose_perturbations_near_balance_reset",
+        "assist": "none"
+      },
+      "requires_dynamic_reset_validation": true
+    },
+    {
+      "seed": 100001,
+      "stage": "supported_survey",
+      "nominal": true,
+      "motor_gain": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "effective_friction": 0.75,
+      "spring_scale": 1.0,
+      "settle_zero_torque_s": 0.0,
+      "enable_ramp_s": 0.3423895194766612,
+      "reset_specification": {
+        "name": "supported_survey",
+        "description": "surveyed_supported_pose_to_balance_with_decaying_virtual_support",
+        "assist": "recorded_vertical_support_only"
+      },
+      "requires_dynamic_reset_validation": true
+    },
+    {
+      "seed": 100002,
+      "stage": "support_release",
+      "nominal": true,
+      "motor_gain": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "effective_friction": 0.75,
+      "spring_scale": 1.0,
+      "settle_zero_torque_s": 2.6638016168773766,
+      "enable_ramp_s": 0.293075996202053,
+      "reset_specification": {
+        "name": "support_release",
+        "description": "random_support_release_timing_with_physical_zero_torque_settle",
+        "assist": "reduce_to_zero_before_success"
+      },
+      "requires_dynamic_reset_validation": true
+    },
+    {
+      "seed": 100003,
+      "stage": "disabled_rest",
+      "nominal": true,
+      "motor_gain": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "effective_friction": 0.75,
+      "spring_scale": 1.0,
+      "settle_zero_torque_s": 1.7409440822347426,
+      "enable_ramp_s": 0.3838987302281909,
+      "reset_specification": {
+        "name": "disabled_rest",
+        "description": "contact_valid_zero_torque_settled_states_from_reset_bank",
+        "assist": "none"
+      },
+      "requires_dynamic_reset_validation": true
+    },
+    {
+      "seed": 100004,
+      "stage": "joint_randomization",
+      "nominal": false,
+      "motor_gain": [
+        0.8066672985770753,
+        0.9480189874775637,
+        1.0,
+        0.85957428599074,
+        0.8352556380884166,
+        1.0
+      ],
+      "effective_friction": 0.78507054920571,
+      "spring_scale": 1.0059691165350755,
+      "settle_zero_torque_s": 2.1285672136356135,
+      "enable_ramp_s": 0.327277618033707,
+      "reset_specification": {
+        "name": "joint_randomization",
+        "description": "validated_reset_states_with_combined_model_uncertainties",
+        "assist": "none"
+      },
+      "requires_dynamic_reset_validation": true
+    }
+  ],
+  "examples_are_parameter_specs": true,
+  "runtime_pending": [
+    "CPU_MuJoCo_getup_adapter_dynamics_and_contact_geometry_validation",
+    "CPU_Torch_actor_initialization_and_PPO_smoke",
+    "dynamic_reachability_and_force_margin",
+    "training_and_heldout_evaluation",
+    "MCU_port_timing_and_supported_hardware_validation"
+  ],
+  "physics_validation_completed": false
+}

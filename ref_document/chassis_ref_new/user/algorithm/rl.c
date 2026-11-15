@@ -77,7 +77,7 @@ void rl_reset(RlController *c, const RlMeasurement *m) {
     memcpy(c->reference_xy,m->xy,sizeof(c->reference_xy)); c->reference_yaw=m->yaw;
     memcpy(c->target_q,rl_default_q,sizeof(c->target_q));
 }
-bool rl_policy_step(RlController *c, const RlMeasurement *m, const float request[3], float dt) {
+bool rl_policy_step_actor(RlController *c, const RlMeasurement *m, const float request[3], float dt, RlActorFn actor) {
     static const float rate[3]={1.5f,6.28318530718f,0.12f};
     if (!isfinite(dt) || dt<=0 || dt>0.02f || !finite_array(request,3) ||
         !finite_measurement(m) || !finite_array(c->reference_xy,2) || !isfinite(c->reference_yaw) ||
@@ -97,15 +97,7 @@ bool rl_policy_step(RlController *c, const RlMeasurement *m, const float request
     /* Reject NaN before clipping (C fmin/fmax would otherwise hide it). */
     if (!finite_array(obs,31)) return false;
     for (unsigned i=0;i<31;++i) obs[i]=rl_clip(obs[i],-100,100);
-    if (!rl_actor(&c->network,obs,c->action)) return false;
-    for (unsigned i=0;i<6;++i) {
-        bool wheel=i==2 || i==5;
-        c->action[i]=rl_clip(c->action[i],wheel ? -2 : -1,wheel ? 2 : 1);
-        c->target_q[i]=rl_default_q[i]+(wheel ? 0 : 0.5f*c->action[i]);
-        c->target_qd[i]=wheel ? 20*c->action[i] : 0;
-    }
-    c->target_q[1]=rl_clip(c->target_q[1],rl_knee_limits[0],rl_knee_limits[1]);
-    c->target_q[4]=rl_clip(c->target_q[4],rl_knee_limits[2],rl_knee_limits[3]);
+    if (!actor || !actor(&c->network,obs,c->action) || !rl_set_action(c,c->action)) return false;
     /* Advance after observation; reset aligns reference to measured root.
      * Source base legged_robot.py timing is still pending golden-trace parity. */
     float old=c->reference_yaw, half=c->command[1]*dt*0.5f;
@@ -116,6 +108,34 @@ bool rl_policy_step(RlController *c, const RlMeasurement *m, const float request
     c->reference_xy[1]+=distance*sinf(old+half)+ds*RL_REFERENCE_X+dc*RL_REFERENCE_Y;
     c->reference_yaw=next;
     return true;
+}
+bool rl_policy_step(RlController *c, const RlMeasurement *m, const float request[3], float dt) {
+    return rl_policy_step_actor(c,m,request,dt,rl_actor);
+}
+bool rl_set_action(RlController *c, const float action[6]) {
+    if (!finite_array(action,6)) return false;
+    for (unsigned i=0;i<6;++i) {
+        bool wheel=i==2 || i==5;
+        c->action[i]=rl_clip(action[i],wheel ? -2 : -1,wheel ? 2 : 1);
+        c->target_q[i]=rl_default_q[i]+(wheel ? 0 : 0.5f*c->action[i]);
+        c->target_qd[i]=wheel ? 20*c->action[i] : 0;
+    }
+    c->target_q[1]=rl_clip(c->target_q[1],rl_knee_limits[0],rl_knee_limits[1]);
+    c->target_q[4]=rl_clip(c->target_q[4],rl_knee_limits[2],rl_knee_limits[3]);
+    return true;
+}
+void rl_manage_reference(RlController *c, const RlMeasurement *m, bool trusted, bool realign) {
+    if (!trusted || realign) {
+        memcpy(c->reference_xy,m->xy,sizeof(c->reference_xy)); c->reference_yaw=m->yaw;
+        c->command[0]=0; c->command[1]=0;
+        return;
+    }
+    float dx=c->reference_xy[0]-m->xy[0],dy=c->reference_xy[1]-m->xy[1];
+    float distance=hypotf(dx,dy);
+    if (distance>ROBOT_REFERENCE_MAX_ERROR_M) {
+        float scale=ROBOT_REFERENCE_MAX_ERROR_M/distance;
+        c->reference_xy[0]=m->xy[0]+dx*scale; c->reference_xy[1]=m->xy[1]+dy*scale;
+    }
 }
 bool rl_torque_step(RlController *c, const RlMeasurement *m) {
     if (!finite_measurement(m) || !finite_array(c->target_q,6) || !finite_array(c->target_qd,6)) return false;

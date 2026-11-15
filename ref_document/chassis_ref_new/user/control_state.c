@@ -6,8 +6,8 @@
 void control_state_step(ControlState *s, uint32_t now, bool remote_ok, uint8_t s1,
                         uint8_t s2, bool centered, bool healthy, bool enabled) {
     (void)s2; (void)centered;
-    if (s1==2) { s->mode=CONTROL_STOP; s->down_seen=true; return; }
     if (!remote_ok) { s->mode=CONTROL_STOP; s->down_seen=false; return; }
+    if (s1==2) { s->mode=CONTROL_STOP; s->down_seen=true; return; }
     if (!healthy) { if (s->mode!=CONTROL_STOP) s->mode=CONTROL_FAULT; s->down_seen=false; return; }
     if (s->mode==CONTROL_FAULT) return;
     if (!s->down_seen) { s->mode=CONTROL_STOP; return; }

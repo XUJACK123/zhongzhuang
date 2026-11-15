@@ -18,8 +18,9 @@ import subprocess
 import struct
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from export_policy import SAMPLE, load_actor, reference, sha
+from export_policy import SAMPLE, load_actor, reference, sha, active_checkpoint
 from calibration_values import measured_pose
+from telemetry_log import Ring, Frame, decode, summarize
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT/"build/host"
@@ -45,7 +46,8 @@ def main():
     if not cc: raise SystemExit("HOST_CC or native gcc is required")
     library=BUILD/("rl_host.dll" if os.name=="nt" else "rl_host.so")
     sources=["user/algorithm/rl.c","user/algorithm/model/model.c","user/control_state.c",
-             "user/motor_io.c","user/remote_control.c","user/state_estimator.c","tests/test_logic.c"]
+             "user/motor_io.c","user/remote_control.c","user/state_estimator.c",
+             "user/imu_filter.c","user/startup_control.c","user/telemetry.c","tests/test_improvements.c","tests/test_logic.c"]
     cmd=[cc,"-std=c11","-O2","-Wall","-Wextra","-Wshadow","-Werror","-shared","-Iuser",
          "-Iuser/algorithm",*sources,"-o",str(library),"-lm"]
     if os.name!="nt": cmd.insert(1,"-fPIC")
@@ -53,6 +55,24 @@ def main():
     lib=C.CDLL(str(library))
     failed=lib.test_logic()
     if failed: raise AssertionError(f"C control/protocol test failed at tests/test_logic.c:{failed}")
+    failed=lib.test_improvements()
+    if failed: raise AssertionError(f"Algorithm improvement test failed at tests/test_improvements.c:{failed}")
+    # Cross-check Python ABI against frames actually published by the C module.
+    lib.telemetry_reset()
+    entry=Frame(tick=10, mode=3, submitted_mask=3, torque_scale=1)
+    entry.limited_motor_torque[0]=2; entry.feedback[0]=-1.6
+    lib.telemetry_publish(C.byref(entry))
+    entry.tick=12; lib.telemetry_publish(C.byref(entry)); lib.telemetry_freeze()
+    ring=Ring.in_dll(lib,'g_telemetry')
+    trace=decode(bytes(ring))
+    assert trace['sample_count']==2 and trace['continuous_2ms_window'] and trace['frozen']
+    ratio=summarize(trace)['dm_ratios']['right_hip_DM4']['median_reported_to_command_ratio']
+    assert abs(ratio-.8)<1e-6
+    bad_ring=Ring.from_buffer_copy(bytes(ring)); bad_ring.frame[0].begin|=1
+    assert decode(bytes(bad_ring))['rejected_slots']==[0]
+    try: decode(bytes(ring)[:-1])
+    except ValueError: pass
+    else: raise AssertionError('Truncated ring accepted')
     fake_sources=sources[:-1]+["user/chassis.c","tests/test_chassis.c"]
     integration=[]
     for active in (False,True):
@@ -92,7 +112,7 @@ def main():
     lib.rl_reset.argtypes=[C.POINTER(Controller),C.POINTER(Measurement)]
     lib.rl_policy_step.argtypes=[C.POINTER(Controller),C.POINTER(Measurement),fp,C.c_float]
     lib.rl_policy_step.restype=C.c_bool
-    actor=load_actor(SAMPLE/"model_3050.pt")
+    actor=load_actor(active_checkpoint())
     words=0
     for i,layer in enumerate(actor):
         for kind,values in zip(("w","b"),layer):
@@ -100,7 +120,7 @@ def main():
             assert bytes(compiled)==struct.pack(f"<{len(values)}f",*values)
             words+=len(values)
     manifest=json.loads((ROOT/"user/algorithm/model/manifest.json").read_text())
-    assert manifest["sha256"]==sha(SAMPLE/"model_3050.pt")
+    assert manifest["sha256"]==sha(active_checkpoint())
     for name,digest in manifest["generated_sha256"].items():
         assert sha(ROOT/"user/algorithm/model"/name)==digest
     rng=random.Random(20261113); net=Network(); worst=0
@@ -141,13 +161,14 @@ def main():
         ref_next,yaw_next=contract.advance_reference(ref_xy,ref_yaw,applied[0],applied[1],dt)
         assert max(abs(a-b) for a,b in zip(c.reference_xy,ref_next))<1e-6
         assert abs(c.reference_yaw-yaw_next)<1e-6
-        targets=contract.action_targets(list(c.action),[[-4.296127953784042,-2.5592683579936732],[2.559268357993676,4.296127953784042]])
+        targets=contract.action_targets(list(c.action),manifest["target_knee_limits_rad"])
         assert max(abs(a-b) for a,b in zip(c.target_q,targets["position"]))<1e-6
     report={"status":"pass","weight_float32_words_bit_exact":words,
             "actor_vectors":len(vectors),"actor_max_absolute_error":worst,
             "observation_vectors":100,"observation_max_absolute_error":max_obs_error,
             "protocol_and_control_assertions":"passed", "physical_pose_conversion":"passed", "torch_forward_executed":False,
             "fake_hal_control_loop":integration,
+            "algorithm_improvements":"prediction_unwrap, odometry_quality, imu_weight, startup, reference, telemetry passed",
             "arm_runtime_tested":False,"hardware_tested":False,"checkpoint_sha256":manifest["sha256"]}
     (BUILD/"test_report.json").write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))

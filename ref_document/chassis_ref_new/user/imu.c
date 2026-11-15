@@ -1,6 +1,8 @@
 /* DRDY-gated BMI088 SPI2, PC0 accel CS, PC3 gyro CS, PB13 clock, PC1/PC2 data.
  * Based on HKU bsp_bmi088; no RTOS, DMA, heater or external AHRS dependency. */
 #include "imu.h"
+#include "imu_filter.h"
+#include "board.h"
 #include "main.h"
 #include "robot_config.h"
 #include "algorithm/rl.h"
@@ -62,6 +64,7 @@ bool imu_init(void) {
     memset(&g_imu,0,sizeof(g_imu)); g_imu.quaternion[0]=1;
     g_imu.gravity[2]=-1; g_imu.initialized=true;
     consumed_edges=0;
+    memset(&g_imu_fusion,0,sizeof(g_imu_fusion)); memset(&g_imu_timing,0,sizeof(g_imu_timing));
     __HAL_RCC_GPIOE_CLK_ENABLE();
     g.Pin=GPIO_PIN_12; g.Mode=GPIO_MODE_IT_RISING; g.Pull=GPIO_NOPULL;
     g.Speed=GPIO_SPEED_FREQ_LOW; HAL_GPIO_Init(GPIOE,&g);
@@ -70,7 +73,10 @@ bool imu_init(void) {
     return true;
 }
 void HAL_GPIO_EXTI_Callback(uint16_t pin) {
-    if (pin==GPIO_PIN_12) ++g_imu.drdy_edges;
+    if (pin==GPIO_PIN_12) {
+        g_imu_timing.edge_cycles=board_cycles(); g_imu_timing.edge_tick=HAL_GetTick();
+        ++g_imu.drdy_edges;
+    }
 }
 static void decode(const uint8_t raw[6], float scale, float body[3]) {
     float chip[3];
@@ -83,17 +89,21 @@ void imu_service(uint32_t now) {
     Imu *m=&g_imu;
     if (!m->initialized || (m->samples && now==m->tick)) return;
     uint8_t ar[6],gr[6];
-    uint32_t edges=m->drdy_edges;
+    uint32_t mask=__get_PRIMASK(); __disable_irq();
+    uint32_t edges=m->drdy_edges, sample_cycles=g_imu_timing.edge_cycles, sample_tick=g_imu_timing.edge_tick;
+    __set_PRIMASK(mask);
     if (edges==consumed_edges) return; /* freshness requires a real DRDY edge */
+    if (edges-consumed_edges>1) g_imu_timing.missed_edges+=edges-consumed_edges-1;
     consumed_edges=edges;
     if (!read_reg(true,0x12,ar,6) || !read_reg(false,0x02,gr,6)) { ++m->errors; return; }
     decode(ar,24*9.81f/32768,m->accel); decode(gr,2000*(RL_PI/180)/32768,m->omega);
     float norm=sqrtf(m->accel[0]*m->accel[0]+m->accel[1]*m->accel[1]+m->accel[2]*m->accel[2]);
     if (!isfinite(norm) || norm<0.1f || norm>250) { ++m->errors; return; }
-    float dt=m->samples ? (float)(now-m->tick)*0.001f : 0.001f;
-    uint32_t gap=m->samples ? now-m->tick : 1;
+    float dt=m->samples ? (float)(uint32_t)(sample_cycles-g_imu_timing.consumed_cycles)/(float)SystemCoreClock : 0.001f;
+    g_imu_timing.consumed_cycles=sample_cycles; g_imu_timing.sample_dt_s=dt;
+    uint32_t gap=m->samples ? sample_tick-m->tick : 1;
     if (gap>m->max_gap_ms) m->max_gap_ms=gap;
-    m->tick=now; ++m->samples;
+    m->tick=sample_tick; ++m->samples;
     if (!m->calibrated) {
         bool still=fabsf(norm-9.81f)<0.5f;
         for (unsigned i=0;i<3;++i) if (fabsf(m->omega[i])>0.08f) still=false;
@@ -114,7 +124,7 @@ void imu_service(uint32_t now) {
         m->quaternion[0]=cr*cp; m->quaternion[1]=sr*cp;
         m->quaternion[2]=cr*sp; m->quaternion[3]=-sr*sp; m->calibrated=true;
     }
-    if (gap>ROBOT_IMU_TIMEOUT_MS) {
+    if (gap>ROBOT_IMU_TIMEOUT_MS || dt<=0 || dt>0.005f) {
         m->calibrated=false; m->calibration_samples=0;
         memset(m->bias_sum,0,sizeof(m->bias_sum)); memset(m->accel_sum,0,sizeof(m->accel_sum));
         ++m->errors; return;
@@ -122,11 +132,14 @@ void imu_service(uint32_t now) {
     float *q=m->quaternion;
     float up[3]={2*(q[1]*q[3]-q[0]*q[2]),2*(q[0]*q[1]+q[2]*q[3]),1-2*(q[1]*q[1]+q[2]*q[2])};
     float w[3];
+    float acceleration_weight=imu_acceleration_weight(&g_imu_fusion,m->accel,up,dt);
+    if (ROBOT_IMU_ADAPTIVE) imu_track_bias(&g_imu_fusion,m->omega,m->bias,norm,dt);
     for (unsigned i=0;i<3;++i) { m->omega[i]-=m->bias[i]; w[i]=m->omega[i]; }
     if (fabsf(norm-9.81f)<1.0f) {
         float a[3]; for (unsigned i=0;i<3;++i) a[i]=m->accel[i]/norm;
-        w[0]+=2*(a[1]*up[2]-a[2]*up[1]); w[1]+=2*(a[2]*up[0]-a[0]*up[2]);
-        w[2]+=2*(a[0]*up[1]-a[1]*up[0]);
+        float gain=2*(ROBOT_IMU_ADAPTIVE ? acceleration_weight : 1);
+        w[0]+=gain*(a[1]*up[2]-a[2]*up[1]); w[1]+=gain*(a[2]*up[0]-a[0]*up[2]);
+        w[2]+=gain*(a[0]*up[1]-a[1]*up[0]);
     }
     float d[4]={-q[1]*w[0]-q[2]*w[1]-q[3]*w[2],q[0]*w[0]+q[2]*w[2]-q[3]*w[1],
                 q[0]*w[1]-q[1]*w[2]+q[3]*w[0],q[0]*w[2]+q[1]*w[1]-q[2]*w[0]};

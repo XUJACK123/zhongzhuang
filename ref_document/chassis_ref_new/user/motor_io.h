@@ -12,6 +12,8 @@ typedef struct {
 } MotorFeedback;
 typedef struct { MotorFeedback motor[6]; uint32_t rejected; } MotorBank;
 extern const uint8_t motor_id[6];
+typedef struct { uint32_t ambiguous[6], predicted_wraps[6]; float residual_counts[6]; } MotorDiagnostics;
+extern MotorDiagnostics g_motor_diagnostics;
 bool motor_receive(MotorBank *bank, uint16_t id, const uint8_t data[8], unsigned len, uint32_t now);
 bool motor_feedback_healthy(const MotorBank *bank, uint32_t now);
 bool motor_all_enabled(const MotorBank *bank);

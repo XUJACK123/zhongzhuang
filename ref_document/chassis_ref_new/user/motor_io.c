@@ -7,6 +7,7 @@ const uint8_t motor_id[6]={4,3,3,1,2,2}; /* right hip,knee,wheel; left hip,knee,
 static const float signs[6]=ROBOT_ENCODER_SIGNS;
 static const float encoder_reference[6]=ROBOT_ENCODER_REFERENCE_RAD;
 static const float arm_reference[6]=ROBOT_ARM_REFERENCE_RAD;
+MotorDiagnostics g_motor_diagnostics;
 static int16_t be16(const uint8_t *d) { return (int16_t)((uint16_t)d[0]<<8|d[1]); }
 bool motor_receive(MotorBank *b, uint16_t id, const uint8_t d[8], unsigned len, uint32_t now) {
     int index=-1;
@@ -20,12 +21,31 @@ bool motor_receive(MotorBank *b, uint16_t id, const uint8_t d[8], unsigned len, 
     bool wheel=i==2 || i==5;
     if (raw>=8192) { ++b->rejected; return false; }
     MotorFeedback *m=&b->motor[i];
+    float raw_velocity=(float)be16(d+2)*(wheel ? 2*RL_PI/60 : RL_PI/3000);
     if (m->received) {
-        if (now-m->tick>ROBOT_FEEDBACK_TIMEOUT_MS) m->position_lost=true;
+        uint32_t gap=now-m->tick;
+        if (gap>ROBOT_FEEDBACK_TIMEOUT_MS) m->position_lost=true;
         int delta=(int)raw-(int)m->raw;
         if (delta>4096) delta-=8192;
         if (delta< -4096) delta+=8192;
-        m->counts+=delta;
+        if (wheel && gap>0 && gap<=ROBOT_FEEDBACK_TIMEOUT_MS) {
+            float seconds=(float)gap*0.001f;
+            float previous=m->velocity*signs[i]*ROBOT_WHEEL_GEAR_RATIO;
+            float prediction=0.5f*(previous+raw_velocity)*seconds*(8192/(2*RL_PI));
+            float bound=128.0f+(fabsf(previous)+fabsf(raw_velocity))*0.0005f*(8192/(2*RL_PI))+
+                0.5f*ROBOT_WHEEL_PREDICTION_ACCEL_RAD_S2*ROBOT_WHEEL_GEAR_RATIO*seconds*seconds*(8192/(2*RL_PI));
+            int turns=(int)lroundf((prediction-(float)delta)/8192);
+            int predicted_delta=delta+turns*8192;
+            float residual=fabsf((float)predicted_delta-prediction);
+            g_motor_diagnostics.residual_counts[i]=residual;
+            if (!isfinite(prediction) || bound>=4096 || residual>bound) {
+                m->position_lost=true; ++g_motor_diagnostics.ambiguous[i];
+            } else {
+                delta=predicted_delta;
+                if (turns) ++g_motor_diagnostics.predicted_wraps[i];
+            }
+        }
+        if (!m->position_lost) m->counts+=delta;
     } else m->counts=(int64_t)raw;
     float reduction=wheel ? ROBOT_WHEEL_GEAR_RATIO : 1;
     float angle=(float)m->counts*(2*RL_PI/8192)/reduction;
@@ -36,7 +56,7 @@ bool motor_receive(MotorBank *b, uint16_t id, const uint8_t d[8], unsigned len, 
         m->counts=(int64_t)llroundf(angle*reduction*(8192/(2*RL_PI)));
     }
     m->arm=arm_reference[i]+signs[i]*(angle-encoder_reference[i]);
-    m->velocity=signs[i]*(float)be16(d+2)*(wheel ? 2*RL_PI/(60*reduction) : RL_PI/3000);
+    m->velocity=signs[i]*raw_velocity/reduction;
     m->current=(float)be16(d+4)*(wheel ? 20.0f/16384 : 0.001f);
     m->raw=(uint16_t)raw; m->temperature=d[6]; m->state=wheel ? 1 : d[7];
     m->tick=now; ++m->received;
@@ -58,6 +78,8 @@ bool motor_feedback_healthy(const MotorBank *b, uint32_t now) {
     return true;
 }
 bool motor_all_enabled(const MotorBank *b) {
+    /* Group-mode firmware may retain 0x0D while reporting fresh feedback.
+     * This is readiness for group commands, not positive FC acknowledgement. */
     for (unsigned i=0;i<6;++i)
         if (i!=2 && i!=5 && (!b->motor[i].received || dm_fault(b->motor[i].state))) return false;
     return true;

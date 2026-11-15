@@ -2,6 +2,45 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "RL: ST-Link flash and debug",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "device": "STM32H723VG",
+      "executable": "${workspaceFolder}/build/rl/wheel_leg_rl.elf",
+      "servertype": "openocd",
+      "serverpath": "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+      "gdbPath": "${env:USERPROFILE}/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
+      "searchDir": [
+        "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+      ],
+      "configFiles": [
+        "${workspaceFolder}/openocd_stlink.cfg"
+      ],
+      "preLaunchTask": "RL: build",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "raw"
+    },
+    {
+      "name": "RL: ST-Link attach",
+      "type": "cortex-debug",
+      "request": "attach",
+      "cwd": "${workspaceFolder}",
+      "device": "STM32H723VG",
+      "executable": "${workspaceFolder}/build/rl/wheel_leg_rl.elf",
+      "servertype": "openocd",
+      "serverpath": "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe",
+      "gdbPath": "${env:USERPROFILE}/.eide/tools/gcc_arm/bin/arm-none-eabi-gdb.exe",
+      "searchDir": [
+        "${env:USERPROFILE}/.eide/tools/openocd_7a1adfbec_mingw32/share/openocd/scripts"
+      ],
+      "configFiles": [
+        "${workspaceFolder}/openocd_stlink.cfg"
+      ],
+      "showDevDebugOutput": "raw"
+    },
+    {
+
       "name": "RL: DAP flash and run",
       "type": "cortex-debug",
       "request": "launch",
@@ -23,7 +62,7 @@
       "postRestartCommands": [
         "monitor reset run"
       ],
-      "showDevDebugOutput": "none",
+      "showDevDebugOutput": "raw",
       "liveWatch": {
         "enabled": true,
         "samplesPerSecond": 1

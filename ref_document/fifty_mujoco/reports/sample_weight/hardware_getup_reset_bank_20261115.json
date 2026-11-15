@@ -1,0 +1,46 @@
+{
+  "schema": "hardware_getup_reset_spec_v1",
+  "simulation_validated": false,
+  "joint_order": [
+    "right_hip_DM4",
+    "right_knee_DM3",
+    "right_wheel_M3508_3",
+    "left_hip_DM1",
+    "left_knee_DM2",
+    "left_wheel_M3508_2"
+  ],
+  "standing_reference_q_rad": [
+    3.1063109024878943,
+    -3.6606010515197696,
+    0.0,
+    -3.1063109024878943,
+    3.6606010515197696,
+    0.0
+  ],
+  "entries": [
+    {
+      "name": "surveyed_supported_20261113",
+      "q_rad": [
+        3.1500981078,
+        -2.9896,
+        0,
+        -3.1500981078,
+        2.9896,
+        0
+      ],
+      "hip_axis_height_m": 0.3,
+      "hip_to_wheel_distance_m": 0.35,
+      "wheel_center_behind_hip": true,
+      "pose_source": "tape_measurements_plus_kinematic_inverse_not_six_direct_angle_measurements",
+      "external_support_present_at_measurement": true,
+      "root_height_requires_collision_geometry_conversion": true,
+      "eligible_as_unsupported_rest_reset": false,
+      "evidence": "ref_document/chassis_ref_new/docs/COMMISSIONING_LOG_20261113.md#2355-写入标定并放行-motor_calibrated"
+    }
+  ],
+  "pending": [
+    "generate_zero_torque_settled_states_with_explicit_contacts",
+    "validate_spring_stroke_linkage_branch_and_nonpenetration",
+    "collect_repeatable_unsupported_physical_rest_states"
+  ]
+}

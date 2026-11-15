@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-15",
+  "timezone": "Asia/Hong_Kong",
+  "probe_responding": true,
+  "probe_firmware": "Horco v0.2",
+  "swd_dpidr": "0x6ba02477",
+  "ap0_idr": "0x84770001",
+  "ap2_idr": "0x54770002",
+  "ap2_dbgmcu_idcode_address": "0xE00E1000",
+  "ap2_dbgmcu_idcode": "0x10016483",
+  "cpu_examination": "failed: Cortex-M PARTNO 0x0 is unrecognized",
+  "swd_speeds_tested_khz": [100, 50],
+  "cpu_memory_access_available": false,
+  "flash_executed": false,
+  "reset_executed": false,
+  "motor_commands_sent": false,
+  "conclusion": "DAP and target debug access ports respond. AP2 chip identification is readable, but CPU examination fails at both tested speeds. Normal GDB debugging remains unavailable.",
+  "logs": ["openocd.log", "retry_50khz.log", "access_port.log"]
+}

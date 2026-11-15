@@ -42,6 +42,7 @@ C_SOURCES := \
   Core/Src/system_stm32h7xx.c \
   Core/Src/syscalls.c \
   user/board.c user/imu.c user/chassis.c user/control_state.c \
+  user/imu_filter.c user/startup_control.c user/telemetry.c \
   user/motor_io.c user/remote_control.c user/state_estimator.c \
   user/algorithm/rl.c user/algorithm/model/model.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c \
