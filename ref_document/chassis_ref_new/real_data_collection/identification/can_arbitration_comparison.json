@@ -1,0 +1,64 @@
+{
+  "prior_active_observations": [
+    {
+      "trial": "trial_20261116_193021",
+      "wire": {
+        "groups_tx": 5324,
+        "fc_tx": 15,
+        "fd_tx": 649,
+        "active_groups_tx": 1228,
+        "active_fc_tx": 15,
+        "active_gap_max_us": 75984,
+        "event_loss_flags_seen": 0,
+        "foreign_group_rx": 0,
+        "foreign_dji_rx": 0,
+        "last_foreign_group": "00 00 00 00 00 00 00 00",
+        "last_foreign_dji": "00 00 00 00 00 00 00 00"
+      }
+    }
+  ],
+  "after_zero_output_verification": {
+    "rows": [
+      {
+        "tick": 718488,
+        "wire_groups_tx": 359152,
+        "fc_tx": 0,
+        "all_gap_max_us": 2768,
+        "expired_abort_requests": 0,
+        "event_loss_flags_seen": 0,
+        "foreign_group_rx": 0,
+        "foreign_dji_rx": 0,
+        "nonzero_submitted": 0,
+        "enable_submitted": 0,
+        "token": 0
+      },
+      {
+        "tick": 723612,
+        "wire_groups_tx": 361717,
+        "fc_tx": 0,
+        "all_gap_max_us": 2768,
+        "expired_abort_requests": 0,
+        "event_loss_flags_seen": 0,
+        "foreign_group_rx": 0,
+        "foreign_dji_rx": 0,
+        "nonzero_submitted": 0,
+        "enable_submitted": 0,
+        "token": 0
+      }
+    ],
+    "elapsed_s": 5.124,
+    "group_tx_delta": 2565,
+    "measured_groups_per_s": 500.58548009367684,
+    "all_commands_zero_and_no_enable": true,
+    "no_physical_motion_test": true,
+    "auto_retransmission": true
+  },
+  "source_reference": "https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/m_can/mcan_users_manual_v331.pdf",
+  "source_section": "3.1.7 / 3.1.7.1",
+  "mechanism": "DAR disables retry after arbitration loss; arbitration loss need not increment CAN error counters.",
+  "inference": "Disabled automatic retransmission explains a likely command-loss path; the corrected diagnostic verified stable zero-command delivery. Corrected nonzero actuation and full RL operation are not yet verified.",
+  "fix": "Enable retransmission; request cancellation for pending nonzero torque frames aged >=4ms; preserve zero/stop packet delivery.",
+  "normal_source_updated": true,
+  "normal_image_rebuilt_and_host_tests_passed": true,
+  "corrected_normal_image_flashed": false
+}

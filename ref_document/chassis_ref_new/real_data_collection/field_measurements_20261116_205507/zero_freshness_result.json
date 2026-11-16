@@ -1,0 +1,437 @@
+{
+  "source": "two asynchronous read-only snapshots; CPU never explicitly halted",
+  "snapshots": [
+    {
+      "host_utc": "2026-11-16T12:57:45.761017+00:00",
+      "phase": "IDLE",
+      "reason": "NONE",
+      "last_token": 0,
+      "request_token": 0,
+      "tick": 250246,
+      "healthy_at_control_step": true,
+      "s1": 2,
+      "remote_valid": true,
+      "remote_tick": 250410,
+      "imu_calibrated": true,
+      "gravity_body": [
+        -0.11832141876220703,
+        0.029720688238739967,
+        -0.9925314784049988
+      ],
+      "can": {
+        "received": 1498778,
+        "other": 0,
+        "tx_error": 0,
+        "rx_error": 0,
+        "bus_off": 0,
+        "last_error": 0,
+        "tx_queued": 262847,
+        "nonzero": 0,
+        "enable": 0,
+        "status_samples": 125166
+      },
+      "tx_failed": 0,
+      "fifo_overflow": 0,
+      "log_header": [
+        489034006,
+        2,
+        212,
+        384,
+        0,
+        0,
+        37
+      ],
+      "motors": [
+        {
+          "label": "right_hip_DM4",
+          "raw": 3607,
+          "arm_rad": 3.134758234024048,
+          "velocity_rad_s": 0.002094395225867629,
+          "feedback": 0.00800000037997961,
+          "tick": 250295,
+          "received": 249177,
+          "temperature_c": 23,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "right_knee_DM3",
+          "raw": 3246,
+          "arm_rad": 1.6076029539108276,
+          "velocity_rad_s": 0.0,
+          "feedback": 0.009000000543892384,
+          "tick": 250311,
+          "received": 249305,
+          "temperature_c": 23,
+          "state": 0,
+          "position_lost": false
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "raw": 3323,
+          "arm_rad": 0.013765260577201843,
+          "velocity_rad_s": -0.0,
+          "feedback": -0.023193359375,
+          "tick": 250335,
+          "received": 250427,
+          "temperature_c": 23,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "left_hip_DM1",
+          "raw": 1336,
+          "arm_rad": 3.1362924575805664,
+          "velocity_rad_s": -0.002094395225867629,
+          "feedback": -0.00800000037997961,
+          "tick": 250351,
+          "received": 249348,
+          "temperature_c": 22,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "left_knee_DM2",
+          "raw": 3716,
+          "arm_rad": 1.5592824220657349,
+          "velocity_rad_s": 0.0,
+          "feedback": -0.0010000000474974513,
+          "tick": 250369,
+          "received": 249362,
+          "temperature_c": 22,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "raw": 4120,
+          "arm_rad": 0.07114464044570923,
+          "velocity_rad_s": 0.0,
+          "feedback": 0.062255859375,
+          "tick": 250383,
+          "received": 250081,
+          "temperature_c": 23,
+          "state": 1,
+          "position_lost": false
+        }
+      ],
+      "asynchronous_swd_reads": true,
+      "wire": {
+        "groups_tx": 125228,
+        "fc_tx": 0,
+        "fd_tx": 12523,
+        "active_groups_tx": 0,
+        "active_fc_tx": 0,
+        "active_gap_max_us": 0,
+        "event_loss_flags_seen": 0,
+        "foreign_group_rx": 0,
+        "foreign_dji_rx": 0,
+        "all_gap_max_us": 2752,
+        "expired_torque_abort_requests": 0,
+        "last_foreign_group": "00 00 00 00 00 00 00 00",
+        "last_foreign_dji": "00 00 00 00 00 00 00 00"
+      }
+    },
+    {
+      "host_utc": "2026-11-16T12:57:47.871715+00:00",
+      "phase": "IDLE",
+      "reason": "NONE",
+      "last_token": 0,
+      "request_token": 0,
+      "tick": 252332,
+      "healthy_at_control_step": true,
+      "s1": 2,
+      "remote_valid": true,
+      "remote_tick": 252510,
+      "imu_calibrated": true,
+      "gravity_body": [
+        -0.11834540963172913,
+        0.030358877032995224,
+        -0.9925051927566528
+      ],
+      "can": {
+        "received": 1511429,
+        "other": 0,
+        "tx_error": 0,
+        "rx_error": 0,
+        "bus_off": 0,
+        "last_error": 0,
+        "tx_queued": 265056,
+        "nonzero": 0,
+        "enable": 0,
+        "status_samples": 126218
+      },
+      "tx_failed": 0,
+      "fifo_overflow": 0,
+      "log_header": [
+        489034006,
+        2,
+        212,
+        384,
+        0,
+        0,
+        37
+      ],
+      "motors": [
+        {
+          "label": "right_hip_DM4",
+          "raw": 3607,
+          "arm_rad": 3.134758234024048,
+          "velocity_rad_s": -0.004188790451735258,
+          "feedback": 0.00800000037997961,
+          "tick": 252379,
+          "received": 251263,
+          "temperature_c": 23,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "right_knee_DM3",
+          "raw": 3246,
+          "arm_rad": 1.6076029539108276,
+          "velocity_rad_s": 0.002094395225867629,
+          "feedback": 0.009000000543892384,
+          "tick": 252401,
+          "received": 251396,
+          "temperature_c": 23,
+          "state": 0,
+          "position_lost": false
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "raw": 3323,
+          "arm_rad": 0.013765260577201843,
+          "velocity_rad_s": -0.0,
+          "feedback": -0.06591796875,
+          "tick": 252417,
+          "received": 252523,
+          "temperature_c": 23,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "left_hip_DM1",
+          "raw": 1336,
+          "arm_rad": 3.1362924575805664,
+          "velocity_rad_s": 0.009424778632819653,
+          "feedback": -0.03100000135600567,
+          "tick": 252439,
+          "received": 251436,
+          "temperature_c": 22,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "left_knee_DM2",
+          "raw": 3716,
+          "arm_rad": 1.5592824220657349,
+          "velocity_rad_s": 0.0062831854447722435,
+          "feedback": 0.04000000283122063,
+          "tick": 252455,
+          "received": 251450,
+          "temperature_c": 22,
+          "state": 1,
+          "position_lost": false
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "raw": 4120,
+          "arm_rad": 0.07114464044570923,
+          "velocity_rad_s": 0.0,
+          "feedback": 0.02685546875,
+          "tick": 252469,
+          "received": 252189,
+          "temperature_c": 23,
+          "state": 1,
+          "position_lost": false
+        }
+      ],
+      "asynchronous_swd_reads": true,
+      "wire": {
+        "groups_tx": 126275,
+        "fc_tx": 0,
+        "fd_tx": 12628,
+        "active_groups_tx": 0,
+        "active_fc_tx": 0,
+        "active_gap_max_us": 0,
+        "event_loss_flags_seen": 0,
+        "foreign_group_rx": 0,
+        "foreign_dji_rx": 0,
+        "all_gap_max_us": 2752,
+        "expired_torque_abort_requests": 0,
+        "last_foreign_group": "00 00 00 00 00 00 00 00",
+        "last_foreign_dji": "00 00 00 00 00 00 00 00"
+      }
+    }
+  ],
+  "per_motor_rx_deltas": [
+    2086,
+    2091,
+    2096,
+    2088,
+    2088,
+    2108
+  ],
+  "all_six_counters_increased": true,
+  "last_control_healthy": true,
+  "no_nonzero_or_enable_commands": true,
+  "no_flash_reset_halt_resume_or_trigger": true,
+  "raw_manifest": [
+    {
+      "path": "raw\\code_end.bin",
+      "sha256": "c813d77afe665dbc59a03598abd2193da124acdb6f9f74f69be021bff6b0838b"
+    },
+    {
+      "path": "raw\\code_mid.bin",
+      "sha256": "5a4fcdf57b402d8a5c6001c2714737e226f4d4a56f7f670e67daabea80882436"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_can_monitor.bin",
+      "sha256": "98a2107d3fc22e4d56160e50632472b7c4e2066ffc54b527320ec39e02830b75"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_can_rx_overflow.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_can_tx_fail.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_diag_can.bin",
+      "sha256": "ac77716ad9b579d79aa1bc559cf4f00853b89494d0af4ee3a50d776ec08076a0"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_ident.bin",
+      "sha256": "85759b3811ff7dc47b03792ac85317be51431a3f9e01dcafce317ed736a391b0"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_ident_healthy.bin",
+      "sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_ident_log.bin",
+      "sha256": "467681f53a068fefc888eaf5d7e4002a3c35dea888baf42b5ae49b6e869181ee"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_ident_request_token.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_ident_tick.bin",
+      "sha256": "318c707bf3a21cf7eced16b4661ec028e515ade8d34f56b15060bed2ceb433ef"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_imu.bin",
+      "sha256": "df43a3f3950b9aaba3c67579e17738feda90dd73659be0f016a123a4a2cda8cb"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_motor_snapshot.bin",
+      "sha256": "ca8db437cdfabe1d1c8fe5d44d597622a88798425f2340987215a0d73f175d2f"
+    },
+    {
+      "path": "raw\\initial_zero_status_g_remote.bin",
+      "sha256": "f43c72f132fe65b6bf24f76682c875d6563cd2a43ef7ba55cd2a7eb577d7fc56"
+    },
+    {
+      "path": "raw\\vectors.bin",
+      "sha256": "40fff9bdfc791c213acb2f4e68c8c53c57eed2ffe1db065304406ab5c72d30b5"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_can_monitor.bin",
+      "sha256": "b648b9b8a3db26b399cabb04186b62892ea4b44d192b9663045f5cca16e3894a"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_can_rx_overflow.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_can_tx_fail.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_diag_can.bin",
+      "sha256": "fb352b3eac997728d3d3f47b341cc14027d11f59c97b7ff918a581d1dd386773"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_ident.bin",
+      "sha256": "85759b3811ff7dc47b03792ac85317be51431a3f9e01dcafce317ed736a391b0"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_ident_healthy.bin",
+      "sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_ident_log.bin",
+      "sha256": "467681f53a068fefc888eaf5d7e4002a3c35dea888baf42b5ae49b6e869181ee"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_ident_request_token.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_ident_tick.bin",
+      "sha256": "19ba018a660fe3ca29bcaf5a5ebe2dd14a752f93869ea9177571fb7549d31006"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_imu.bin",
+      "sha256": "8ad83337cbb78f72e0045c52132b59756915945f273ac1dab0f5b03058e2ddd6"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_motor_snapshot.bin",
+      "sha256": "544921c7c798e4ea8275975ebb524bf36e68fcc9be30292fda277aedbe6aeb6f"
+    },
+    {
+      "path": "raw\\zero_freshness_a_g_remote.bin",
+      "sha256": "5ebc9c4d1157e45887a415fc58b7cb772ab586e9591833a2eee0670964b06576"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_can_monitor.bin",
+      "sha256": "f0cfd633dec2a522aa2fc3bfeecf725acfc7490e427248b2749b7a4873c8a345"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_can_rx_overflow.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_can_tx_fail.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_diag_can.bin",
+      "sha256": "177a97a10cf7ca2b3e321a6563398e4d2ed6825fcf05b346816ce5eda4dc6fd4"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_ident.bin",
+      "sha256": "85759b3811ff7dc47b03792ac85317be51431a3f9e01dcafce317ed736a391b0"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_ident_healthy.bin",
+      "sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_ident_log.bin",
+      "sha256": "467681f53a068fefc888eaf5d7e4002a3c35dea888baf42b5ae49b6e869181ee"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_ident_request_token.bin",
+      "sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_ident_tick.bin",
+      "sha256": "18012b3b0f66631ff21df66c3049bd35b90b0a41fdc445c69e6c4c6bee229ab4"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_imu.bin",
+      "sha256": "351e96d93e269689c3e1c75b2fa16ef13946b8c75a1a9215d8e5ddbcbe21d31f"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_motor_snapshot.bin",
+      "sha256": "4ae7da8e6c4fd71300a7f820bcf3d2e9e243a4ffa914749da71435eea4c56d15"
+    },
+    {
+      "path": "raw\\zero_freshness_b_g_remote.bin",
+      "sha256": "e4e3165cf3172aa089b55825e1473a72e9b30627de2fed6775a06d29be591113"
+    }
+  ]
+}

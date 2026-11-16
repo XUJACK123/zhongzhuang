@@ -1,0 +1,81 @@
+{
+  "recorded_at_utc": "2026-11-16T13:02:44.173326+00:00",
+  "supported_pose_forward_direction_disagreement": [
+    {
+      "side": "right",
+      "current_calibration_hip_rad": 3.134758234024048,
+      "current_calibration_knee_rad": -2.9541693261594406,
+      "current_calibration_hip_deg": 179.60841660346117,
+      "current_calibration_knee_deg": -169.2614343559423,
+      "current_calibration_fk_body_x_m": -0.25489732945248567,
+      "current_calibration_fk_body_z_m": -0.24736973950220162,
+      "operator_hip_height_m": 0.3,
+      "operator_wheel_forward_from_hip_m": 0.304,
+      "tyre_geometric_radius_m": 0.0575,
+      "wheel_height_m_inferred_from_contact_and_radius": 0.0575,
+      "wheel_height_independently_measured": false,
+      "ground_relative_z_m_inferred": -0.2425,
+      "body_to_ground_angle_quantified": false,
+      "forward_direction_disagreement": true,
+      "mechanical_reference_verified": false
+    },
+    {
+      "side": "left",
+      "current_calibration_hip_rad": -3.1362924575805664,
+      "current_calibration_knee_rad": 2.9975779203478705,
+      "current_calibration_hip_deg": -179.6963211380792,
+      "current_calibration_knee_deg": 171.74856359753542,
+      "current_calibration_fk_body_x_m": -0.24456457881588112,
+      "current_calibration_fk_body_z_m": -0.2487116748301742,
+      "operator_hip_height_m": 0.3,
+      "operator_wheel_forward_from_hip_m": 0.304,
+      "tyre_geometric_radius_m": 0.0575,
+      "wheel_height_m_inferred_from_contact_and_radius": 0.0575,
+      "wheel_height_independently_measured": false,
+      "ground_relative_z_m_inferred": -0.2425,
+      "body_to_ground_angle_quantified": false,
+      "forward_direction_disagreement": true,
+      "mechanical_reference_verified": false
+    }
+  ],
+  "imu_estimated_tilt_deg": 6.863040048671803,
+  "external_body_angle_quantified": false,
+  "cad_chain_drives": [
+    {
+      "body": "thigh",
+      "driving_teeth": 16,
+      "driven_teeth": 19,
+      "ratio": 1.1875,
+      "same_standard_pitch": true,
+      "status": "confirmed",
+      "note": "driving sprocket on the motor, driven on the hip axis; the driven side turns 1/ratio of the motor"
+    },
+    {
+      "body": "crank",
+      "driving_teeth": 16,
+      "driven_teeth": 19,
+      "ratio": 1.1875,
+      "same_standard_pitch": true,
+      "status": "confirmed",
+      "note": "driving sprocket on the motor, driven on the hip axis; the driven side turns 1/ratio of the motor"
+    }
+  ],
+  "motor_io_source": {
+    "path": "user/motor_io.c",
+    "sha256": "8a98150d4ba2078d0d7409d2c80ed34ca4d6438f18d2f2474db343439c60ffb8",
+    "leg_reduction_in_feedback_code": 1.0,
+    "wheel_reduction_in_feedback_code": 15.88,
+    "interpretation": "Leg motor output is treated as canonical drive arm after reference/sign, with no explicit 16/19 external-chain scale. CAD part correspondence to installed chain remains unverified."
+  },
+  "chain_ratio_verified_on_installed_robot": false,
+  "zero_calibration_modified": false,
+  "requested_physical_data": [
+    "four direct thigh and knee included angles",
+    "body front/rear heights and separation"
+  ],
+  "not_proven": [
+    "a hardware fault",
+    "a specific encoder sign or zero correction",
+    "independent spring force or motor shaft torque"
+  ]
+}

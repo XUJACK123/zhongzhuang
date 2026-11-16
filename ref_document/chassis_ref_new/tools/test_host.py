@@ -44,6 +44,10 @@ def main():
     BUILD.mkdir(parents=True,exist_ok=True)
     cc=os.environ.get("HOST_CC") or shutil.which("gcc")
     if not cc: raise SystemExit("HOST_CC or native gcc is required")
+    queue_test=BUILD/("can_tx_age.exe" if os.name=="nt" else "can_tx_age")
+    subprocess.run([cc,"-std=c11","-O2","-Wall","-Wextra","-Werror","-Iuser",
+                    "tests/test_can_tx_age.c","-o",str(queue_test)],cwd=ROOT,check=True)
+    subprocess.run([str(queue_test)],cwd=ROOT,check=True)
     library=BUILD/("rl_host.dll" if os.name=="nt" else "rl_host.so")
     sources=["user/algorithm/rl.c","user/algorithm/model/model.c","user/control_state.c",
              "user/motor_io.c","user/remote_control.c","user/state_estimator.c",
@@ -167,6 +171,7 @@ def main():
             "actor_vectors":len(vectors),"actor_max_absolute_error":worst,
             "observation_vectors":100,"observation_max_absolute_error":max_obs_error,
             "protocol_and_control_assertions":"passed", "physical_pose_conversion":"passed", "torch_forward_executed":False,
+            "pending_nonzero_tx_age":"4ms expiry, zero preservation, buffer reuse, tick wrap passed",
             "fake_hal_control_loop":integration,
             "algorithm_improvements":"prediction_unwrap, odometry_quality, imu_weight, startup, reference, telemetry passed",
             "arm_runtime_tested":False,"hardware_tested":False,"checkpoint_sha256":manifest["sha256"]}

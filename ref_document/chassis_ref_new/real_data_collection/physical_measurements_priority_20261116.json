@@ -1,0 +1,108 @@
+{
+  "recorded_at_utc": "2026-11-16T12:41:04.335951+00:00",
+  "mode": "offline_consolidation_after_user_stopped_retest",
+  "board_access_stopped": true,
+  "pose_change_requested": false,
+  "already_recorded_no_repeat": [
+    "supported pose A: body clearance 120 mm",
+    "motor-pair midpoint height 300 mm each side, not verified single hip axis",
+    "wheel centre 304 mm forward of motor-pair midpoint each side",
+    "spring pin centre distance 240 mm each side",
+    "static supply voltage 24 V",
+    "right reported diameter corrected to approximately 10 mm",
+    "exposed shiny rod length: 100 mm each side; not total spring stroke",
+    "operating mass: accepted existing record 21.9 kg; no fresh weighing",
+    "tyre outer diameter: 115 mm each side",
+    "tyre width: 15 mm each side"
+  ],
+  "items": [
+    {
+      "id": "spring_visible_rod_lengths",
+      "priority": 1,
+      "status": "operator_measurement_recorded",
+      "right_m": 0.1,
+      "left_m": 0.1,
+      "definition": "Exposed shiny rod, seal mouth to nearest rod-end fitting edge; exclude fitting. This is not total stroke.",
+      "tools": "ruler; no pose change or spring compression",
+      "measurement_accuracy_m": null,
+      "recorded_at_utc": "2026-11-16T12:43:35.700353+00:00",
+      "endpoints_confirmed_by_operator": true,
+      "prior_right_candidate_m": 0.1
+    },
+    {
+      "id": "operating_mass",
+      "priority": 1,
+      "status": "operator_accepted_existing_record",
+      "mass_kg": 21.9,
+      "definition": "Complete robot with operating battery and current attachments; exclude support fixture.",
+      "tools": "suitable scale; skip if unavailable; use a supported weighing arrangement",
+      "measurement_accuracy_kg": null,
+      "recorded_at_utc": "2026-11-16T12:43:35.700353+00:00",
+      "source": "existing weight record",
+      "fresh_weighing_in_this_session": false
+    },
+    {
+      "id": "wheel_free_outer_diameters",
+      "priority": 2,
+      "status": "operator_measurement_recorded",
+      "right_m": 0.115,
+      "left_m": 0.115,
+      "definition": "Full tyre outer diameter through axle centre; record support/loading. Not assumed equal to effective loaded rolling diameter.",
+      "tools": "ruler; no powered movement",
+      "operator_raw_reply": "刚才是宽度，直径应该是115mm",
+      "reported_numeric_value": 115,
+      "reported_unit": "mm",
+      "right_tyre_width_m": 0.015,
+      "left_tyre_width_m": 0.015,
+      "original_15_mm_reading_was_width": true,
+      "recorded_at_utc": "2026-11-16T12:53:08.235615+00:00",
+      "measurement_accuracy_m": null
+    },
+    {
+      "id": "spring_mount_geometry",
+      "priority": 2,
+      "status": "CAD_reference_available_installed_correspondence_pending",
+      "definition": "Verify actual spring pin locations against CAD using adjacent joint centres; label points before requesting distances. Existing 300/304 mm readings use motor-pair midpoint."
+    },
+    {
+      "id": "spring_force_stroke",
+      "priority": 1,
+      "status": "needs_independent_force_reference_or_traceable_exact_model_curve",
+      "definition": "Each spring axial force versus pin distance, compression and return; installed pressure remains unknown. No hand compression or pressure-valve operation requested."
+    },
+    {
+      "id": "shaft_torque",
+      "priority": 2,
+      "status": "needs_independent_load_and_known_lever_arm",
+      "definition": "Existing motor protocol feedback is retained separately from independent torque measurement."
+    },
+    {
+      "id": "natural_stop_and_reference_repeatability",
+      "priority": 3,
+      "status": "supported_pose_approximate_angles_recorded; precise reference repeatability and natural unassisted trials pending",
+      "definition": "External pose and contact measurements paired with fresh board timestamps and encoder readings; not performed while board access is stopped."
+    },
+    {
+      "id": "marked_wheel_rolling",
+      "status": "single_manual_result_accepted_by_user_no_retest",
+      "right_effective_radius_m": 0.05570423008216337,
+      "left_effective_radius_m": 0.05570423008216337,
+      "left_is_symmetry_assumption": true,
+      "encoder_gear_ratio_valid": false
+    }
+  ],
+  "updated_at_utc": "2026-11-16T13:16:10.639636+00:00",
+  "cad_source_requested_by_user": "D:\\robomaster_material\\solidwork_graph\\26英雄整车总装2.0.STEP",
+  "remaining_field_work_order": [
+    "No additional wheel retest: user accepts the single manual 700 mm / 2 turns result.",
+    "Independent force/torque measurements remain unavailable without a load reference/appropriate fixture or traceable installed spring curve.",
+    "Reference/IMU/natural-stop/full odometry commissioning remains incomplete; coarse data and assumptions retained separately."
+  ],
+  "current_field_session": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\real_data_collection\\field_measurements_20261116_205507",
+  "cad_reference": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\real_data_collection\\cad_reference_for_field_measurements_20261116.json",
+  "current_block_for_reference_alignment": "Approximate physical angles agree with coarse dimensions, but existing calibration disagrees; precision and external chain transfer remain unverified.",
+  "body_orientation_reference_status": "operator authorizes horizontal assumption; no quantified external angle measurement",
+  "user_instructed_no_retest": true,
+  "accepted_rolling_radius_m": 0.05570423008216337,
+  "left_right_rolling_symmetry_authorized_by_operator": true
+}

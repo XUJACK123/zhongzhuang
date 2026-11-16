@@ -1,0 +1,4478 @@
+{
+  "report": "real_data_full_tests_20261116_165832.json",
+  "all_tests_complete": false,
+  "tests": {
+    "T0": {
+      "status": "communication_and_position_subchecks_pass; full_acceptance_incomplete",
+      "three_pairs": {
+        "snapshot_count": 6,
+        "pairs": [
+          {
+            "a": "T0_after_reset_000",
+            "b": "T0_after_reset_001",
+            "received_deltas": [
+              3018,
+              3003,
+              3160,
+              3126,
+              3140,
+              3148
+            ],
+            "all_six_increasing": true
+          },
+          {
+            "a": "T0_after_reset_002",
+            "b": "T0_after_reset_003",
+            "received_deltas": [
+              3085,
+              3233,
+              3259,
+              3242,
+              3218,
+              3263
+            ],
+            "all_six_increasing": true
+          },
+          {
+            "a": "T0_after_reset_004",
+            "b": "T0_after_reset_005",
+            "received_deltas": [
+              3024,
+              3173,
+              3203,
+              3182,
+              3131,
+              3196
+            ],
+            "all_six_increasing": true
+          }
+        ],
+        "six_motor_connection_pass": true
+      },
+      "missing": [
+        "continuous60s record with per-sample age and loop timing",
+        "ACTIVE single/dual-actor timing; getup actor missing"
+      ]
+    },
+    "T1": {
+      "status": "supported_pose_measured; natural_rest_trials_not_run",
+      "missing": [
+        "anti-tip protection and controllable support unloading",
+        "10 symmetric and5+5 asymmetric natural rest trials"
+      ]
+    },
+    "T2": {
+      "status": "raw/arm/q captured after software reset; full_repeatability_not_run",
+      "missing": [
+        "same fixture approach5 times in both directions",
+        "3 full power cycles",
+        "wheel marked one-turn repeats3 times"
+      ],
+      "software_reset_repeatability": {
+        "kind": "same_pose_MCU_software_reset_repeatability_only",
+        "trials": [
+          {
+            "trial": 1,
+            "mcu_epoch": 2,
+            "snapshot_tags": [
+              "T2_soft_reset_1_000",
+              "T2_soft_reset_1_001"
+            ],
+            "inhibit_values": [
+              0,
+              0
+            ],
+            "raw_counts": [
+              3611,
+              3255,
+              488,
+              1336,
+              3719,
+              1863
+            ],
+            "arm_rad": [
+              3.131690263748169,
+              1.6145058870315552,
+              0.15069332718849182,
+              3.1362924575805664,
+              1.561583399772644,
+              -0.03786653280258179
+            ],
+            "q_rad": [
+              3.131690263748169,
+              -2.9454636573791504,
+              0.15069332718849182,
+              -3.1362924575805664,
+              2.9955790042877197,
+              -0.03786653280258179
+            ],
+            "position_lost": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "trial": 2,
+            "mcu_epoch": 3,
+            "snapshot_tags": [
+              "T2_soft_reset_2_000",
+              "T2_soft_reset_2_001"
+            ],
+            "inhibit_values": [
+              0,
+              0
+            ],
+            "raw_counts": [
+              3611,
+              3255,
+              488,
+              1336,
+              3719,
+              1863
+            ],
+            "arm_rad": [
+              3.131690263748169,
+              1.6145058870315552,
+              0.15069332718849182,
+              3.1362924575805664,
+              1.561583399772644,
+              -0.03786653280258179
+            ],
+            "q_rad": [
+              3.131690263748169,
+              -2.9454636573791504,
+              0.15069332718849182,
+              -3.1362924575805664,
+              2.9955790042877197,
+              -0.03786653280258179
+            ],
+            "position_lost": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "trial": 3,
+            "mcu_epoch": 4,
+            "snapshot_tags": [
+              "T2_soft_reset_3_000",
+              "T2_soft_reset_3_001"
+            ],
+            "inhibit_values": [
+              0,
+              0
+            ],
+            "raw_counts": [
+              3611,
+              3255,
+              488,
+              1336,
+              3719,
+              1863
+            ],
+            "arm_rad": [
+              3.131690263748169,
+              1.6145058870315552,
+              0.15069332718849182,
+              3.1362924575805664,
+              1.561583399772644,
+              -0.03786653280258179
+            ],
+            "q_rad": [
+              3.131690263748169,
+              -2.9454636573791504,
+              0.15069332718849182,
+              -3.1362924575805664,
+              2.9955790042877197,
+              -0.03786653280258179
+            ],
+            "position_lost": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          }
+        ],
+        "q_range_rad": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "leg_q_range_within_0p02rad": true,
+        "physical_pose_fixture_used": false,
+        "full_power_cycle_count": 0,
+        "encoder_zeros_modified": false,
+        "full_T2_pass": false,
+        "limitations": [
+          "No bidirectional physical approach repetitions.",
+          "MCU reset is not full power cycling.",
+          "Wheel absolute base can change by design after restart."
+        ]
+      }
+    },
+    "T3": {
+      "status": "not_measurable_with_available_equipment",
+      "missing": [
+        "independent force/torque sensor",
+        "rated fixture and measured force arm",
+        "bounded torque bench mode"
+      ]
+    },
+    "T4": {
+      "status": "installed_pin_distances_measured; force_curve_not_measured",
+      "missing": [
+        "guarded compression fixture and force measurement or traceable supplier curve"
+      ],
+      "manual_hand_compression_used": false
+    },
+    "T5": {
+      "status": "static_data_and_level_discrepancy_recorded; not_passed",
+      "user_body_level_observation": true,
+      "board_parallel_confirmed": true,
+      "latest_estimated_tilt_deg": 2.867578824870554,
+      "missing": [
+        "quantified external angle reference and uncertainty",
+        "cold/warm temperature measurement",
+        "repeated known angles/turns",
+        "continuous dynamic acceleration record"
+      ]
+    },
+    "T6": {
+      "status": "static_estimator_data_captured; displacement_scale_not_measured",
+      "missing": [
+        "protected low-slip1m forward/back trials5 each",
+        "known arc and wheel-lift truth labels",
+        "continuous synchronous record"
+      ]
+    },
+    "T7": {
+      "status": "no_active_rotation_or_delay_identification",
+      "missing": [
+        "guarded wheel fixture",
+        "continuous raw CAN arrival timestamp/rotational truth",
+        "bounded wheel bench mode"
+      ]
+    },
+    "T8": {
+      "status": "prerequisites_not_met; no_getup_attempt",
+      "missing": [
+        "validated and registered getup actor",
+        "prior force/spring/dynamic gates",
+        "continuous trajectory and external assistance-force/contact truth"
+      ]
+    }
+  },
+  "analyses": {
+    "imu_level_verification": {
+      "snapshot_count": 2,
+      "mcu_span_s": 2.188,
+      "sample_period_ms": {
+        "n": 1,
+        "min": 2188,
+        "max": 2188,
+        "mean": 2188,
+        "sample_std": null,
+        "p50": 2188.0,
+        "p95": 2188.0,
+        "p99": 2188.0
+      },
+      "read_bracket_ms": {
+        "n": 2,
+        "min": 1124,
+        "max": 1190,
+        "mean": 1157,
+        "sample_std": 46.66904755831214,
+        "p50": 1157.0,
+        "p95": 1186.7,
+        "p99": 1189.34
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 1338164,
+          "received_count_end": 1340235,
+          "raw_counts": {
+            "n": 2,
+            "min": 3611,
+            "max": 3611,
+            "mean": 3611,
+            "sample_std": 0.0,
+            "p50": 3611.0,
+            "p95": 3611.0,
+            "p99": 3611.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.131690263748169,
+            "max": 3.1324572563171387,
+            "mean": 3.132073760032654,
+            "sample_std": 0.0005423456466381844,
+            "p50": 3.132073760032654,
+            "p95": 3.1324189066886903,
+            "p99": 3.132449586391449
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 1355708,
+          "received_count_end": 1357782,
+          "raw_counts": {
+            "n": 2,
+            "min": 3252,
+            "max": 3252,
+            "mean": 3252,
+            "sample_std": 0.0,
+            "p50": 3252.0,
+            "p95": 3252.0,
+            "p99": 3252.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.612204909324646,
+            "max": 1.612204909324646,
+            "mean": 1.612204909324646,
+            "sample_std": 0.0,
+            "p50": 1.612204909324646,
+            "p95": 1.612204909324646,
+            "p99": 1.612204909324646
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 1398676,
+          "received_count_end": 1400870,
+          "raw_counts": {
+            "n": 2,
+            "min": 32,
+            "max": 32,
+            "mean": 32,
+            "sample_std": 0.0,
+            "p50": 32.0,
+            "p95": 32.0,
+            "p99": 32.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.2229488641023636,
+            "max": -0.2229488641023636,
+            "mean": -0.2229488641023636,
+            "sample_std": 0.0,
+            "p50": -0.2229488641023636,
+            "p95": -0.2229488641023636,
+            "p99": -0.2229488641023636
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 1383402,
+          "received_count_end": 1385583,
+          "raw_counts": {
+            "n": 2,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 1370162,
+          "received_count_end": 1372343,
+          "raw_counts": {
+            "n": 2,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 1397200,
+          "received_count_end": 1399396,
+          "raw_counts": {
+            "n": 2,
+            "min": 1873,
+            "max": 1873,
+            "mean": 1873,
+            "sample_std": 0.0,
+            "p50": 1873.0,
+            "p95": 1873.0,
+            "p99": 1873.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.0373835414648056,
+            "max": -0.0373835414648056,
+            "mean": -0.0373835414648056,
+            "sample_std": 0.0,
+            "p50": -0.0373835414648056,
+            "p95": -0.0373835414648056,
+            "p99": -0.0373835414648056
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 39,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          1390028,
+          1392198
+        ],
+        "drdy_edges_start_end": [
+          2776464,
+          2780800
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 2,
+            "min": -0.022779615595936775,
+            "max": -0.005735384300351143,
+            "mean": -0.014257499948143959,
+            "sample_std": 0.012052091529220575,
+            "p50": -0.014257499948143959,
+            "p95": -0.006587595865130424,
+            "p99": -0.005905826613306998
+          },
+          {
+            "n": 2,
+            "min": -0.008203601464629173,
+            "max": 0.001383778639137745,
+            "mean": -0.003409911412745714,
+            "sample_std": 0.006779301485186574,
+            "p50": -0.003409911412745714,
+            "p95": 0.0009044096339493983,
+            "p99": 0.0012879048381000749
+          },
+          {
+            "n": 2,
+            "min": -0.004416586831212044,
+            "max": 0.0030402643606066704,
+            "mean": -0.0006881612353026867,
+            "sample_std": 0.0052727900440340016,
+            "p50": -0.0006881612353026867,
+            "p95": 0.0026674218010157343,
+            "p99": 0.002965695848688483
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 2,
+            "min": 0.7616162300109863,
+            "max": 0.790356457233429,
+            "mean": 0.7759863436222076,
+            "sample_std": 0.020322409561831394,
+            "p50": 0.7759863436222076,
+            "p95": 0.7889194458723068,
+            "p99": 0.7900690549612045
+          },
+          {
+            "n": 2,
+            "min": -0.6610254049301147,
+            "max": -0.6035449504852295,
+            "mean": -0.6322851777076721,
+            "sample_std": 0.04064481912366279,
+            "p50": -0.6322851777076721,
+            "p95": -0.6064189732074737,
+            "p99": -0.6041197550296783
+          },
+          {
+            "n": 2,
+            "min": 9.75012493133545,
+            "max": 9.75012493133545,
+            "mean": 9.75012493133545,
+            "sample_std": 0.0,
+            "p50": 9.75012493133545,
+            "p95": 9.75012493133545,
+            "p99": 9.75012493133545
+          }
+        ],
+        "yaw_start_end_deg": [
+          10.91409246345219,
+          11.00520718698016
+        ],
+        "yaw_delta_deg": 0.09111472352796923,
+        "yaw_linear_slope_deg_s": 0.04196901129800518,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          0.07456812262535095,
+          0.025399770587682724
+        ],
+        [
+          0.07392779737710953,
+          0.027781127020716667
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.00246594300110274,
+      "estimated_xy_max_sampled_excursion_m": 0.00246594300110274,
+      "joint_position_rad": [
+        {
+          "n": 2,
+          "min": 3.131690263748169,
+          "max": 3.131690263748169,
+          "mean": 3.131690263748169,
+          "sample_std": 0.0,
+          "p50": 3.131690263748169,
+          "p95": 3.131690263748169,
+          "p99": 3.131690263748169
+        },
+        {
+          "n": 2,
+          "min": -2.9474732875823975,
+          "max": -2.9474732875823975,
+          "mean": -2.9474732875823975,
+          "sample_std": 0.0,
+          "p50": -2.9474732875823975,
+          "p95": -2.9474732875823975,
+          "p99": -2.9474732875823975
+        },
+        {
+          "n": 2,
+          "min": -0.2229488641023636,
+          "max": -0.2229488641023636,
+          "mean": -0.2229488641023636,
+          "sample_std": 0.0,
+          "p50": -0.2229488641023636,
+          "p95": -0.2229488641023636,
+          "p99": -0.2229488641023636
+        },
+        {
+          "n": 2,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 2,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 2,
+          "min": -0.0373835414648056,
+          "max": -0.0373835414648056,
+          "mean": -0.0373835414648056,
+          "sample_std": 0.0,
+          "p50": -0.0373835414648056,
+          "p95": -0.0373835414648056,
+          "p99": -0.0373835414648056
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 2,
+        "min": 5.1890863082808325,
+        "max": 5.561619380799821,
+        "mean": 5.375352844540327,
+        "sample_std": 0.26342066179443685,
+        "p50": 5.375352844540327,
+        "p95": 5.542992727173872,
+        "p99": 5.557894050074632
+      },
+      "acceleration_norm_m_s2": {
+        "n": 2,
+        "min": 9.800707424129948,
+        "max": 9.80214007471982,
+        "mean": 9.801423749424885,
+        "sample_std": 0.0010130369471688238,
+        "p50": 9.801423749424885,
+        "p95": 9.802068442190325,
+        "p99": 9.802125748213921
+      }
+    },
+    "pose_A_external": {
+      "snapshot_count": 2,
+      "mcu_span_s": 2.212,
+      "sample_period_ms": {
+        "n": 1,
+        "min": 2212,
+        "max": 2212,
+        "mean": 2212,
+        "sample_std": null,
+        "p50": 2212.0,
+        "p95": 2212.0,
+        "p99": 2212.0
+      },
+      "read_bracket_ms": {
+        "n": 2,
+        "min": 1116,
+        "max": 1150,
+        "mean": 1133,
+        "sample_std": 24.041630560342615,
+        "p50": 1133.0,
+        "p95": 1148.3,
+        "p99": 1149.66
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 1004714,
+          "received_count_end": 1006815,
+          "raw_counts": {
+            "n": 2,
+            "min": 3607,
+            "max": 3607,
+            "mean": 3607,
+            "sample_std": 0.0,
+            "p50": 3607.0,
+            "p95": 3607.0,
+            "p99": 3607.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.134758234024048,
+            "max": 3.134758234024048,
+            "mean": 3.134758234024048,
+            "sample_std": 0.0,
+            "p50": 3.134758234024048,
+            "p95": 3.134758234024048,
+            "p99": 3.134758234024048
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 1015830,
+          "received_count_end": 1018038,
+          "raw_counts": {
+            "n": 2,
+            "min": 3245,
+            "max": 3245,
+            "mean": 3245,
+            "sample_std": 0.0,
+            "p50": 3245.0,
+            "p95": 3245.0,
+            "p99": 3245.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.606835961341858,
+            "max": 1.606835961341858,
+            "mean": 1.606835961341858,
+            "sample_std": 0.0,
+            "p50": 1.606835961341858,
+            "p95": 1.606835961341858,
+            "p99": 1.606835961341858
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 1048754,
+          "received_count_end": 1050978,
+          "raw_counts": {
+            "n": 2,
+            "min": 7931,
+            "max": 7931,
+            "mean": 7931,
+            "sample_std": 0.0,
+            "p50": 7931.0,
+            "p95": 7931.0,
+            "p99": 7931.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.20879720151424408,
+            "max": -0.20879720151424408,
+            "mean": -0.20879720151424408,
+            "sample_std": 0.0,
+            "p50": -0.20879720151424408,
+            "p95": -0.20879720151424408,
+            "p99": -0.20879720151424408
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 1037337,
+          "received_count_end": 1039483,
+          "raw_counts": {
+            "n": 2,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 1027628,
+          "received_count_end": 1029835,
+          "raw_counts": {
+            "n": 2,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 1047625,
+          "received_count_end": 1049838,
+          "raw_counts": {
+            "n": 2,
+            "min": 1873,
+            "max": 1873,
+            "mean": 1873,
+            "sample_std": 0.0,
+            "p50": 1873.0,
+            "p95": 1873.0,
+            "p99": 1873.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.0373835414648056,
+            "max": -0.0373835414648056,
+            "mean": -0.0373835414648056,
+            "sample_std": 0.0,
+            "p50": -0.0373835414648056,
+            "p95": -0.0373835414648056,
+            "p99": -0.0373835414648056
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 38,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          1042245,
+          1044455
+        ],
+        "drdy_edges_start_end": [
+          2081817,
+          2086231
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 2,
+            "min": -0.019583823159337044,
+            "max": 0.008113053627312183,
+            "mean": -0.00573538476601243,
+            "sample_std": 0.019584649393527942,
+            "p50": -0.00573538476601243,
+            "p95": 0.006728209787979722,
+            "p99": 0.007836084859445692
+          },
+          {
+            "n": 2,
+            "min": -0.002877279184758663,
+            "max": 0.002449043095111847,
+            "mean": -0.00021411804482340813,
+            "sample_std": 0.0037662786028814297,
+            "p50": -0.00021411804482340813,
+            "p95": 0.0021827269811183214,
+            "p99": 0.0023957798723131416
+          },
+          {
+            "n": 2,
+            "min": -0.008677644655108452,
+            "max": -0.006547115743160248,
+            "mean": -0.00761238019913435,
+            "sample_std": 0.0015065114411525718,
+            "p50": -0.00761238019913435,
+            "p95": -0.006653642188757658,
+            "p99": -0.00656842103227973
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 2,
+            "min": 2.054926872253418,
+            "max": 2.0980372428894043,
+            "mean": 2.076482057571411,
+            "sample_std": 0.03048363541617135,
+            "p50": 2.076482057571411,
+            "p95": 2.095881724357605,
+            "p99": 2.0976061391830445
+          },
+          {
+            "n": 2,
+            "min": -1.1711645126342773,
+            "max": -1.1639795303344727,
+            "mean": -1.167572021484375,
+            "sample_std": 0.00508054970689721,
+            "p50": -1.167572021484375,
+            "p95": -1.1643387794494628,
+            "p99": -1.1640513801574708
+          },
+          {
+            "n": 2,
+            "min": 9.52020263671875,
+            "max": 9.592053413391113,
+            "mean": 9.556128025054932,
+            "sample_std": 0.05080617141854828,
+            "p50": 9.556128025054932,
+            "p95": 9.588460874557494,
+            "p99": 9.59133490562439
+          }
+        ],
+        "yaw_start_end_deg": [
+          9.022910412471331,
+          9.032197762195256
+        ],
+        "yaw_delta_deg": 0.009287349723924976,
+        "yaw_linear_slope_deg_s": 0.004202420689558812,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          0.021877452731132507,
+          0.00766770588234067
+        ],
+        [
+          0.022582491859793663,
+          0.0075460635125637054
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.0007154558260774996,
+      "estimated_xy_max_sampled_excursion_m": 0.0007154558260774996,
+      "joint_position_rad": [
+        {
+          "n": 2,
+          "min": 3.134758234024048,
+          "max": 3.134758234024048,
+          "mean": 3.134758234024048,
+          "sample_std": 0.0,
+          "p50": 3.134758234024048,
+          "p95": 3.134758234024048,
+          "p99": 3.134758234024048
+        },
+        {
+          "n": 2,
+          "min": -2.954838752746582,
+          "max": -2.954838752746582,
+          "mean": -2.954838752746582,
+          "sample_std": 0.0,
+          "p50": -2.954838752746582,
+          "p95": -2.954838752746582,
+          "p99": -2.954838752746582
+        },
+        {
+          "n": 2,
+          "min": -0.20879720151424408,
+          "max": -0.20879720151424408,
+          "mean": -0.20879720151424408,
+          "sample_std": 0.0,
+          "p50": -0.20879720151424408,
+          "p95": -0.20879720151424408,
+          "p99": -0.20879720151424408
+        },
+        {
+          "n": 2,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 2,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 2,
+          "min": -0.0373835414648056,
+          "max": -0.0373835414648056,
+          "mean": -0.0373835414648056,
+          "sample_std": 0.0,
+          "p50": -0.0373835414648056,
+          "p95": -0.0373835414648056,
+          "p99": -0.0373835414648056
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 2,
+        "min": 13.98450554623865,
+        "max": 14.005800479555973,
+        "mean": 13.995153012897312,
+        "sample_std": 0.015057791753594526,
+        "p50": 13.995153012897312,
+        "p95": 14.004735732890106,
+        "p99": 14.0055875302228
+      },
+      "acceleration_norm_m_s2": {
+        "n": 2,
+        "min": 9.818739472681385,
+        "max": 9.87851514564284,
+        "mean": 9.848627309162111,
+        "sample_std": 0.0422677837010346,
+        "p50": 9.848627309162111,
+        "p95": 9.875526361994767,
+        "p99": 9.877917388913225
+      }
+    },
+    "supported_pose_baseline": {
+      "snapshot_count": 21,
+      "mcu_span_s": 63.552,
+      "sample_period_ms": {
+        "n": 20,
+        "min": 3114,
+        "max": 3256,
+        "mean": 3177.6,
+        "sample_std": 31.964453941675174,
+        "p50": 3178.0,
+        "p95": 3218.0,
+        "p99": 3248.4
+      },
+      "read_bracket_ms": {
+        "n": 21,
+        "min": 1044,
+        "max": 1228,
+        "mean": 1112,
+        "sample_std": 40.144738135900205,
+        "p50": 1110.0,
+        "p95": 1154.0,
+        "p99": 1213.2
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 633960,
+          "received_count_end": 694803,
+          "raw_counts": {
+            "n": 21,
+            "min": 3607,
+            "max": 3607,
+            "mean": 3607,
+            "sample_std": 0.0,
+            "p50": 3607.0,
+            "p95": 3607.0,
+            "p99": 3607.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.134758234024048,
+            "max": 3.134758234024048,
+            "mean": 3.134758234024048,
+            "sample_std": 0.0,
+            "p50": 3.134758234024048,
+            "p95": 3.134758234024048,
+            "p99": 3.134758234024048
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 641084,
+          "received_count_end": 702766,
+          "raw_counts": {
+            "n": 21,
+            "min": 3245,
+            "max": 3245,
+            "mean": 3245,
+            "sample_std": 0.0,
+            "p50": 3245.0,
+            "p95": 3245.0,
+            "p99": 3245.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.606835961341858,
+            "max": 1.606835961341858,
+            "mean": 1.606835961341858,
+            "sample_std": 0.0,
+            "p50": 1.606835961341858,
+            "p95": 1.606835961341858,
+            "p99": 1.606835961341858
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 661652,
+          "received_count_end": 725603,
+          "raw_counts": {
+            "n": 21,
+            "min": 7921,
+            "max": 7929,
+            "mean": 7924.571428571428,
+            "sample_std": 1.5991068935949395,
+            "p50": 7925.0,
+            "p95": 7925.0,
+            "p99": 7928.2
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": -0.20870061218738556,
+            "max": -0.20821760594844818,
+            "mean": -0.2084821043979554,
+            "sample_std": 8.986657142537705e-05,
+            "p50": -0.20850740373134613,
+            "p95": -0.2083142250776291,
+            "p99": -0.20823692977428437
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 654528,
+          "received_count_end": 717725,
+          "raw_counts": {
+            "n": 21,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 648089,
+          "received_count_end": 710867,
+          "raw_counts": {
+            "n": 21,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 660926,
+          "received_count_end": 724810,
+          "raw_counts": {
+            "n": 21,
+            "min": 1868,
+            "max": 1872,
+            "mean": 1871,
+            "sample_std": 0.7745966692414834,
+            "p50": 1871.0,
+            "p95": 1872.0,
+            "p99": 1872.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": -0.037625037133693695,
+            "max": -0.03743183612823486,
+            "mean": -0.03748013788745517,
+            "sample_std": 3.741321383813616e-05,
+            "p50": -0.03748013824224472,
+            "p95": -0.03743183612823486,
+            "p99": -0.03743183612823486
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 38,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          657535,
+          721087
+        ],
+        "drdy_edges_start_end": [
+          1313405,
+          1440342
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 21,
+            "min": -0.016388030722737312,
+            "max": 0.01876569725573063,
+            "mean": 0.0015185592097363301,
+            "sample_std": 0.008736591268873719,
+            "p50": 0.0017214666586369276,
+            "p95": 0.012374111451208591,
+            "p99": 0.017487380094826227
+          },
+          {
+            "n": 21,
+            "min": -0.03057415597140789,
+            "max": 0.007775365374982357,
+            "mean": -0.003739636222321895,
+            "sample_std": 0.009308845497863,
+            "p50": -0.002877279184758663,
+            "p95": 0.006710100919008255,
+            "p99": 0.007562312483787538
+          },
+          {
+            "n": 21,
+            "min": -0.01933029107749462,
+            "max": 0.016888702288269997,
+            "mean": -0.0006120710833264249,
+            "sample_std": 0.009882137877089893,
+            "p50": -0.0001555291237309575,
+            "p95": 0.011562380008399487,
+            "p99": 0.015823437832295898
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 21,
+            "min": 2.0190014839172363,
+            "max": 2.2489233016967773,
+            "mean": 2.1192501726604642,
+            "sample_std": 0.04870367328166892,
+            "p50": 2.1195921897888184,
+            "p95": 2.177072763442993,
+            "p99": 2.2345531940460206
+          },
+          {
+            "n": 21,
+            "min": -1.2645703554153442,
+            "max": -1.0705736875534058,
+            "mean": -1.1636373542603993,
+            "sample_std": 0.044955528440857276,
+            "p50": -1.1711645126342773,
+            "p95": -1.092128872871399,
+            "p99": -1.0748847246170044
+          },
+          {
+            "n": 21,
+            "min": 9.426796913146973,
+            "max": 9.613608360290527,
+            "mean": 9.5441529410226,
+            "sample_std": 0.06012877472724172,
+            "p50": 9.548942565917969,
+            "p95": 9.613608360290527,
+            "p99": 9.613608360290527
+          }
+        ],
+        "yaw_start_end_deg": [
+          4.753877829786459,
+          5.202154244071798
+        ],
+        "yaw_delta_deg": 0.4482764142853384,
+        "yaw_linear_slope_deg_s": 0.007756591470189393,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          0.005846140906214714,
+          0.009501351974904537
+        ],
+        [
+          0.005730391945689917,
+          0.009769851341843605
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.00029238627175237093,
+      "estimated_xy_max_sampled_excursion_m": 0.002028445653441361,
+      "joint_position_rad": [
+        {
+          "n": 21,
+          "min": 3.134758234024048,
+          "max": 3.134758234024048,
+          "mean": 3.134758234024048,
+          "sample_std": 0.0,
+          "p50": 3.134758234024048,
+          "p95": 3.134758234024048,
+          "p99": 3.134758234024048
+        },
+        {
+          "n": 21,
+          "min": -2.954838752746582,
+          "max": -2.954838752746582,
+          "mean": -2.954838752746582,
+          "sample_std": 0.0,
+          "p50": -2.954838752746582,
+          "p95": -2.954838752746582,
+          "p99": -2.954838752746582
+        },
+        {
+          "n": 21,
+          "min": -0.20870061218738556,
+          "max": -0.2083142250776291,
+          "mean": -0.20849130338146574,
+          "sample_std": 6.715743494318011e-05,
+          "p50": -0.20850740373134613,
+          "p95": -0.2084108144044876,
+          "p99": -0.2083335429430008
+        },
+        {
+          "n": 21,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 21,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 21,
+          "min": -0.037625037133693695,
+          "max": -0.03743183612823486,
+          "mean": -0.03748013788745517,
+          "sample_std": 3.741321383813616e-05,
+          "p50": -0.03748013824224472,
+          "p95": -0.03743183612823486,
+          "p99": -0.03743183612823486
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 21,
+        "min": 14.132532098509305,
+        "max": 14.194319328197066,
+        "mean": 14.16407906454183,
+        "sample_std": 0.01962451140873042,
+        "p50": 14.165559074307962,
+        "p95": 14.19385972489461,
+        "p99": 14.194227407536575
+      },
+      "acceleration_norm_m_s2": {
+        "n": 21,
+        "min": 9.723940993972942,
+        "max": 9.92010206414162,
+        "mean": 9.845823253917883,
+        "sample_std": 0.06079611591288379,
+        "p50": 9.858566026044324,
+        "p95": 9.916307562396574,
+        "p99": 9.919343163792611
+      }
+    },
+    "T0_after_reset": {
+      "snapshot_count": 6,
+      "mcu_span_s": 15.938,
+      "sample_period_ms": {
+        "n": 5,
+        "min": 3138,
+        "max": 3246,
+        "mean": 3187.6,
+        "sample_std": 40.97316194779212,
+        "p50": 3174.0,
+        "p95": 3238.4,
+        "p99": 3244.48
+      },
+      "read_bracket_ms": {
+        "n": 6,
+        "min": 1078,
+        "max": 1182,
+        "mean": 1120,
+        "sample_std": 39.89987468652001,
+        "p50": 1118.0,
+        "p95": 1171.5,
+        "p99": 1179.9
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 30513,
+          "received_count_end": 45721,
+          "raw_counts": {
+            "n": 6,
+            "min": 3611,
+            "max": 3611,
+            "mean": 3611,
+            "sample_std": 0.0,
+            "p50": 3611.0,
+            "p95": 3611.0,
+            "p99": 3611.0
+          },
+          "reported_arm_rad": {
+            "n": 6,
+            "min": 3.131690263748169,
+            "max": 3.131690263748169,
+            "mean": 3.131690263748169,
+            "sample_std": 0.0,
+            "p50": 3.131690263748169,
+            "p95": 3.131690263748169,
+            "p99": 3.131690263748169
+          },
+          "temperature_c": {
+            "n": 6,
+            "min": 23,
+            "max": 24,
+            "mean": 23.666666666666668,
+            "sample_std": 0.5163977794943223,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 31076,
+          "received_count_end": 46821,
+          "raw_counts": {
+            "n": 6,
+            "min": 3252,
+            "max": 3254,
+            "mean": 3252.8333333333335,
+            "sample_std": 0.752772652709081,
+            "p50": 3253.0,
+            "p95": 3253.75,
+            "p99": 3253.95
+          },
+          "reported_arm_rad": {
+            "n": 6,
+            "min": 1.612204909324646,
+            "max": 1.6137388944625854,
+            "mean": 1.6128440697987874,
+            "sample_std": 0.0005773710307514938,
+            "p50": 1.6129719018936157,
+            "p95": 1.613547146320343,
+            "p99": 1.613700544834137
+          },
+          "temperature_c": {
+            "n": 6,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 31987,
+          "received_count_end": 48025,
+          "raw_counts": {
+            "n": 6,
+            "min": 129,
+            "max": 7065,
+            "mean": 4761.666666666667,
+            "sample_std": 3559.0987435960055,
+            "p50": 7054.5,
+            "p95": 7064.25,
+            "p99": 7064.85
+          },
+          "reported_arm_rad": {
+            "n": 6,
+            "min": -0.2313046008348465,
+            "max": -0.16605244576931,
+            "mean": -0.1876099705696106,
+            "sample_std": 0.03248275997531082,
+            "p50": -0.16692183911800385,
+            "p95": -0.1662214919924736,
+            "p99": -0.16608625501394272
+          },
+          "temperature_c": {
+            "n": 6,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 31638,
+          "received_count_end": 47536,
+          "raw_counts": {
+            "n": 6,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 6,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 6,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 31231,
+          "received_count_end": 47052,
+          "raw_counts": {
+            "n": 6,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 6,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 6,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 31984,
+          "received_count_end": 47997,
+          "raw_counts": {
+            "n": 6,
+            "min": 1864,
+            "max": 1886,
+            "mean": 1871.8333333333333,
+            "sample_std": 9.239408350466315,
+            "p50": 1867.0,
+            "p95": 1884.75,
+            "p99": 1885.75
+          },
+          "reported_arm_rad": {
+            "n": 6,
+            "min": -0.03781823068857193,
+            "max": -0.036755651235580444,
+            "mean": -0.03742378825942675,
+            "sample_std": 0.0004666960557773935,
+            "p50": -0.037673331797122955,
+            "p95": -0.03679187595844269,
+            "p99": -0.036762896180152896
+          },
+          "temperature_c": {
+            "n": 6,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 38,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          31847,
+          47785
+        ],
+        "drdy_edges_start_end": [
+          63643,
+          95477
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 6,
+            "min": -0.008931177668273449,
+            "max": 0.02196148969233036,
+            "mean": 0.010066037648357451,
+            "sample_std": 0.01204110083681662,
+            "p50": 0.01397200720384717,
+            "p95": 0.021162541583180428,
+            "p99": 0.021801700070500373
+          },
+          {
+            "n": 6,
+            "min": -0.039096273481845856,
+            "max": 0.02268906868994236,
+            "mean": -0.0005692066624760628,
+            "sample_std": 0.023294162613837453,
+            "p50": 0.002449043095111847,
+            "p95": 0.02215643599629402,
+            "p99": 0.022582542151212692
+          },
+          {
+            "n": 6,
+            "min": -0.017199760302901268,
+            "max": 0.021149760112166405,
+            "mean": 0.0012648235812472801,
+            "sample_std": 0.013768998111234415,
+            "p50": 0.0003771031624637544,
+            "p95": 0.018752915086224675,
+            "p99": 0.02067039110697806
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 6,
+            "min": 2.0908520221710205,
+            "max": 2.1986279487609863,
+            "mean": 2.1459374825159707,
+            "sample_std": 0.03597316997645632,
+            "p50": 2.1447399854660034,
+            "p95": 2.189646601676941,
+            "p99": 2.1968316793441773
+          },
+          {
+            "n": 6,
+            "min": -1.1999047994613647,
+            "max": -1.063388705253601,
+            "mean": -1.1424243251482646,
+            "sample_std": 0.06214141868161968,
+            "p50": -1.1603869795799255,
+            "p95": -1.0651849508285522,
+            "p99": -1.0637479543685913
+          },
+          {
+            "n": 6,
+            "min": 9.204060554504395,
+            "max": 9.599238395690918,
+            "mean": 9.462722142537435,
+            "sample_std": 0.13984104953526916,
+            "p50": 9.498647212982178,
+            "p95": 9.58486819267273,
+            "p99": 9.59636435508728
+          }
+        ],
+        "yaw_start_end_deg": [
+          0.15750262813597343,
+          0.25542500921382316
+        ],
+        "yaw_delta_deg": 0.09792238107784973,
+        "yaw_linear_slope_deg_s": 0.006827355809843288,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          0.001992999343201518,
+          0.0007819936727173626
+        ],
+        [
+          0.0013983858516439795,
+          -0.001110608922317624
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.001983811933393741,
+      "estimated_xy_max_sampled_excursion_m": 0.001983811933393741,
+      "joint_position_rad": [
+        {
+          "n": 6,
+          "min": 3.130923271179199,
+          "max": 3.131690263748169,
+          "mean": 3.131562431653341,
+          "sample_std": 0.0003131234050803774,
+          "p50": 3.131690263748169,
+          "p95": 3.131690263748169,
+          "p99": 3.131690263748169
+        },
+        {
+          "n": 6,
+          "min": -2.9474732875823975,
+          "max": -2.9441235065460205,
+          "mean": -2.9463568528493247,
+          "sample_std": 0.0011732660463315689,
+          "p50": -2.946803569793701,
+          "p95": -2.944626033306122,
+          "p99": -2.944224011898041
+        },
+        {
+          "n": 6,
+          "min": -0.2308216243982315,
+          "max": -0.1664871722459793,
+          "mean": -0.18930044770240784,
+          "sample_std": 0.031057171066584153,
+          "p50": -0.17204155027866364,
+          "p95": -0.1665716916322708,
+          "p99": -0.16650407612323762
+        },
+        {
+          "n": 6,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 6,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 6,
+          "min": -0.03781823068857193,
+          "max": -0.03723864257335663,
+          "mean": -0.03755258644620577,
+          "sample_std": 0.00025143347485375686,
+          "p50": -0.037649184465408325,
+          "p95": -0.03723864257335663,
+          "p99": -0.03723864257335663
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 6,
+        "min": 14.02438641269047,
+        "max": 14.12367573986022,
+        "mean": 14.071778310379495,
+        "sample_std": 0.038153504592664804,
+        "p50": 14.069607299685039,
+        "p95": 14.11912436585991,
+        "p99": 14.122765465060159
+      },
+      "acceleration_norm_m_s2": {
+        "n": 6,
+        "min": 9.512716870539695,
+        "max": 9.918056787875916,
+        "mean": 9.770216829433036,
+        "sample_std": 0.14176215417406218,
+        "p50": 9.805096483668015,
+        "p95": 9.901075948326298,
+        "p99": 9.914660619965993
+      }
+    },
+    "T2_soft_reset_1": {
+      "snapshot_count": 2,
+      "mcu_span_s": 2.166,
+      "sample_period_ms": {
+        "n": 1,
+        "min": 2166,
+        "max": 2166,
+        "mean": 2166,
+        "sample_std": null,
+        "p50": 2166.0,
+        "p95": 2166.0,
+        "p99": 2166.0
+      },
+      "read_bracket_ms": {
+        "n": 2,
+        "min": 1076,
+        "max": 1110,
+        "mean": 1093,
+        "sample_std": 24.041630560342615,
+        "p50": 1093.0,
+        "p95": 1108.3,
+        "p99": 1109.66
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 6044,
+          "received_count_end": 8160,
+          "raw_counts": {
+            "n": 2,
+            "min": 3611,
+            "max": 3611,
+            "mean": 3611,
+            "sample_std": 0.0,
+            "p50": 3611.0,
+            "p95": 3611.0,
+            "p99": 3611.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.131690263748169,
+            "max": 3.131690263748169,
+            "mean": 3.131690263748169,
+            "sample_std": 0.0,
+            "p50": 3.131690263748169,
+            "p95": 3.131690263748169,
+            "p99": 3.131690263748169
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 6203,
+          "received_count_end": 8370,
+          "raw_counts": {
+            "n": 2,
+            "min": 3255,
+            "max": 3255,
+            "mean": 3255,
+            "sample_std": 0.0,
+            "p50": 3255.0,
+            "p95": 3255.0,
+            "p99": 3255.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.6145058870315552,
+            "max": 1.6145058870315552,
+            "mean": 1.6145058870315552,
+            "sample_std": 0.0,
+            "p50": 1.6145058870315552,
+            "p95": 1.6145058870315552,
+            "p99": 1.6145058870315552
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 6285,
+          "received_count_end": 8466,
+          "raw_counts": {
+            "n": 2,
+            "min": 488,
+            "max": 488,
+            "mean": 488,
+            "sample_std": 0.0,
+            "p50": 488.0,
+            "p95": 488.0,
+            "p99": 488.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 0.15069332718849182,
+            "max": 0.15069332718849182,
+            "mean": 0.15069332718849182,
+            "sample_std": 0.0,
+            "p50": 0.15069332718849182,
+            "p95": 0.15069332718849182,
+            "p99": 0.15069332718849182
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 6257,
+          "received_count_end": 8425,
+          "raw_counts": {
+            "n": 2,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 6263,
+          "received_count_end": 8431,
+          "raw_counts": {
+            "n": 2,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 6306,
+          "received_count_end": 8486,
+          "raw_counts": {
+            "n": 2,
+            "min": 1863,
+            "max": 1863,
+            "mean": 1863,
+            "sample_std": 0.0,
+            "p50": 1863.0,
+            "p95": 1863.0,
+            "p99": 1863.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.03786653280258179,
+            "max": -0.03786653280258179,
+            "mean": -0.03786653280258179,
+            "sample_std": 0.0,
+            "p50": -0.03786653280258179,
+            "p95": -0.03786653280258179,
+            "p99": -0.03786653280258179
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 38,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          6312,
+          8460
+        ],
+        "drdy_edges_start_end": [
+          12638,
+          16929
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 2,
+            "min": 9.747175499796867e-05,
+            "max": 0.01288064569234848,
+            "mean": 0.0064890587236732244,
+            "sample_std": 0.009039068976187685,
+            "p50": 0.0064890587236732244,
+            "p95": 0.012241486995480954,
+            "p99": 0.012752813952974975
+          },
+          {
+            "n": 2,
+            "min": -0.006514624692499638,
+            "max": -0.0011883025290444493,
+            "mean": -0.0038514636107720435,
+            "sample_std": 0.0037662785205633664,
+            "p50": -0.0038514636107720435,
+            "p95": -0.001454618637217209,
+            "p99": -0.0012415657506790016
+          },
+          {
+            "n": 2,
+            "min": -0.007652327883988619,
+            "max": 0.0008697878802195191,
+            "mean": -0.00339127000188455,
+            "sample_std": 0.006026045846928351,
+            "p50": -0.00339127000188455,
+            "p95": 0.0004436820920091112,
+            "p99": 0.0007845667225774376
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 2,
+            "min": 0.5029541254043579,
+            "max": 0.5460644364356995,
+            "mean": 0.5245092809200287,
+            "sample_std": 0.030483593269322838,
+            "p50": 0.5245092809200287,
+            "p95": 0.5439089208841323,
+            "p99": 0.545633333325386
+          },
+          {
+            "n": 2,
+            "min": -0.20836670696735382,
+            "max": -0.15088623762130737,
+            "mean": -0.1796264722943306,
+            "sample_std": 0.040644829660374915,
+            "p50": -0.1796264722943306,
+            "p95": -0.15376026108860968,
+            "p99": -0.15146104231476784
+          },
+          {
+            "n": 2,
+            "min": 9.836345672607422,
+            "max": 9.908195495605469,
+            "mean": 9.872270584106445,
+            "sample_std": 0.050805497068972104,
+            "p50": 9.872270584106445,
+            "p95": 9.904603004455566,
+            "p99": 9.907476997375488
+          }
+        ],
+        "yaw_start_end_deg": [
+          0.03181989700185228,
+          0.04208736219640742
+        ],
+        "yaw_delta_deg": 0.01026746519455514,
+        "yaw_linear_slope_deg_s": 0.0047800117293087235,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          -0.0012162572238594294,
+          0.0009403133299201727
+        ],
+        [
+          -0.0016882788622751832,
+          0.0016069235280156136
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.0008168069437373409,
+      "estimated_xy_max_sampled_excursion_m": 0.0008168069437373409,
+      "joint_position_rad": [
+        {
+          "n": 2,
+          "min": 3.131690263748169,
+          "max": 3.131690263748169,
+          "mean": 3.131690263748169,
+          "sample_std": 0.0,
+          "p50": 3.131690263748169,
+          "p95": 3.131690263748169,
+          "p99": 3.131690263748169
+        },
+        {
+          "n": 2,
+          "min": -2.9454636573791504,
+          "max": -2.9454636573791504,
+          "mean": -2.9454636573791504,
+          "sample_std": 0.0,
+          "p50": -2.9454636573791504,
+          "p95": -2.9454636573791504,
+          "p99": -2.9454636573791504
+        },
+        {
+          "n": 2,
+          "min": 0.15069332718849182,
+          "max": 0.15069332718849182,
+          "mean": 0.15069332718849182,
+          "sample_std": 0.0,
+          "p50": 0.15069332718849182,
+          "p95": 0.15069332718849182,
+          "p99": 0.15069332718849182
+        },
+        {
+          "n": 2,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 2,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 2,
+          "min": -0.03786653280258179,
+          "max": -0.03786653280258179,
+          "mean": -0.03786653280258179,
+          "sample_std": 0.0,
+          "p50": -0.03786653280258179,
+          "p95": -0.03786653280258179,
+          "p99": -0.03786653280258179
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 2,
+        "min": 2.8675105601223003,
+        "max": 2.87494188487866,
+        "mean": 2.8712262225004803,
+        "sample_std": 0.005254740128421304,
+        "p50": 2.8712262225004803,
+        "p95": 2.874570318640842,
+        "p99": 2.8748675716310963
+      },
+      "acceleration_norm_m_s2": {
+        "n": 2,
+        "min": 9.851399683692486,
+        "max": 9.924378620577706,
+        "mean": 9.887889152135095,
+        "sample_std": 0.05160390115532353,
+        "p50": 9.887889152135095,
+        "p95": 9.920729673733444,
+        "p99": 9.923648831208853
+      }
+    },
+    "T2_soft_reset_2": {
+      "snapshot_count": 2,
+      "mcu_span_s": 2.168,
+      "sample_period_ms": {
+        "n": 1,
+        "min": 2168,
+        "max": 2168,
+        "mean": 2168,
+        "sample_std": null,
+        "p50": 2168.0,
+        "p95": 2168.0,
+        "p99": 2168.0
+      },
+      "read_bracket_ms": {
+        "n": 2,
+        "min": 1114,
+        "max": 1138,
+        "mean": 1126,
+        "sample_std": 16.97056274847714,
+        "p50": 1126.0,
+        "p95": 1136.8,
+        "p99": 1137.76
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 5950,
+          "received_count_end": 8009,
+          "raw_counts": {
+            "n": 2,
+            "min": 3611,
+            "max": 3611,
+            "mean": 3611,
+            "sample_std": 0.0,
+            "p50": 3611.0,
+            "p95": 3611.0,
+            "p99": 3611.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.131690263748169,
+            "max": 3.131690263748169,
+            "mean": 3.131690263748169,
+            "sample_std": 0.0,
+            "p50": 3.131690263748169,
+            "p95": 3.131690263748169,
+            "p99": 3.131690263748169
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 5958,
+          "received_count_end": 8035,
+          "raw_counts": {
+            "n": 2,
+            "min": 3255,
+            "max": 3255,
+            "mean": 3255,
+            "sample_std": 0.0,
+            "p50": 3255.0,
+            "p95": 3255.0,
+            "p99": 3255.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.6145058870315552,
+            "max": 1.6145058870315552,
+            "mean": 1.6145058870315552,
+            "sample_std": 0.0,
+            "p50": 1.6145058870315552,
+            "p95": 1.6145058870315552,
+            "p99": 1.6145058870315552
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 6312,
+          "received_count_end": 8492,
+          "raw_counts": {
+            "n": 2,
+            "min": 488,
+            "max": 488,
+            "mean": 488,
+            "sample_std": 0.0,
+            "p50": 488.0,
+            "p95": 488.0,
+            "p99": 488.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 0.15069332718849182,
+            "max": 0.15069332718849182,
+            "mean": 0.15069332718849182,
+            "sample_std": 0.0,
+            "p50": 0.15069332718849182,
+            "p95": 0.15069332718849182,
+            "p99": 0.15069332718849182
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 6151,
+          "received_count_end": 8317,
+          "raw_counts": {
+            "n": 2,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 6092,
+          "received_count_end": 8246,
+          "raw_counts": {
+            "n": 2,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 6332,
+          "received_count_end": 8511,
+          "raw_counts": {
+            "n": 2,
+            "min": 1863,
+            "max": 1863,
+            "mean": 1863,
+            "sample_std": 0.0,
+            "p50": 1863.0,
+            "p95": 1863.0,
+            "p99": 1863.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.03786653280258179,
+            "max": -0.03786653280258179,
+            "mean": -0.03786653280258179,
+            "sample_std": 0.0,
+            "p50": -0.03786653280258179,
+            "p95": -0.03786653280258179,
+            "p99": -0.03786653280258179
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 38,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          6351,
+          8508
+        ],
+        "drdy_edges_start_end": [
+          12716,
+          17025
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 2,
+            "min": 0.0012096065329387784,
+            "max": 0.00866645760834217,
+            "mean": 0.0049380320706404746,
+            "sample_std": 0.005272789961715938,
+            "p50": 0.0049380320706404746,
+            "p95": 0.008293615054572,
+            "p99": 0.008591889097588137
+          },
+          {
+            "n": 2,
+            "min": -0.011472365818917751,
+            "max": 0.009832923300564289,
+            "mean": -0.0008197212591767311,
+            "sample_std": 0.015065114411525719,
+            "p50": -0.0008197212591767311,
+            "p95": 0.008767658844590187,
+            "p99": 0.009619870409369468
+          },
+          {
+            "n": 2,
+            "min": -0.01715395413339138,
+            "max": -0.007566574029624462,
+            "mean": -0.012360264081507921,
+            "sample_std": 0.006779301485186574,
+            "p50": -0.012360264081507921,
+            "p95": -0.008045943034812809,
+            "p99": -0.007662447830662132
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 2,
+            "min": 0.3448828160762787,
+            "max": 0.49576905369758606,
+            "mean": 0.4203259348869324,
+            "sample_std": 0.10669268180975121,
+            "p50": 0.4203259348869324,
+            "p95": 0.48822474181652065,
+            "p99": 0.494260191321373
+          },
+          {
+            "n": 2,
+            "min": -0.2586621046066284,
+            "max": -0.1652563512325287,
+            "mean": -0.21195922791957855,
+            "sample_std": 0.06604784161266417,
+            "p50": -0.21195922791957855,
+            "p95": -0.16992663890123366,
+            "p99": -0.16619040876626967
+          },
+          {
+            "n": 2,
+            "min": 9.821974754333496,
+            "max": 9.987231254577637,
+            "mean": 9.904603004455566,
+            "sample_std": 0.11685399195778819,
+            "p50": 9.904603004455566,
+            "p95": 9.97896842956543,
+            "p99": 9.985578689575195
+          }
+        ],
+        "yaw_start_end_deg": [
+          0.012635250488691895,
+          0.07405240405317579
+        ],
+        "yaw_delta_deg": 0.06141715356448389,
+        "yaw_linear_slope_deg_s": 0.028473413799018958,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          -0.00038658955600112677,
+          0.001189923146739602
+        ],
+        [
+          -0.00045937957474961877,
+          0.002261843765154481
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.001074389221377589,
+      "estimated_xy_max_sampled_excursion_m": 0.001074389221377589,
+      "joint_position_rad": [
+        {
+          "n": 2,
+          "min": 3.131690263748169,
+          "max": 3.131690263748169,
+          "mean": 3.131690263748169,
+          "sample_std": 0.0,
+          "p50": 3.131690263748169,
+          "p95": 3.131690263748169,
+          "p99": 3.131690263748169
+        },
+        {
+          "n": 2,
+          "min": -2.9454636573791504,
+          "max": -2.9454636573791504,
+          "mean": -2.9454636573791504,
+          "sample_std": 0.0,
+          "p50": -2.9454636573791504,
+          "p95": -2.9454636573791504,
+          "p99": -2.9454636573791504
+        },
+        {
+          "n": 2,
+          "min": 0.15069332718849182,
+          "max": 0.15069332718849182,
+          "mean": 0.15069332718849182,
+          "sample_std": 0.0,
+          "p50": 0.15069332718849182,
+          "p95": 0.15069332718849182,
+          "p99": 0.15069332718849182
+        },
+        {
+          "n": 2,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 2,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 2,
+          "min": -0.03786653280258179,
+          "max": -0.03786653280258179,
+          "mean": -0.03786653280258179,
+          "sample_std": 0.0,
+          "p50": -0.03786653280258179,
+          "p95": -0.03786653280258179,
+          "p99": -0.03786653280258179
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 2,
+        "min": 2.8660083246310126,
+        "max": 2.868534360910868,
+        "mean": 2.86727134277094,
+        "sample_std": 0.0017861773830091289,
+        "p50": 2.86727134277094,
+        "p95": 2.8684080590968755,
+        "p99": 2.86850910054807
+      },
+      "acceleration_norm_m_s2": {
+        "n": 2,
+        "min": 9.831431142816838,
+        "max": 10.00089419745251,
+        "mean": 9.916162670134675,
+        "sample_std": 0.11982847509347032,
+        "p50": 9.916162670134675,
+        "p95": 9.992421044720727,
+        "p99": 9.999199566906153
+      }
+    },
+    "T2_soft_reset_3": {
+      "snapshot_count": 2,
+      "mcu_span_s": 2.19,
+      "sample_period_ms": {
+        "n": 1,
+        "min": 2190,
+        "max": 2190,
+        "mean": 2190,
+        "sample_std": null,
+        "p50": 2190.0,
+        "p95": 2190.0,
+        "p99": 2190.0
+      },
+      "read_bracket_ms": {
+        "n": 2,
+        "min": 1128,
+        "max": 1140,
+        "mean": 1134,
+        "sample_std": 8.48528137423857,
+        "p50": 1134.0,
+        "p95": 1139.4,
+        "p99": 1139.88
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 5983,
+          "received_count_end": 8066,
+          "raw_counts": {
+            "n": 2,
+            "min": 3611,
+            "max": 3611,
+            "mean": 3611,
+            "sample_std": 0.0,
+            "p50": 3611.0,
+            "p95": 3611.0,
+            "p99": 3611.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.131690263748169,
+            "max": 3.131690263748169,
+            "mean": 3.131690263748169,
+            "sample_std": 0.0,
+            "p50": 3.131690263748169,
+            "p95": 3.131690263748169,
+            "p99": 3.131690263748169
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 6140,
+          "received_count_end": 8224,
+          "raw_counts": {
+            "n": 2,
+            "min": 3255,
+            "max": 3255,
+            "mean": 3255,
+            "sample_std": 0.0,
+            "p50": 3255.0,
+            "p95": 3255.0,
+            "p99": 3255.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.6145058870315552,
+            "max": 1.6145058870315552,
+            "mean": 1.6145058870315552,
+            "sample_std": 0.0,
+            "p50": 1.6145058870315552,
+            "p95": 1.6145058870315552,
+            "p99": 1.6145058870315552
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 6310,
+          "received_count_end": 8517,
+          "raw_counts": {
+            "n": 2,
+            "min": 488,
+            "max": 488,
+            "mean": 488,
+            "sample_std": 0.0,
+            "p50": 488.0,
+            "p95": 488.0,
+            "p99": 488.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 0.15069332718849182,
+            "max": 0.15069332718849182,
+            "mean": 0.15069332718849182,
+            "sample_std": 0.0,
+            "p50": 0.15069332718849182,
+            "p95": 0.15069332718849182,
+            "p99": 0.15069332718849182
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 6283,
+          "received_count_end": 8465,
+          "raw_counts": {
+            "n": 2,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 24,
+            "mean": 23.5,
+            "sample_std": 0.7071067811865476,
+            "p50": 23.5,
+            "p95": 23.95,
+            "p99": 23.99
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 6278,
+          "received_count_end": 8438,
+          "raw_counts": {
+            "n": 2,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 6335,
+          "received_count_end": 8540,
+          "raw_counts": {
+            "n": 2,
+            "min": 1863,
+            "max": 1863,
+            "mean": 1863,
+            "sample_std": 0.0,
+            "p50": 1863.0,
+            "p95": 1863.0,
+            "p99": 1863.0
+          },
+          "reported_arm_rad": {
+            "n": 2,
+            "min": -0.03786653280258179,
+            "max": -0.03786653280258179,
+            "mean": -0.03786653280258179,
+            "sample_std": 0.0,
+            "p50": -0.03786653280258179,
+            "p95": -0.03786653280258179,
+            "p99": -0.03786653280258179
+          },
+          "temperature_c": {
+            "n": 2,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 39,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          6331,
+          8529
+        ],
+        "drdy_edges_start_end": [
+          12677,
+          17067
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 2,
+            "min": 0.003458381164819002,
+            "max": 0.008784702979028225,
+            "mean": 0.0061215420719236135,
+            "sample_std": 0.0037662782736091758,
+            "p50": 0.0061215420719236135,
+            "p95": 0.008518386888317762,
+            "p99": 0.008731439760886132
+          },
+          {
+            "n": 2,
+            "min": -0.004762796685099602,
+            "max": -0.0026322680059820414,
+            "mean": -0.0036975323455408216,
+            "sample_std": 0.0015065112765164448,
+            "p50": -0.0036975323455408216,
+            "p95": -0.0027387944399379196,
+            "p99": -0.002653573292773217
+          },
+          {
+            "n": 2,
+            "min": -0.0002775003667920828,
+            "max": -0.0002775003667920828,
+            "mean": -0.0002775003667920828,
+            "sample_std": 0.0,
+            "p50": -0.0002775003667920828,
+            "p95": -0.0002775003667920828,
+            "p99": -0.0002775003667920828
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 2,
+            "min": 0.40236330032348633,
+            "max": 0.4095483422279358,
+            "mean": 0.40595582127571106,
+            "sample_std": 0.0050805918537457214,
+            "p50": 0.40595582127571106,
+            "p95": 0.4091890901327133,
+            "p99": 0.4094764918088913
+          },
+          {
+            "n": 2,
+            "min": -0.18681152164936066,
+            "max": -0.13651610910892487,
+            "mean": -0.16166381537914276,
+            "sample_std": 0.03556422726991707,
+            "p50": -0.16166381537914276,
+            "p95": -0.13903087973594666,
+            "p99": -0.13701906323432922
+          },
+          {
+            "n": 2,
+            "min": 9.757309913635254,
+            "max": 9.807604789733887,
+            "mean": 9.78245735168457,
+            "sample_std": 0.03556384794828047,
+            "p50": 9.78245735168457,
+            "p95": 9.805090045928955,
+            "p99": 9.8071018409729
+          }
+        ],
+        "yaw_start_end_deg": [
+          -0.032524827219071815,
+          -0.059725128443828615
+        ],
+        "yaw_delta_deg": -0.0272003012247568,
+        "yaw_linear_slope_deg_s": -0.01237502330516688,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          0.00021428015315905213,
+          -0.0009744983399286866
+        ],
+        [
+          0.0004034327284898609,
+          -0.0011605917243286967
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.00026534778022762354,
+      "estimated_xy_max_sampled_excursion_m": 0.00026534778022762354,
+      "joint_position_rad": [
+        {
+          "n": 2,
+          "min": 3.131690263748169,
+          "max": 3.131690263748169,
+          "mean": 3.131690263748169,
+          "sample_std": 0.0,
+          "p50": 3.131690263748169,
+          "p95": 3.131690263748169,
+          "p99": 3.131690263748169
+        },
+        {
+          "n": 2,
+          "min": -2.9454636573791504,
+          "max": -2.9454636573791504,
+          "mean": -2.9454636573791504,
+          "sample_std": 0.0,
+          "p50": -2.9454636573791504,
+          "p95": -2.9454636573791504,
+          "p99": -2.9454636573791504
+        },
+        {
+          "n": 2,
+          "min": 0.15069332718849182,
+          "max": 0.15069332718849182,
+          "mean": 0.15069332718849182,
+          "sample_std": 0.0,
+          "p50": 0.15069332718849182,
+          "p95": 0.15069332718849182,
+          "p99": 0.15069332718849182
+        },
+        {
+          "n": 2,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 2,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 2,
+          "min": -0.03786653280258179,
+          "max": -0.03786653280258179,
+          "mean": -0.03786653280258179,
+          "sample_std": 0.0,
+          "p50": -0.03786653280258179,
+          "p95": -0.03786653280258179,
+          "p99": -0.03786653280258179
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 2,
+        "min": 2.867578824870554,
+        "max": 2.8748737948223066,
+        "mean": 2.8712263098464303,
+        "sample_std": 0.005158322721436369,
+        "p50": 2.8712263098464303,
+        "p95": 2.874509046324719,
+        "p99": 2.874800845122789
+      },
+      "acceleration_norm_m_s2": {
+        "n": 2,
+        "min": 9.767687809301002,
+        "max": 9.816804194090077,
+        "mean": 9.792246001695538,
+        "sample_std": 0.034730528751722715,
+        "p50": 9.792246001695538,
+        "p95": 9.814348374850622,
+        "p99": 9.816313030242187
+      }
+    },
+    "T5_warm_static": {
+      "snapshot_count": 21,
+      "mcu_span_s": 63.692,
+      "sample_period_ms": {
+        "n": 20,
+        "min": 3124,
+        "max": 3244,
+        "mean": 3184.6,
+        "sample_std": 30.546599431722434,
+        "p50": 3181.0,
+        "p95": 3238.3,
+        "p99": 3242.86
+      },
+      "read_bracket_ms": {
+        "n": 21,
+        "min": 1072,
+        "max": 1194,
+        "mean": 1121.2380952380952,
+        "sample_std": 32.12772130404639,
+        "p50": 1112.0,
+        "p95": 1172.0,
+        "p99": 1189.6
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 1495539,
+          "received_count_end": 1557094,
+          "raw_counts": {
+            "n": 21,
+            "min": 3611,
+            "max": 3611,
+            "mean": 3611,
+            "sample_std": 0.0,
+            "p50": 3611.0,
+            "p95": 3611.0,
+            "p99": 3611.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.131690263748169,
+            "max": 3.131690263748169,
+            "mean": 3.131690263748169,
+            "sample_std": 0.0,
+            "p50": 3.131690263748169,
+            "p95": 3.131690263748169,
+            "p99": 3.131690263748169
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 1515165,
+          "received_count_end": 1577173,
+          "raw_counts": {
+            "n": 21,
+            "min": 3255,
+            "max": 3255,
+            "mean": 3255,
+            "sample_std": 0.0,
+            "p50": 3255.0,
+            "p95": 3255.0,
+            "p99": 3255.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.6145058870315552,
+            "max": 1.6145058870315552,
+            "mean": 1.6145058870315552,
+            "sample_std": 0.0,
+            "p50": 1.6145058870315552,
+            "p95": 1.6145058870315552,
+            "p99": 1.6145058870315552
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 24,
+            "max": 24,
+            "mean": 24,
+            "sample_std": 0.0,
+            "p50": 24.0,
+            "p95": 24.0,
+            "p99": 24.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 1563885,
+          "received_count_end": 1627973,
+          "raw_counts": {
+            "n": 21,
+            "min": 486,
+            "max": 488,
+            "mean": 486.4761904761905,
+            "sample_std": 0.8728715609439696,
+            "p50": 486.0,
+            "p95": 488.0,
+            "p99": 488.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": -0.24497325718402863,
+            "max": -0.2448766678571701,
+            "mean": -0.24489966531594595,
+            "sample_std": 4.215503825276204e-05,
+            "p50": -0.2448766678571701,
+            "p95": -0.2448766678571701,
+            "p99": -0.2448766678571701
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 1546606,
+          "received_count_end": 1610030,
+          "raw_counts": {
+            "n": 21,
+            "min": 1336,
+            "max": 1336,
+            "mean": 1336,
+            "sample_std": 0.0,
+            "p50": 1336.0,
+            "p95": 1336.0,
+            "p99": 1336.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.1362924575805664,
+            "max": 3.1362924575805664,
+            "mean": 3.1362924575805664,
+            "sample_std": 0.0,
+            "p50": 3.1362924575805664,
+            "p95": 3.1362924575805664,
+            "p99": 3.1362924575805664
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 1532259,
+          "received_count_end": 1595124,
+          "raw_counts": {
+            "n": 21,
+            "min": 3719,
+            "max": 3719,
+            "mean": 3719,
+            "sample_std": 0.0,
+            "p50": 3719.0,
+            "p95": 3719.0,
+            "p99": 3719.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.561583399772644,
+            "max": 1.561583399772644,
+            "mean": 1.561583399772644,
+            "sample_std": 0.0,
+            "p50": 1.561583399772644,
+            "p95": 1.561583399772644,
+            "p99": 1.561583399772644
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 1562256,
+          "received_count_end": 1626279,
+          "raw_counts": {
+            "n": 21,
+            "min": 1863,
+            "max": 1863,
+            "mean": 1863,
+            "sample_std": 0.0,
+            "p50": 1863.0,
+            "p95": 1863.0,
+            "p99": 1863.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": -0.03786653280258179,
+            "max": -0.03786653280258179,
+            "mean": -0.03786653280258179,
+            "sample_std": 0.0,
+            "p50": -0.03786653280258179,
+            "p95": -0.03786653280258179,
+            "p99": -0.03786653280258179
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 39,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": true,
+      "invalid_state_reason": null,
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          1554232,
+          1617912
+        ],
+        "drdy_edges_start_end": [
+          3104435,
+          3231624
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 21,
+            "min": -0.014257499016821384,
+            "max": 0.019830962643027306,
+            "mean": 0.002178008634863155,
+            "sample_std": 0.00988787730247998,
+            "p50": 0.0006562022026628256,
+            "p95": 0.017700431868433952,
+            "p99": 0.019404856488108635
+          },
+          {
+            "n": 21,
+            "min": -0.032704684883356094,
+            "max": 0.01416695211082697,
+            "mean": 0.0010794173216535931,
+            "sample_std": 0.011289506072772274,
+            "p50": 0.004579572007060051,
+            "p95": 0.012036423198878765,
+            "p99": 0.01374084632843733
+          },
+          {
+            "n": 21,
+            "min": -0.024656612426042557,
+            "max": 0.021149760112166405,
+            "mean": -0.004162952536717057,
+            "sample_std": 0.011985549722209483,
+            "p50": -0.005481851287186146,
+            "p95": 0.012627644464373589,
+            "p99": 0.019445336982607846
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 21,
+            "min": 0.26584717631340027,
+            "max": 0.3592529296875,
+            "mean": 0.3038253386815389,
+            "sample_std": 0.025008013861080227,
+            "p50": 0.30177247524261475,
+            "p95": 0.3448828160762787,
+            "p99": 0.35637890696525576
+          },
+          {
+            "n": 21,
+            "min": -0.2299218773841858,
+            "max": -0.07185058295726776,
+            "mean": -0.1673092231864021,
+            "sample_std": 0.03629292983187435,
+            "p50": -0.17962646484375,
+            "p95": -0.10777588188648224,
+            "p99": -0.07903564274311063
+          },
+          {
+            "n": 21,
+            "min": 9.678274154663086,
+            "max": 9.9297513961792,
+            "mean": 9.827449526105609,
+            "sample_std": 0.06036747764902127,
+            "p50": 9.836345672607422,
+            "p95": 9.908195495605469,
+            "p99": 9.925440216064453
+          }
+        ],
+        "yaw_start_end_deg": [
+          10.719737723072186,
+          10.925461313325677
+        ],
+        "yaw_delta_deg": 0.2057235902534913,
+        "yaw_linear_slope_deg_s": 0.0027064103776535727,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      },
+      "runtime_estimator_valid": true,
+      "external_odometry_accuracy_verified": false,
+      "estimated_xy_start_end_m": [
+        [
+          0.08739129453897476,
+          0.007157323881983757
+        ],
+        [
+          0.09664282947778702,
+          -0.0034535834565758705
+        ]
+      ],
+      "estimated_xy_endpoint_change_m": 0.014077721877902065,
+      "estimated_xy_max_sampled_excursion_m": 0.014077721877902065,
+      "joint_position_rad": [
+        {
+          "n": 21,
+          "min": 3.131690263748169,
+          "max": 3.131690263748169,
+          "mean": 3.131690263748169,
+          "sample_std": 0.0,
+          "p50": 3.131690263748169,
+          "p95": 3.131690263748169,
+          "p99": 3.131690263748169
+        },
+        {
+          "n": 21,
+          "min": -2.9454636573791504,
+          "max": -2.9454636573791504,
+          "mean": -2.9454636573791504,
+          "sample_std": 0.0,
+          "p50": -2.9454636573791504,
+          "p95": -2.9454636573791504,
+          "p99": -2.9454636573791504
+        },
+        {
+          "n": 21,
+          "min": -0.24497325718402863,
+          "max": -0.2448766678571701,
+          "mean": -0.24489966531594595,
+          "sample_std": 4.215503825276204e-05,
+          "p50": -0.2448766678571701,
+          "p95": -0.2448766678571701,
+          "p99": -0.2448766678571701
+        },
+        {
+          "n": 21,
+          "min": -3.1362924575805664,
+          "max": -3.1362924575805664,
+          "mean": -3.1362924575805664,
+          "sample_std": 0.0,
+          "p50": -3.1362924575805664,
+          "p95": -3.1362924575805664,
+          "p99": -3.1362924575805664
+        },
+        {
+          "n": 21,
+          "min": 2.9955790042877197,
+          "max": 2.9955790042877197,
+          "mean": 2.9955790042877197,
+          "sample_std": 0.0,
+          "p50": 2.9955790042877197,
+          "p95": 2.9955790042877197,
+          "p99": 2.9955790042877197
+        },
+        {
+          "n": 21,
+          "min": -0.03786653280258179,
+          "max": -0.03786653280258179,
+          "mean": -0.03786653280258179,
+          "sample_std": 0.0,
+          "p50": -0.03786653280258179,
+          "p95": -0.03786653280258179,
+          "p99": -0.03786653280258179
+        }
+      ],
+      "position_lost_any": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "imu_total_tilt_deg": {
+        "n": 21,
+        "min": 1.7846542131822518,
+        "max": 1.9037203526880502,
+        "mean": 1.8490716145360349,
+        "sample_std": 0.02771949409093256,
+        "p50": 1.8501259180637322,
+        "p95": 1.8862668132292455,
+        "p99": 1.9002296447962892
+      },
+      "acceleration_norm_m_s2": {
+        "n": 21,
+        "min": 9.685707062952781,
+        "max": 9.935367359445063,
+        "mean": 9.83366648091635,
+        "sample_std": 0.059667829328305666,
+        "p50": 9.841773643509587,
+        "p95": 9.914123089012877,
+        "p99": 9.931118505358626
+      }
+    }
+  },
+  "manual_measurements": {
+    "pose_id": "supported_pose_A",
+    "reported_at": "2026-11-16T17:15:55.436378+08:00",
+    "source": "user ruler readings and user-labelled right/left photographs in this conversation",
+    "body_clearance_m": 0.12,
+    "spring_pin_center_distance_m": {
+      "right": 0.24,
+      "left": 0.24
+    },
+    "both_wheels_touch_ground": true,
+    "cardboard_support_bears_load": true,
+    "support_force_n": null,
+    "unassisted_rest_pose": false,
+    "external_pitch_roll_deg": null,
+    "supply_voltage_v": 24.0,
+    "ruler_accuracy_m": null,
+    "measurement_time_mcu_tick": null,
+    "synchronization_error_ms": null,
+    "photo_original_local_paths": null,
+    "do_not_use_as_spring_force_curve": true,
+    "horizontal_sign_convention": "positive is robot forward; user corrected right wheel from behind to in front",
+    "body_level_observation": "user states body parallel to ground",
+    "external_level_accuracy_deg": null,
+    "h723_board_fixed_parallel_to_body_user_confirmed": true,
+    "can_id_groups_user_confirmed": {
+      "left_dm": [
+        1,
+        2
+      ],
+      "left_wheel": 2,
+      "right_dm": [
+        3,
+        4
+      ],
+      "right_wheel": 3
+    },
+    "voltage_source": "user multimeter reading",
+    "motor_pair_midpoint_height_m": {
+      "right": 0.3,
+      "left": 0.3
+    },
+    "wheel_center_horizontal_from_motor_pair_midpoint_m": {
+      "right": 0.304,
+      "left": 0.304
+    },
+    "hip_axis_height_m": {
+      "right": null,
+      "left": null
+    },
+    "wheel_center_horizontal_from_hip_m": {
+      "right": null,
+      "left": null
+    },
+    "body_reference_point_user_definition": "midpoint between the two leg motor shaft centers, user called black circle",
+    "hip_point_identification_pending": true,
+    "earlier_hip_axis_labels_retracted": true
+  },
+  "bounded_window_summaries": {
+    "priority_final": {
+      "frame_count": 32,
+      "rejected_slots": [],
+      "tick_first_last": [
+        574371,
+        574433
+      ],
+      "tick_span_ms": 62,
+      "tick_gap_ms": {
+        "n": 31,
+        "min": 2,
+        "max": 2,
+        "mean": 2,
+        "sample_std": 0.0,
+        "p50": 2.0,
+        "p95": 2.0,
+        "p99": 2.0
+      },
+      "all_gaps_2ms": true,
+      "motor_age_ms": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        }
+      ],
+      "imu_age_ms": {
+        "n": 32,
+        "min": 1,
+        "max": 1,
+        "mean": 1,
+        "sample_std": 0.0,
+        "p50": 1.0,
+        "p95": 1.0,
+        "p99": 1.0
+      },
+      "remote_age_ms": {
+        "n": 32,
+        "min": 2,
+        "max": 14,
+        "mean": 7.625,
+        "sample_std": 4.014088093926994,
+        "p50": 8.0,
+        "p95": 14.0,
+        "p99": 14.0
+      },
+      "imu_all_within_5ms": true,
+      "remote_all_within_100ms": true,
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        0
+      ],
+      "fault_values": [
+        0
+      ],
+      "unwrap_ambiguous_last": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "imu_missed_edges_first_last": [
+        572654,
+        572716
+      ],
+      "missed_edges_definition": "Sum of max(DRDY edge increment minus one,0) between SPI reads; not automatically CAN/IMU packet loss rate.",
+      "control_version": "0x20261115",
+      "model_version": 100,
+      "getup_model_version": 0,
+      "external_synchronization_error_ms": null,
+      "uncertainty": "Millisecond MCU time quantization plus unknown sensor/internal delay.",
+      "capture_interference": "CPU paused during RAM export after these frames, then resumed; no continuous 60s guarantee."
+    }
+  }
+}

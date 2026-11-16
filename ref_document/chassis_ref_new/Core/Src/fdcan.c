@@ -1,15 +1,18 @@
 #include "fdcan.h"
 #include "chassis.h"
+#include "can_tx_age.h"
 FDCAN_HandleTypeDef hfdcan2;
 volatile uint32_t g_can_tx_fail, g_can_rx_overflow;
+static CanTxAge tx_age;
 volatile CanMonitor g_can_monitor={.node={{.id=0x304},{.id=0x303},{.id=0x203},
                                         {.id=0x301},{.id=0x302},{.id=0x202}}};
 bool can2_init(void) {
     hfdcan2.Instance=FDCAN2;
     hfdcan2.Init.FrameFormat=FDCAN_FRAME_CLASSIC;
     hfdcan2.Init.Mode=FDCAN_MODE_NORMAL;
-    /* Do not retransmit a stale torque indefinitely when a node disappears. */
-    hfdcan2.Init.AutoRetransmission=DISABLE;
+    /* Arbitration loss is not an error: retain the request, while expiring
+     * pending nonzero torques explicitly in can2_healthy(). */
+    hfdcan2.Init.AutoRetransmission=ENABLE;
     hfdcan2.Init.TransmitPause=DISABLE;
     hfdcan2.Init.ProtocolException=DISABLE;
     hfdcan2.Init.NominalPrescaler=3; /* 96MHz / 3 / (1+23+8) = 1Mbps */
@@ -41,14 +44,22 @@ bool can2_send(uint16_t id, const uint8_t d[8]) {
     h.BitRateSwitch=FDCAN_BRS_OFF; h.FDFormat=FDCAN_CLASSIC_CAN;
     h.TxEventFifoControl=FDCAN_NO_TX_EVENTS;
     if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan2,&h,d)!=HAL_OK) { ++g_can_tx_fail; return false; }
+    bool nonzero=false;
+    if(id==0x3fe || id==0x200)for(unsigned i=0;i<8;++i)nonzero=nonzero || d[i]!=0;
+    can_tx_age_record(&tx_age,HAL_FDCAN_GetLatestTxFifoQRequestBuffer(&hfdcan2),HAL_GetTick(),nonzero);
     ++g_can_monitor.tx_queued;
     if (id==0x3fe || id==0x200) {
         for (unsigned i=0;i<8;++i) if (d[i]) { ++g_can_monitor.nonzero_torque_frames; break; }
     } else if (id>=1 && id<=4 && d[0]==0xff && d[7]==0xfc) ++g_can_monitor.enable_commands;
     return true;
 }
-void can2_cancel_pending(void) { (void)HAL_FDCAN_AbortTxRequest(&hfdcan2,0xffffffffU); }
+void can2_cancel_pending(void) { (void)HAL_FDCAN_AbortTxRequest(&hfdcan2,0xffffffffU);can_tx_age_clear(&tx_age); }
 bool can2_healthy(void) {
+    uint32_t expired=can_tx_age_expired(&tx_age,hfdcan2.Instance->TXBRP,HAL_GetTick());
+    if(expired) {
+        if(HAL_FDCAN_AbortTxRequest(&hfdcan2,expired)!=HAL_OK) {++g_can_tx_fail;return false;}
+        tx_age.nonzero_mask&=~expired;
+    }
     FDCAN_ProtocolStatusTypeDef s={0}; FDCAN_ErrorCountersTypeDef c={0};
     if (HAL_FDCAN_GetProtocolStatus(&hfdcan2,&s)!=HAL_OK ||
         HAL_FDCAN_GetErrorCounters(&hfdcan2,&c)!=HAL_OK) return false;

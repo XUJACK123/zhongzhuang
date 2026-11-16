@@ -1,0 +1,238 @@
+{
+  "pose_id": "supported_pose_A",
+  "reported_at": "2026-11-16T17:15:55.436378+08:00",
+  "source": "user ruler readings and user-labelled right/left photographs in this conversation",
+  "body_clearance_m": 0.12,
+  "spring_pin_center_distance_m": {
+    "right": 0.24,
+    "left": 0.24
+  },
+  "both_wheels_touch_ground": true,
+  "cardboard_support_bears_load": true,
+  "support_force_n": null,
+  "unassisted_rest_pose": false,
+  "external_pitch_roll_deg": null,
+  "supply_voltage_v": 24.0,
+  "ruler_accuracy_m": null,
+  "measurement_time_mcu_tick": null,
+  "synchronization_error_ms": null,
+  "photo_original_local_paths": null,
+  "do_not_use_as_spring_force_curve": true,
+  "horizontal_sign_convention": "positive is robot forward; user corrected right wheel from behind to in front",
+  "body_level_observation": "user states body parallel to ground",
+  "external_level_accuracy_deg": null,
+  "h723_board_fixed_parallel_to_body_user_confirmed": true,
+  "can_id_groups_user_confirmed": {
+    "left_dm": [
+      1,
+      2
+    ],
+    "left_wheel": 2,
+    "right_dm": [
+      3,
+      4
+    ],
+    "right_wheel": 3
+  },
+  "voltage_source": "user multimeter reading",
+  "motor_pair_midpoint_height_m": {
+    "right": 0.3,
+    "left": 0.3
+  },
+  "wheel_center_horizontal_from_motor_pair_midpoint_m": {
+    "right": 0.304,
+    "left": 0.304
+  },
+  "hip_axis_height_m": {
+    "right": 0.3,
+    "left": 0.3
+  },
+  "wheel_center_horizontal_from_hip_m": {
+    "right": 0.304,
+    "left": 0.304
+  },
+  "body_reference_point_user_definition": "green slip-ring central bore axis, operator confirmed right and left; earlier midpoint description retained in history",
+  "hip_point_identification_pending": false,
+  "earlier_hip_axis_labels_retracted": true,
+  "spring_dimensions_operator_reported": {
+    "right": {
+      "reported_diameter_m": 0.01,
+      "measurement_method": "operator ruler estimate; requested black-cylinder outer diameter",
+      "independent_verification": false,
+      "supersedes_reported_diameter_m": 0.007,
+      "visible_rod_length_endpoint_confirmed": true,
+      "visible_rod_length_source": "operator reply to seal-mouth-to-fitting-root measurement request: 左右都是100mm",
+      "stroke_m_verified": null,
+      "visible_rod_length_m": 0.1,
+      "measurement_accuracy_m": null,
+      "recorded_at_utc": "2026-11-16T12:43:35.700353+00:00",
+      "prior_visible_rod_length_m_candidate": 0.1
+    },
+    "left": {
+      "visible_rod_length_m": 0.1,
+      "visible_rod_length_endpoint_confirmed": true,
+      "visible_rod_length_source": "operator reply to seal-mouth-to-fitting-root measurement request: 左右都是100mm",
+      "measurement_accuracy_m": null,
+      "stroke_m_verified": null,
+      "recorded_at_utc": "2026-11-16T12:43:35.700353+00:00"
+    }
+  },
+  "operating_mass_kg": 21.9,
+  "operating_mass_metadata": {
+    "source": "operator accepted existing weight record; no fresh weighing this session",
+    "raw_reply": "整机为21.9kg",
+    "recorded_at_utc": "2026-11-16T12:43:35.700353+00:00",
+    "scale_model": null,
+    "measurement_accuracy_kg": null,
+    "independently_verified": false,
+    "support_load_distribution_n": null,
+    "raw_source_clarification": "重量来自已有记录  ,没有问题",
+    "fresh_weighing_in_this_session": false,
+    "source_document_path": null,
+    "source_record_date": null,
+    "source_clarification_recorded_at_utc": "2026-11-16T12:56:57.929126+00:00"
+  },
+  "supplemental_manual_measurements": [
+    {
+      "recorded_at_utc": "2026-11-16T12:43:35.700353+00:00",
+      "source": "operator replies in conversation",
+      "kind": "offline_supplemental_manual_readings",
+      "right_visible_rod_length_m": 0.1,
+      "left_visible_rod_length_m": 0.1,
+      "operating_mass_kg": 21.9,
+      "pose_id": null,
+      "notes": "Separate from earlier cardboard-supported pose A; no simultaneous pin-length or encoder sample. No board access."
+    }
+  ],
+  "manual_reading_correction_history": [
+    {
+      "recorded_at_utc": "2026-11-16T12:44:47.955978+00:00",
+      "raw_reply": "左右都是15mm",
+      "quantity_requested": "full tyre outer diameter through wheel axle centre",
+      "reported_numeric_value": 15,
+      "reported_unit": "mm",
+      "sides": [
+        "right",
+        "left"
+      ],
+      "status": "resolved_15_mm_was_width",
+      "accepted_right_outer_diameter_m": null,
+      "accepted_left_outer_diameter_m": null,
+      "note": "No automatic conversion to 150 mm; no model or firmware radius change.",
+      "resolution_raw_reply": "刚才是宽度，直径应该是115mm"
+    }
+  ],
+  "wheel_dimensions_operator_reported": {
+    "recorded_at_utc": "2026-11-16T12:53:08.235615+00:00",
+    "source": "operator ruler reading and clarification in conversation",
+    "right_outer_diameter_m": 0.115,
+    "left_outer_diameter_m": 0.115,
+    "right_tyre_width_m": 0.015,
+    "left_tyre_width_m": 0.015,
+    "geometric_radius_m": 0.0575,
+    "effective_rolling_radius_m": null,
+    "measurement_accuracy_m": null,
+    "wheel_loading_during_measurement": null,
+    "original_15_mm_reply_was_width": true,
+    "raw_clarification": "刚才是宽度，直径应该是115mm",
+    "model_comparison": {
+      "firmware_radius_m_current": 0.055,
+      "geometric_radius_minus_firmware_m": 0.0025,
+      "geometric_radius_ratio_to_firmware": 1.0454545454545454,
+      "firmware_radius_modified": false,
+      "runtime_odometry_scale_verified": false
+    },
+    "effective_rolling_radius_m_operator_adopted": {
+      "right": 0.05570423008216337,
+      "left": 0.05570423008216337
+    },
+    "left_rolling_radius_source": "operator-authorized symmetry assumption from right manual result",
+    "rolling_radius_repetitions": 1,
+    "rolling_radius_precision_m": null
+  },
+  "reference_point_clarification_history": [
+    {
+      "recorded_at_utc": "2026-11-16T13:00:34.117716+00:00",
+      "previous_definition": "midpoint between the two leg motor shaft centers, user called black circle",
+      "previous_single_hip_point_identification_pending": true,
+      "new_definition": "green slip-ring central bore axis, operator confirmed right and left; earlier midpoint description retained in history",
+      "source": [
+        "直接沿用即可",
+        "是，左右均为上述尺寸，两轮都接地"
+      ]
+    }
+  ],
+  "hip_point_operator_confirmed": true,
+  "current_rigid_fixture_pose": {
+    "path": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\real_data_collection\\field_measurements_20261116_205507\\paired_supported_pose.json",
+    "both_wheels_touch_ground": true,
+    "measurements_reused_with_operator_same_pose_confirmation": true,
+    "new_ruler_measurement": false
+  },
+  "current_approximate_leg_angles_deg": {
+    "right": {
+      "thigh": 70,
+      "knee_included": 120
+    },
+    "left": {
+      "thigh": 70,
+      "knee_included": 120
+    },
+    "accuracy_deg": null,
+    "source": "operator approximate report",
+    "paired_snapshot": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\real_data_collection\\field_measurements_20261116_205507\\manual_angles_70_120.json"
+  },
+  "current_body_orientation_assumption": {
+    "raw_reply": "机身平行于地面，或者说是你可以假设机身平行于地面",
+    "assumed_pitch_deg": 0,
+    "assumed_roll_deg": 0,
+    "source": "operator-authorized assumption",
+    "quantified_external_measurement": false,
+    "must_not_mark_imu_verified_from_this_assumption": true
+  },
+  "manual_marked_wheel_rolling": {
+    "recorded_at_utc": "2026-11-16T13:16:10.639636+00:00",
+    "selected_wheel": "right",
+    "operator_initial_raw_reply": "已完成，70mm",
+    "operator_unit_and_turns_clarification": "是70厘米，即700毫米；右轮转了两整圈",
+    "marked_wheel_revolutions": 2,
+    "travel_m": 0.7,
+    "circumference_m": 0.35,
+    "effective_radius_m_from_manual_travel_and_turns": 0.05570423008216337,
+    "effective_diameter_m": 0.11140846016432673,
+    "derivation": "radius = measured travel / (2*pi*marked revolutions)",
+    "measurement_accuracy_m": null,
+    "repetitions": 1,
+    "tyre_geometric_outer_diameter_m": 0.115,
+    "pose_and_no_slip_quantitatively_verified": false,
+    "radius_interpretation": "operator-accepted single manual rolling result, conditional on two marked rotations, straight rolling and sufficiently constant carrier pose",
+    "left_adoption": {
+      "value_m": 0.05570423008216337,
+      "source": "operator instruction 左右可以理解为一样的",
+      "independently_measured": false
+    },
+    "retest_status": "stopped at user instruction: 不需要复测，以这个数据为准即可",
+    "encoder_position_lost_end": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      true
+    ],
+    "encoder_gear_ratio_calibration_valid": false,
+    "encoder_ratio_failure_reason": "both wheel accumulated counts lost trust during the trial; frozen accumulated counts cannot verify gear ratio",
+    "per_motor_rx_count_delta": [
+      173402,
+      173571,
+      174687,
+      173572,
+      173569,
+      174489
+    ],
+    "no_nonzero_or_enable_commands": true,
+    "firmware_radius_m_current": 0.055,
+    "firmware_radius_modified": false,
+    "relative_radius_difference_from_firmware": 0.012804183312061124
+  }
+}

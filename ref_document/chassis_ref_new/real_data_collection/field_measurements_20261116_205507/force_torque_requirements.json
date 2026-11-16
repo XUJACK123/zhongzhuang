@@ -1,0 +1,42 @@
+{
+  "recorded_at_utc": "2026-11-16T13:16:10.639636+00:00",
+  "existing_equipment": [
+    "ruler/protractor",
+    "multimeter",
+    "camera",
+    "previously installed rigid body fixture and mechanical stops"
+  ],
+  "mass_21_9_kg_source": "existing accepted record; no on-site scale confirmed",
+  "spring_force_stroke": {
+    "missing": [
+      "independent calibrated axial force reference",
+      "guided fixture capable of holding and incrementally compressing/releasing the spring along its axis",
+      "pin-distance or compression readings paired with force over multiple points",
+      "installed charge condition if using pressure-indexed manufacturer curves"
+    ],
+    "alternative": "traceable force-stroke data for installed BG450-080 at its actual charge condition; include units and compression/return information",
+    "known_nameplate_max_bar": 150,
+    "actual_charge_bar": null,
+    "maximum_filling_pressure_is_not_actual_charge_pressure": true
+  },
+  "motor_shaft_torque": {
+    "missing": [
+      "independent force or known mass applied through a measured effective lever arm, or a torque transducer",
+      "load-bearing motor/output reaction fixture and repeatable load application",
+      "separation or accounted contribution of gas spring, linkage weight and friction"
+    ],
+    "deadweight_example": {
+      "known_mass_kg": 1,
+      "horizontal_effective_lever_m": 0.1,
+      "force_direction": "vertical, perpendicular to horizontal lever",
+      "ideal_torque_nm": 0.980665,
+      "note": "example only, not a performed test"
+    }
+  },
+  "why_current_ramp_is_insufficient": "Motion onset combines motor torque, spring torque, linkage gravity and friction. With motor torque not independently calibrated, current plus movement alone does not uniquely identify spring axial force.",
+  "reference_urls": [
+    "https://www.bbkspring.com/knowledge/nitrogen-spring-selection-guide",
+    "https://www.ics-schneider.de/drehmomentsensor-statisch-pruefen-kraft-und-hebelarm-als-referenz-nutzen/?lang=en",
+    "https://www.npl.co.uk/research/mass-mechanical-measurement/measuring-force"
+  ]
+}

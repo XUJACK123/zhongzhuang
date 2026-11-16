@@ -1,0 +1,169 @@
+{
+  "user_authorized_all_measurements": true,
+  "prior_session": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\real_data_collection\\T0_20261116_162107",
+  "field_photo_description": "Two user-supplied side photos, body supported on cardboard boxes; supported pose, not an unassisted rest state. No dimensional reference in photos.",
+  "equipment_user_confirmed": [
+    "ruler",
+    "protractor",
+    "multimeter",
+    "camera"
+  ],
+  "equipment_not_available": [
+    "force/torque sensor and rated fixture",
+    "guarded spring test fixture",
+    "continuous UART/CAN recording connection"
+  ],
+  "no_hand_compression_of_spring": true,
+  "prior_verified_identity": {
+    "captured_at_utc": "2026-11-16T08:29:47.565558+00:00",
+    "full_bin_bytewise_match": false,
+    "elf_flash_load_sections_match": true,
+    "sections": [
+      {
+        "section": ".isr_vector",
+        "lma": "0x8000000",
+        "bytes": 716,
+        "matches": true
+      },
+      {
+        "section": ".text",
+        "lma": "0x80002d0",
+        "bytes": 46248,
+        "matches": true
+      },
+      {
+        "section": ".rodata",
+        "lma": "0x800b778",
+        "bytes": 59464,
+        "matches": true
+      },
+      {
+        "section": ".ARM.exidx",
+        "lma": "0x8019fc0",
+        "bytes": 8,
+        "matches": true
+      },
+      {
+        "section": ".init_array",
+        "lma": "0x8019fc8",
+        "bytes": 4,
+        "matches": true
+      },
+      {
+        "section": ".fini_array",
+        "lma": "0x8019fcc",
+        "bytes": 4,
+        "matches": true
+      },
+      {
+        "section": ".data",
+        "lma": "0x8019fd0",
+        "bytes": 256,
+        "matches": true
+      }
+    ],
+    "differing_bin_offsets": [
+      716,
+      717,
+      718,
+      719
+    ],
+    "all_differences_outside_load_sections": true,
+    "difference_explanation": "Erased 0xff in the four-byte section alignment gap at 0x080002cc; local BIN fills it with 0x00.",
+    "board_firmware_sha256": "3e41e6c8ea39996ee38fb54e8d02288f57c9354c6edf1090515e56ca2ffd020d",
+    "local_bin_sha256": "c52f43e37084b403f2e48f550e6037534a6740c202db8c91a53e803dab4fe7e9",
+    "local_elf_sha256": "58db4c181227730b630871be84e9167248a3cf25785b0e0a44405af9bb638845",
+    "image_bytes": 106704,
+    "entire_physical_flash_verified": false,
+    "first_process_timeout_s": 50,
+    "first_stdout_log_available": false,
+    "symbols": {
+      "g_board_debug": [
+        536871416,
+        40
+      ],
+      "g_can_monitor": [
+        536870912,
+        160
+      ],
+      "g_can_rx_overflow": [
+        536871196,
+        4
+      ],
+      "g_can_tx_fail": [
+        536871200,
+        4
+      ],
+      "g_chassis": [
+        536875048,
+        40
+      ],
+      "g_imu": [
+        536871776,
+        128
+      ],
+      "g_imu_fusion": [
+        536875108,
+        32
+      ],
+      "g_imu_timing": [
+        536875088,
+        20
+      ],
+      "g_measurement": [
+        536873792,
+        92
+      ],
+      "g_motor_diagnostics": [
+        536895516,
+        72
+      ],
+      "g_motor_snapshot": [
+        536873544,
+        248
+      ],
+      "g_remote": [
+        536871456,
+        28
+      ],
+      "g_rl": [
+        536873884,
+        1164
+      ],
+      "g_telemetry": [
+        536875140,
+        20376
+      ]
+    }
+  },
+  "reset_kind": "MCU software reset only, not a full power cycle",
+  "tests": {
+    "0": "three pairs all six increase; inhibit0; bounded/long record and active timing still to assess",
+    "1": "supported pose only; external dimensions requested; natural unsupported states not measured",
+    "2": "pending",
+    "3": "requires independent force or torque sensor and rated fixture; absent",
+    "4": "requires protected force-displacement fixture or traceable supplier curve; absent; no hand compression",
+    "5": "pending",
+    "6": "pending",
+    "7": "offline replay possible; active wheel trials need guarded fixture and continuous record",
+    "8": "getup actor missing; prerequisites not satisfied"
+  },
+  "controlled_reset_executed": true,
+  "after_reset_position_lost": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "after_reset_inhibit": 0,
+  "photo_side_mapping": "User stated images1/2 right, image3 left; additional photos/repeat views kept as conversation evidence, not measured dimensions.",
+  "manual_measurements_pending": [
+    "body clearance mm",
+    "hip axis height mm",
+    "right/left spring pin distances mm",
+    "both wheels contact",
+    "remaining cardboard support"
+  ]
+}

@@ -1,0 +1,199 @@
+{
+  "recorded_at_utc": "2026-11-16T13:00:34.116984+00:00",
+  "pose_id": "current_rigid_fixture_pose_operator_confirms_prior_dimensions_apply",
+  "operator_replies": [
+    "直接沿用即可",
+    "是，左右均为上述尺寸，两轮都接地"
+  ],
+  "reference_point": "green slip-ring central bore axis, operator confirmed right and left; earlier midpoint description retained in history",
+  "hip_axis_height_m": {
+    "right": 0.3,
+    "left": 0.3
+  },
+  "wheel_center_horizontal_from_hip_m": {
+    "right": 0.304,
+    "left": 0.304
+  },
+  "both_wheels_touch_ground": true,
+  "rigid_fixture_fixed": true,
+  "support_reaction_n": null,
+  "new_ruler_readings_this_epoch": false,
+  "operator_confirms_same_pose_as_prior_readings": true,
+  "measurement_accuracy_m": null,
+  "synchronized_shared_trigger": false,
+  "capture_method": "operator held pose; asynchronous SWD snapshots before and after reference-point confirmation",
+  "board_snapshot": {
+    "host_utc": "2026-11-16T13:00:34.116171+00:00",
+    "phase": "IDLE",
+    "reason": "NONE",
+    "last_token": 0,
+    "request_token": 0,
+    "tick": 418590,
+    "healthy_at_control_step": true,
+    "s1": 2,
+    "remote_valid": true,
+    "remote_tick": 418769,
+    "imu_calibrated": true,
+    "gravity_body": [
+      -0.11662266403436661,
+      0.026049194857478142,
+      -0.9928351044654846
+    ],
+    "can": {
+      "received": 2510673,
+      "other": 0,
+      "tx_error": 0,
+      "rx_error": 0,
+      "bus_off": 0,
+      "last_error": 0,
+      "tx_queued": 439610,
+      "nonzero": 0,
+      "enable": 0,
+      "status_samples": 209339
+    },
+    "tx_failed": 0,
+    "fifo_overflow": 0,
+    "log_header": [
+      489034006,
+      2,
+      212,
+      384,
+      0,
+      0,
+      38
+    ],
+    "motors": [
+      {
+        "label": "right_hip_DM4",
+        "raw": 3607,
+        "arm_rad": 3.134758234024048,
+        "velocity_rad_s": -0.0010471976129338145,
+        "feedback": -0.009000000543892384,
+        "tick": 418639,
+        "received": 417265,
+        "temperature_c": 23,
+        "state": 1,
+        "position_lost": false
+      },
+      {
+        "label": "right_knee_DM3",
+        "raw": 3246,
+        "arm_rad": 1.6076029539108276,
+        "velocity_rad_s": 0.021991150453686714,
+        "feedback": 0.009000000543892384,
+        "tick": 418665,
+        "received": 417667,
+        "temperature_c": 23,
+        "state": 0,
+        "position_lost": false
+      },
+      {
+        "label": "right_wheel_M3508_3",
+        "raw": 3323,
+        "arm_rad": 0.013765260577201843,
+        "velocity_rad_s": -0.0,
+        "feedback": 0.023193359375,
+        "tick": 418685,
+        "received": 419907,
+        "temperature_c": 23,
+        "state": 1,
+        "position_lost": false
+      },
+      {
+        "label": "left_hip_DM1",
+        "raw": 1336,
+        "arm_rad": 3.1362924575805664,
+        "velocity_rad_s": 0.0,
+        "feedback": 0.014000000432133675,
+        "tick": 418709,
+        "received": 417711,
+        "temperature_c": 22,
+        "state": 1,
+        "position_lost": false
+      },
+      {
+        "label": "left_knee_DM2",
+        "raw": 3716,
+        "arm_rad": 1.5592824220657349,
+        "velocity_rad_s": 0.00733038317412138,
+        "feedback": -0.0010000000474974513,
+        "tick": 418725,
+        "received": 417725,
+        "temperature_c": 22,
+        "state": 1,
+        "position_lost": false
+      },
+      {
+        "label": "left_wheel_M3508_2",
+        "raw": 4120,
+        "arm_rad": 0.07114464044570923,
+        "velocity_rad_s": 0.0,
+        "feedback": -0.006103515625,
+        "tick": 418739,
+        "received": 419371,
+        "temperature_c": 23,
+        "state": 1,
+        "position_lost": false
+      }
+    ],
+    "asynchronous_swd_reads": true,
+    "wire": {
+      "groups_tx": 209408,
+      "fc_tx": 0,
+      "fd_tx": 20941,
+      "active_groups_tx": 0,
+      "active_fc_tx": 0,
+      "active_gap_max_us": 0,
+      "event_loss_flags_seen": 0,
+      "foreign_group_rx": 0,
+      "foreign_dji_rx": 0,
+      "all_gap_max_us": 2752,
+      "expired_torque_abort_requests": 0,
+      "last_foreign_group": "00 00 00 00 00 00 00 00",
+      "last_foreign_dji": "00 00 00 00 00 00 00 00"
+    }
+  },
+  "fk_comparison": [
+    {
+      "side": "right",
+      "current_calibration_hip_rad": 3.134758234024048,
+      "current_calibration_knee_rad": -2.9541693261594406,
+      "current_calibration_hip_deg": 179.60841660346117,
+      "current_calibration_knee_deg": -169.2614343559423,
+      "current_calibration_fk_body_x_m": -0.25489732945248567,
+      "current_calibration_fk_body_z_m": -0.24736973950220162,
+      "operator_hip_height_m": 0.3,
+      "operator_wheel_forward_from_hip_m": 0.304,
+      "tyre_geometric_radius_m": 0.0575,
+      "wheel_height_m_inferred_from_contact_and_radius": 0.0575,
+      "wheel_height_independently_measured": false,
+      "ground_relative_z_m_inferred": -0.2425,
+      "body_to_ground_angle_quantified": false,
+      "forward_direction_disagreement": true,
+      "mechanical_reference_verified": false
+    },
+    {
+      "side": "left",
+      "current_calibration_hip_rad": -3.1362924575805664,
+      "current_calibration_knee_rad": 2.9975779203478705,
+      "current_calibration_hip_deg": -179.6963211380792,
+      "current_calibration_knee_deg": 171.74856359753542,
+      "current_calibration_fk_body_x_m": -0.24456457881588112,
+      "current_calibration_fk_body_z_m": -0.2487116748301742,
+      "operator_hip_height_m": 0.3,
+      "operator_wheel_forward_from_hip_m": 0.304,
+      "tyre_geometric_radius_m": 0.0575,
+      "wheel_height_m_inferred_from_contact_and_radius": 0.0575,
+      "wheel_height_independently_measured": false,
+      "ground_relative_z_m_inferred": -0.2425,
+      "body_to_ground_angle_quantified": false,
+      "forward_direction_disagreement": true,
+      "mechanical_reference_verified": false
+    }
+  ],
+  "calibration_modified": false,
+  "requested_direct_measurements": [
+    "right/left thigh angles and included knee angles",
+    "front/rear body reference-point heights and horizontal spacing for external pitch"
+  ]
+}

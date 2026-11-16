@@ -1,0 +1,1138 @@
+{
+  "primary_report": "real_data_20261116_162107.json",
+  "status": {
+    "six_motor_reception_pass": true,
+    "full_T0_pass": false,
+    "remaining_position_lost": [
+      "left_wheel_M3508_2"
+    ],
+    "latest_mode": 0,
+    "latest_inhibit": 36,
+    "inhibit_bits": {
+      "motor": 4,
+      "geometry": 32
+    },
+    "next_test_allowed": "supported zero-output diagnostics only; no getup or active torque tests",
+    "T1_T2": "not performed: no natural release, geometry truth, repeated approach or power cycles",
+    "T3_T4": "not performed: independent load/spring instruments and fixture absent",
+    "T5": "supported static descriptive observations only; external-angle/dynamic/cold-warm validation not performed",
+    "T6_T7_T8": "not performed"
+  },
+  "static_summaries": {
+    "static_after_reconnect": {
+      "snapshot_count": 21,
+      "mcu_span_s": 63.57,
+      "sample_period_ms": {
+        "n": 20,
+        "min": 3086,
+        "max": 3262,
+        "mean": 3178.5,
+        "sample_std": 51.78853764665447,
+        "p50": 3168.0,
+        "p95": 3256.3,
+        "p99": 3260.86
+      },
+      "read_bracket_ms": {
+        "n": 21,
+        "min": 1030,
+        "max": 1196,
+        "mean": 1114.2857142857142,
+        "sample_std": 49.32863555496225,
+        "p50": 1110.0,
+        "p95": 1188.0,
+        "p99": 1194.4
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 867312,
+          "received_count_end": 928663,
+          "raw_counts": {
+            "n": 21,
+            "min": 3607,
+            "max": 3607,
+            "mean": 3607,
+            "sample_std": 0.0,
+            "p50": 3607.0,
+            "p95": 3607.0,
+            "p99": 3607.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.134758234024048,
+            "max": 3.134758234024048,
+            "mean": 3.134758234024048,
+            "sample_std": 0.0,
+            "p50": 3.134758234024048,
+            "p95": 3.134758234024048,
+            "p99": 3.134758234024048
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 876044,
+          "received_count_end": 937982,
+          "raw_counts": {
+            "n": 21,
+            "min": 3249,
+            "max": 3249,
+            "mean": 3249,
+            "sample_std": 0.0,
+            "p50": 3249.0,
+            "p95": 3249.0,
+            "p99": 3249.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.6099039316177368,
+            "max": 1.6099039316177368,
+            "mean": 1.6099039316177368,
+            "sample_std": 0.0,
+            "p50": 1.6099039316177368,
+            "p95": 1.6099039316177368,
+            "p99": 1.6099039316177368
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 184956,
+          "received_count_end": 248925,
+          "raw_counts": {
+            "n": 21,
+            "min": 3038,
+            "max": 3039,
+            "mean": 3038.0476190476193,
+            "sample_std": 0.2182178902359924,
+            "p50": 3038.0,
+            "p95": 3038.0,
+            "p99": 3038.8
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 0.027482211589813232,
+            "max": 0.027530506253242493,
+            "mean": 0.02752820650736491,
+            "sample_std": 1.053875956319051e-05,
+            "p50": 0.027530506253242493,
+            "p95": 0.027530506253242493,
+            "p99": 0.027530506253242493
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 890006,
+          "received_count_end": 953285,
+          "raw_counts": {
+            "n": 21,
+            "min": 1339,
+            "max": 1339,
+            "mean": 1339,
+            "sample_std": 0.0,
+            "p50": 1339.0,
+            "p95": 1339.0,
+            "p99": 1339.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.1385931968688965,
+            "max": 3.1385931968688965,
+            "mean": 3.1385931968688965,
+            "sample_std": 0.0,
+            "p50": 3.1385931968688965,
+            "p95": 3.1385931968688965,
+            "p99": 3.1385931968688965
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 22,
+            "max": 22,
+            "mean": 22,
+            "sample_std": 0.0,
+            "p50": 22.0,
+            "p95": 22.0,
+            "p99": 22.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 884854,
+          "received_count_end": 947428,
+          "raw_counts": {
+            "n": 21,
+            "min": 3722,
+            "max": 3722,
+            "mean": 3722,
+            "sample_std": 0.0,
+            "p50": 3722.0,
+            "p95": 3722.0,
+            "p99": 3722.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.5638843774795532,
+            "max": 1.5638843774795532,
+            "mean": 1.5638843774795532,
+            "sample_std": 0.0,
+            "p50": 1.5638843774795532,
+            "p95": 1.5638843774795532,
+            "p99": 1.5638843774795532
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 22,
+            "max": 22,
+            "mean": 22,
+            "sample_std": 0.0,
+            "p50": 22.0,
+            "p95": 22.0,
+            "p99": 22.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 895374,
+          "received_count_end": 959263,
+          "raw_counts": {
+            "n": 21,
+            "min": 6541,
+            "max": 6541,
+            "mean": 6541,
+            "sample_std": 0.0,
+            "p50": 6541.0,
+            "p95": 6541.0,
+            "p99": 6541.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 0.07467047870159149,
+            "max": 0.07467047870159149,
+            "mean": 0.07467047870159149,
+            "sample_std": 0.0,
+            "p50": 0.07467047870159149,
+            "p95": 0.07467047870159149,
+            "p99": 0.07467047870159149
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": true,
+          "unwrapped_angle_valid_for_analysis": false,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 3,
+          "end": 3,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        36
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 26,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": false,
+      "invalid_state_reason": "inhibit has geometry bit32 and motor bit4; copied q/xy zeros are not true physical zero or a drift measurement.",
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          890753,
+          954321
+        ],
+        "drdy_edges_start_end": [
+          1779283,
+          1906257
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 21,
+            "min": -0.012655353173613548,
+            "max": 0.01504152175039053,
+            "mean": 0.0009394494727963494,
+            "sample_std": 0.006053334229266536,
+            "p50": 0.00012781936675310135,
+            "p95": 0.00971519947052002,
+            "p99": 0.013976257294416431
+          },
+          {
+            "n": 21,
+            "min": -0.019601929932832718,
+            "max": 0.01981285586953163,
+            "mean": -0.0012387990108912899,
+            "sample_std": 0.00959273334508769,
+            "p50": -0.002557697705924511,
+            "p95": 0.01342126913368702,
+            "p99": 0.018534538522362712
+          },
+          {
+            "n": 21,
+            "min": -0.01888234168291092,
+            "max": 0.006684004329144955,
+            "mean": -0.003816459472069428,
+            "sample_std": 0.007873491373577575,
+            "p50": -0.00290337554179132,
+            "p95": 0.005618739873170853,
+            "p99": 0.006470951437950135
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 21,
+            "min": 2.026186466217041,
+            "max": 2.212998151779175,
+            "mean": 2.139094602494013,
+            "sample_std": 0.05890622209521432,
+            "p50": 2.1483325958251953,
+            "p95": 2.212998151779175,
+            "p99": 2.212998151779175
+          },
+          {
+            "n": 21,
+            "min": -1.1783496141433716,
+            "max": -1.027463436126709,
+            "mean": -1.102393280892145,
+            "sample_std": 0.040681101526539205,
+            "p50": -1.0993139743804932,
+            "p95": -1.0346484184265137,
+            "p99": -1.02890043258667
+          },
+          {
+            "n": 21,
+            "min": 9.455536842346191,
+            "max": 9.663904190063477,
+            "mean": 9.527387846083869,
+            "sample_std": 0.05090760563005846,
+            "p50": 9.52020263671875,
+            "p95": 9.592053413391113,
+            "p99": 9.649534034729005
+          }
+        ],
+        "yaw_start_end_deg": [
+          28.200025714926962,
+          27.311952566210856
+        ],
+        "yaw_delta_deg": -0.8880731487161064,
+        "yaw_linear_slope_deg_s": -0.01377704983281125,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      }
+    },
+    "static": {
+      "snapshot_count": 21,
+      "mcu_span_s": 63.896,
+      "sample_period_ms": {
+        "n": 20,
+        "min": 3148,
+        "max": 3244,
+        "mean": 3194.8,
+        "sample_std": 28.86192173636034,
+        "p50": 3202.0,
+        "p95": 3238.3,
+        "p99": 3242.86
+      },
+      "read_bracket_ms": {
+        "n": 21,
+        "min": 1086,
+        "max": 1216,
+        "mean": 1134.2857142857142,
+        "sample_std": 31.882821169311313,
+        "p50": 1136.0,
+        "p95": 1170.0,
+        "p99": 1206.8
+      },
+      "not_continuous_500hz": true,
+      "motor_summary": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "received_count_start": 89280,
+          "received_count_end": 151627,
+          "raw_counts": {
+            "n": 21,
+            "min": 3604,
+            "max": 3604,
+            "mean": 3604,
+            "sample_std": 0.0,
+            "p50": 3604.0,
+            "p95": 3604.0,
+            "p99": 3604.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.137059211730957,
+            "max": 3.137059211730957,
+            "mean": 3.137059211730957,
+            "sample_std": 0.0,
+            "p50": 3.137059211730957,
+            "p95": 3.137059211730957,
+            "p99": 3.137059211730957
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 22,
+            "max": 23,
+            "mean": 22.523809523809526,
+            "sample_std": 0.511766315719159,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "received_count_start": 89940,
+          "received_count_end": 153008,
+          "raw_counts": {
+            "n": 21,
+            "min": 3245,
+            "max": 3245,
+            "mean": 3245,
+            "sample_std": 0.0,
+            "p50": 3245.0,
+            "p95": 3245.0,
+            "p99": 3245.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.606835961341858,
+            "max": 1.606835961341858,
+            "mean": 1.606835961341858,
+            "sample_std": 0.0,
+            "p50": 1.606835961341858,
+            "p95": 1.606835961341858,
+            "p99": 1.606835961341858
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 22,
+            "max": 22,
+            "mean": 22,
+            "sample_std": 0.0,
+            "p50": 22.0,
+            "p95": 22.0,
+            "p99": 22.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "received_count_start": 0,
+          "received_count_end": 0,
+          "raw_counts": {
+            "n": 0,
+            "min": null,
+            "max": null,
+            "mean": null,
+            "sample_std": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "reported_arm_rad": {
+            "n": 0,
+            "min": null,
+            "max": null,
+            "mean": null,
+            "sample_std": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "temperature_c": {
+            "n": 0,
+            "min": null,
+            "max": null,
+            "mean": null,
+            "sample_std": null,
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": false,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "received_count_start": 91395,
+          "received_count_end": 155269,
+          "raw_counts": {
+            "n": 21,
+            "min": 1347,
+            "max": 1347,
+            "mean": 1347,
+            "sample_std": 0.0,
+            "p50": 1347.0,
+            "p95": 1347.0,
+            "p99": 1347.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 3.1447291374206543,
+            "max": 3.1447291374206543,
+            "mean": 3.1447291374206543,
+            "sample_std": 0.0,
+            "p50": 3.1447291374206543,
+            "p95": 3.1447291374206543,
+            "p99": 3.1447291374206543
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 22,
+            "max": 22,
+            "mean": 22,
+            "sample_std": 0.0,
+            "p50": 22.0,
+            "p95": 22.0,
+            "p99": 22.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "received_count_start": 90827,
+          "received_count_end": 154319,
+          "raw_counts": {
+            "n": 21,
+            "min": 3730,
+            "max": 3730,
+            "mean": 3730,
+            "sample_std": 0.0,
+            "p50": 3730.0,
+            "p95": 3730.0,
+            "p99": 3730.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 1.570020318031311,
+            "max": 1.570020318031311,
+            "mean": 1.570020318031311,
+            "sample_std": 0.0,
+            "p50": 1.570020318031311,
+            "p95": 1.570020318031311,
+            "p99": 1.570020318031311
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 22,
+            "max": 22,
+            "mean": 22,
+            "sample_std": 0.0,
+            "p50": 22.0,
+            "p95": 22.0,
+            "p99": 22.0
+          },
+          "position_lost_observed": false,
+          "unwrapped_angle_valid_for_analysis": true,
+          "external_angle_reference_rad": null
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "received_count_start": 91914,
+          "received_count_end": 156120,
+          "raw_counts": {
+            "n": 21,
+            "min": 3033,
+            "max": 3035,
+            "mean": 3034.095238095238,
+            "sample_std": 0.4364357804719848,
+            "p50": 3034.0,
+            "p95": 3035.0,
+            "p99": 3035.0
+          },
+          "reported_arm_rad": {
+            "n": 21,
+            "min": 0.07467047870159149,
+            "max": 0.07467047870159149,
+            "mean": 0.07467047870159149,
+            "sample_std": 0.0,
+            "p50": 0.07467047870159149,
+            "p95": 0.07467047870159149,
+            "p99": 0.07467047870159149
+          },
+          "temperature_c": {
+            "n": 21,
+            "min": 23,
+            "max": 23,
+            "mean": 23,
+            "sample_std": 0.0,
+            "p50": 23.0,
+            "p95": 23.0,
+            "p99": 23.0
+          },
+          "position_lost_observed": true,
+          "unwrapped_angle_valid_for_analysis": false,
+          "external_angle_reference_rad": null
+        }
+      ],
+      "errors": {
+        "tx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "rx_error": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "bus_off": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        },
+        "fifo_overflow": {
+          "start": 2,
+          "end": 2,
+          "delta_u32": 0
+        },
+        "tx_failed": {
+          "start": 0,
+          "end": 0,
+          "delta_u32": 0
+        }
+      },
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        36
+      ],
+      "s1_values": [
+        2
+      ],
+      "enable_commands_max": 0,
+      "nonzero_torque_frames_max": 0,
+      "control_overruns_start_end": [
+        0,
+        0
+      ],
+      "stored_control_max_loop_us": 25,
+      "active_inference_measured": false,
+      "inference_duration_percentiles_us": null,
+      "loop_duration_percentiles_us": null,
+      "loop_timing_limit": "Firmware stores a running maximum only; STOP measurements cannot establish ACTIVE single/dual-actor worst case.",
+      "joint_q_and_odometry_valid": false,
+      "invalid_state_reason": "inhibit has geometry bit32 and motor bit4; copied q/xy zeros are not true physical zero or a drift measurement.",
+      "imu_static": {
+        "all_calibrated": true,
+        "samples_start_end": [
+          91446,
+          155333
+        ],
+        "drdy_edges_start_end": [
+          182698,
+          310312
+        ],
+        "gyro_corrected_rad_s": [
+          {
+            "n": 21,
+            "min": -0.007329031825065613,
+            "max": 0.0075846705585718155,
+            "mean": 0.00012781936675310135,
+            "sample_std": 0.004405097158504767,
+            "p50": 0.00012781936675310135,
+            "p95": 0.0075846705585718155,
+            "p99": 0.0075846705585718155
+          },
+          {
+            "n": 21,
+            "min": -0.034515634179115295,
+            "max": 0.021943382918834686,
+            "mean": -0.0036736892680415793,
+            "sample_std": 0.01304884268903074,
+            "p50": -0.005753491073846817,
+            "p95": 0.01981285586953163,
+            "p99": 0.021517277508974076
+          },
+          {
+            "n": 21,
+            "min": -0.023143399506807327,
+            "max": 0.033315617591142654,
+            "mean": 0.0008504135600690331,
+            "sample_std": 0.014397312557573906,
+            "p50": -0.0007728466298431158,
+            "p95": 0.024793501943349838,
+            "p99": 0.0316111944615841
+          }
+        ],
+        "acceleration_m_s2": [
+          {
+            "n": 21,
+            "min": 2.0621118545532227,
+            "max": 2.256108522415161,
+            "mean": 2.1606497651054744,
+            "sample_std": 0.048897627084454144,
+            "p50": 2.155517578125,
+            "p95": 2.2489233016967773,
+            "p99": 2.2546714782714843
+          },
+          {
+            "n": 21,
+            "min": -1.1783496141433716,
+            "max": -0.9843530654907227,
+            "mean": -1.0890496117728097,
+            "sample_std": 0.04991270320579914,
+            "p50": -1.092128872871399,
+            "p95": -1.0130932331085205,
+            "p99": -0.9901010990142822
+          },
+          {
+            "n": 21,
+            "min": 9.369316101074219,
+            "max": 9.584868431091309,
+            "mean": 9.475381624130975,
+            "sample_std": 0.056525275029396825,
+            "p50": 9.469907760620117,
+            "p95": 9.577683448791504,
+            "p99": 9.583431434631347
+          }
+        ],
+        "yaw_start_end_deg": [
+          -1.8862986791677105,
+          -3.0839377722967733
+        ],
+        "yaw_delta_deg": -1.1976390931290628,
+        "yaw_linear_slope_deg_s": -0.018771503496686655,
+        "drift_uncertainty_deg_s": null,
+        "interpretation": "Supported static onboard estimate; no external angle truth, temperature or vibration control; not an error bound or completed T5."
+      }
+    }
+  },
+  "bounded_window_summaries": {
+    "bounded_retry1": {
+      "frame_count": 32,
+      "rejected_slots": [],
+      "tick_first_last": [
+        958043,
+        958105
+      ],
+      "tick_span_ms": 62,
+      "tick_gap_ms": {
+        "n": 31,
+        "min": 2,
+        "max": 2,
+        "mean": 2,
+        "sample_std": 0.0,
+        "p50": 2.0,
+        "p95": 2.0,
+        "p99": 2.0
+      },
+      "all_gaps_2ms": true,
+      "motor_age_ms": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 3,
+            "mean": 1.0625,
+            "sample_std": 0.3535533905932738,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 2.3800000000000026
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "age": {
+            "n": 32,
+            "min": 0,
+            "max": 1,
+            "mean": 0.96875,
+            "sample_std": 0.1767766952966369,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        }
+      ],
+      "imu_age_ms": {
+        "n": 32,
+        "min": 1,
+        "max": 1,
+        "mean": 1,
+        "sample_std": 0.0,
+        "p50": 1.0,
+        "p95": 1.0,
+        "p99": 1.0
+      },
+      "remote_age_ms": {
+        "n": 32,
+        "min": 1,
+        "max": 13,
+        "mean": 7.125,
+        "sample_std": 3.8999586432877513,
+        "p50": 7.0,
+        "p95": 13.0,
+        "p99": 13.0
+      },
+      "imu_all_within_5ms": true,
+      "remote_all_within_100ms": true,
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        36
+      ],
+      "fault_values": [
+        0
+      ],
+      "unwrap_ambiguous_last": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "imu_missed_edges_first_last": [
+        955423,
+        955485
+      ],
+      "missed_edges_definition": "Sum of max(DRDY edge increment minus one,0) between SPI reads; not automatically CAN/IMU packet loss rate.",
+      "control_version": "0x20261115",
+      "model_version": 100,
+      "getup_model_version": 0,
+      "external_synchronization_error_ms": null,
+      "uncertainty": "Millisecond MCU time quantization plus unknown sensor/internal delay.",
+      "capture_interference": "CPU paused during RAM export after these frames, then resumed; no continuous 60s guarantee."
+    },
+    "bounded": {
+      "frame_count": 32,
+      "rejected_slots": [],
+      "tick_first_last": [
+        204809,
+        204871
+      ],
+      "tick_span_ms": 62,
+      "tick_gap_ms": {
+        "n": 31,
+        "min": 2,
+        "max": 2,
+        "mean": 2,
+        "sample_std": 0.0,
+        "p50": 2.0,
+        "p95": 2.0,
+        "p99": 2.0
+      },
+      "all_gaps_2ms": true,
+      "motor_age_ms": [
+        {
+          "label": "right_hip_DM4",
+          "id": "0x304",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 2,
+            "mean": 1.03125,
+            "sample_std": 0.1767766952966369,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.6900000000000013
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "right_knee_DM3",
+          "id": "0x303",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "right_wheel_M3508_3",
+          "id": "0x203",
+          "age": {
+            "n": 32,
+            "min": 204809,
+            "max": 204871,
+            "mean": 204840,
+            "sample_std": 18.76166303929372,
+            "p50": 204840.0,
+            "p95": 204867.9,
+            "p99": 204870.38
+          },
+          "all_within_30ms": false
+        },
+        {
+          "label": "left_hip_DM1",
+          "id": "0x301",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_knee_DM2",
+          "id": "0x302",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        },
+        {
+          "label": "left_wheel_M3508_2",
+          "id": "0x202",
+          "age": {
+            "n": 32,
+            "min": 1,
+            "max": 1,
+            "mean": 1,
+            "sample_std": 0.0,
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0
+          },
+          "all_within_30ms": true
+        }
+      ],
+      "imu_age_ms": {
+        "n": 32,
+        "min": 1,
+        "max": 1,
+        "mean": 1,
+        "sample_std": 0.0,
+        "p50": 1.0,
+        "p95": 1.0,
+        "p99": 1.0
+      },
+      "remote_age_ms": {
+        "n": 32,
+        "min": 2,
+        "max": 14,
+        "mean": 7.875,
+        "sample_std": 3.8999586432877513,
+        "p50": 8.0,
+        "p95": 14.0,
+        "p99": 14.0
+      },
+      "imu_all_within_5ms": true,
+      "remote_all_within_100ms": true,
+      "mode_values": [
+        0
+      ],
+      "inhibit_values": [
+        36
+      ],
+      "fault_values": [
+        0
+      ],
+      "unwrap_ambiguous_last": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "imu_missed_edges_first_last": [
+        204106,
+        204168
+      ],
+      "missed_edges_definition": "Sum of max(DRDY edge increment minus one,0) between SPI reads; not automatically CAN/IMU packet loss rate.",
+      "control_version": "0x20261115",
+      "model_version": 100,
+      "getup_model_version": 0,
+      "external_synchronization_error_ms": null,
+      "uncertainty": "Millisecond MCU time quantization plus unknown sensor/internal delay.",
+      "capture_interference": "CPU paused during RAM export after these frames, then resumed; no continuous 60s guarantee."
+    }
+  },
+  "snapshot_count": 56,
+  "bounded_frame_count": 64,
+  "artifact_count": 773
+}

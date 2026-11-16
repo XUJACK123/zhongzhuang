@@ -1,0 +1,26 @@
+diff --git a/ref_document/chassis_ref_new/openocd_stlink.cfg b/ref_document/chassis_ref_new/openocd_stlink.cfg
+index 3e53af2..c39705b 100644
+--- a/ref_document/chassis_ref_new/openocd_stlink.cfg
++++ b/ref_document/chassis_ref_new/openocd_stlink.cfg
+@@ -1,10 +1,18 @@
+ # STM32H723VG, single Cortex-M7, single flash bank.
+-# Uses the project's pinned OpenOCD 0.12.0-rc2 ST-Link HLA driver.
+-source [find interface/stlink.cfg]
+-transport select hla_swd
++# Native ST-Link exposes AP2, needed to prepare debug clocks before CPUID reads.
++source [find interface/stlink-dap.cfg]
++transport select dapdirect_swd
+ set CHIPNAME stm32h723
+ set DUAL_CORE 0
+ set DUAL_BANK 0
+ source [find target/stm32h7x.cfg]
+ reset_config none
+ adapter speed 100
++
++# The running firmware uses WFI. With DBGMCU_CR=0, CPUID was read as zero;
++# enabling these standard STM32H7 debug clocks restored Cortex-M7 access.
++# Do this before examination; the stock examine-end hook runs too late.
++# No target reset, halt, resume, flash or motor commands are issued here.
++stm32h723.cpu0 configure -event examine-start {
++    stm32h7x_dbgmcu_mmw 0x004 0x00600007 0
++}

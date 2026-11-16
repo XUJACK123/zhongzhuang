@@ -1,0 +1,322 @@
+{
+  "received": 8243057,
+  "other": 0,
+  "tx_error": 0,
+  "rx_error": 0,
+  "bus_off": 0,
+  "last_error": 0,
+  "tx_queued": 1667786,
+  "nonzero_torque_frames": 0,
+  "enable_commands": 0,
+  "status_samples": 1389823,
+  "nodes": [
+    {
+      "label": "right_hip_DM4",
+      "feedback_id": "0x304",
+      "received": 1338164,
+      "last_ms": 1390034,
+      "encoder_counts": 3611,
+      "encoder_total_counts": 3611,
+      "temperature_c": 24,
+      "status_byte": 1,
+      "data": "0e 1b ff f6 00 04 18 01"
+    },
+    {
+      "label": "right_knee_DM3",
+      "feedback_id": "0x303",
+      "received": 1355708,
+      "last_ms": 1390041,
+      "encoder_counts": 3252,
+      "encoder_total_counts": 3252,
+      "temperature_c": 24,
+      "status_byte": 0,
+      "data": "0c b4 00 0f ff fd 18 00"
+    },
+    {
+      "label": "right_wheel_M3508_3",
+      "feedback_id": "0x203",
+      "received": 1398676,
+      "last_ms": 1390055,
+      "encoder_counts": 32,
+      "encoder_total_counts": 8224,
+      "temperature_c": 23,
+      "status_byte": 0,
+      "data": "00 20 00 00 ff bc 17 00"
+    },
+    {
+      "label": "left_hip_DM1",
+      "feedback_id": "0x301",
+      "received": 1383402,
+      "last_ms": 1390062,
+      "encoder_counts": 1336,
+      "encoder_total_counts": 1336,
+      "temperature_c": 23,
+      "status_byte": 1,
+      "data": "05 38 ff fe ff e9 17 01"
+    },
+    {
+      "label": "left_knee_DM2",
+      "feedback_id": "0x302",
+      "received": 1370162,
+      "last_ms": 1390070,
+      "encoder_counts": 3719,
+      "encoder_total_counts": 3719,
+      "temperature_c": 23,
+      "status_byte": 1,
+      "data": "0e 87 ff f8 00 16 17 01"
+    },
+    {
+      "label": "left_wheel_M3508_2",
+      "feedback_id": "0x202",
+      "received": 1397200,
+      "last_ms": 1390080,
+      "encoder_counts": 1874,
+      "encoder_total_counts": 1873,
+      "temperature_c": 23,
+      "status_byte": 0,
+      "data": "07 52 00 00 00 01 17 00"
+    }
+  ],
+  "chassis": {
+    "tick": 1390101,
+    "inhibit": 0,
+    "fault": 0,
+    "cycles": 694953,
+    "policy_runs": 0,
+    "inference_us": 0,
+    "max_loop_us": 39,
+    "overruns": 0,
+    "mode": 0,
+    "actor_selftest": 1
+  },
+  "remote": {
+    "channels": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "s1": 2,
+    "s2": 2,
+    "tick": 1390148,
+    "valid_frames": 99209,
+    "rejected": 0,
+    "valid": true
+  },
+  "imu": {
+    "tick": 1390228,
+    "samples": 1390028,
+    "calibration_samples": 2000,
+    "errors": 0,
+    "initialized": true,
+    "calibrated": true,
+    "quaternion_wxyz": [
+      0.9945458173751831,
+      -0.020141279324889183,
+      -0.04044244810938835,
+      0.09404072910547256
+    ],
+    "omega_body_rad_s": [
+      -0.022779615595936775,
+      -0.008203601464629173,
+      0.0030402643606066704
+    ],
+    "accel_body_m_s2": [
+      0.790356457233429,
+      -0.6035449504852295,
+      9.75012493133545
+    ],
+    "gravity_body": [
+      -0.07660292834043503,
+      0.04805361106991768,
+      -0.9959016442298889
+    ],
+    "yaw_rad": 0.1904868483543396,
+    "motion_resets": 0,
+    "cadence_resets": 0,
+    "max_gap_ms": 2,
+    "drdy_edges": 2776464
+  },
+  "board_debug": {
+    "init_stage": 4,
+    "rx_starts": 99232,
+    "rx_start_failures": 0,
+    "rx_events": 99231,
+    "uart_errors": 0,
+    "irq_count": 1885396,
+    "cr1": 5429,
+    "isr": 4329664,
+    "uart_clock": 1048576,
+    "rx_state": 34
+  },
+  "measurement": {
+    "joint_position_rad": [
+      3.131690263748169,
+      -2.9474732875823975,
+      -0.2229488641023636,
+      -3.1362924575805664,
+      2.9955790042877197,
+      -0.0373835414648056
+    ],
+    "joint_velocity_rad_s": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "root_xy_m": [
+      0.07456812262535095,
+      0.025399770587682724
+    ],
+    "body_velocity_xy_m_s": [
+      0.004305101931095123,
+      0.005922297015786171
+    ]
+  },
+  "tx_failed": 0,
+  "fifo_overflow": 0,
+  "rl": {
+    "action": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "command": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "reference_yaw": 0.0,
+    "target_q": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "target_qd": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "joint_torque": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "motor_torque": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "tag": "imu_level_verification_000",
+  "mcu_read_bracket": {
+    "tick_before": 1389979,
+    "tick_after": 1391103,
+    "elapsed_ms_u32": 1124,
+    "not_synchronous": true
+  },
+  "motor_bank": [
+    {
+      "label": "right_hip_DM4",
+      "raw": 3611,
+      "counts": 3611,
+      "arm_rad": 3.131690263748169,
+      "velocity_rad_s": 0.004188790451735258,
+      "protocol_feedback_value": 0.004000000189989805,
+      "protocol_feedback_unit": "Nm",
+      "motor_tick": 1390334,
+      "motor_received": 1338355,
+      "temperature_c": 24,
+      "state": 1,
+      "position_lost": false
+    },
+    {
+      "label": "right_knee_DM3",
+      "raw": 3252,
+      "counts": 3252,
+      "arm_rad": 1.612204909324646,
+      "velocity_rad_s": -0.004188790451735258,
+      "protocol_feedback_value": 0.007000000216066837,
+      "protocol_feedback_unit": "Nm",
+      "motor_tick": 1390355,
+      "motor_received": 1355914,
+      "temperature_c": 24,
+      "state": 0,
+      "position_lost": false
+    },
+    {
+      "label": "right_wheel_M3508_3",
+      "raw": 32,
+      "counts": 8224,
+      "arm_rad": -0.2229488641023636,
+      "velocity_rad_s": -0.0,
+      "protocol_feedback_value": 0.0048828125,
+      "protocol_feedback_unit": "A",
+      "motor_tick": 1390374,
+      "motor_received": 1398911,
+      "temperature_c": 23,
+      "state": 1,
+      "position_lost": false
+    },
+    {
+      "label": "left_hip_DM1",
+      "raw": 1336,
+      "counts": 1336,
+      "arm_rad": 3.1362924575805664,
+      "velocity_rad_s": 0.0031415927223861217,
+      "protocol_feedback_value": -0.012000000104308128,
+      "protocol_feedback_unit": "Nm",
+      "motor_tick": 1390391,
+      "motor_received": 1383638,
+      "temperature_c": 23,
+      "state": 1,
+      "position_lost": false
+    },
+    {
+      "label": "left_knee_DM2",
+      "raw": 3719,
+      "counts": 3719,
+      "arm_rad": 1.561583399772644,
+      "velocity_rad_s": 0.008377580903470516,
+      "protocol_feedback_value": 0.010000000707805157,
+      "protocol_feedback_unit": "Nm",
+      "motor_tick": 1390408,
+      "motor_received": 1370406,
+      "temperature_c": 23,
+      "state": 1,
+      "position_lost": false
+    },
+    {
+      "label": "left_wheel_M3508_2",
+      "raw": 1873,
+      "counts": 1873,
+      "arm_rad": -0.0373835414648056,
+      "velocity_rad_s": 0.0,
+      "protocol_feedback_value": 0.00244140625,
+      "protocol_feedback_unit": "A",
+      "motor_tick": 1390422,
+      "motor_received": 1397461,
+      "temperature_c": 23,
+      "state": 1,
+      "position_lost": false
+    }
+  ]
+}

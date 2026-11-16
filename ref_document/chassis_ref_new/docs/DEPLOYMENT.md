@@ -174,3 +174,11 @@ Cortex-Debug 的 Live Watch 请使用下列当前符号（旧固件的 `motor_ca
 Live Watch 每次采样都要读内存；输出使能期间高频轮询会使 `g_can_rx_overflow` 增加并让 DM 上报通信丢失
 （`state=0x0D`），从而重新置位 `inhibit` 的 16/4 位。出力测试时把 `samplesPerSecond` 降到 1 或关闭
 Live Watch，改用 `python tools/monitor_can.py --fast` 事后核对计数。
+
+
+<!-- CAN_ARBITRATION_20261116 -->
+## 2026-11-16 CAN仲裁发送与有效期
+
+已将自动重发设为ENABLE。关闭重发时，丢仲裁的请求也会被取消，不能以HAL入队成功或错误计数为0作为报文已送达的证据，见[控制器手册§3.1.7](https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/m_can/mcan_users_manual_v331.pdf)。队列按HAL返回的发送缓冲位记录，pending的非零力矩达到4ms时请求取消；零输出/停机帧保留发送机会，故障停机仍取消全部待发帧。
+
+主机测试覆盖有效期边界、已完成请求、零帧、缓冲复用和tick回绕。独立诊断测到修复前活动组控最长75.984ms断档；修复后仅零输出条件确认约500.6Hz、最大2.768ms。新正常RL镜像尚未烧录，不能把这次验证当作生产策略时序、主动停车或平衡通过。数据与原始日志见real_data_collection/identification/can_arbitration_comparison.json。
