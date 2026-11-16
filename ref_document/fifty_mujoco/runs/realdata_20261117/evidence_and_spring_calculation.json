@@ -1,0 +1,112 @@
+{
+  "schema": "realdata_training_evidence_v1",
+  "evidence_kind": "derived_and_provisional_not_new_measurement",
+  "input_sha256": {
+    "chassis_ref_new/real_data_collection/physical_measurements_priority_20261116.json": "95c89b35410b5bbf9c5f495ce8ea1dcd1eac0786dd330d30aabfbc3e3f752bb7",
+    "chassis_ref_new/real_data_collection/field_measurements_20261116_205507/marked_wheel_result.json": "8961f4ca5146d1e8ae749a92f12277a93e551be83e5e444be4e1cf15358af300",
+    "chassis_ref_new/real_data_collection/field_measurements_20261116_205507/manual_angle_reference.json": "827105e2a542cde27b9b4933c30fdaf4aa0b2e9486c4381967567d6914bfe7a6",
+    "chassis_ref_new/real_data_collection/cad_reference_for_field_measurements_20261116.json": "5b0d7160d747c0068c06d4b46fa46832cba7ca1cab2847381663fc96b321dd14",
+    "chassis_ref_new/real_data_collection/identification/manufacturer_bg450/spring_curve_reference.json": "7fb836d459197b2e9c0b3cb00c198818b4ac6b591d77dbfcaef61a029106e7e9"
+  },
+  "step": {
+    "path": "/home/xy/Desktop/zhongzhuang/26英雄整车总装2.0.STEP",
+    "bytes": 264168116,
+    "sha256": "ffe77c10b183a47c44bb96d829f2a1356c3d644de409979af5ab5da6bd00a055",
+    "evidence": "cad_extracted"
+  },
+  "accepted_mass_kg": 21.9,
+  "mass_source": "operator accepted existing 21.9 kg record; no fresh weighing",
+  "wheel": {
+    "effective_radius_m": 0.05570423008216337,
+    "equation": "700 mm / (2 marked turns * 2*pi)",
+    "left_is_symmetry_assumption": true,
+    "geometric_outer_diameter_m": 0.115,
+    "ratio_15_88_not_verified_by_lost_encoder_trial": true
+  },
+  "geometry": {
+    "thigh_m": 0.21,
+    "shin_m": 0.25,
+    "pin_offset_m": 0.011,
+    "cad_pin_at_assembly_m": 0.19494962151452186,
+    "pin_m_from_coarse_120deg_included": 0.22573612566070186,
+    "reported_pin_m": 0.24,
+    "residual_m": 0.014263874339298127,
+    "included_knee_deg_implied_by_240mm_CAD_pins": 144.8759555419766,
+    "geometry_not_refit_to_inconsistent_coarse_readings": true
+  },
+  "pressure_calculation": {
+    "equation": "F = gauge_pressure * pi * effective_diameter^2 / 4",
+    "rows": [
+      {
+        "assumed_effective_diameter_m": 0.006,
+        "area_m2": 2.8274333882308137e-05,
+        "force_n_at_9_12_15_MPa": [
+          254.46900494077323,
+          339.29200658769764,
+          424.11500823462205
+        ],
+        "pressure_bar_for_450N": 159.15494309189535
+      },
+      {
+        "assumed_effective_diameter_m": 0.01,
+        "area_m2": 7.853981633974483e-05,
+        "force_n_at_9_12_15_MPa": [
+          706.8583470577034,
+          942.4777960769379,
+          1178.0972450961724
+        ],
+        "pressure_bar_for_450N": 57.29577951308233
+      }
+    ],
+    "actual_pressure_MPa": null,
+    "diameter_10mm_measured_part_unverified": true,
+    "not_an_independent_spring_force_measurement": true
+  },
+  "spring_candidate": {
+    "installed_model": "BG450-080",
+    "catalogue_proxy": "BKB0.45; exact model equivalence unverified",
+    "free_pin_distance_m": 0.25,
+    "stroke_m": 0.08,
+    "initial_force_n": 450.0,
+    "progression_at_full_stroke": 1.7,
+    "polytropic_exponent": 1.2,
+    "seal_friction_n": 15.0,
+    "viscous_damping_ns_m": 20.0,
+    "friction_smoothing_m_s": 0.01,
+    "provenance": "450 N/progression are catalogue-proxy assumptions, not this spring's measured force. 250 mm pin endpoint provisional; 080 interpreted as 80 mm stroke. Friction/damping are sensitivity hypotheses."
+  },
+  "spring_model_equation": "F0 * (D/(D-(Lfree-L)))^n - Fseal*tanh(Ldot/vsmooth) - c*Ldot; push force clipped at zero",
+  "dead_length_equation": "D = stroke / (1 - progression^(-1/n))",
+  "manufacturer_source": "https://www.bbkspring.com/standard-gas-spring/compact-nitrogen-spring",
+  "exact_BG450_to_BKB_equivalence_verified": false,
+  "manufacturer_journey_units_explicit": false,
+  "hysteresis_status": "15 N seal friction and 20 N s/m damping are engineering sensitivity hypotheses, not measured loops",
+  "rotor_inertia": {
+    "leg_motor_output_kg_m2": 0.01,
+    "wheel_output_kg_m2": 0.001,
+    "approximation": "Diagonal approximation to B(q)^T J B(q), evaluated at default pose; omits cross terms. J_output=81*0.5*0.2kg*(0.035m)^2=0.0099225 kg m2 is a geometric rotor hypothesis, not a measured rotor."
+  },
+  "standing_target": {
+    "default_rad": [
+      2.7819044070401433,
+      -3.273633415309531,
+      0,
+      -2.7819044070401433,
+      3.273633415309531,
+      0
+    ],
+    "root_height_m": 0.35,
+    "clearance_m": 0.1750239065885657,
+    "evidence": "simulation IK design, not encoder calibration"
+  },
+  "missing_measurements": [
+    "actual spring pressure and exact-model force-stroke loops",
+    "independent motor torque",
+    "actual stroke endpoints and precision zero references",
+    "full mass inertia tensor",
+    "unassisted zero-output rest",
+    "continuous active timing and IMU dynamic truth"
+  ],
+  "hardware_changed_or_accessed": false,
+  "T3_or_T4_marked_measured_pass": false
+}

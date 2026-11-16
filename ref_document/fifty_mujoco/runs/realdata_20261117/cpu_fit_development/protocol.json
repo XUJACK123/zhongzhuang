@@ -1,0 +1,55 @@
+[
+  {
+    "label": "cpu_fit_near",
+    "checkpoint": "runs/realdata_20261117/allocator_full_cpu_fit/actor.pt",
+    "balance": "runs/realdata_20261117/feedback_grid_survey/balance_rank01.pt",
+    "reset_range": [
+      0,
+      0.2
+    ],
+    "count": 4,
+    "seed_base": 616400,
+    "split": "development",
+    "out": "runs/realdata_20261117/cpu_fit_development/cpu_fit_near.json"
+  },
+  {
+    "label": "cpu_fit_mixed",
+    "checkpoint": "runs/realdata_20261117/allocator_full_cpu_fit/actor.pt",
+    "balance": "runs/realdata_20261117/feedback_grid_survey/balance_rank01.pt",
+    "reset_range": [
+      0,
+      1
+    ],
+    "count": 4,
+    "seed_base": 616400,
+    "split": "development",
+    "out": "runs/realdata_20261117/cpu_fit_development/cpu_fit_mixed.json"
+  },
+  {
+    "label": "cpu_fit_full",
+    "checkpoint": "runs/realdata_20261117/allocator_full_cpu_fit/actor.pt",
+    "balance": "runs/realdata_20261117/feedback_grid_survey/balance_rank01.pt",
+    "reset_range": [
+      1,
+      1
+    ],
+    "count": 4,
+    "seed_base": 616400,
+    "split": "development",
+    "out": "runs/realdata_20261117/cpu_fit_development/cpu_fit_full.json"
+  },
+  {
+    "label": "cpu_fit_long_full",
+    "checkpoint": "runs/realdata_20261117/allocator_full_cpu_fit/actor.pt",
+    "balance": "runs/realdata_20261117/feedback_grid_survey/balance_rank01.pt",
+    "reset_range": [
+      1,
+      1
+    ],
+    "count": 2,
+    "seed_base": 616400,
+    "split": "development",
+    "balance_s": 30.0,
+    "out": "runs/realdata_20261117/cpu_fit_development/cpu_fit_long_full.json"
+  }
+]

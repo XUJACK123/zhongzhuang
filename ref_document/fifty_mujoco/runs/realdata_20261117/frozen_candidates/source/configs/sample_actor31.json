@@ -1,0 +1,225 @@
+{
+  "schema": "sample_actor31_v1",
+  "status": "offline_reference_runtime_unverified",
+  "runtime_enabled": false,
+  "source": {
+    "archive": "sample_weight_file",
+    "checkpoint": "artifacts/model_3050.pt",
+    "source_commit": "019a4b63f2e33f2473a656ae0cbda1a1b3a6e4e0",
+    "default_angles": [
+      3.1063109024878943,
+      -3.6606010515197696,
+      0,
+      -3.1063109024878943,
+      3.6606010515197696,
+      0
+    ],
+    "root_z_m": 0.2749762,
+    "root_quaternion_xyzw": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "profile": "artifacts/training_profile.json",
+    "environment": "artifacts/env_cfg.json"
+  },
+  "network": {
+    "actor_sizes": [
+      31,
+      128,
+      64,
+      32,
+      6
+    ],
+    "critic_sizes": [
+      147,
+      256,
+      128,
+      64,
+      1
+    ],
+    "activation": "elu",
+    "encoder": false,
+    "history_required": false,
+    "checkpoint_state_key": "model_state_dict",
+    "load_actor_strict": true,
+    "complete_resume_supported": false
+  },
+  "joint_order": [
+    "rf0_Joint",
+    "rf1_Joint",
+    "r_wheel_Joint",
+    "lf0_Joint",
+    "lf1_Joint",
+    "l_wheel_Joint"
+  ],
+  "observations": {
+    "dimension": 31,
+    "layout": [
+      {
+        "slice": [
+          0,
+          3
+        ],
+        "name": "angular_velocity_body",
+        "scale": 0.25
+      },
+      {
+        "slice": [
+          3,
+          6
+        ],
+        "name": "projected_gravity_body",
+        "scale": 1
+      },
+      {
+        "slice": [
+          6,
+          9
+        ],
+        "name": "applied_commands_vx_wz_clearance",
+        "scale": [
+          2,
+          0.25,
+          5
+        ]
+      },
+      {
+        "slice": [
+          9,
+          13
+        ],
+        "name": "leg_position_relative_to_source_defaults",
+        "leg_indices": [
+          0,
+          1,
+          3,
+          4
+        ],
+        "periodic_hip_indices": [
+          0,
+          3
+        ]
+      },
+      {
+        "slice": [
+          13,
+          19
+        ],
+        "name": "joint_velocity",
+        "scale": 0.05
+      },
+      {
+        "slice": [
+          19,
+          25
+        ],
+        "name": "previous_clipped_action"
+      },
+      {
+        "slice": [
+          25,
+          31
+        ],
+        "name": "reference_position_heading_errors_and_body_xy_velocity"
+      }
+    ],
+    "command_scales": [
+      2,
+      0.25,
+      5
+    ],
+    "clip": 100,
+    "additional_features": [
+      "clip(5*body_dx,-2,2)",
+      "clip(5*body_dy,-2,2)",
+      "sin(reference_yaw-yaw)",
+      "cos(reference_yaw-yaw)-1",
+      "2*body_vx",
+      "2*body_vy"
+    ],
+    "base_implementation_status": "original_revision_missing_scales_and_time_alignment_require_reproduction",
+    "velocity_source": "position_difference_original_sampling_and_wrap_pending"
+  },
+  "commands": {
+    "order": [
+      "forward_m_s",
+      "yaw_rad_s",
+      "bottom_clearance_m"
+    ],
+    "source_forward_range": [
+      0.1,
+      0.3
+    ],
+    "source_yaw_range": [
+      -2.5,
+      2.5
+    ],
+    "source_clearance_m": 0.1,
+    "slew_rates": [
+      1.5,
+      6.283185307179586,
+      0.12
+    ],
+    "reference_offset_xy_m": [
+      -0.07828434314112345,
+      0.003702250000000018
+    ],
+    "lateral_velocity_command": false,
+    "backward": "out_of_training_range_requires_evaluation"
+  },
+  "actions": {
+    "leg_position_scale": 0.5,
+    "wheel_velocity_scale": 20,
+    "clip_per_channel": [
+      1,
+      1,
+      2,
+      1,
+      1,
+      2
+    ],
+    "kp": [
+      40,
+      60,
+      0,
+      40,
+      60,
+      0
+    ],
+    "kd": [
+      2,
+      2,
+      0.3,
+      2,
+      2,
+      0.3
+    ],
+    "knee_limits": [
+      [
+        -4.296127953784042,
+        -2.5592683579936732
+      ],
+      [
+        2.559268357993676,
+        4.296127953784042
+      ]
+    ],
+    "physical_motor_model": "artifacts/actuator_model.py::CoupledActuators",
+    "independent_generalized_torque_clipping": false
+  },
+  "timing": {
+    "policy_dt_s": 0.01,
+    "external_PD_dt_s": 0.005,
+    "source_integrator_substeps": 2
+  },
+  "pending": [
+    "original_base_environment_revision",
+    "exact_reset_and_step_timing",
+    "source_MJCF",
+    "Torch_strict_load_and_inference_parity",
+    "target_model_transfer",
+    "command_evaluation"
+  ]
+}

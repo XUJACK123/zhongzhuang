@@ -1,0 +1,19 @@
+{
+  "scope": "Numerical audit of saved CPU simulation signals; seed/weight provenance must be audited separately.",
+  "trace_sha256": "19e201a09245191111a77218d48a4a3b2da24318dc024a2172f160bb4149c116",
+  "checks": {
+    "finite": true,
+    "continuous_100hz_clock": true,
+    "zero_active_stop": true,
+    "motor_caps": true,
+    "action_caps": true,
+    "unassisted_dwell": true,
+    "handoff": true,
+    "frozen_balance": false,
+    "physical_knee_boundaries": true
+  },
+  "passed": false,
+  "dwell_ticks": 101,
+  "handoff_ticks": 30,
+  "balance_ticks": 242
+}

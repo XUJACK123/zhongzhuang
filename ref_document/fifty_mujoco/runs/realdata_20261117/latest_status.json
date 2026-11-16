@@ -1,0 +1,1653 @@
+{
+  "updated_at": "2026-11-17T06:05:27.587434+08:00",
+  "scope": "Offline simulation experiments. Each development count has its own curriculum/configuration; do not pool as acceptance.",
+  "gpu": "NVIDIA GeForce RTX 5060 Laptop GPU, 26 %, 13 MiB, 46, 11.30 W",
+  "runs": [
+    {
+      "run": "balance350_v1",
+      "latest": {
+        "update": 50,
+        "transitions": 204800,
+        "wall_s": 643.2211774720004,
+        "sample_s": 9.060872226000356,
+        "optimization_s": 0.6648080880004272,
+        "samples_per_s": 452.0536100538362,
+        "reward_mean": 0.041033223271369934,
+        "outcomes": [
+          {
+            "time_s": 7.849999999998369,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 7.1199999999987735,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.080000000000196,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.170000000000226,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 6.589999999999067,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.200000000000236,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 2.5900000000000323,
+            "failure": "base_ground_contact",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          }
+        ],
+        "value_loss": 0.6730401813983917,
+        "policy_loss": -0.0013526290276786312,
+        "entropy": -7.578580051660538,
+        "kl": 0.0002365975425959732,
+        "critic_warmup": false,
+        "actor_kl_guard_skips": 0,
+        "actor_kl_rollbacks": 0,
+        "final_full_rollout_kl": 0.0008039036765694618,
+        "actor_learning_rate": 3.75e-06,
+        "evaluation": {
+          "rows": [
+            {
+              "seed": 611000,
+              "seconds": 7.939999999998319,
+              "failure": "base_ground_contact",
+              "passed": false,
+              "clearance_mae_m": 0.010994128187117886,
+              "tilt_p95_deg": 1.2651840572184343,
+              "vx_mae_m_s": 0.050769110764609306,
+              "displacement_max_m": 0.16069568076513813
+            },
+            {
+              "seed": 611001,
+              "seconds": 7.82999999999838,
+              "failure": "base_ground_contact",
+              "passed": false,
+              "clearance_mae_m": 0.011135011976007372,
+              "tilt_p95_deg": 1.32920383226761,
+              "vx_mae_m_s": 0.04960625029669017,
+              "displacement_max_m": 0.15860474528506438
+            },
+            {
+              "seed": 611002,
+              "seconds": 8.189999999998518,
+              "failure": "base_ground_contact",
+              "passed": false,
+              "clearance_mae_m": 0.011206594149310372,
+              "tilt_p95_deg": 1.204266919537105,
+              "vx_mae_m_s": 0.05642692204649903,
+              "displacement_max_m": 0.18181155739117616
+            },
+            {
+              "seed": 611003,
+              "seconds": 7.809999999998391,
+              "failure": "base_ground_contact",
+              "passed": false,
+              "clearance_mae_m": 0.011079034733841862,
+              "tilt_p95_deg": 1.3366682684110855,
+              "vx_mae_m_s": 0.04931173765139005,
+              "displacement_max_m": 0.15723382698146063
+            }
+          ],
+          "passed": 0,
+          "trials": 4,
+          "score": 100.39134341887913
+        }
+      },
+      "training_report": {
+        "update": 50,
+        "transitions": 204800,
+        "wall_s": 694.773752396,
+        "best_development_score": 100.39134341887913,
+        "stopped_by_signal": true,
+        "device": "cuda",
+        "workers": 8
+      },
+      "cpu_development": []
+    },
+    {
+      "run": "balance_parallel_v2",
+      "latest": {
+        "update": 12,
+        "transitions": 49152,
+        "wall_s": 142.9514402750001,
+        "sample_s": 11.45131116199991,
+        "optimization_s": 0.7734597209996537,
+        "samples_per_s": 357.6882980520333,
+        "reward_mean": 0.015389771200716496,
+        "outcomes": [
+          {
+            "time_s": 3.8000000000004364,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.2400000000002493,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.880000000000463,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 7.17999999999874,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.8300000000004464,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 4.250000000000364,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.530000000000346,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 4.0400000000004805,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.1000000000002026,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 2.8000000000001024,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.2700000000002594,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.940000000000483,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 4.340000000000314,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.5700000000003596,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 7.519999999998552,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 4.480000000000237,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.2100000000002393,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 3.0600000000001892,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          },
+          {
+            "time_s": 4.620000000000159,
+            "failure": "tilt_or_low_root",
+            "success": null,
+            "phase": null,
+            "phase_counts": null,
+            "balance_ticks": null,
+            "episode_parameters": null
+          }
+        ],
+        "value_loss": 0.5152605138719082,
+        "policy_loss": -0.00035539298551157117,
+        "entropy": -7.57662558555603,
+        "kl": 0.007043593911475909,
+        "critic_warmup": false,
+        "actor_kl_guard_skips": 0,
+        "actor_kl_rollbacks": 0,
+        "final_full_rollout_kl": 0.005410267971456051,
+        "actor_learning_rate": 3e-05
+      },
+      "training_report": {
+        "update": 12,
+        "transitions": 49152,
+        "wall_s": 145.39399637399993,
+        "best_development_score": null,
+        "stopped_by_signal": true,
+        "device": "cuda",
+        "workers": 8
+      },
+      "cpu_development": []
+    },
+    {
+      "run": "balance_v1",
+      "latest": {
+        "update": 165,
+        "transitions": 168960,
+        "wall_s": 735.4580755090001,
+        "reward_mean": 0.0018025999888777733,
+        "outcomes": [
+          {
+            "time_s": 2.1499999999998853,
+            "failure": "base_ground_contact"
+          },
+          {
+            "time_s": 2.469999999999992,
+            "failure": "base_ground_contact"
+          },
+          {
+            "time_s": 4.0400000000004805,
+            "failure": "tilt_or_low_root"
+          },
+          {
+            "time_s": 3.9200000000004764,
+            "failure": "tilt_or_low_root"
+          }
+        ],
+        "value_loss": 0.32196394447237253,
+        "policy_loss": -0.008084073779173195,
+        "entropy": -7.5837544202804565,
+        "kl": 0.0015954359948864294,
+        "critic_warmup": false,
+        "actor_kl_guard_skips": 0,
+        "actor_kl_rollbacks": 0,
+        "final_full_rollout_kl": 0.005456555634737015,
+        "actor_learning_rate": 7.5e-06
+      },
+      "training_report": {
+        "update": 166,
+        "transitions": 168960,
+        "wall_s": 735.4793382909997,
+        "stopped_by_signal": true,
+        "device": "cuda",
+        "best_development_score": 103.14288619524365
+      },
+      "cpu_development": []
+    },
+    {
+      "run": "getup_allocated_near",
+      "latest": {
+        "update": 30,
+        "transitions": 4133492,
+        "physical_policy_ticks": 9223680,
+        "wall_s": 1198.1564496970004,
+        "sampling_s": 52.5636104389996,
+        "optimization_s": 4.840482391000478,
+        "learner_steps_per_s": 2087.1473455446294,
+        "cohort_steps": 1551,
+        "cohort_successes": 32,
+        "cohort_trials": 256,
+        "failures": {
+          "balance_state_out_of_spec": 172,
+          "handoff_unstable": 34,
+          "getup_timeout": 18,
+          "null": 32
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 267.97576904296875,
+        "support_peak_moment_nm": 69.32066345214844,
+        "value_loss": 0.606170117855072,
+        "policy_loss": -0.00040550437552155927,
+        "entropy": -19.564024107796804,
+        "kl": 0.0036219517409595676,
+        "anchor_loss": 0.33767674969775335,
+        "valid_transitions": 109708,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.003285012673586607,
+        "actor_learning_rate": 5e-07
+      },
+      "training_report": {
+        "update": 30,
+        "transitions": 4133492,
+        "physical_policy_ticks": 9223680,
+        "wall_s": 1198.21575114,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": 58087
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000005.json",
+          "update": 5,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000010.json",
+          "update": 10,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000015.json",
+          "update": 15,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 252
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000020.json",
+          "update": 20,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 458
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000025.json",
+          "update": 25,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 652
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_near/cpu_development_000030.json",
+          "update": 30,
+          "passed": 1,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        }
+      ]
+    },
+    {
+      "run": "getup_allocated_survey",
+      "latest": {
+        "update": 32,
+        "transitions": 4357210,
+        "physical_policy_ticks": 7035392,
+        "wall_s": 1100.144815145999,
+        "sampling_s": 56.726064611000766,
+        "optimization_s": 3.5421063320009125,
+        "learner_steps_per_s": 1899.7968700811439,
+        "cohort_steps": 1576,
+        "cohort_successes": 16,
+        "cohort_trials": 256,
+        "failures": {
+          "balance_state_out_of_spec": 240,
+          "null": 16
+        },
+        "minimum_balance_ticks": 116.99992370605469,
+        "support_peak_force_n": 214.3492889404297,
+        "support_peak_moment_nm": 79.50325775146484,
+        "value_loss": 0.49720548199755804,
+        "policy_loss": -0.0016150642248768626,
+        "entropy": -19.565581457955496,
+        "kl": 0.0034565054005335177,
+        "anchor_loss": 0.35237496931638035,
+        "valid_transitions": 107768,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.004766230471432209,
+        "actor_learning_rate": 1e-06
+      },
+      "training_report": {
+        "update": 32,
+        "transitions": 4357210,
+        "physical_policy_ticks": 7035392,
+        "wall_s": 1100.1685852190003,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": 57486
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_allocated_survey/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_survey/cpu_development_000010.json",
+          "update": 10,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_survey/cpu_development_000015.json",
+          "update": 15,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_survey/cpu_development_000020.json",
+          "update": 20,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 151
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_survey/cpu_development_000025.json",
+          "update": 25,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 215
+        },
+        {
+          "file": "runs/realdata_20261117/getup_allocated_survey/cpu_development_000030.json",
+          "update": 30,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 479
+        }
+      ]
+    },
+    {
+      "run": "getup_feedback18_full_entry",
+      "latest": {
+        "update": 6,
+        "transitions": 1035077,
+        "physical_policy_ticks": 2036736,
+        "wall_s": 499.50575934399967,
+        "sampling_s": 92.61367259800136,
+        "optimization_s": 4.559061095000288,
+        "learner_steps_per_s": 1559.0030710337676,
+        "cohort_steps": 1326,
+        "cohort_successes": 0,
+        "cohort_trials": 256,
+        "failures": {
+          "balance_state_out_of_spec": 209,
+          "getup_timeout": 42,
+          "forbidden_floor_contact": 5
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 214.70675659179688,
+        "support_peak_moment_nm": 80.14634704589844,
+        "value_loss": 0.2748171049687598,
+        "policy_loss": -0.00026167545608283643,
+        "entropy": -19.563784466849434,
+        "kl": 0.0028379036958641438,
+        "anchor_loss": 0.004372838819916878,
+        "valid_transitions": 144385,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.00293768965639174,
+        "actor_learning_rate": 5e-07
+      },
+      "training_report": {
+        "update": 6,
+        "transitions": 1035077,
+        "physical_policy_ticks": 2036736,
+        "wall_s": 499.5326628589992,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": 63898
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_full_entry/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 210
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_full_entry/cpu_development_000005.json",
+          "update": 5,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 261
+        }
+      ]
+    },
+    {
+      "run": "getup_feedback18_mixed",
+      "latest": {
+        "update": 19,
+        "transitions": 5342765,
+        "physical_policy_ticks": 15267328,
+        "wall_s": 1598.119561256999,
+        "sampling_s": 128.97727190299884,
+        "optimization_s": 11.576171458000317,
+        "learner_steps_per_s": 2099.6955200267603,
+        "cohort_steps": 1576,
+        "cohort_successes": 176,
+        "cohort_trials": 512,
+        "failures": {
+          "balance_state_out_of_spec": 226,
+          "null": 176,
+          "getup_timeout": 72,
+          "handoff_unstable": 23,
+          "balance_displacement": 13,
+          "forbidden_floor_contact": 2
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 336.81549072265625,
+        "support_peak_moment_nm": 80.14247131347656,
+        "value_loss": 0.7870679138337865,
+        "policy_loss": 0.00044578740541028846,
+        "entropy": -19.563772313735065,
+        "kl": 0.002254638952709844,
+        "anchor_loss": 0.03828052828526672,
+        "valid_transitions": 270813,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0019572325982153416,
+        "actor_learning_rate": 5e-07
+      },
+      "training_report": {
+        "update": 19,
+        "transitions": 5342765,
+        "physical_policy_ticks": 15267328,
+        "wall_s": 1598.1470209990002,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": null
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_mixed/cpu_development_000000.json",
+          "update": 0,
+          "passed": 3,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_mixed/cpu_development_000005.json",
+          "update": 5,
+          "passed": 2,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_mixed/cpu_development_000010.json",
+          "update": 10,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 772
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_mixed/cpu_development_000015.json",
+          "update": 15,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 731
+        }
+      ]
+    },
+    {
+      "run": "getup_feedback18_near",
+      "latest": {
+        "update": 30,
+        "transitions": 3329171,
+        "physical_policy_ticks": 12103680,
+        "wall_s": 1814.7312281949999,
+        "sampling_s": 45.51026444800118,
+        "optimization_s": 4.355140753999876,
+        "learner_steps_per_s": 2364.0600929253737,
+        "cohort_steps": 1576,
+        "cohort_successes": 157,
+        "cohort_trials": 256,
+        "failures": {
+          "null": 157,
+          "handoff_unstable": 7,
+          "balance_displacement": 28,
+          "balance_state_out_of_spec": 64
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 320.47314453125,
+        "support_peak_moment_nm": 66.68455505371094,
+        "value_loss": 1.2044619545340538,
+        "policy_loss": 0.0010971690984920965,
+        "entropy": -19.563701629638672,
+        "kl": 0.0019623651968296535,
+        "anchor_loss": 0.033978472131171396,
+        "valid_transitions": 107589,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0024538917932659388,
+        "actor_learning_rate": 3e-07
+      },
+      "training_report": {
+        "update": 30,
+        "transitions": 3329171,
+        "physical_policy_ticks": 12103680,
+        "wall_s": 1814.7876423140005,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluator_pid": 64601
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_near/cpu_development_000000.json",
+          "update": 0,
+          "passed": 3,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_near/cpu_development_000010.json",
+          "update": 10,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_near/cpu_development_000015.json",
+          "update": 15,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_near/cpu_development_000020.json",
+          "update": 20,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_near/cpu_development_000025.json",
+          "update": 25,
+          "passed": 5,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_feedback18_near/cpu_development_000030.json",
+          "update": 30,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        }
+      ]
+    },
+    {
+      "run": "getup_full_cpu_fit_ppo",
+      "latest": {
+        "update": 16,
+        "transitions": 6501026,
+        "physical_policy_ticks": 12795392,
+        "wall_s": 1196.9062763069996,
+        "sampling_s": 39.45316556099897,
+        "optimization_s": 10.377205841999967,
+        "learner_steps_per_s": 10857.683886928984,
+        "cohort_steps": 1576,
+        "cohort_successes": 70,
+        "cohort_trials": 512,
+        "failures": {
+          "balance_state_out_of_spec": 149,
+          "forbidden_floor_contact": 81,
+          "getup_timeout": 205,
+          "null": 70,
+          "balance_displacement": 6,
+          "getup_tilt_limit": 1
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 214.7089385986328,
+        "support_peak_moment_nm": 80.13431549072266,
+        "value_loss": 0.3250836860037075,
+        "policy_loss": -0.00016918489687531342,
+        "entropy": -22.182342529296875,
+        "kl": 0.0024311012251550805,
+        "anchor_loss": 0.06930557359009981,
+        "valid_transitions": 428370,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0026343276258558035,
+        "actor_learning_rate": 1e-07
+      },
+      "training_report": {
+        "update": 16,
+        "transitions": 6501026,
+        "physical_policy_ticks": 12795392,
+        "wall_s": 1196.9294578080007,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": 72359
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_full_cpu_fit_ppo/cpu_development_000000.json",
+          "update": 0,
+          "passed": 1,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_cpu_fit_ppo/cpu_development_000005.json",
+          "update": 5,
+          "passed": 1,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_cpu_fit_ppo/cpu_development_000010.json",
+          "update": 10,
+          "passed": 1,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_cpu_fit_ppo/cpu_development_000015.json",
+          "update": 15,
+          "passed": 3,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        }
+      ]
+    },
+    {
+      "run": "getup_full_v6",
+      "latest": {
+        "update": 22,
+        "transitions": 7112949,
+        "physical_policy_ticks": 17688064,
+        "wall_s": 1809.4001755209993,
+        "sampling_s": 61.67080492000059,
+        "optimization_s": 9.568705984998815,
+        "learner_steps_per_s": 5051.6934293971435,
+        "cohort_steps": 1551,
+        "cohort_successes": 33,
+        "cohort_trials": 512,
+        "failures": {
+          "getup_timeout": 105,
+          "balance_state_out_of_spec": 356,
+          "balance_displacement": 7,
+          "null": 33,
+          "handoff_unstable": 9,
+          "forbidden_floor_contact": 2
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 214.6278076171875,
+        "support_peak_moment_nm": 80.1878662109375,
+        "value_loss": 0.3393904369037885,
+        "policy_loss": -0.0009683013784711082,
+        "entropy": -19.56367678520007,
+        "kl": 0.0021845637739972565,
+        "anchor_loss": 0.09042051668541554,
+        "valid_transitions": 311542,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0033658253960311413,
+        "actor_learning_rate": 1e-07
+      },
+      "training_report": {
+        "update": 22,
+        "transitions": 7112949,
+        "physical_policy_ticks": 17688064,
+        "wall_s": 1809.431119208999,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluator_pid": 71280
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_full_v6/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 374
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_v6/cpu_development_000005.json",
+          "update": 5,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 374
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_v6/cpu_development_000010.json",
+          "update": 10,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 549
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_v6/cpu_development_000015.json",
+          "update": 15,
+          "passed": 3,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_full_v6/cpu_development_000020.json",
+          "update": 20,
+          "passed": 6,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        }
+      ]
+    },
+    {
+      "run": "getup_gated_near",
+      "latest": {
+        "update": 52,
+        "transitions": 7906968,
+        "physical_policy_ticks": 13318912,
+        "wall_s": 1181.092950967999,
+        "sampling_s": 26.400798893000683,
+        "optimization_s": 3.430685163999442,
+        "learner_steps_per_s": 5573.354071456136,
+        "cohort_steps": 1451,
+        "cohort_successes": 3,
+        "cohort_trials": 256,
+        "failures": {
+          "getup_timeout": 229,
+          "handoff_unstable": 11,
+          "balance_state_out_of_spec": 13,
+          "null": 3
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 280.2947082519531,
+        "support_peak_moment_nm": 73.07635498046875,
+        "value_loss": 0.0650041497622927,
+        "policy_loss": -0.00019040337550298622,
+        "entropy": -19.565856403774685,
+        "kl": 0.00267068812708102,
+        "anchor_loss": 0.2850971660680241,
+        "valid_transitions": 147141,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0037479703314602375,
+        "actor_learning_rate": 1e-06
+      },
+      "training_report": {
+        "update": 52,
+        "transitions": 7906968,
+        "physical_policy_ticks": 13318912,
+        "wall_s": 1181.1152063970003,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": 51950
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000010.json",
+          "update": 10,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000020.json",
+          "update": 20,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000030.json",
+          "update": 30,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000035.json",
+          "update": 35,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000040.json",
+          "update": 40,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000045.json",
+          "update": 45,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 160
+        },
+        {
+          "file": "runs/realdata_20261117/getup_gated_near/cpu_development_000050.json",
+          "update": 50,
+          "passed": 1,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        }
+      ]
+    },
+    {
+      "run": "getup_gpu_smoke",
+      "latest": {
+        "update": 1,
+        "transitions": 14495,
+        "physical_policy_ticks": 36032,
+        "wall_s": 27.87798818400006,
+        "sampling_s": 26.57798441399973,
+        "optimization_s": 1.2190342860003511,
+        "learner_steps_per_s": 545.3761946058212,
+        "cohort_steps": 1126,
+        "cohort_successes": 0,
+        "cohort_trials": 32,
+        "failures": {
+          "balance_displacement": 17,
+          "getup_timeout": 15
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 276.64984130859375,
+        "support_peak_moment_nm": 70.02731323242188,
+        "value_loss": 0.522039569914341,
+        "policy_loss": -0.0004063973610755056,
+        "entropy": -14.641296863555908,
+        "kl": 0.0,
+        "anchor_loss": 0.0,
+        "valid_transitions": 14495,
+        "critic_warmup": true,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0,
+        "actor_learning_rate": 1e-06
+      },
+      "training_report": {
+        "update": 1,
+        "transitions": 14495,
+        "physical_policy_ticks": 36032,
+        "wall_s": 27.894711674000064,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluator_pid": 30127
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_gpu_smoke/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 587
+        }
+      ]
+    },
+    {
+      "run": "getup_near_duration",
+      "latest": {
+        "update": 16,
+        "transitions": 3486965,
+        "physical_policy_ticks": 12910592,
+        "wall_s": 1277.5848861270006,
+        "sampling_s": 94.62049887899957,
+        "optimization_s": 8.583686374000536,
+        "learner_steps_per_s": 2314.9740552532157,
+        "cohort_steps": 1576,
+        "cohort_successes": 302,
+        "cohort_trials": 512,
+        "failures": {
+          "handoff_unstable": 28,
+          "balance_displacement": 46,
+          "null": 302,
+          "balance_state_out_of_spec": 131,
+          "getup_timeout": 4,
+          "forbidden_floor_contact": 1
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 324.0474853515625,
+        "support_peak_moment_nm": 68.11157989501953,
+        "value_loss": 1.678697066174613,
+        "policy_loss": -0.0005599601534885113,
+        "entropy": -19.56371890174018,
+        "kl": 0.00299103323461033,
+        "anchor_loss": 0.032763292340354785,
+        "valid_transitions": 219044,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0033552059903740883,
+        "actor_learning_rate": 3e-07
+      },
+      "training_report": {
+        "update": 16,
+        "transitions": 3486965,
+        "physical_policy_ticks": 12910592,
+        "wall_s": 1277.6215580330008,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluator_pid": 70767
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_near_duration/cpu_development_000000.json",
+          "update": 0,
+          "passed": 5,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_duration/cpu_development_000005.json",
+          "update": 5,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_duration/cpu_development_000010.json",
+          "update": 10,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_duration/cpu_development_000015.json",
+          "update": 15,
+          "passed": 4,
+          "trials": 8,
+          "maximum_balance_ticks": 1000
+        }
+      ]
+    },
+    {
+      "run": "getup_near_v1",
+      "latest": {
+        "update": 5,
+        "transitions": 574916,
+        "physical_policy_ticks": 1844480,
+        "wall_s": 243.60141562199988,
+        "sampling_s": 45.51644818800014,
+        "optimization_s": 1.5990056939999704,
+        "learner_steps_per_s": 2549.847464385365,
+        "cohort_steps": 1426,
+        "cohort_successes": 2,
+        "cohort_trials": 256,
+        "failures": {
+          "balance_state_out_of_spec": 138,
+          "getup_timeout": 111,
+          "forbidden_floor_contact": 3,
+          "null": 2,
+          "balance_displacement": 2
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 279.6305847167969,
+        "support_peak_moment_nm": 72.15092468261719,
+        "value_loss": 0.6688802182674408,
+        "policy_loss": 0.001051310783562561,
+        "entropy": -14.641296450297038,
+        "kl": 0.0,
+        "anchor_loss": 0.0,
+        "valid_transitions": 116060,
+        "critic_warmup": true,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0,
+        "actor_learning_rate": 3e-06
+      },
+      "training_report": {
+        "update": 5,
+        "transitions": 574916,
+        "physical_policy_ticks": 1844480,
+        "wall_s": 243.63914852699963,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": 37153
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_near_v1/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 326
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_v1/cpu_development_000005.json",
+          "update": 5,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 326
+        }
+      ]
+    },
+    {
+      "run": "getup_near_x3_v2",
+      "latest": {
+        "update": 33,
+        "transitions": 4688817,
+        "physical_policy_ticks": 9672448,
+        "wall_s": 1325.8078277600007,
+        "sampling_s": 38.143461493999894,
+        "optimization_s": 3.422448940999857,
+        "learner_steps_per_s": 3723.78369546621,
+        "cohort_steps": 1451,
+        "cohort_successes": 9,
+        "cohort_trials": 256,
+        "failures": {
+          "forbidden_floor_contact": 16,
+          "getup_timeout": 214,
+          "balance_state_out_of_spec": 16,
+          "handoff_unstable": 1,
+          "null": 9
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 279.50347900390625,
+        "support_peak_moment_nm": 71.935791015625,
+        "value_loss": 0.21349450676805443,
+        "policy_loss": 2.4817749767357276e-05,
+        "entropy": -14.641982740826077,
+        "kl": 0.0023122911931952534,
+        "anchor_loss": 0.10364462590465943,
+        "valid_transitions": 142038,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0025150659494102,
+        "actor_learning_rate": 2e-06
+      },
+      "training_report": {
+        "update": 33,
+        "transitions": 4688817,
+        "physical_policy_ticks": 9672448,
+        "wall_s": 1325.8295245420004,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluator_pid": null
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_near_x3_v2/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 247
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_x3_v2/cpu_development_000005.json",
+          "update": 5,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 257
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_x3_v2/cpu_development_000010.json",
+          "update": 10,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 231
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_x3_v2/cpu_development_000015.json",
+          "update": 15,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 257
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_x3_v2/cpu_development_000025.json",
+          "update": 25,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 245
+        },
+        {
+          "file": "runs/realdata_20261117/getup_near_x3_v2/cpu_development_000030.json",
+          "update": 30,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 389
+        }
+      ]
+    },
+    {
+      "run": "getup_near_zero_smoke",
+      "latest": {
+        "update": 1,
+        "transitions": 14819,
+        "physical_policy_ticks": 28032,
+        "wall_s": 27.356037503999687,
+        "sampling_s": 25.98912913500044,
+        "optimization_s": 1.2860084020003342,
+        "learner_steps_per_s": 570.1999448701323,
+        "cohort_steps": 876,
+        "cohort_successes": 0,
+        "cohort_trials": 32,
+        "failures": {
+          "balance_state_out_of_spec": 15,
+          "getup_timeout": 17
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 260.1349792480469,
+        "support_peak_moment_nm": 61.66395950317383,
+        "value_loss": 0.5595161393284798,
+        "policy_loss": 0.0004076942568644881,
+        "entropy": -20.45625114440918,
+        "kl": 0.0,
+        "anchor_loss": 0.0,
+        "valid_transitions": 14819,
+        "critic_warmup": true,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0,
+        "actor_learning_rate": 1e-06
+      },
+      "training_report": {
+        "update": 1,
+        "transitions": 14819,
+        "physical_policy_ticks": 28032,
+        "wall_s": 27.38049495300038,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluator_pid": 47109
+      },
+      "cpu_development": []
+    },
+    {
+      "run": "getup_staged_smoke",
+      "latest": {
+        "update": 1,
+        "transitions": 38528,
+        "physical_policy_ticks": 46464,
+        "wall_s": 26.96643730299911,
+        "sampling_s": 25.436782144999597,
+        "optimization_s": 1.447452878999684,
+        "learner_steps_per_s": 1514.6569947556789,
+        "cohort_steps": 726,
+        "cohort_successes": 0,
+        "cohort_trials": 64,
+        "failures": {
+          "getup_timeout": 64
+        },
+        "minimum_balance_ticks": 0.0,
+        "support_peak_force_n": 266.86492919921875,
+        "support_peak_moment_nm": 66.03600311279297,
+        "value_loss": 0.36167604476213455,
+        "policy_loss": 0.0007405714248307049,
+        "entropy": -20.45625114440918,
+        "kl": 0.0,
+        "anchor_loss": 0.0,
+        "valid_transitions": 38528,
+        "critic_warmup": true,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.0,
+        "actor_learning_rate": 1e-06
+      },
+      "training_report": {
+        "update": 1,
+        "transitions": 38528,
+        "physical_policy_ticks": 46464,
+        "wall_s": 26.987751439999556,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluator_pid": 51682
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/getup_staged_smoke/cpu_development_000000.json",
+          "update": 0,
+          "passed": 0,
+          "trials": 8,
+          "maximum_balance_ticks": 0
+        }
+      ]
+    },
+    {
+      "run": "gpu_balance350_anchored",
+      "latest": {
+        "update": 400,
+        "transitions": 6553600,
+        "wall_s": 513.9935468739995,
+        "sampling_s": 0.6947605000004842,
+        "optimization_s": 0.6493530429997918,
+        "sampling_steps_per_s": 23582.227256714483,
+        "reward_mean": 0.0444205142557621,
+        "completed_episodes": 6,
+        "physical_failures": 1,
+        "value_loss": 0.005090063641546294,
+        "policy_loss": -0.006060032959794626,
+        "entropy": -14.644278109073639,
+        "kl": 0.0024518544423699495,
+        "anchor_loss": 0.25087933894246817,
+        "valid_transitions": 16384,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 0.007901785895228386,
+        "actor_learning_rate": 1e-06
+      },
+      "training_report": {
+        "update": 400,
+        "transitions": 6553600,
+        "wall_s": 514.0394175089996,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluation_pid": 33049
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_anchored/cpu_development_000000.json",
+          "update": 0,
+          "passed": 4,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_anchored/cpu_development_000200.json",
+          "update": 200,
+          "passed": 0,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_anchored/cpu_development_000300.json",
+          "update": 300,
+          "passed": 0,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_anchored/cpu_development_000400.json",
+          "update": 400,
+          "passed": 0,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        }
+      ]
+    },
+    {
+      "run": "gpu_balance350_strict",
+      "latest": {
+        "update": 609,
+        "transitions": 9977856,
+        "wall_s": 1201.9914811620001,
+        "sampling_s": 1.250253414999861,
+        "optimization_s": 1.0389510499999233,
+        "sampling_steps_per_s": 13104.543289731244,
+        "reward_mean": 0.05265512317419052,
+        "completed_episodes": 4,
+        "physical_failures": 34,
+        "value_loss": 0.018168484966736287,
+        "policy_loss": -3.441907756496221e-05,
+        "entropy": -14.641427457332611,
+        "kl": 3.204059112249524e-05,
+        "anchor_loss": 0.004588862386299297,
+        "valid_transitions": 16384,
+        "critic_warmup": false,
+        "actor_kl_rollbacks": 0,
+        "actor_kl_guard_skips": 0,
+        "final_full_rollout_kl": 8.112302020890638e-05,
+        "actor_learning_rate": 3e-07
+      },
+      "training_report": {
+        "update": 609,
+        "transitions": 9977856,
+        "wall_s": 1202.0157115379998,
+        "stopped_by_signal": false,
+        "pending_cpu_evaluation_pid": 46721
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_strict/cpu_development_000000.json",
+          "update": 0,
+          "passed": 4,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_strict/cpu_development_000200.json",
+          "update": 200,
+          "passed": 1,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_strict/cpu_development_000300.json",
+          "update": 300,
+          "passed": 4,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_strict/cpu_development_000400.json",
+          "update": 400,
+          "passed": 4,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_strict/cpu_development_000500.json",
+          "update": 500,
+          "passed": 0,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_strict/cpu_development_000600.json",
+          "update": 600,
+          "passed": 4,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        }
+      ]
+    },
+    {
+      "run": "gpu_balance350_v1",
+      "latest": {
+        "update": 267,
+        "transitions": 4374528,
+        "wall_s": 353.1812384499999,
+        "sampling_s": 0.6478529010000784,
+        "optimization_s": 0.7984948900002564,
+        "sampling_steps_per_s": 25289.691494332008,
+        "reward_mean": 0.01844210736453533,
+        "completed_episodes": 0,
+        "physical_failures": 15,
+        "value_loss": 0.005032061890233308,
+        "policy_loss": -0.0002792204322759062,
+        "entropy": -14.64479684829712,
+        "kl": 0.0017396993814600137,
+        "critic_warmup": false,
+        "actor_kl_guard_skips": 0,
+        "actor_kl_rollbacks": 0,
+        "final_full_rollout_kl": 0.004967541433870792,
+        "actor_learning_rate": 3e-06
+      },
+      "training_report": {
+        "update": 267,
+        "transitions": 4374528,
+        "wall_s": 353.202295862,
+        "stopped_by_signal": true,
+        "pending_cpu_evaluation_pid": null
+      },
+      "cpu_development": [
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_v1/cpu_development_000000.json",
+          "update": 0,
+          "passed": 4,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_v1/cpu_development_000100.json",
+          "update": 100,
+          "passed": 0,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        },
+        {
+          "file": "runs/realdata_20261117/gpu_balance350_v1/cpu_development_000200.json",
+          "update": 200,
+          "passed": 0,
+          "trials": 4,
+          "maximum_balance_ticks": 0
+        }
+      ]
+    },
+    {
+      "run": "parallel_smoke",
+      "latest": {
+        "update": 3,
+        "transitions": 3072,
+        "wall_s": 11.922817166000186,
+        "sample_s": 2.8382295659998817,
+        "optimization_s": 0.09500243200000114,
+        "samples_per_s": 360.78829290866554,
+        "reward_mean": 0.05739625543355942,
+        "outcomes": [],
+        "value_loss": 0.012168687302619219,
+        "policy_loss": 3.8300640881061554e-08,
+        "entropy": -7.580748558044434,
+        "kl": 0.0,
+        "critic_warmup": true,
+        "actor_kl_guard_skips": 0,
+        "actor_kl_rollbacks": 0,
+        "final_full_rollout_kl": 0.0,
+        "actor_learning_rate": 3e-05
+      },
+      "training_report": {
+        "update": 3,
+        "transitions": 3072,
+        "wall_s": 14.056553975000043,
+        "best_development_score": null,
+        "stopped_by_signal": false,
+        "device": "cuda",
+        "workers": 8
+      },
+      "cpu_development": []
+    }
+  ],
+  "recorded_last_transition_counts_sum": 69869166,
+  "missing_real_identification": [
+    "independent spring force and hysteresis",
+    "actual charge pressure",
+    "rotor inertia/gear drag",
+    "encoder reference reconciliation",
+    "natural disabled rest",
+    "real dynamic timing and sensor errors"
+  ],
+  "hardware_access_this_run": false
+}

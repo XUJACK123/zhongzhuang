@@ -1,0 +1,113 @@
+{
+  "schema": "sample_randomization_v1",
+  "status": "engineering_hypotheses_not_measured",
+  "enabled": false,
+  "required_gate": "V5_target_nominal_commands_passed",
+  "sample_on": "episode_reset",
+  "hold_parameters_until_episode_end": true,
+  "nominal_environment_fraction_min": 0.2,
+  "order": [
+    "ground_friction",
+    "joint_viscous_and_coulomb",
+    "motor_gain",
+    "mass_and_inertia",
+    "left_right_asymmetry",
+    "joint_randomization"
+  ],
+  "factors": {
+    "ground_friction": {
+      "R0": [
+        1,
+        1
+      ],
+      "R1": [
+        0.9,
+        1.1
+      ],
+      "R2": [
+        0.8,
+        1.2
+      ],
+      "future_candidate": [
+        0.6,
+        1.4
+      ]
+    },
+    "joint_friction": {
+      "R0": [
+        1,
+        1
+      ],
+      "R1": [
+        0.9,
+        1.1
+      ],
+      "R2": [
+        0.8,
+        1.2
+      ],
+      "zero_nominal_requires_absolute_range": true,
+      "avoid_double_application": true
+    },
+    "motor_gain": {
+      "R0": [
+        1,
+        1
+      ],
+      "R1": [
+        0.95,
+        1.05
+      ],
+      "R2": [
+        0.9,
+        1.1
+      ],
+      "future_candidate": [
+        0.8,
+        1.2
+      ],
+      "independent_motors": 6,
+      "reclip_to_original_speed_torque_envelope": true
+    },
+    "density_mass": {
+      "R0": [
+        1,
+        1
+      ],
+      "R1": [
+        0.95,
+        1.05
+      ],
+      "R2": [
+        0.9,
+        1.1
+      ],
+      "future_candidate": [
+        0.8,
+        1.2
+      ],
+      "scale_COM_inertia_with_density": true,
+      "payload_requires_combined_mass_COM_inertia": true
+    },
+    "gas_spring_force": {
+      "initially_randomized": false,
+      "later_small_range": [
+        0.95,
+        1.05
+      ],
+      "later_candidate": [
+        0.9,
+        1.1
+      ],
+      "required": "validated_target_spring_geometry_and_stroke"
+    }
+  },
+  "progression": {
+    "consecutive_development_passes": 3,
+    "nominal_success_drop_max_points": 5,
+    "stop_on_hard_constraint_failure": true,
+    "rollback_to_last_passed": true,
+    "widen_one_family_at_a_time": true
+  },
+  "runtime_adapter_implemented": false
+}

@@ -1,0 +1,1427 @@
+{
+  "schema": "realdata_independent_cpu_acceptance_audit_v1",
+  "audited_at": "2026-11-17T06:05:25.686519+08:00",
+  "frozen_manifest_sha256": "82dfb585e865539a9d2ad4ba73cb3c13e2e7ffca20d6ce928d4b0b1e31b8ecec",
+  "groups": [
+    {
+      "label": "near_near",
+      "expected": 8,
+      "completed": 8,
+      "passed": 7,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "None": 7,
+        "balance_state_out_of_spec": 1
+      }
+    },
+    {
+      "label": "near_mixed",
+      "expected": 8,
+      "completed": 8,
+      "passed": 1,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "None": 1,
+        "handoff_unstable": 1,
+        "getup_timeout": 6
+      }
+    },
+    {
+      "label": "near_full",
+      "expected": 8,
+      "completed": 8,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "getup_timeout": 8
+      }
+    },
+    {
+      "label": "full_near",
+      "expected": 8,
+      "completed": 8,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "balance_state_out_of_spec": 3,
+        "getup_timeout": 5
+      }
+    },
+    {
+      "label": "full_mixed",
+      "expected": 8,
+      "completed": 8,
+      "passed": 2,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "balance_state_out_of_spec": 4,
+        "None": 2,
+        "getup_timeout": 1,
+        "forbidden_contact": 1
+      }
+    },
+    {
+      "label": "full_full",
+      "expected": 8,
+      "completed": 8,
+      "passed": 2,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "balance_state_out_of_spec": 6,
+        "None": 2
+      }
+    },
+    {
+      "label": "near_near_domain",
+      "expected": 4,
+      "completed": 4,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "forbidden_contact": 2,
+        "getup_timeout": 2
+      }
+    },
+    {
+      "label": "full_full_domain",
+      "expected": 4,
+      "completed": 4,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "forbidden_contact": 3,
+        "balance_state_out_of_spec": 1
+      }
+    },
+    {
+      "label": "full_full_spring_225N",
+      "expected": 2,
+      "completed": 2,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "getup_tilt_limit": 2
+      }
+    },
+    {
+      "label": "full_full_spring_900N",
+      "expected": 2,
+      "completed": 2,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "forbidden_contact": 2
+      }
+    },
+    {
+      "label": "full_full_spring_1178N_conditional",
+      "expected": 2,
+      "completed": 2,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "forbidden_contact": 1,
+        "getup_timeout": 1
+      }
+    },
+    {
+      "label": "full_full_rotor_half",
+      "expected": 2,
+      "completed": 2,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "getup_timeout": 2
+      }
+    },
+    {
+      "label": "full_full_rotor_double",
+      "expected": 2,
+      "completed": 2,
+      "passed": 0,
+      "complete": true,
+      "scope_passed": false,
+      "failures": {
+        "getup_timeout": 2
+      }
+    }
+  ],
+  "trajectory_checks": [
+    {
+      "label": "near_near",
+      "seed": 710000,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710001,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710002,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710003,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710004,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710005,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710006,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near",
+      "seed": 710007,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "handoff_unstable",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711003,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711004,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711005,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711006,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_mixed",
+      "seed": 711007,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712003,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712004,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712005,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712006,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_full",
+      "seed": 712007,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710003,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710004,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710005,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710006,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_near",
+      "seed": 710007,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711003,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711004,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711005,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711006,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_mixed",
+      "seed": 711007,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712003,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712004,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712005,
+      "success": true,
+      "trace_audit_passed": true,
+      "label_agrees": true,
+      "failure": null,
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": true,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712006,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full",
+      "seed": 712007,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near_domain",
+      "seed": 713000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near_domain",
+      "seed": 713001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near_domain",
+      "seed": 713002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "near_near_domain",
+      "seed": 713003,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_domain",
+      "seed": 714000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_domain",
+      "seed": 714001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_domain",
+      "seed": 714002,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "balance_state_out_of_spec",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": true,
+        "handoff": true,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_domain",
+      "seed": 714003,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_spring_225N",
+      "seed": 715000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_tilt_limit",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_spring_225N",
+      "seed": 715001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_tilt_limit",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_spring_900N",
+      "seed": 715100,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_spring_900N",
+      "seed": 715101,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_spring_1178N_conditional",
+      "seed": 715200,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "forbidden_contact",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_spring_1178N_conditional",
+      "seed": 715201,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_rotor_half",
+      "seed": 716000,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_rotor_half",
+      "seed": 716001,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_rotor_double",
+      "seed": 716100,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    },
+    {
+      "label": "full_full_rotor_double",
+      "seed": 716101,
+      "success": false,
+      "trace_audit_passed": false,
+      "label_agrees": true,
+      "failure": "getup_timeout",
+      "checks": {
+        "finite": true,
+        "continuous_100hz_clock": true,
+        "zero_active_stop": true,
+        "motor_caps": true,
+        "action_caps": true,
+        "unassisted_dwell": false,
+        "handoff": false,
+        "frozen_balance": false,
+        "physical_knee_boundaries": true
+      }
+    }
+  ],
+  "expected_episodes": 66,
+  "completed_episodes": 66,
+  "completed_successes": 12,
+  "integrity_issues": [],
+  "integrity_passed": true,
+  "all_planned_episodes_completed": true,
+  "all_tested_scopes_passed": false,
+  "hardware_accepted": false,
+  "deployed": false,
+  "scope": "Frozen simulation models only. Failed and incomplete episodes are retained. No retuning from these seeds."
+}

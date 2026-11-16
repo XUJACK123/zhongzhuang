@@ -1,0 +1,99 @@
+{
+  "schema": "realdata_frozen_acceptance_plan_v1",
+  "created_at": "2026-11-17T05:39:32.441998+08:00",
+  "status": "planned; no held-out execution yet",
+  "selection": "Use completed CPU development evaluations only. Freeze one near-pose candidate and one full-pose candidate, even if full-pose development remains unsuccessful. Do not replace weights using held-out results.",
+  "freeze_requirements": [
+    "All PPO stopped and saved",
+    "Exact get-up/balance weights and configurations hashed",
+    "CPU evaluator, environment, protocol, C observer and new tests snapshotted",
+    "No further tuning using held-out results"
+  ],
+  "per_candidate_nominal": [
+    {
+      "scope": "near",
+      "reset_range": [
+        0,
+        0.2
+      ],
+      "count": 8,
+      "seed_base": 710000
+    },
+    {
+      "scope": "mixed",
+      "reset_range": [
+        0,
+        1
+      ],
+      "count": 8,
+      "seed_base": 711000
+    },
+    {
+      "scope": "full",
+      "reset_range": [
+        1,
+        1
+      ],
+      "count": 8,
+      "seed_base": 712000
+    }
+  ],
+  "sensitivity": [
+    {
+      "scope": "near_domain",
+      "candidate": "near",
+      "count": 4,
+      "seed_base": 713000,
+      "domain": true
+    },
+    {
+      "scope": "full_domain",
+      "candidate": "full",
+      "count": 4,
+      "seed_base": 714000,
+      "domain": true
+    },
+    {
+      "scope": "full_spring_225N",
+      "candidate": "full",
+      "count": 2,
+      "seed_base": 715000,
+      "initial_force_n": 225.0
+    },
+    {
+      "scope": "full_spring_900N",
+      "candidate": "full",
+      "count": 2,
+      "seed_base": 715100,
+      "initial_force_n": 900.0
+    },
+    {
+      "scope": "full_spring_1178N_conditional",
+      "candidate": "full",
+      "count": 2,
+      "seed_base": 715200,
+      "initial_force_n": 1178.0972450961724
+    },
+    {
+      "scope": "full_rotor_half",
+      "candidate": "full",
+      "count": 2,
+      "seed_base": 716000,
+      "rotor_scale": 0.5
+    },
+    {
+      "scope": "full_rotor_double",
+      "candidate": "full",
+      "count": 2,
+      "seed_base": 716100,
+      "rotor_scale": 2.0
+    }
+  ],
+  "nominal_episodes": 48,
+  "sensitivity_episodes": 18,
+  "record_all_physical_trajectories": true,
+  "success": "Complete configured get-up timeout, 1 s unassisted dwell, 0.3 s handoff, then all 10 s balance gates with zero support, both wheel loads, no body/forbidden contact and original motor/physical knee caps. Failed or early-terminated episodes retained.",
+  "aggregate_acceptance": "Every episode must pass to mark its tested scope passed. No simulation outcome marks hardware commissioning or deployment passed.",
+  "uncertainty": "Spring force/pressure/hysteresis, inertia and drag are unmeasured hypotheses. Sensitivity is conditional, not a calibrated real-world envelope.",
+  "deadline": "2026-11-17T06:53:00+08:00; save completed and incomplete results honestly if budget ends"
+}

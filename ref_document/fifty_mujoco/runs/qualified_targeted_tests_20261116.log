@@ -1,0 +1,91 @@
+.........F..................................................             [100%]
+=================================== FAILURES ===================================
+_________ test_firmware_c_estimator_matches_port_on_moving_joint_trace _________
+
+tmp_path = PosixPath('/tmp/pytest-of-xy/pytest-0/test_firmware_c_estimator_matc0')
+
+    def test_firmware_c_estimator_matches_port_on_moving_joint_trace(tmp_path):
+        import ctypes as c
+        import subprocess
+        from pathlib import Path
+        import mujoco
+        from fifty_mujoco.math3d import mat_to_quat_wxyz, rpy_to_mat
+        from fifty_mujoco.transfer.sample_source import source_module
+    
+        firmware = Path(__file__).resolve().parents[2] / 'chassis_ref_new'
+        library = tmp_path / 'firmware.so'
+        subprocess.run(['cc','-std=c11','-O2','-shared','-fPIC','-I'+str(firmware/'user'),
+            str(firmware/'user/state_estimator.c'),str(firmware/'user/algorithm/rl.c'),
+            str(firmware/'user/algorithm/model/model.c'),'-lm','-o',str(library)], check=True)
+        class Estimator(c.Structure):
+            _fields_=[('xy',c.c_float*2),('last_q',c.c_float*6),('held_qd',c.c_float*6),
+                      ('valid',c.c_bool),('tick',c.c_uint32)]
+        class Measurement(c.Structure):
+            _fields_=[('q',c.c_float*6),('qd',c.c_float*6),('omega',c.c_float*3),
+                      ('gravity',c.c_float*3),('xy',c.c_float*2),('yaw',c.c_float),('velocity',c.c_float*2)]
+        lib=c.CDLL(str(library))
+        lib.estimator_update.restype=c.c_bool
+        lib.estimator_update.argtypes=[c.POINTER(Estimator),c.POINTER(Measurement),
+            c.POINTER(c.c_float),c.POINTER(c.c_float),c.POINTER(c.c_float),c.POINTER(c.c_float),c.c_uint32,c.c_float]
+        e=SampleHardwareEnv31()
+        est,measurement=Estimator(),Measurement()
+        helper=source_module('actuator_model')
+        base=e.source.defaults.copy()
+        quat=mat_to_quat_wxyz(rpy_to_mat([.04,-.08,.2]))
+        cf=lambda v:(c.c_float*len(v))(*v)
+        for tick in range(101):
+            t=tick*.005
+            q=base+np.array([.05,-.03,.08,-.04,.025,-.06])*np.sin(3*t)
+            qd=np.array([.05,-.03,.08,-.04,.025,-.06])*3*np.cos(3*t)
+            # Initial stationary sample establishes the same held-difference history.
+            if tick==0: qd[:]=0
+            arms=q.copy();speed=qd.copy()
+            for h,k,sign in ((0,1,1),(3,4,-1)):
+                beta=sign*q[k]+np.pi/2
+                alpha=helper.alpha_from_bend(beta,e.source.hardware)
+                ratio=helper.knee_ratio(beta,e.source.hardware)
+                arms[h]=sign*q[h];arms[k]=arms[h]+alpha
+                speed[h]=sign*qd[h];speed[k]=sign*(qd[h]+qd[k]/ratio)
+            omega=np.array([.03,-.02,.04]) if tick else np.zeros(3)
+            e.data.qpos[3:7]=quat;e.data.qpos[e.source.qpos_ids]=q
+            e.data.qvel[e.source.qvel_ids]=qd;e.data.qvel[3:6]=omega;e.data.time=t
+            mujoco.mj_forward(e.model,e.data)
+            # mj_objectVelocity supplies body-frame gyro for the very same state.
+            gyro=e._velocity6()[:3]
+            assert lib.estimator_update(c.byref(est),c.byref(measurement),cf(quat),cf(arms),cf(speed),cf(gyro),tick*5,.005)
+            if tick:
+                assert e._update_estimator()
+                assert np.asarray(measurement.qd)==pytest.approx(e.joint_velocity,abs=2e-4)
+                assert np.asarray(measurement.xy)==pytest.approx(e.estimated_xy,abs=2e-6)
+                assert np.asarray(measurement.velocity)==pytest.approx(e.estimated_velocity[:2],abs=2e-6)
+        # Use the same compiled firmware to verify PD -> joint clamp -> coupled
+        # motor torque and speed-envelope ordering independently of Python algebra.
+        class Controller(c.Structure):
+            _fields_=[('network',c.c_float*224),('obs',c.c_float*31),('action',c.c_float*6),
+                      ('command',c.c_float*3),('reference_xy',c.c_float*2),('reference_yaw',c.c_float),
+                      ('target_q',c.c_float*6),('target_qd',c.c_float*6),
+                      ('joint_torque',c.c_float*6),('motor_torque',c.c_float*6)]
+        lib.rl_torque_step.restype=c.c_bool
+        lib.rl_torque_step.argtypes=[c.POINTER(Controller),c.POINTER(Measurement)]
+        rng=np.random.default_rng(9)
+        for _ in range(80):
+            ctrl=Controller();q=base+rng.uniform(-.025,.025,6);qd=rng.uniform(-2,2,6)
+            target=q+rng.uniform(-.5,.5,6);velocity=rng.uniform(-30,30,6)
+            ctrl.target_q[:]=target;ctrl.target_qd[:]=velocity
+            measurement.q[:]=q;measurement.qd[:]=qd
+            assert lib.rl_torque_step(c.byref(ctrl),c.byref(measurement))
+            error=target-q;error[[0,3]]=np.arctan2(np.sin(error[[0,3]]),np.cos(error[[0,3]]))
+            request=np.array([40,60,0]*2)*error+np.array([2,2,.3]*2)*(velocity-qd)
+            e.actuators.apply(torch.tensor(request)[None],torch.tensor(q)[None],torch.tensor(qd)[None])
+>           assert np.array(ctrl.motor_torque)==pytest.approx(e.actuators.motor_torque_applied[0].numpy(),abs=3e-4)
+E           assert array([-20.  ...dtype=float32) == approx([-20.0....0 ± 3.0e-04])
+E             
+E             comparison failed. Mismatched elements: 1 / 6:
+E             Max absolute difference: 0.4149874448776245
+E             Max relative difference: 0.26181966066360474
+E             Index | Obtained   | Expected      
+E             (2,)  | -1.5850126 | -2.0 ± 3.0e-04
+
+tests/test_sample_hardware.py:151: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_sample_hardware.py::test_firmware_c_estimator_matches_port_on_moving_joint_trace

@@ -1,0 +1,42 @@
+{
+  "schema": "qualified_continuous_replay_v1",
+  "rows": [
+    {
+      "scenario": "stand",
+      "first_failure": null,
+      "duration_s": 39.99999999999748,
+      "finite": true,
+      "automatic_reset": false,
+      "vx_rmse_m_s": 1.0002174725425399e-05,
+      "yaw_rmse_rad_s": 2.2915733857742424e-05,
+      "clearance_mae_m": 0.001484909895809324,
+      "min_spring_margin_m": 0.002665196895502292,
+      "report": "reports/sample_weight/media/qualified_u400_stand40_20261116.json"
+    },
+    {
+      "scenario": "turning",
+      "first_failure": null,
+      "duration_s": 39.99999999999748,
+      "finite": true,
+      "automatic_reset": false,
+      "vx_rmse_m_s": 0.01650862491610569,
+      "yaw_rmse_rad_s": 0.02185144789148526,
+      "clearance_mae_m": 0.0013382513432733715,
+      "min_spring_margin_m": 0.002907380210869309,
+      "report": "reports/sample_weight/media/qualified_u400_turning40_20261116.json"
+    },
+    {
+      "scenario": "reversal",
+      "first_failure": null,
+      "duration_s": 39.99999999999748,
+      "finite": true,
+      "automatic_reset": false,
+      "vx_rmse_m_s": 0.01600371488462202,
+      "yaw_rmse_rad_s": 0.023362896995174198,
+      "clearance_mae_m": 0.0016957308093771724,
+      "min_spring_margin_m": 0.0029134595139514996,
+      "report": "reports/sample_weight/media/qualified_u400_reversal40_20261116.json"
+    }
+  ],
+  "note": "Continuous simulation with fresh policy commands, not hardware. Reversal includes legacy 0.3 m/s OOD segments. Torque saturation is covered separately in evaluation reports."
+}

@@ -1,0 +1,59 @@
+<mujoco model="sample_source_diagnostic">
+  <compiler angle="radian"/>
+
+  <option timestep="0.0005" tolerance="1e-10" integrator="implicitfast" cone="elliptic" iterations="80"/>
+
+  <statistic meaninertia="5.58238" meanmass="3.12857" meansize="0.20189"/>
+
+  <default>
+    <geom friction="0.75 0 0" solref="0.01"/>
+  </default>
+
+  <worldbody>
+    <geom name="floor" size="10 10 0.1" type="plane"/>
+    <body name="base_link" pos="0 0 0.274976">
+      <inertial pos="-0.0785237 0.0248957 -0.0854758" quat="0.999969 -0.00257497 0.00674126 -0.0031975" mass="19.8517" diaginertia="0.0711967 0.057061 0.0408377"/>
+      <joint name="root" type="free"/>
+      <geom name="base_link_collision_0" size="0.310999 0.196425 0.223251" pos="0 -0.0125478 0.0482748" type="box"/>
+      <body name="r0_link" pos="0 -0.227698 0" quat="0.707107 -0.707107 0 0">
+        <inertial pos="0.0511035 -0.0131271 0.0023276" quat="0.0263616 0.706927 -0.0351196 0.705922" mass="0.649918" diaginertia="0.00164692 0.00144416 0.00048531"/>
+        <joint name="rf0_Joint" armature="0.02" damping="0.05" frictionloss="0.1" limited="false"/>
+        <geom name="r0_link_collision_0" size="0.0248285 0.126115" pos="0.0989327 -0.0305336 -0.0151" quat="0.707107 0 0.707107 0" type="cylinder"/>
+        <body name="r1_link" pos="0.21 0 0.0115" quat="0.707107 0 0 0.707107">
+          <inertial pos="0.102356 0.00166907 -0.0118493" quat="-0.00536682 0.706483 0.00533634 0.707689" mass="0.146779" diaginertia="0.00138161 0.00134114 4.56603e-05"/>
+          <joint name="rf1_Joint" solreflimit="0.001" solimplimit="0.99 0.999 0.0001" range="-3.72383 -2.55927" margin="0.04" armature="0.0143599" damping="0.05" frictionloss="0.1"/>
+          <geom name="r1_link_collision_0" size="0.012 0.0981064" pos="0.142391 0.00128489 -0.01285" quat="0.707107 0 0.707107 0" type="cylinder"/>
+          <body name="right_wheel" pos="0.25 0 -0.0446" quat="0.707107 0 0 -0.707107">
+            <inertial pos="3.84876e-05 0.000984421 0.00857547" quat="0.0112697 0.706945 -0.0146647 0.707027" mass="0.224233" diaginertia="0.000335212 0.000174354 0.000169671"/>
+            <joint name="r_wheel_Joint" armature="0.001" damping="0.005" frictionloss="0.02" limited="false"/>
+            <geom name="right_wheel_collision_0" size="0.0557042 0.02355" type="cylinder"/>
+          </body>
+        </body>
+      </body>
+      <body name="l0_link" pos="0 0.227698 0" quat="0.707107 0.707107 0 0">
+        <inertial pos="0.0538835 0.0137738 -0.00506179" quat="-0.0263602 0.706932 0.0351063 0.705918" mass="0.618041" diaginertia="0.00163468 0.00143861 0.000479758"/>
+        <joint name="lf0_Joint" armature="0.02" damping="0.05" frictionloss="0.1" limited="false"/>
+        <geom name="l0_link_collision_0" size="0.023466 0.1276" pos="0.0985987 0.0296576 -0.0192235" quat="0.707107 0 0.707107 0" type="cylinder"/>
+        <body name="l1_link" pos="0.21 0 0.0120455" quat="0.707107 0 0 -0.707107">
+          <inertial pos="0.0811797 -0.00130538 -0.0179182" quat="0.00536535 0.706483 -0.00533165 0.70769" mass="0.185069" diaginertia="0.00138863 0.00134924 5.37587e-05"/>
+          <joint name="lf1_Joint" solreflimit="0.001" solimplimit="0.99 0.999 0.0001" range="2.55927 3.72467" margin="0.04" armature="0.0143599" damping="0.05" frictionloss="0.1"/>
+          <geom name="l1_link_collision_0" size="0.012 0.125327" pos="0.113442 -0.000310468 -0.0208" quat="0.707107 0 0.707107 0" type="cylinder"/>
+          <body name="left_wheel" pos="0.25 0 -0.05255" quat="0 0.707107 0.707107 0">
+            <inertial pos="-0.00097623 0.000132445 -0.00857547" quat="0.531983 0.463264 -0.534229 0.465811" mass="0.224233" diaginertia="0.000335212 0.000174354 0.000169671"/>
+            <joint name="l_wheel_Joint" armature="0.001" damping="0.005" frictionloss="0.02" limited="false"/>
+            <geom name="left_wheel_collision_0" size="0.0557042 0.02355" type="cylinder"/>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <contact>
+    <exclude body1="base_link" body2="r0_link"/>
+    <exclude body1="r0_link" body2="r1_link"/>
+    <exclude body1="r1_link" body2="right_wheel"/>
+    <exclude body1="base_link" body2="l0_link"/>
+    <exclude body1="l0_link" body2="l1_link"/>
+    <exclude body1="l1_link" body2="left_wheel"/>
+  </contact>
+</mujoco>

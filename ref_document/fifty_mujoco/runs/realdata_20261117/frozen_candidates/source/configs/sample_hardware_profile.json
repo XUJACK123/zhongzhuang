@@ -1,0 +1,53 @@
+{
+  "schema": "sample_commissioned_hardware_v1",
+  "date": "2026-11-15",
+  "wheel_radius_m": 0.055,
+  "wheel_ratio": 15.88,
+  "wheel_torque_cap_nm": 2.0,
+  "leg_torque_cap_nm": 20.0,
+  "external_pd_dt_s": 0.002,
+  "policy_dt_s": 0.01,
+  "natural_joint_pose_rad": [
+    3.1500981078,
+    -2.9896,
+    0,
+    -3.1500981078,
+    2.9896,
+    0
+  ],
+  "spring_force_n": 450.0,
+  "spring_stroke_m": 0.075,
+  "joint_effort_nm": [
+    40.0,
+    54.82787762486449,
+    2.4808354218880537,
+    40.0,
+    54.82787762486449,
+    2.4808354218880537
+  ],
+  "evidence": {
+    "wheel": "User confirmed 2026-11-15: 55 mm / 15.88 supersedes the older CAD-derived target profile.",
+    "control_and_caps": "chassis_ref_new/user/robot_config.h and user/algorithm/rl.c",
+    "natural_pose": "COMMISSIONING_LOG_20261113.md 23:55; surveyed supported pose, also near spring-driven resting position; not an unassisted equilibrium measurement.",
+    "motor_gain": "5.88/7.37 feedback-to-command suggests ~0.8; an uncertainty hypothesis, not calibrated torque.",
+    "spring": "progress.md 450 N nominal / 250 mm free / 75 mm stroke; force progression and friction unmeasured."
+  },
+  "limitations": [
+    "Wheel no-slip odometry and held 5 ms difference velocities ported from firmware; ideal encoder/gyro sensors, no transport delays/quantization or packet loss.",
+    "Serial equivalent linkage and archived inertias; no new inertia measurements.",
+    "Constant spring force, no measured breakaway or force-displacement curve.",
+    "Original Isaac/PhysX parity remains unavailable."
+  ],
+  "physics_dt_s": 0.001,
+  "estimator_dt_s": 0.005,
+  "firmware_target_knee_limits_rad": [
+    [
+      -4.296127953784042,
+      -2.5592683579936732
+    ],
+    [
+      2.559268357993676,
+      4.296127953784042
+    ]
+  ]
+}

@@ -1,0 +1,33 @@
+{"observer_errors": {"qd": 9.5367431640625e-05, "xy": 2.3283064365386963e-10, "velocity": 3.725290298461914e-09, "confidence": 0.0}, "observer_passed": true}
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.2
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/xy/.cache/warp/1.12.0
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 34.48 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 3.38 ms  (cached)
+Module _nxn_broadphase__locals__kernel_c763f4cb c763f4c load on device 'cuda:0' took 3.42 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_fd6d26f2 fd6d26f load on device 'cuda:0' took 11.82 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_a37284d0 a37284d load on device 'cuda:0' took 12.75 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_42493a75 42493a7 load on device 'cuda:0' took 6.25 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 17.44 ms  (cached)
+Module _efc_contact_init__locals__kernel_c8a6d94d c8a6d94 load on device 'cuda:0' took 4.07 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_3ce537d5 8484a5a load on device 'cuda:0' took 4.13 ms  (cached)
+Module _efc_contact_update__locals__kernel_7bd789c7 7bd789c load on device 'cuda:0' took 3.99 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 9.17 ms  (cached)
+Module mujoco_warp._src.forward ab3b1a6 load on device 'cuda:0' took 15.85 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 3.70 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_d83d6ecc 23c3f6f load on device 'cuda:0' took 276.08 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 14.88 ms  (cached)
+Module solve_init_jaref__locals__kernel_d614c3c4 d614c3c load on device 'cuda:0' took 3.65 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_1ef9b850 1ef9b85 load on device 'cuda:0' took 4.16 ms  (cached)
+Module update_constraint_efc__locals__kernel_81015163 8101516 load on device 'cuda:0' took 3.86 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_cc0b8ce1 cc0b8ce load on device 'cuda:0' took 3.38 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_8af4086e f519906 load on device 'cuda:0' took 5.81 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_68ba042b 3c7cbe3 load on device 'cuda:0' took 282.62 ms  (cached)
+Module linesearch_iterative__locals__kernel_f2a333a5 de36de8 load on device 'cuda:0' took 6.29 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 19.72 ms  (cached)
+Module mujoco_warp._src.derivative a753363 load on device 'cuda:0' took 9.65 ms  (cached)
+{"observer_errors": {"qd": 9.5367431640625e-05, "xy": 2.3283064365386963e-10, "velocity": 3.725290298461914e-09, "confidence": 0.0}, "observer_passed": true, "physics_steps_compared": 100, "qpos_max_error": 0.03354622179382705, "observation_max_error": 0.014407016336917877, "clearance_max_error_m": 4.804620889786726e-05, "termination_mismatches": 0, "trace": [{"step": 0, "qpos_error": 0.0009627152774198677, "observation_error": 0.006222349125891924, "height_error": 1.8717291428826943e-05}, {"step": 20, "qpos_error": 0.001530892001620484, "observation_error": 0.0009011044166982174, "height_error": 3.793328848700206e-06}, {"step": 40, "qpos_error": 0.004246627916842896, "observation_error": 0.0015626652166247368, "height_error": 1.6688998227043506e-05}, {"step": 60, "qpos_error": 0.007842814132762402, "observation_error": 0.002054085023701191, "height_error": 1.677657660095755e-05}, {"step": 80, "qpos_error": 0.011849480004780102, "observation_error": 0.0031100958585739136, "height_error": 1.6976818655589643e-05}, {"step": 100, "qpos_error": 0.015987607260807626, "observation_error": 0.004241256043314934, "height_error": 2.037225045203872e-05}, {"step": 120, "qpos_error": 0.020231200752466344, "observation_error": 0.005416098982095718, "height_error": 2.1885958678996564e-05}, {"step": 140, "qpos_error": 0.024415792194571823, "observation_error": 0.0065850988030433655, "height_error": 1.6241120582072277e-05}, {"step": 160, "qpos_error": 0.028198779973731963, "observation_error": 0.007661685347557068, "height_error": 9.721206405854943e-06}, {"step": 180, "qpos_error": 0.03133123916149955, "observation_error": 0.008573487401008606, "height_error": 2.573101528430266e-06}], "worlds": 256, "captured_full_policy_steps_per_s": 19050.9581816322, "physics_passed": false, "candidate_scope": "independent teacher feedback on each backend; open-loop divergence recorded separately; CPU task heldout acceptance still required"}

@@ -1,0 +1,233 @@
+{
+  "schema": "qualified_balance_night_summary_v1",
+  "status": "completed",
+  "started_at": "2026-11-16T01:35:30+08:00",
+  "finished_at": "2026-11-16T02:51:37.879195+08:00",
+  "elapsed_wall_seconds": 4567.879205703735,
+  "maximum_authorized_wall_seconds": 21600,
+  "budget_respected": true,
+  "getup_training_started": false,
+  "getup_gate": "failed_valid_reset_and_startup_feasibility",
+  "training_updates": 700,
+  "training_transitions": 896000,
+  "training_wall_seconds": 2134.415122435,
+  "training_stop_reason": "development_plateau",
+  "selected_update": 400,
+  "selected_checkpoint_sha256": "1e7041f60fc411e4d0f46dea4d2d864fab4b0baa66ed4a9850630a149a18cb4b",
+  "candidate": "runs/qualified_combined_v1_20261116/candidate_u400",
+  "acceptance": {
+    "nominal": {
+      "passed": true,
+      "complete": true,
+      "provenance_matches": true,
+      "trials": 200,
+      "successes": 200,
+      "rate": 1.0,
+      "physical_failures": 0,
+      "wilson_95": [
+        0.9811546736227335,
+        1.0
+      ],
+      "classes": {
+        "stand": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "forward": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "backward": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "left": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "right": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        }
+      },
+      "metrics": {
+        "point_vx_rmse_m_s": 0.016409604085430227,
+        "yaw_rate_rmse_rad_s": 0.0005105771750016631,
+        "clearance_mae_m": 0.0023923325876675523
+      }
+    },
+    "combined": {
+      "passed": true,
+      "complete": true,
+      "provenance_matches": true,
+      "trials": 500,
+      "successes": 500,
+      "rate": 1.0,
+      "physical_failures": 0,
+      "wilson_95": [
+        0.9923756595384479,
+        1.0
+      ],
+      "classes": {
+        "stand": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "forward": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "backward": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "left": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "right": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        }
+      },
+      "metrics": {
+        "point_vx_rmse_m_s": 0.013827925248378899,
+        "yaw_rate_rmse_rad_s": 0.005917456241379104,
+        "clearance_mae_m": 0.0037620004175650573
+      }
+    }
+  },
+  "heldout_diagnostics": {
+    "nominal": {
+      "minimum_spring_margin_m": 0.001891409136648592,
+      "max_per_motor_saturation_fraction": 0.0002,
+      "maximum_low_confidence_fraction": 0.0,
+      "maximum_trial_roll_pitch_p95_deg": 3.6558406183269767
+    },
+    "combined": {
+      "minimum_spring_margin_m": 0.0016447506688307967,
+      "max_per_motor_saturation_fraction": 0.00025,
+      "maximum_low_confidence_fraction": 0.0,
+      "maximum_trial_roll_pitch_p95_deg": 3.932817926707826
+    }
+  },
+  "passed_limited_simulation_scope": true,
+  "scope": "already_balancing_reset_current_C_odometry_quality_reference_ideal_sensors",
+  "real_robot_accepted": false,
+  "hardware_accessed": false,
+  "firmware_flashed": false,
+  "source_integrity_passed": true,
+  "host_c_parity": {
+    "vectors": 512,
+    "passed": true,
+    "max_abs_error": 3.814697265625e-06,
+    "atol": 1e-05,
+    "rtol": 0.0001
+  },
+  "tests": {
+    "targeted": 60,
+    "independent_acceptance_scorer": 9
+  },
+  "limitations_zh": [
+    "初态已站稳，未验证失能后启动或起身。",
+    "使用理想IMU/编码器，尚未纳入实机IMU滤波、CAN时序与噪声。",
+    "质量、惯量、弹簧恒力与摩擦仍包含暂定假设；起身限位存在来源差异。",
+    "旧OpenOCD原始日志在本机缺失，不计为新增实测证据。"
+  ],
+  "next_steps_zh": [
+    "保持update400候选；无新证据不从较差的update700盲目续训。",
+    "先核实失能自然停位、机械限位/碰撞、弹簧与电机折算惯量。",
+    "得到合法的1–3秒零力矩静置和有界启动轨迹后，再进行起身课程/PPO冒烟。",
+    "将真实IMU/编码器滤波、CAN时序和观测对齐纳入仿真，再评估部署。"
+  ],
+  "artifacts_sha256": {
+    "reports/sample_weight/figures/getup_feasibility_20261116.png": "8a981bbc262a61b713ec5d5f8595cbd509ada9822faa713439caf93e611013e9",
+    "reports/sample_weight/figures/qualified_training_20261116.png": "fc16efbc00055ee09c2ace0f94ad33de7a720afe72b502f2dd7803e9c9ea50f7",
+    "reports/sample_weight/getup_feasibility_20261116.json": "4aebd0a2c4ed5f2c6ef2408bd623061bc74761d4303255aecd62fb978e8f7742",
+    "reports/sample_weight/getup_limit_audit_20261116.json": "5b817c63d48bd39816eacf3dd3c28a9f4865cb8a8da627224f7f0282b640054c",
+    "reports/sample_weight/getup_probe_initial_20261116.json": "3908c76ac4eb37bc1860c1bbd69f6dde8c972c6fc337d8cc10aaeb0c55215de5",
+    "reports/sample_weight/media/qualified_u400_reversal40_20261116.json": "abe3257b6244487de1bd721e9435dcc5b1fcbfae66077b6073ee4df8b805a523",
+    "reports/sample_weight/media/qualified_u400_reversal40_20261116.mp4": "1de7516130965159ea9ff2595f63f5216ab09caf8effa8e935d613aa54a6250e",
+    "reports/sample_weight/media/qualified_u400_reversal40_20261116.trajectory.npz": "8f78e4cc0c09ec49c7f6fa1b7074984d5013c96c34059e166545e1c689b6dd97",
+    "reports/sample_weight/media/qualified_u400_stand40_20261116.json": "2052495026ad1ebd31cb2a49e7b8789d83722e0283a0c1e44744cdfe7ca8be6c",
+    "reports/sample_weight/media/qualified_u400_stand40_20261116.mp4": "c9d62bfc948e5b49d1d78008ef3d839f7972059aacf565378f04a529b53a1aac",
+    "reports/sample_weight/media/qualified_u400_stand40_20261116.trajectory.npz": "b58abc8f72775d01209ee80579fa9f0a88ae4c75736968e6376f21caf2960184",
+    "reports/sample_weight/media/qualified_u400_turning40_20261116.json": "ad6849bf4b14deb8d63db1dd65d647eded098c57afa7106829cf7a64f6a0c6fd",
+    "reports/sample_weight/media/qualified_u400_turning40_20261116.mp4": "c3c4ab17bdfc8d3a989c849a78abbb18e8634e82b3d8eb9f6cbe58db9de79e36",
+    "reports/sample_weight/media/qualified_u400_turning40_20261116.trajectory.npz": "0b2e0e86f67f16639a08ebe9d1ad6fbfdba7041b8c9ee95165fc0effe952824c",
+    "reports/sample_weight/qualified_baseline_combined_20261116.json": "6b72c60915bf67d92ffb7944c1ad83787276d980ec6106e00539bda88f4fc362",
+    "reports/sample_weight/qualified_baseline_nominal_20261116.json": "18d47b8a1b06c89c9d10f0149f151e8ac38bb0d4e4d3f3e1166d6cdee7cddade",
+    "reports/sample_weight/qualified_baseline_selection_20261116.json": "c7247c34d5a80141760b61d4ed084e06e18059fe810cdc65d794a215e05d6cf9",
+    "reports/sample_weight/qualified_final_acceptance_20261116.json": "b167f94a095febbe50f8e0677749a3f24dabe4f871e02451fb292d8ea85b2cae",
+    "reports/sample_weight/qualified_final_combined_20261116.json": "17fbf9a854d10abe2c6a8713e8a308e1a108b38fa9fb685d28d2ef21702dbeb4",
+    "reports/sample_weight/qualified_final_nominal_20261116.json": "bb391923ac6ce1122db70ffd31095bd2e0c91bddba19e1bbfa03b74f6e44984f",
+    "reports/sample_weight/qualified_u200_corners_20261116.json": "244650beb73008af525922010c0e06fd23c90651464e1580227b8f9cb0400c03",
+    "reports/sample_weight/qualified_u400_continuous_replay_20261116.json": "7bff84b53f3fa3b27427558e275667be1230008175e9eb1ecf2c23ce9ad9fbfd",
+    "reports/sample_weight/qualified_u400_corners_20261116.json": "175bc583bd484796964a84b323c54d887b877101520b8a084485819dadfe3404",
+    "reports/sample_weight/qualified_u400_development_20261116.json": "e26f038ee67172a9c480691dd42e5d6dba3fc8bbeaced2e7cfc6626e37d04126",
+    "runs/night_20261116/acceptance_protocol.json": "ba85a4feb101e43c9856aff04663fa1ac5ea2e3f2b8b739f5aded338bac0a82b",
+    "runs/night_20261116/candidate_freeze.json": "3c60e34a1141157c3abed3f5b61e0dc5920ca48c448d5bb557eac52f41162e5c",
+    "runs/night_20261116/export_metadata_checks.json": "ea42ee9a5ac263d4d255695130246f8358efc0de9a2a51b317fbd62dcfdccbc3",
+    "runs/night_20261116/integrity_audit.json": "b81e62167ad69dc3eb84859cf30a0d2faa012dde02d4a885503503f74bab6e6e",
+    "runs/night_20261116/manifest.json": "523c48ed24d29db7162401c16ba3842388f909fad6683d5117ef64ab4f3941fb",
+    "runs/night_20261116/runtime_environment.json": "d562623a755521d133d2b386aa05ce72bd24f5289104c9b06279baaf0da176ed",
+    "runs/night_20261116/seed_audit_before_heldout.json": "e5b5c6f50b1db6c8ed08c6bd895470123a40b98f5b178b3edd54bc98c5835418",
+    "runs/qualified_acceptance_tests_20261116.log": "585ba42829657b9e2d56f8614be6c3365a8405474eed008559511ab50f2ffcfb",
+    "runs/qualified_combined_v1_20261116/candidate_u400/manifest.json": "096bc42f88b6ce814b7202bd733f0b12335dc84d401fa689d3493c6e83339806",
+    "runs/qualified_combined_v1_20261116/training_report.json": "ba03dce44c5aa613a7f9e4636b05bd8cfca3dfafcc43c4e312b83d4b335685c8",
+    "runs/qualified_combined_v1_20261116/update_000400.pt": "1e7041f60fc411e4d0f46dea4d2d864fab4b0baa66ed4a9850630a149a18cb4b",
+    "runs/qualified_targeted_tests_fixed_20261116.log": "9352925e5e271773731e7ca3a390daf15479f6b144d2d059ca8d677d62821619",
+    "tools/sample_qualified_acceptance.py": "4dcb3495b8423cfed9511c5764bab6949119869c2731efef2d57622eed4f7102",
+    "tools/sample_qualified_export.py": "cf66ea314e87663dacaa6f167f2b4196a8210662e5d10cd011f71a2c8a42c2fa"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "qualified_balance_acceptance_v1",
+  "scope": "already_balancing_reset_current_C_odometry_quality_reference_ideal_sensors",
+  "candidate_selection": "development_only; freeze checkpoint SHA before heldout trials",
+  "nominal": {
+    "seed_base": 30000000,
+    "seeds_per_class": 40,
+    "duration_s": 40
+  },
+  "combined": {
+    "seed_base": 40000000,
+    "seeds_per_class": 100,
+    "duration_s": 40
+  },
+  "class_stride": 1000,
+  "classes": [
+    "stand",
+    "forward",
+    "backward",
+    "left",
+    "right"
+  ],
+  "rate_min": 0.95,
+  "per_class_rate_min": 0.9,
+  "physical_failures_max": 0,
+  "finite_metrics_required": true,
+  "metric_thresholds_source": "configs/sample_command_evaluation.json",
+  "extra_protocols": [
+    "reversal",
+    "turning"
+  ],
+  "extra_protocol_status": "separate development transition diagnostics including legacy 0.3 m/s OOD reversal segments",
+  "getup_accepted": false,
+  "real_robot_accepted": false,
+  "retuning_after_heldout": "requires_new_seed_ranges_and_new_frozen_candidate"
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "sample_commands_v1",
+  "status": "specification_not_executed",
+  "runtime_enabled": false,
+  "clearance_m": 0.1,
+  "smoke": {
+    "episodes_per_class": 5,
+    "duration_s": 10,
+    "seeds": [
+      41000,
+      41024
+    ]
+  },
+  "development": {
+    "episodes_per_class": 40,
+    "duration_s": 40,
+    "seeds": [
+      42000,
+      42199
+    ]
+  },
+  "heldout_nominal": {
+    "episodes_per_class": 40,
+    "duration_s": 40,
+    "seeds": [
+      52000,
+      52199
+    ]
+  },
+  "heldout_random": {
+    "episodes_per_class": 100,
+    "duration_s": 40,
+    "seeds": [
+      62000,
+      62499
+    ]
+  },
+  "classes": [
+    {
+      "name": "stand",
+      "vx": 0,
+      "wz": 0
+    },
+    {
+      "name": "forward",
+      "vx": 0.15,
+      "wz": 0
+    },
+    {
+      "name": "backward",
+      "vx": -0.15,
+      "wz": 0,
+      "out_of_source_distribution": true
+    },
+    {
+      "name": "left",
+      "vx": 0,
+      "wz": 0.3
+    },
+    {
+      "name": "right",
+      "vx": 0,
+      "wz": -0.3
+    }
+  ],
+  "reversal_5s_segments": [
+    0,
+    0.15,
+    0,
+    -0.15,
+    0,
+    0.3,
+    -0.3,
+    0
+  ],
+  "turning_5s_segments": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0.3
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      -0.3
+    ],
+    [
+      0.15,
+      0.3
+    ],
+    [
+      0.15,
+      -0.3
+    ],
+    [
+      -0.15,
+      0.3
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "thresholds": {
+    "success_rate_min": 0.95,
+    "per_class_rate_min": 0.9,
+    "vx_rmse_max_m_s": 0.1,
+    "wz_rmse_max_rad_s": 0.15,
+    "clearance_mae_max_m": 0.02,
+    "tilt_p95_max_deg": 15,
+    "motor_saturation_max_per_motor": 0.05,
+    "nonfinite_count": 0,
+    "stroke_violation_count": 0
+  },
+  "semantics": {
+    "score_first_failure": true,
+    "tracking_command": "applied_after_slew",
+    "requested_transition_report": true,
+    "ignore_initial_s_for_tracking": 2,
+    "failed_short_episode_is_failure": true,
+    "do_not_use_stand_eval_abs_vx_as_tracking_error": true
+  }
+}

@@ -1,0 +1,3964 @@
+{
+  "schema": "sample_qualified_odometry_cpu31_v1",
+  "checkpoint": "runs/qualified_combined_v1_20261116/update_000400.pt",
+  "checkpoint_sha256": "1e7041f60fc411e4d0f46dea4d2d864fab4b0baa66ed4a9850630a149a18cb4b",
+  "firmware_sha256": {
+    "user/state_estimator.c": "ab13c2050c398d737af0930d618bec016c182cd5a6c51b07a089049cf3837451",
+    "user/state_estimator.h": "63c81b12c25780d10d742a261fcf438646aeeaa1225890506eb13c80fe4518c3",
+    "user/robot_config.h": "d5e5d399a3987dde86143c537a89782062ed34f60fb78ca781fa44dc74898317",
+    "user/algorithm/rl.c": "c1018a1099f0fc379a7fb83676044c4c56175393f8c632d3e76da0cd4f99587c",
+    "user/algorithm/rl.h": "c71d677f5039955c0bf3488cc98705c9b09d7f18ace1af58f4fb743840f0e528",
+    "user/algorithm/model/model.c": "4aa8979a086afabd75ca21a96ee72d0bc6d42d97e216cb9b26f3ab1c4e931cf7",
+    "user/algorithm/model/model.h": "fe2d03efbaa0851431d8caa10c5a9c248dbe15630c7e7b628178b11e2d05102d"
+  },
+  "domain": "combined",
+  "seed_base": 23000000,
+  "duration_s": 40.0,
+  "complete": true,
+  "summaries": {
+    "right": {
+      "trials": 20,
+      "passed": 20,
+      "wilson_95": [
+        0.8388748419471806,
+        1.0
+      ]
+    },
+    "left": {
+      "trials": 20,
+      "passed": 20,
+      "wilson_95": [
+        0.8388748419471806,
+        1.0
+      ]
+    },
+    "stand": {
+      "trials": 20,
+      "passed": 20,
+      "wilson_95": [
+        0.8388748419471806,
+        1.0
+      ]
+    },
+    "backward": {
+      "trials": 20,
+      "passed": 20,
+      "wilson_95": [
+        0.8388748419471806,
+        1.0
+      ]
+    },
+    "forward": {
+      "trials": 20,
+      "passed": 20,
+      "wilson_95": [
+        0.8388748419471806,
+        1.0
+      ]
+    }
+  },
+  "rows": [
+    {
+      "scenario": "stand",
+      "seed": 23000002,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9963879008387344,
+          0.922967540901613,
+          1.0,
+          0.9500839246056291,
+          0.9862119641680218,
+          1.0
+        ],
+        "effective_friction": 0.6134593095947195,
+        "spring_scale": 1.0722001244785502
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 5.0117393464475155e-05,
+        "yaw_rate_rmse_rad_s": 0.0002289014421653866,
+        "clearance_mae_m": 0.004845204409444782,
+        "roll_abs_p95_deg": 0.7294791422100139,
+        "pitch_abs_p95_deg": 2.754665247662396
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029465183999788924,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000000,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 9.921347542621213e-06,
+        "yaw_rate_rmse_rad_s": 2.304080316533274e-05,
+        "clearance_mae_m": 0.0014839673664157256,
+        "roll_abs_p95_deg": 0.28267554346097457,
+        "pitch_abs_p95_deg": 2.5772767898337348
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029161998142077095,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000003,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9362138174872032,
+          0.8049301439733025,
+          1.0,
+          0.8494427477752307,
+          0.9960366417655909,
+          1.0
+        ],
+        "effective_friction": 0.7638826629653213,
+        "spring_scale": 1.0695987023897873
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 5.67319528641334e-05,
+        "yaw_rate_rmse_rad_s": 0.00020340349155421414,
+        "clearance_mae_m": 0.006082172796706141,
+        "roll_abs_p95_deg": 1.2332276190602112,
+        "pitch_abs_p95_deg": 2.731829880574357
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029804470781633896,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000001,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8166039360069677,
+          0.9845484390708859,
+          1.0,
+          0.9819230159251902,
+          0.8605393358953038,
+          1.0
+        ],
+        "effective_friction": 0.8154779100378826,
+        "spring_scale": 1.0158746730012254
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 3.0172182601982937e-05,
+        "yaw_rate_rmse_rad_s": 0.0002457272401464613,
+        "clearance_mae_m": 0.0026571231197777363,
+        "roll_abs_p95_deg": 0.3445153921587213,
+        "pitch_abs_p95_deg": 2.567258643654636
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029301315375488413,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000004,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9894289373878115,
+          0.9069962278963507,
+          1.0,
+          0.8225438823796071,
+          0.8276640392583502,
+          1.0
+        ],
+        "effective_friction": 0.6475679284682925,
+        "spring_scale": 1.0592152155999286
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 8.060065758349865e-05,
+        "yaw_rate_rmse_rad_s": 0.00030329114281530924,
+        "clearance_mae_m": 0.00791549503862227,
+        "roll_abs_p95_deg": 0.40586873764011505,
+        "pitch_abs_p95_deg": 2.7388775659931013
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029800994169001116,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000005,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 9.943023082796945e-06,
+        "yaw_rate_rmse_rad_s": 2.009726850622718e-05,
+        "clearance_mae_m": 0.0014838483794804957,
+        "roll_abs_p95_deg": 0.2826855852633492,
+        "pitch_abs_p95_deg": 2.5772794931349154
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0028992596985426,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000006,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9614793669825196,
+          0.862702950596068,
+          1.0,
+          0.889519008805252,
+          0.9590927392977594,
+          1.0
+        ],
+        "effective_friction": 0.6830518113078303,
+        "spring_scale": 1.0930899689991074
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 7.44877621737952e-05,
+        "yaw_rate_rmse_rad_s": 0.0002753938154949889,
+        "clearance_mae_m": 0.007852058577601831,
+        "roll_abs_p95_deg": 0.8980842193906742,
+        "pitch_abs_p95_deg": 2.8061712804597794
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029823851451640793,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000007,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8842072629875742,
+          0.8077968358081402,
+          1.0,
+          0.9257686303388458,
+          0.9758008750879461,
+          1.0
+        ],
+        "effective_friction": 0.8566894593993897,
+        "spring_scale": 1.0017866928436707
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 5.674329924583593e-05,
+        "yaw_rate_rmse_rad_s": 0.0002665331688650958,
+        "clearance_mae_m": 0.0013756332599726018,
+        "roll_abs_p95_deg": 1.07583758877763,
+        "pitch_abs_p95_deg": 2.5383701422642932
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002689851499273893,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000008,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9298817955201517,
+          0.8656477452228899,
+          1.0,
+          0.9197875855094996,
+          0.8242305214868704,
+          1.0
+        ],
+        "effective_friction": 0.8573651130926467,
+        "spring_scale": 1.0703531152931114
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0005716903576400923,
+        "yaw_rate_rmse_rad_s": 0.0014060693044461055,
+        "clearance_mae_m": 0.00964266564665173,
+        "roll_abs_p95_deg": 0.5150987309573257,
+        "pitch_abs_p95_deg": 2.7723359544173647
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029343375952170514,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000009,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8850336152291173,
+          0.9448457606643165,
+          1.0,
+          0.9029662067130971,
+          0.8889496740367243,
+          1.0
+        ],
+        "effective_friction": 0.6016015440235383,
+        "spring_scale": 1.0697462922077516
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 6.821782283032357e-05,
+        "yaw_rate_rmse_rad_s": 0.0004021096278439578,
+        "clearance_mae_m": 0.006648572829272162,
+        "roll_abs_p95_deg": 0.44751931411146684,
+        "pitch_abs_p95_deg": 2.7512540517303474
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002952547092427593,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000010,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 1.0339420847700134e-05,
+        "yaw_rate_rmse_rad_s": 1.934330502074896e-05,
+        "clearance_mae_m": 0.0014824500206722991,
+        "roll_abs_p95_deg": 0.28278063074740517,
+        "pitch_abs_p95_deg": 2.5773339539032953
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0028812636381124745,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000011,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8713240025430077,
+          0.8129203000794228,
+          1.0,
+          0.8385151634080823,
+          0.9846747785086603,
+          1.0
+        ],
+        "effective_friction": 0.7337257677851438,
+        "spring_scale": 1.0994132465160547
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.00011072566192425278,
+        "yaw_rate_rmse_rad_s": 0.00029021125784405575,
+        "clearance_mae_m": 0.008562361496667566,
+        "roll_abs_p95_deg": 1.208993538560978,
+        "pitch_abs_p95_deg": 2.792848507112718
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002977578433121686,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000012,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8362969906308678,
+          0.896847231302441,
+          1.0,
+          0.9812929030618188,
+          0.807433014217767,
+          1.0
+        ],
+        "effective_friction": 0.7054571002571552,
+        "spring_scale": 0.9741943016026523
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 3.261580733453753e-05,
+        "yaw_rate_rmse_rad_s": 0.0002660179352989902,
+        "clearance_mae_m": 0.0012891130724355137,
+        "roll_abs_p95_deg": 0.47677188818254657,
+        "pitch_abs_p95_deg": 2.453180717622375
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002846935536245321,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000013,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8088652017667207,
+          0.9054004233067153,
+          1.0,
+          0.8384521418698192,
+          0.8703322532856446,
+          1.0
+        ],
+        "effective_friction": 0.7111274862923482,
+        "spring_scale": 1.0744907153845444
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 9.906968541132055e-05,
+        "yaw_rate_rmse_rad_s": 0.0005725039684992036,
+        "clearance_mae_m": 0.008157175899721118,
+        "roll_abs_p95_deg": 0.5104355760970263,
+        "pitch_abs_p95_deg": 2.7514901946826584
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002973514850490383,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000014,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9302460766802215,
+          0.9011451381866807,
+          1.0,
+          0.9624081904360492,
+          0.8350080735896196,
+          1.0
+        ],
+        "effective_friction": 0.7436632866962718,
+        "spring_scale": 0.9944440890450681
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 3.385369429634265e-05,
+        "yaw_rate_rmse_rad_s": 0.00025632293606482555,
+        "clearance_mae_m": 0.0022830490088786085,
+        "roll_abs_p95_deg": 0.49562144716666995,
+        "pitch_abs_p95_deg": 2.543906581323335
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0028053804297163976,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000015,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 9.782665629668209e-06,
+        "yaw_rate_rmse_rad_s": 2.1292526985128856e-05,
+        "clearance_mae_m": 0.0014832692016215154,
+        "roll_abs_p95_deg": 0.2827247967163798,
+        "pitch_abs_p95_deg": 2.577304139153734
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0028985080900346127,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000016,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.851670224085175,
+          0.8337159836676092,
+          1.0,
+          0.9409172548872689,
+          0.8161750495875457,
+          1.0
+        ],
+        "effective_friction": 0.7895690729852928,
+        "spring_scale": 1.052330768924524
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0003713384722931788,
+        "yaw_rate_rmse_rad_s": 0.0011299253987242588,
+        "clearance_mae_m": 0.0088540175438034,
+        "roll_abs_p95_deg": 0.6125278161420848,
+        "pitch_abs_p95_deg": 2.7045599509537954
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029293712362932767,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000017,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9435206692149769,
+          0.9632910907726705,
+          1.0,
+          0.9886132848605795,
+          0.9611440251571046,
+          1.0
+        ],
+        "effective_friction": 0.6758985725975751,
+        "spring_scale": 1.0164134571933563
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 1.6710537779133743e-05,
+        "yaw_rate_rmse_rad_s": 4.953504355973513e-05,
+        "clearance_mae_m": 0.0016661298450669619,
+        "roll_abs_p95_deg": 0.4940783366583791,
+        "pitch_abs_p95_deg": 2.5895541655368963
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002928583043890598,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000018,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9811557438414991,
+          0.9521954823267755,
+          1.0,
+          0.8175877820204586,
+          0.875677386618689,
+          1.0
+        ],
+        "effective_friction": 0.8158557611793682,
+        "spring_scale": 1.086185109447428
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 5.101646169540252e-05,
+        "yaw_rate_rmse_rad_s": 0.000267972216241545,
+        "clearance_mae_m": 0.00818992705317615,
+        "roll_abs_p95_deg": 0.3832704555585248,
+        "pitch_abs_p95_deg": 2.803254055809112
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002968071689702617,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "stand",
+      "seed": 23000019,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8180860310933148,
+          0.86161255756232,
+          1.0,
+          0.850699112324865,
+          0.8616290564781747,
+          1.0
+        ],
+        "effective_friction": 0.8881325015197079,
+        "spring_scale": 0.9250138676959746
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 2.4165794626958136e-05,
+        "yaw_rate_rmse_rad_s": 2.6832944461908095e-05,
+        "clearance_mae_m": 0.0022933087140122365,
+        "roll_abs_p95_deg": 0.5887810993841113,
+        "pitch_abs_p95_deg": 2.2573646349952416
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002641457506987216,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001000,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008538728096775426,
+        "yaw_rate_rmse_rad_s": 0.00018415098981611346,
+        "clearance_mae_m": 0.0007232901111172791,
+        "roll_abs_p95_deg": 0.5677820302297489,
+        "pitch_abs_p95_deg": 2.505967537650322
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0002,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029377452126148618,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001001,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8656261285220903,
+          0.8937347159622002,
+          1.0,
+          0.9367055990464018,
+          0.8726145786105336,
+          1.0
+        ],
+        "effective_friction": 0.8526258466747573,
+        "spring_scale": 1.0647703361351586
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009785672308513685,
+        "yaw_rate_rmse_rad_s": 0.0005958259894889048,
+        "clearance_mae_m": 0.008287428523543564,
+        "roll_abs_p95_deg": 0.6047062990775376,
+        "pitch_abs_p95_deg": 2.5493391033273314
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0002,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029798797214351525,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001002,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9346822634008463,
+          0.8103218103453506,
+          1.0,
+          0.9101061736576921,
+          0.9259829897913053,
+          1.0
+        ],
+        "effective_friction": 0.7850872911244007,
+        "spring_scale": 0.9697598722574132
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008490777822677312,
+        "yaw_rate_rmse_rad_s": 0.0002724874628783315,
+        "clearance_mae_m": 0.00036862881967710627,
+        "roll_abs_p95_deg": 0.996567009575695,
+        "pitch_abs_p95_deg": 2.517155741604898
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029736812038296534,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001003,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8831372300080957,
+          0.8778823334287921,
+          1.0,
+          0.9681800360187881,
+          0.8503197329165862,
+          1.0
+        ],
+        "effective_friction": 0.7304956992153835,
+        "spring_scale": 1.0086350666162065
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009094405639486109,
+        "yaw_rate_rmse_rad_s": 0.0005078599186402997,
+        "clearance_mae_m": 0.004100059974054747,
+        "roll_abs_p95_deg": 0.6308821672877706,
+        "pitch_abs_p95_deg": 2.4762046499006876
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029517156676130973,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001004,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8643903732676481,
+          0.8151798309968417,
+          1.0,
+          0.9726337038425235,
+          0.9155954038923799,
+          1.0
+        ],
+        "effective_friction": 0.7279749499865357,
+        "spring_scale": 0.9601033372769636
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008075478551146344,
+        "yaw_rate_rmse_rad_s": 0.00034083192738392274,
+        "clearance_mae_m": 0.00075438884767117,
+        "roll_abs_p95_deg": 0.9616738265028935,
+        "pitch_abs_p95_deg": 2.504994445844162
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002942538036229264,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001005,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008541652144946321,
+        "yaw_rate_rmse_rad_s": 0.0001841837475986369,
+        "clearance_mae_m": 0.000723285729929456,
+        "roll_abs_p95_deg": 0.5677712683225754,
+        "pitch_abs_p95_deg": 2.505923264294647
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002953003417954375,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001006,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8975051884018175,
+          0.9295719484502434,
+          1.0,
+          0.9132914362060217,
+          0.9181823402263167,
+          1.0
+        ],
+        "effective_friction": 0.6791439651253279,
+        "spring_scale": 1.017413026569521
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009049190496866348,
+        "yaw_rate_rmse_rad_s": 0.00037143595937538885,
+        "clearance_mae_m": 0.0028687302158859067,
+        "roll_abs_p95_deg": 0.6103935751967039,
+        "pitch_abs_p95_deg": 2.4898909019040665
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0002,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029676084756637966,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001007,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.976828190582635,
+          0.8907785625369062,
+          1.0,
+          0.9994605863947114,
+          0.8249715181582465,
+          1.0
+        ],
+        "effective_friction": 0.6631834871873802,
+        "spring_scale": 1.044208498433386
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.000988483354524091,
+        "yaw_rate_rmse_rad_s": 0.0005349533217641398,
+        "clearance_mae_m": 0.007710215240242545,
+        "roll_abs_p95_deg": 0.5087097221317847,
+        "pitch_abs_p95_deg": 2.507986817778585
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002950336480311344,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001008,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.994995553713538,
+          0.9565700206892583,
+          1.0,
+          0.9745405071791804,
+          0.8401541873491857,
+          1.0
+        ],
+        "effective_friction": 0.7665211792416073,
+        "spring_scale": 1.0477784965583412
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009872694630990526,
+        "yaw_rate_rmse_rad_s": 0.0003153873728053081,
+        "clearance_mae_m": 0.006794662304814264,
+        "roll_abs_p95_deg": 0.3625940630890839,
+        "pitch_abs_p95_deg": 2.4818920151671806
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002968519025687316,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001009,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8605922049737985,
+          0.8049971595682276,
+          1.0,
+          0.8034684156744913,
+          0.8845906107377954,
+          1.0
+        ],
+        "effective_friction": 0.7037455963310536,
+        "spring_scale": 0.9782601787443419
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008907659710397452,
+        "yaw_rate_rmse_rad_s": 0.00045240394452634867,
+        "clearance_mae_m": 0.0017785144432498575,
+        "roll_abs_p95_deg": 0.9465541204509169,
+        "pitch_abs_p95_deg": 2.429842362587689
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029686896039060884,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001010,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.000854530071065221,
+        "yaw_rate_rmse_rad_s": 0.00018420852342922013,
+        "clearance_mae_m": 0.0007232890377995569,
+        "roll_abs_p95_deg": 0.5677638001826555,
+        "pitch_abs_p95_deg": 2.5059783161157103
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029341545279393533,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001011,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8539021358813447,
+          0.9779844513126401,
+          1.0,
+          0.82287497120135,
+          0.9334878717152997,
+          1.0
+        ],
+        "effective_friction": 0.8322904659930008,
+        "spring_scale": 0.9789688154364604
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008881914097033089,
+        "yaw_rate_rmse_rad_s": 0.00023771024917774514,
+        "clearance_mae_m": 0.0005781674126568715,
+        "roll_abs_p95_deg": 0.5317669790956656,
+        "pitch_abs_p95_deg": 2.345867418116799
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029733386665981854,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001012,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9082073883511304,
+          0.8321203075215761,
+          1.0,
+          0.823658098051995,
+          0.9239108928976152,
+          1.0
+        ],
+        "effective_friction": 0.8601677200938793,
+        "spring_scale": 0.9227479785356185
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008406682013251919,
+        "yaw_rate_rmse_rad_s": 0.000210371976772264,
+        "clearance_mae_m": 0.0038085248031390264,
+        "roll_abs_p95_deg": 0.8762949600013036,
+        "pitch_abs_p95_deg": 2.3527389510819807
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029700785161242416,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001013,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8194177955310538,
+          0.9799657206321328,
+          1.0,
+          0.9932265292727938,
+          0.8339413426061869,
+          1.0
+        ],
+        "effective_friction": 0.6823908746997591,
+        "spring_scale": 1.071451450547376
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0010375311665663347,
+        "yaw_rate_rmse_rad_s": 0.0006182249716668787,
+        "clearance_mae_m": 0.008782420536459026,
+        "roll_abs_p95_deg": 0.26825495715189623,
+        "pitch_abs_p95_deg": 2.5084033833076513
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002967932568206183,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001014,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8239385397504333,
+          0.8721695685493818,
+          1.0,
+          0.8931891669972774,
+          0.8469815270385461,
+          1.0
+        ],
+        "effective_friction": 0.6786334308164557,
+        "spring_scale": 1.0897541024566615
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0010278389840378216,
+        "yaw_rate_rmse_rad_s": 0.0007331831605873934,
+        "clearance_mae_m": 0.011681717162971934,
+        "roll_abs_p95_deg": 0.598185213489319,
+        "pitch_abs_p95_deg": 2.5444966835018192
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0030202305815195674,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001015,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008531652700779885,
+        "yaw_rate_rmse_rad_s": 0.00018436998263282999,
+        "clearance_mae_m": 0.00072327136865914,
+        "roll_abs_p95_deg": 0.5677672278120004,
+        "pitch_abs_p95_deg": 2.505984994496547
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029470484942958064,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001016,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9988486506641802,
+          0.8731120880405528,
+          1.0,
+          0.8235811646278658,
+          0.9812581980849289,
+          1.0
+        ],
+        "effective_friction": 0.8091818745517714,
+        "spring_scale": 1.0415368678466652
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009175546398936721,
+        "yaw_rate_rmse_rad_s": 0.0002270640040716436,
+        "clearance_mae_m": 0.003987120268253623,
+        "roll_abs_p95_deg": 0.9211953391647653,
+        "pitch_abs_p95_deg": 2.6043221438254287
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029945767806648094,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001017,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8495415715153636,
+          0.9996977458573313,
+          1.0,
+          0.9718947622497197,
+          0.8708501885245581,
+          1.0
+        ],
+        "effective_friction": 0.7967629474940828,
+        "spring_scale": 0.9036481078411952
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.000840305983183459,
+        "yaw_rate_rmse_rad_s": 0.00020568393395708391,
+        "clearance_mae_m": 0.0024211196541797817,
+        "roll_abs_p95_deg": 0.24917135331656903,
+        "pitch_abs_p95_deg": 2.1963654828820487
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.00290123188174915,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001018,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9269779125151869,
+          0.8492655748869161,
+          1.0,
+          0.8719407424812624,
+          0.9518483065635212,
+          1.0
+        ],
+        "effective_friction": 0.7850496255803728,
+        "spring_scale": 0.9061405403520556
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008125776873643142,
+        "yaw_rate_rmse_rad_s": 0.00020725016016150536,
+        "clearance_mae_m": 0.00545450685056016,
+        "roll_abs_p95_deg": 0.8428397675737832,
+        "pitch_abs_p95_deg": 2.3579759366247717
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029437102780147384,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "forward",
+      "seed": 23001019,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8356143139917611,
+          0.9956359947233816,
+          1.0,
+          0.9452131022488802,
+          0.8497575308967877,
+          1.0
+        ],
+        "effective_friction": 0.7980562715218529,
+        "spring_scale": 1.022739097953176
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009557396768622796,
+        "yaw_rate_rmse_rad_s": 0.0004443668265754971,
+        "clearance_mae_m": 0.00411929542747469,
+        "roll_abs_p95_deg": 0.324810641614422,
+        "pitch_abs_p95_deg": 2.4087803133526346
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.00296451677668666,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002000,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009230875531539332,
+        "yaw_rate_rmse_rad_s": 0.0009991012762192624,
+        "clearance_mae_m": 0.0026301946603118523,
+        "roll_abs_p95_deg": 0.16077700157298747,
+        "pitch_abs_p95_deg": 2.8362288600653174
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0022920055571140907,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002001,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8175884038803387,
+          0.9483010488666648,
+          1.0,
+          0.8082041572608271,
+          0.9867330706398193,
+          1.0
+        ],
+        "effective_friction": 0.6380342169633139,
+        "spring_scale": 0.9837643205239788
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008679506620110963,
+        "yaw_rate_rmse_rad_s": 0.0003056445355295163,
+        "clearance_mae_m": 0.0009921314891429807,
+        "roll_abs_p95_deg": 0.4553407090103578,
+        "pitch_abs_p95_deg": 2.6709669549640886
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0024055359043885505,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002002,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8791481819010323,
+          0.8169635135699646,
+          1.0,
+          0.9494934252694409,
+          0.84276429253631,
+          1.0
+        ],
+        "effective_friction": 0.8011551040364259,
+        "spring_scale": 1.026346740455348
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0010881738331989792,
+        "yaw_rate_rmse_rad_s": 0.001368395625914276,
+        "clearance_mae_m": 0.005425626689660689,
+        "roll_abs_p95_deg": 0.6981140842747993,
+        "pitch_abs_p95_deg": 2.87838913325902
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002285631713661418,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002003,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.915009382503291,
+          0.8040467385270167,
+          1.0,
+          0.8592929648788319,
+          0.9511298320896782,
+          1.0
+        ],
+        "effective_friction": 0.6773351091165857,
+        "spring_scale": 0.980456857601327
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.015854300689572776,
+        "yaw_rate_rmse_rad_s": 0.04151258603977043,
+        "clearance_mae_m": 0.0024624155625765985,
+        "roll_abs_p95_deg": 0.9481221211981584,
+        "pitch_abs_p95_deg": 3.01905669064892
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0021858411501643193,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002004,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8525361325594918,
+          0.8985889916481024,
+          1.0,
+          0.9145556153386237,
+          0.8075639887650811,
+          1.0
+        ],
+        "effective_friction": 0.6962815110151994,
+        "spring_scale": 0.9944154957828557
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009077208397531068,
+        "yaw_rate_rmse_rad_s": 0.00045679063329958307,
+        "clearance_mae_m": 0.0025470946826505092,
+        "roll_abs_p95_deg": 0.40341125412732265,
+        "pitch_abs_p95_deg": 2.776956556778043
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0022611841439184044,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002005,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009237330669389437,
+        "yaw_rate_rmse_rad_s": 0.0010054020528787214,
+        "clearance_mae_m": 0.0026296958196203373,
+        "roll_abs_p95_deg": 0.16085777596066436,
+        "pitch_abs_p95_deg": 2.8361985020489455
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0021821129771600334,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002006,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.845203875811329,
+          0.9454813167940102,
+          1.0,
+          0.8355270723426238,
+          0.9171366496751203,
+          1.0
+        ],
+        "effective_friction": 0.7683032853355409,
+        "spring_scale": 0.9364075543347372
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.000882500098044364,
+        "yaw_rate_rmse_rad_s": 0.00028918069361472993,
+        "clearance_mae_m": 0.0007399889141479874,
+        "roll_abs_p95_deg": 0.2445423284603508,
+        "pitch_abs_p95_deg": 2.565467614795396
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0019188122811391872,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002007,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9842479445957428,
+          0.9530393808765347,
+          1.0,
+          0.9141703871439735,
+          0.9142801265014583,
+          1.0
+        ],
+        "effective_friction": 0.7286512559351586,
+        "spring_scale": 0.9022429967441289
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009035218387370227,
+        "yaw_rate_rmse_rad_s": 0.0005063074959135672,
+        "clearance_mae_m": 0.001346980804166179,
+        "roll_abs_p95_deg": 0.13685863883514693,
+        "pitch_abs_p95_deg": 2.5718163762480475
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0018881795460028994,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002008,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9949435059736252,
+          0.8082300897720537,
+          1.0,
+          0.9564564554059402,
+          0.9121316839667631,
+          1.0
+        ],
+        "effective_friction": 0.8359087416980083,
+        "spring_scale": 0.9462564973088454
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.025312922432290347,
+        "yaw_rate_rmse_rad_s": 0.0651846003060576,
+        "clearance_mae_m": 0.0037038541587775336,
+        "roll_abs_p95_deg": 0.5870423926540104,
+        "pitch_abs_p95_deg": 3.1308050017351015
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002083858092658236,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002010,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009222719388212235,
+        "yaw_rate_rmse_rad_s": 0.0009939680423784565,
+        "clearance_mae_m": 0.0026335182796776917,
+        "roll_abs_p95_deg": 0.16052390719552148,
+        "pitch_abs_p95_deg": 2.836090328408515
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.00246368034099001,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002009,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9387552840813738,
+          0.8091808441256081,
+          1.0,
+          0.8936770225139731,
+          0.8945284762179292,
+          1.0
+        ],
+        "effective_friction": 0.6212175479981671,
+        "spring_scale": 1.0390506220875089
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0012006283371863969,
+        "yaw_rate_rmse_rad_s": 0.0012840256767343845,
+        "clearance_mae_m": 0.005367226829862318,
+        "roll_abs_p95_deg": 0.8631672942519352,
+        "pitch_abs_p95_deg": 2.9105283498256327
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002329257106760685,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002011,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9971731373457937,
+          0.8794339492623219,
+          1.0,
+          0.9666881987722463,
+          0.9582534893970429,
+          1.0
+        ],
+        "effective_friction": 0.8182141513921097,
+        "spring_scale": 1.0785158586425194
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0037224516148329882,
+        "yaw_rate_rmse_rad_s": 0.008650776184826953,
+        "clearance_mae_m": 0.0059589162694804,
+        "roll_abs_p95_deg": 0.7780156364236289,
+        "pitch_abs_p95_deg": 3.029918415647619
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0023454570869190783,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002012,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9692588198189279,
+          0.8165168442988832,
+          1.0,
+          0.9253137051608423,
+          0.9846171536836381,
+          1.0
+        ],
+        "effective_friction": 0.6094829249674282,
+        "spring_scale": 1.0851707175558014
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0012189529581447293,
+        "yaw_rate_rmse_rad_s": 0.0012456136516661226,
+        "clearance_mae_m": 0.006883231792840798,
+        "roll_abs_p95_deg": 1.1146312621056165,
+        "pitch_abs_p95_deg": 3.024211489603314
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0025215143280180596,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002013,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8811241243278289,
+          0.8752377900148599,
+          1.0,
+          0.8256819059908473,
+          0.964291555195108,
+          1.0
+        ],
+        "effective_friction": 0.6865215987106927,
+        "spring_scale": 0.9598979278859102
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.000948767443693924,
+        "yaw_rate_rmse_rad_s": 0.0015155855434821417,
+        "clearance_mae_m": 0.0010073543846637154,
+        "roll_abs_p95_deg": 0.5862554251599363,
+        "pitch_abs_p95_deg": 2.618903691911166
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002350750934500545,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002014,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8083537502547204,
+          0.9279150694302414,
+          1.0,
+          0.8082811682783555,
+          0.8205472254731354,
+          1.0
+        ],
+        "effective_friction": 0.6239784290863369,
+        "spring_scale": 0.9748338561635757
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009135903151286946,
+        "yaw_rate_rmse_rad_s": 0.00040797667309158637,
+        "clearance_mae_m": 0.0006651455254533935,
+        "roll_abs_p95_deg": 0.3829564946543444,
+        "pitch_abs_p95_deg": 2.6641773890449807
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002187447946284088,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002015,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009260364358405896,
+        "yaw_rate_rmse_rad_s": 0.0010172704671845096,
+        "clearance_mae_m": 0.002626760241173436,
+        "roll_abs_p95_deg": 0.1611568777325855,
+        "pitch_abs_p95_deg": 2.836385645576631
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0020519522992118455,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002016,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8087566190139572,
+          0.8408505393309299,
+          1.0,
+          0.9313549536792185,
+          0.8400477433341251,
+          1.0
+        ],
+        "effective_friction": 0.7082095843625265,
+        "spring_scale": 0.9713683400849774
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.000869178873059472,
+        "yaw_rate_rmse_rad_s": 0.0004299991931492275,
+        "clearance_mae_m": 0.0021226884943136336,
+        "roll_abs_p95_deg": 0.6244263463477728,
+        "pitch_abs_p95_deg": 2.6613829876302164
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.00237620842783115,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002017,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.812890349916131,
+          0.9067037164084464,
+          1.0,
+          0.8565322186968592,
+          0.9287621078539293,
+          1.0
+        ],
+        "effective_friction": 0.8096915338821153,
+        "spring_scale": 0.936458849739026
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0008526790374057092,
+        "yaw_rate_rmse_rad_s": 0.00040607051734310777,
+        "clearance_mae_m": 0.0008092256200706705,
+        "roll_abs_p95_deg": 0.3393396199911027,
+        "pitch_abs_p95_deg": 2.548694463352654
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0021723541643224598,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002018,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9811849505246626,
+          0.9061596948139647,
+          1.0,
+          0.8221009714864181,
+          0.8842486759249952,
+          1.0
+        ],
+        "effective_friction": 0.857940573235232,
+        "spring_scale": 1.026166668751947
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009290978337997867,
+        "yaw_rate_rmse_rad_s": 0.0002983960878146948,
+        "clearance_mae_m": 0.003056446093953226,
+        "roll_abs_p95_deg": 0.518729757427053,
+        "pitch_abs_p95_deg": 2.88119875891411
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0025462479301965324,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "backward",
+      "seed": 23002019,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8626442859771357,
+          0.9776429231987588,
+          1.0,
+          0.8565701571278896,
+          0.8806559156532097,
+          1.0
+        ],
+        "effective_friction": 0.7145047468385102,
+        "spring_scale": 1.001625526918942
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0009154897817557041,
+        "yaw_rate_rmse_rad_s": 0.00035178740613690243,
+        "clearance_mae_m": 0.001707993629081179,
+        "roll_abs_p95_deg": 0.32470693053813476,
+        "pitch_abs_p95_deg": 2.769294983762194
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0023713946123391783,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003000,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.030566778473232192,
+        "yaw_rate_rmse_rad_s": 0.0002603293585967639,
+        "clearance_mae_m": 0.0034265793987741963,
+        "roll_abs_p95_deg": 0.2211914865349106,
+        "pitch_abs_p95_deg": 3.6557250675452195
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002776270258258884,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003001,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.939767080414069,
+          0.8349253357524198,
+          1.0,
+          0.963007453277572,
+          0.8164552533154448,
+          1.0
+        ],
+        "effective_friction": 0.8354182186209518,
+        "spring_scale": 1.0451934530488687
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02164896244391734,
+        "yaw_rate_rmse_rad_s": 0.0006494778678937651,
+        "clearance_mae_m": 0.004980400142156819,
+        "roll_abs_p95_deg": 0.29623950722040526,
+        "pitch_abs_p95_deg": 3.6105223061742127
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0027405179850374106,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003002,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.997336125192712,
+          0.9640523435692455,
+          1.0,
+          0.8735441063110196,
+          0.847578582425459,
+          1.0
+        ],
+        "effective_friction": 0.7098599647272094,
+        "spring_scale": 1.09858619461162
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.024442014361930962,
+        "yaw_rate_rmse_rad_s": 0.00017519235598128488,
+        "clearance_mae_m": 0.006425110661950163,
+        "roll_abs_p95_deg": 0.005247507256013581,
+        "pitch_abs_p95_deg": 3.795653199564417
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029579179620179696,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003003,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8830669947659705,
+          0.9703212513348867,
+          1.0,
+          0.9418937602029535,
+          0.8538583867882699,
+          1.0
+        ],
+        "effective_friction": 0.7443927311808817,
+        "spring_scale": 1.0790202189903515
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02581030591790204,
+        "yaw_rate_rmse_rad_s": 0.00022025708138298292,
+        "clearance_mae_m": 0.004448931330985543,
+        "roll_abs_p95_deg": 0.01961053622323884,
+        "pitch_abs_p95_deg": 3.78010328232207
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.00289619241317271,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003007,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8367749356996372,
+          0.9941002119453792,
+          1.0,
+          0.9073595598074119,
+          0.8860154101712583,
+          1.0
+        ],
+        "effective_friction": 0.8744231905323101,
+        "spring_scale": 1.049044047909571
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.0274317896645364,
+        "yaw_rate_rmse_rad_s": 0.0001699220268994278,
+        "clearance_mae_m": 0.0009714768544890813,
+        "roll_abs_p95_deg": 0.06459520901645452,
+        "pitch_abs_p95_deg": 3.7129706743069786
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002936830864343265,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003004,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8387689012575087,
+          0.8237322098650695,
+          1.0,
+          0.9287906253581181,
+          0.9122713536354666,
+          1.0
+        ],
+        "effective_friction": 0.6833005648238721,
+        "spring_scale": 0.9777631237936523
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02396627330738217,
+        "yaw_rate_rmse_rad_s": 0.0004629129645442571,
+        "clearance_mae_m": 0.002639216871257059,
+        "roll_abs_p95_deg": 0.5300059843363423,
+        "pitch_abs_p95_deg": 3.4186037915106344
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0024214688812932428,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003006,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8258479189847349,
+          0.9472743558079252,
+          1.0,
+          0.8924526429958555,
+          0.8306443283658411,
+          1.0
+        ],
+        "effective_friction": 0.703876133956026,
+        "spring_scale": 0.9677305891150889
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02767505481419882,
+        "yaw_rate_rmse_rad_s": 0.00021289504668716967,
+        "clearance_mae_m": 0.0033494704654186773,
+        "roll_abs_p95_deg": 0.11756007870343986,
+        "pitch_abs_p95_deg": 3.4712672365395223
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0024298837089399283,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003005,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.030554723444884833,
+        "yaw_rate_rmse_rad_s": 0.0002604331327319349,
+        "clearance_mae_m": 0.0034244154889418133,
+        "roll_abs_p95_deg": 0.22113959662781585,
+        "pitch_abs_p95_deg": 3.6557882089625178
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0024677470781222788,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003008,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8532625851133113,
+          0.8831088214751066,
+          1.0,
+          0.929355265745814,
+          0.9819089829856177,
+          1.0
+        ],
+        "effective_friction": 0.7730921519384499,
+        "spring_scale": 0.9119247097686694
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.028800899068538072,
+        "yaw_rate_rmse_rad_s": 0.00024994531549375835,
+        "clearance_mae_m": 0.006275181203648272,
+        "roll_abs_p95_deg": 0.24036668456753835,
+        "pitch_abs_p95_deg": 3.3422646364595603
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002083533637147944,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003009,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.923801552658823,
+          0.9235499251998147,
+          1.0,
+          0.9670027061168893,
+          0.9810260434018372,
+          1.0
+        ],
+        "effective_friction": 0.8297596068063057,
+        "spring_scale": 1.097233855977172
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.024240352344194888,
+        "yaw_rate_rmse_rad_s": 0.00013361878963461817,
+        "clearance_mae_m": 0.0033752229772730552,
+        "roll_abs_p95_deg": 0.42550377305433107,
+        "pitch_abs_p95_deg": 3.768816533726518
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002929838940976204,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003010,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.03056837955557703,
+        "yaw_rate_rmse_rad_s": 0.0002603121219270127,
+        "clearance_mae_m": 0.003426873063313125,
+        "roll_abs_p95_deg": 0.22114537245913476,
+        "pitch_abs_p95_deg": 3.655851892224584
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0027991312570113114,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003011,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8986512658891915,
+          0.8335651194612153,
+          1.0,
+          0.847470651106816,
+          0.8469905592282128,
+          1.0
+        ],
+        "effective_friction": 0.8458783620645222,
+        "spring_scale": 0.9065226028516289
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.026820280340877824,
+        "yaw_rate_rmse_rad_s": 0.00023115312756374773,
+        "clearance_mae_m": 0.0067891549271848215,
+        "roll_abs_p95_deg": 0.37524756210074117,
+        "pitch_abs_p95_deg": 3.2799995802155912
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002573679348958441,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003012,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.817196096409103,
+          0.9131502354576664,
+          1.0,
+          0.801683581874318,
+          0.9910723707549949,
+          1.0
+        ],
+        "effective_friction": 0.6395577682564477,
+        "spring_scale": 0.910806243784723
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02779365314396376,
+        "yaw_rate_rmse_rad_s": 0.0002449443485304458,
+        "clearance_mae_m": 0.007603554369921078,
+        "roll_abs_p95_deg": 0.31002027453880676,
+        "pitch_abs_p95_deg": 3.2504639061199483
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0024055711604777374,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003013,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9745338265211282,
+          0.8259373751374525,
+          1.0,
+          0.8461042853155158,
+          0.9546680479884315,
+          1.0
+        ],
+        "effective_friction": 0.6090875829290368,
+        "spring_scale": 1.0274861770410268
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.022520907246164224,
+        "yaw_rate_rmse_rad_s": 0.00012895659995262055,
+        "clearance_mae_m": 0.0004471874873434424,
+        "roll_abs_p95_deg": 0.6459831243112828,
+        "pitch_abs_p95_deg": 3.552767921978903
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0028381914857655843,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003014,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.844263565610389,
+          0.9559656259088506,
+          1.0,
+          0.9084565939286887,
+          0.810883637963469,
+          1.0
+        ],
+        "effective_friction": 0.8419539586631969,
+        "spring_scale": 0.9071617139625221
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02990972347648136,
+        "yaw_rate_rmse_rad_s": 0.00022018143594860305,
+        "clearance_mae_m": 0.006652783277014961,
+        "roll_abs_p95_deg": 0.35879885702227227,
+        "pitch_abs_p95_deg": 3.354951912996809
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002572419738976678,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003015,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.030550993543319176,
+        "yaw_rate_rmse_rad_s": 0.00026053121396727705,
+        "clearance_mae_m": 0.0034237386251737825,
+        "roll_abs_p95_deg": 0.22111763011732374,
+        "pitch_abs_p95_deg": 3.65574698304226
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0023330315129343193,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003016,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.930163963575493,
+          0.9346626439638575,
+          1.0,
+          0.9880969586916849,
+          0.8058452773653626,
+          1.0
+        ],
+        "effective_friction": 0.6384498147019504,
+        "spring_scale": 0.9606970478683525
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.028802426750985547,
+        "yaw_rate_rmse_rad_s": 0.00021717803045629962,
+        "clearance_mae_m": 0.003384234436364727,
+        "roll_abs_p95_deg": 0.19252803338642013,
+        "pitch_abs_p95_deg": 3.5234867018387
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0024158762415843194,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003017,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9748361525618927,
+          0.9556929360801648,
+          1.0,
+          0.8303938071718557,
+          0.9957799821318379,
+          1.0
+        ],
+        "effective_friction": 0.6040378956671313,
+        "spring_scale": 1.065637760737304
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02613639374260199,
+        "yaw_rate_rmse_rad_s": 0.0002149753122932865,
+        "clearance_mae_m": 0.0005707253573682651,
+        "roll_abs_p95_deg": 0.3606257058656263,
+        "pitch_abs_p95_deg": 3.7163899710422235
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029566563258859313,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003018,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9011068053044563,
+          0.9313458961972377,
+          1.0,
+          0.8397974530167835,
+          0.8964774616726892,
+          1.0
+        ],
+        "effective_friction": 0.8890415481748961,
+        "spring_scale": 0.9542215021390182
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.027908775555522024,
+        "yaw_rate_rmse_rad_s": 0.00023213887328894244,
+        "clearance_mae_m": 0.005123798900667717,
+        "roll_abs_p95_deg": 0.2528034037309657,
+        "pitch_abs_p95_deg": 3.4382323580971215
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002339422114503692,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "left",
+      "seed": 23003019,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.878504735647994,
+          0.8881282231823597,
+          1.0,
+          0.9453040016633616,
+          0.9526228747012618,
+          1.0
+        ],
+        "effective_friction": 0.6079151706902002,
+        "spring_scale": 0.9591737557208464
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.027447442352123236,
+        "yaw_rate_rmse_rad_s": 0.00025993481051542606,
+        "clearance_mae_m": 0.004545370239751472,
+        "roll_abs_p95_deg": 0.4186728097565605,
+        "pitch_abs_p95_deg": 3.4358534295983643
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002723340872295199,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004000,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.020307107227575234,
+        "yaw_rate_rmse_rad_s": 0.00043624625261155325,
+        "clearance_mae_m": 0.0037072132316860952,
+        "roll_abs_p95_deg": 0.8242904651945627,
+        "pitch_abs_p95_deg": 2.0075693735877516
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029118789328004824,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004001,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9678048838328831,
+          0.845230210326561,
+          1.0,
+          0.8818696854649648,
+          0.8501593375146586,
+          1.0
+        ],
+        "effective_friction": 0.8013496194736659,
+        "spring_scale": 0.9710102151192417
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.011485314843761397,
+        "yaw_rate_rmse_rad_s": 0.0007901748894886852,
+        "clearance_mae_m": 0.002778466310534717,
+        "roll_abs_p95_deg": 1.0139946447023764,
+        "pitch_abs_p95_deg": 1.947072563705269
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0002,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029264009635416033,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004002,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9122413138499365,
+          0.9044785499106154,
+          1.0,
+          0.8701871432675069,
+          0.876686446382455,
+          1.0
+        ],
+        "effective_friction": 0.600653278836681,
+        "spring_scale": 0.9160324971910511
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.016611736103027987,
+        "yaw_rate_rmse_rad_s": 0.00043184792865285775,
+        "clearance_mae_m": 0.0016527043929114476,
+        "roll_abs_p95_deg": 0.907427320782759,
+        "pitch_abs_p95_deg": 1.7363878886714226
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0002,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002923290851223642,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004003,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9057063330971696,
+          0.9351181240536233,
+          1.0,
+          0.8060088591198039,
+          0.8787790164514205,
+          1.0
+        ],
+        "effective_friction": 0.6686480370537584,
+        "spring_scale": 0.9656682972237268
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.014958112847324255,
+        "yaw_rate_rmse_rad_s": 0.0007657040908298589,
+        "clearance_mae_m": 0.0013920228610618374,
+        "roll_abs_p95_deg": 0.8156200690576348,
+        "pitch_abs_p95_deg": 1.8807255250576813
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002948883350639503,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004004,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9714478172456092,
+          0.8735642463492689,
+          1.0,
+          0.9264485458987216,
+          0.9737702851569605,
+          1.0
+        ],
+        "effective_friction": 0.7008111846833013,
+        "spring_scale": 0.9750974304196943
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.014792254181300372,
+        "yaw_rate_rmse_rad_s": 0.0002902447314570577,
+        "clearance_mae_m": 0.0011628488405518507,
+        "roll_abs_p95_deg": 1.1018644091048135,
+        "pitch_abs_p95_deg": 1.9581134220426604
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029628729393639808,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004005,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.02029594013717197,
+        "yaw_rate_rmse_rad_s": 0.0004383360475095553,
+        "clearance_mae_m": 0.003704273071123128,
+        "roll_abs_p95_deg": 0.824287880070226,
+        "pitch_abs_p95_deg": 2.0076788659238245
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029375240124966395,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004006,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9921065855381186,
+          0.8593168066392722,
+          1.0,
+          0.8729834353327836,
+          0.9183212825140175,
+          1.0
+        ],
+        "effective_friction": 0.6906836828610002,
+        "spring_scale": 0.9473597768828552
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.01503012550648877,
+        "yaw_rate_rmse_rad_s": 0.00028514579455550114,
+        "clearance_mae_m": 0.0005267664922476449,
+        "roll_abs_p95_deg": 1.0574285110541948,
+        "pitch_abs_p95_deg": 1.8810281234895998
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029477790652870095,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004007,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8094779364318232,
+          0.825192693403049,
+          1.0,
+          0.8304388458888726,
+          0.9918913901656292,
+          1.0
+        ],
+        "effective_friction": 0.6699687335026426,
+        "spring_scale": 0.9305723329801723
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.011276307063782727,
+        "yaw_rate_rmse_rad_s": 0.00035047328041698517,
+        "clearance_mae_m": 0.0016288495069361284,
+        "roll_abs_p95_deg": 1.2116055780825365,
+        "pitch_abs_p95_deg": 1.7435669659317836
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029344300174282134,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004009,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9805618226563588,
+          0.9651553372003204,
+          1.0,
+          0.8182133919542938,
+          0.9646150034812269,
+          1.0
+        ],
+        "effective_friction": 0.6683734664784817,
+        "spring_scale": 0.9876424767257632
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.017384221838128527,
+        "yaw_rate_rmse_rad_s": 0.0004965927844640728,
+        "clearance_mae_m": 0.0019476554123751373,
+        "roll_abs_p95_deg": 0.8556741281014212,
+        "pitch_abs_p95_deg": 1.9590351761438465
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002979091778414489,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004008,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8767039301286648,
+          0.9028906236106524,
+          1.0,
+          0.9751191641234682,
+          0.9321630897811142,
+          1.0
+        ],
+        "effective_friction": 0.625486118801929,
+        "spring_scale": 1.0766725667026258
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.009061012541969542,
+        "yaw_rate_rmse_rad_s": 0.0008394847709695708,
+        "clearance_mae_m": 0.009024426993649927,
+        "roll_abs_p95_deg": 0.9631660202286761,
+        "pitch_abs_p95_deg": 2.208194917391101
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002963696502987334,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004010,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.020232903023272027,
+        "yaw_rate_rmse_rad_s": 0.00042895737194331864,
+        "clearance_mae_m": 0.0036876361945631067,
+        "roll_abs_p95_deg": 0.8242942415083312,
+        "pitch_abs_p95_deg": 2.0084528398727457
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029089335935282568,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004011,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8872473352003902,
+          0.8985220459216996,
+          1.0,
+          0.8732090782028388,
+          0.892758747861971,
+          1.0
+        ],
+        "effective_friction": 0.8006180613193465,
+        "spring_scale": 0.9581376426950239
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.013811282204831594,
+        "yaw_rate_rmse_rad_s": 0.0008138007768947595,
+        "clearance_mae_m": 0.0008693889778557882,
+        "roll_abs_p95_deg": 0.9402265681594856,
+        "pitch_abs_p95_deg": 1.8630499578524171
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0002,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002900559924947782,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004013,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8429381369395235,
+          0.9434533572089125,
+          1.0,
+          0.8576885542955297,
+          0.8388221182197408,
+          1.0
+        ],
+        "effective_friction": 0.6513238222484093,
+        "spring_scale": 0.9653970897247516
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.014398584425411337,
+        "yaw_rate_rmse_rad_s": 0.0010215304080422702,
+        "clearance_mae_m": 0.0019730837434250802,
+        "roll_abs_p95_deg": 0.742130130124442,
+        "pitch_abs_p95_deg": 1.8660912488753736
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029419653364720633,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004014,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8910556033166602,
+          0.9153364543101069,
+          1.0,
+          0.8337532282600143,
+          0.9430446160994863,
+          1.0
+        ],
+        "effective_friction": 0.8360588605526404,
+        "spring_scale": 0.991891966718906
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.013250489998538596,
+        "yaw_rate_rmse_rad_s": 0.0007897466974189292,
+        "clearance_mae_m": 0.002415777794522074,
+        "roll_abs_p95_deg": 0.9624361687085148,
+        "pitch_abs_p95_deg": 1.9563260192562695
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029480772817496725,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004015,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "effective_friction": 0.75,
+        "spring_scale": 1.0
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.020245427355728922,
+        "yaw_rate_rmse_rad_s": 0.0004313880544556541,
+        "clearance_mae_m": 0.003690935605133582,
+        "roll_abs_p95_deg": 0.8242825198475096,
+        "pitch_abs_p95_deg": 2.008292465837036
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029106222204927923,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004012,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9737212805950198,
+          0.9627471570812905,
+          1.0,
+          0.8237966332949916,
+          0.9283580609979121,
+          1.0
+        ],
+        "effective_friction": 0.6848241082492241,
+        "spring_scale": 1.034243205475426
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.01495629590406509,
+        "yaw_rate_rmse_rad_s": 0.0005879199749434594,
+        "clearance_mae_m": 0.0053153485695746905,
+        "roll_abs_p95_deg": 0.7866537591266898,
+        "pitch_abs_p95_deg": 2.10062538459595
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029635982248455706,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004016,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8890087958911085,
+          0.907359112206206,
+          1.0,
+          0.8163522689055837,
+          0.9383091091053779,
+          1.0
+        ],
+        "effective_friction": 0.8992606162779664,
+        "spring_scale": 0.9770176073904019
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.013259273452121556,
+        "yaw_rate_rmse_rad_s": 0.0007823884899495728,
+        "clearance_mae_m": 0.0014842421543834158,
+        "roll_abs_p95_deg": 0.9768801695534396,
+        "pitch_abs_p95_deg": 1.9076205020726673
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002973571648099388,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004017,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.9044265028682847,
+          0.9412116115984356,
+          1.0,
+          0.9843188235673483,
+          0.9625145477323953,
+          1.0
+        ],
+        "effective_friction": 0.8783023146535129,
+        "spring_scale": 1.0618678832762145
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.012910391956481249,
+        "yaw_rate_rmse_rad_s": 0.0009046264609923571,
+        "clearance_mae_m": 0.00683084280358664,
+        "roll_abs_p95_deg": 0.9174309062808821,
+        "pitch_abs_p95_deg": 2.173762727410763
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.0029315599296731443,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004018,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8101289157815198,
+          0.8854947195725148,
+          1.0,
+          0.8131231463731534,
+          0.8347177027356669,
+          1.0
+        ],
+        "effective_friction": 0.6343994687461881,
+        "spring_scale": 0.9691381204259238
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.010232022305328785,
+        "yaw_rate_rmse_rad_s": 0.001309138201293983,
+        "clearance_mae_m": 0.002756467063507919,
+        "roll_abs_p95_deg": 0.8738853818795912,
+        "pitch_abs_p95_deg": 1.8599839535991565
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00025,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002938400646532474,
+      "odometry_low_confidence_fraction": 0.0
+    },
+    {
+      "scenario": "right",
+      "seed": 23004019,
+      "domain": "combined",
+      "parameters": {
+        "motor_gain": [
+          0.8749318257657986,
+          0.9648794195891502,
+          1.0,
+          0.8839922155837344,
+          0.8260860597748966,
+          1.0
+        ],
+        "effective_friction": 0.80299799072219,
+        "spring_scale": 1.001347848570884
+      },
+      "elapsed_s": 39.99999999999748,
+      "completed": true,
+      "first_failure": null,
+      "thresholds_met": true,
+      "metrics": {
+        "samples": 3800,
+        "point_vx_rmse_m_s": 0.014877708020903244,
+        "yaw_rate_rmse_rad_s": 0.0009354924485251906,
+        "clearance_mae_m": 0.004758868051991796,
+        "roll_abs_p95_deg": 0.6237115762623456,
+        "pitch_abs_p95_deg": 1.9983336638933804
+      },
+      "motor_saturation_fractions": [
+        0.0,
+        0.0,
+        0.0,
+        0.00015,
+        0.0,
+        0.0
+      ],
+      "minimum_spring_margin_m": 0.002953613896685914,
+      "odometry_low_confidence_fraction": 0.0
+    }
+  ],
+  "wall_seconds": 300.78140748999976,
+  "scope": "Already balancing reset; ideal IMU/encoders with actual C odometry quality and reference logic; excludes startup, IMU filtering, CAN timing and hardware acceptance."
+}

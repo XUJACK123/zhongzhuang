@@ -1,0 +1,2108 @@
+{
+  "schema": "development_feedback_grid_v1",
+  "balance_sha256": "fe208802de4797d4bc2f3636d1f687d33dcbd7610e587069c79d8a2777e75bc2",
+  "configuration": {
+    "schema": "realdata_supported_getup_v1",
+    "evidence_status": "simulation_candidate_with_unmeasured_dynamics",
+    "wheel_radius_m": 0.05570423008216337,
+    "mass_kg": 21.9,
+    "spring": {
+      "installed_model": "BG450-080",
+      "catalogue_proxy": "BKB0.45; exact model equivalence unverified",
+      "free_pin_distance_m": 0.25,
+      "stroke_m": 0.08,
+      "initial_force_n": 450.0,
+      "progression_at_full_stroke": 1.7,
+      "polytropic_exponent": 1.2,
+      "seal_friction_n": 15.0,
+      "viscous_damping_ns_m": 20.0,
+      "friction_smoothing_m_s": 0.01,
+      "provenance": "450 N/progression are catalogue-proxy assumptions, not this spring's measured force. 250 mm pin endpoint provisional; 080 interpreted as 80 mm stroke. Friction/damping are sensitivity hypotheses."
+    },
+    "reflected_inertia": {
+      "leg_motor_output_kg_m2": 0.01,
+      "wheel_output_kg_m2": 0.001,
+      "approximation": "Diagonal approximation to B(q)^T J B(q), evaluated at default pose; omits cross terms. J_output=81*0.5*0.2kg*(0.035m)^2=0.0099225 kg m2 is a geometric rotor hypothesis, not a measured rotor."
+    },
+    "joint_stop_solver": {
+      "time_constant_s": 0.001,
+      "damping_ratio": 1.0,
+      "impedance": [
+        0.99,
+        0.999,
+        0.0001,
+        0.5,
+        2.0
+      ],
+      "inward_contact_margin_rad": 0.04,
+      "provenance": "Numerical contact starts 0.04 rad inward so the stop decelerates before the original boundary; no angle boundary or violation tolerance enlarged."
+    },
+    "passive_drive": {
+      "damping_nms_rad": [
+        0.05,
+        0.05,
+        0.005,
+        0.05,
+        0.05,
+        0.005
+      ],
+      "frictionloss_nm": [
+        0.1,
+        0.1,
+        0.02,
+        0.1,
+        0.1,
+        0.02
+      ],
+      "provenance": "Unmeasured gear/bearing drag hypothesis, tested over 0.5x..2x. Prevents frictionless wheel spin from being treated as a real disabled rest."
+    },
+    "physics_dt_s": 0.0005,
+    "pd_dt_s": 0.002,
+    "policy_dt_s": 0.01,
+    "wheel_kd": 0.14,
+    "survey_pose_rad": [
+      1.2217304763960306,
+      -2.6179938779914944,
+      0.0,
+      -1.2217304763960306,
+      2.6179938779914944,
+      0.0
+    ],
+    "support": {
+      "position_kp_n_m": [
+        1500,
+        1500,
+        5000
+      ],
+      "position_kd_ns_m": [
+        200,
+        200,
+        400
+      ],
+      "rotation_kp_nm_rad": [
+        600,
+        600,
+        200
+      ],
+      "rotation_kd_nms_rad": [
+        15,
+        15,
+        5
+      ],
+      "force_cap_bodyweights": 2.0,
+      "moment_cap_nm": 80,
+      "release_after_s": [
+        2.0,
+        2.5
+      ],
+      "fade_s": [
+        0.5,
+        0.8
+      ],
+      "provenance": "Staged virtual fixture: transfer vertical load first, retain upright/horizontal support, then remove all wrenches. Reaction updated at 2 ms to avoid 10 ms sample-and-hold instability with small archived body inertia. Stiffness is a fixture hypothesis, not measured cardboard.",
+      "target_root_height_m": 0.35,
+      "vertical_release_after_s": [
+        0.3,
+        0.6
+      ],
+      "vertical_fade_s": [
+        0.5,
+        0.8
+      ],
+      "reaction_update_dt_s": 0.002
+    },
+    "success": {
+      "stable_dwell_s": 1.0,
+      "blend_s": 0.3,
+      "balance_s": 10.0,
+      "getup_timeout_s": 12.0,
+      "tilt_deg": 8.0,
+      "angular_velocity_rad_s": 0.5,
+      "forward_velocity_m_s": 0.08,
+      "clearance_error_m": 0.02,
+      "leg_error_rad": 0.15,
+      "displacement_m": 0.3
+    },
+    "seed_ranges": {
+      "train": [
+        510000,
+        599999
+      ],
+      "development": [
+        610000,
+        619999
+      ],
+      "heldout": [
+        710000,
+        719999
+      ]
+    },
+    "limitations": [
+      "Physical zero references are inconsistent with the coarse surveyed pose; no firmware calibration changed.",
+      "Independent torque, pressure, hysteresis, rotor inertia and natural unsupported rest are unavailable.",
+      "Existing conservative knee boundaries retained; these are inherited source boundaries, not newly measured physical stops.",
+      "Ideal IMU attitude/gyro and encoder input to actual C odometry; real IMU filtering and CAN transport not reproduced.",
+      "Body inertia shape and serial equivalent mechanism inherited; only total mass adjusted.",
+      "Success is simulation-only and requires both wheels carrying force, no body contact, zero force AND moment assistance, 1 s dwell, 0.3 s handoff and 10 s balance.",
+      "New standing defaults and clearance command require a matching candidate firmware contract; existing low-stance actor acceptance does not transfer."
+    ],
+    "standing_default_rad": [
+      2.7819044070401433,
+      -3.273633415309531,
+      0,
+      -2.7819044070401433,
+      3.273633415309531,
+      0
+    ],
+    "standing_clearance_m": 0.1750239065885657,
+    "standing_provenance": "Development target: 0.35 m hip height, CAD IK, inherited COM x; not measured. Selected from development-only dynamics scan; 12 s teacher probe, no autonomous get-up acceptance.",
+    "teacher_feedback": {
+      "pitch_kp": 10.0,
+      "pitch_kd": 1.0,
+      "roll_kp": 6.0,
+      "roll_kd": 0.4,
+      "velocity": 1.5
+    },
+    "handoff_reanchor_reference": true,
+    "handoff_reference_provenance": "At GETUP->HANDOFF anchor desired xy/yaw to current estimate; preserve true displacement origin, estimator state, measurements, held velocities and last action. Candidate transition contract, not deployed firmware.",
+    "handoff_velocity_limit_m_s": 0.035,
+    "velocity_feedback_derivation": {
+      "wheel_radius_m": 0.05570423008216337,
+      "inner_wheel_velocity_gain": 0.14,
+      "action_scale_rad_s": 20,
+      "action_velocity_gain_for_zero_motor_force_velocity_coefficient": 0.8975979010256553,
+      "selected_action_velocity_gain": 1.5,
+      "note": "The wheel inner PD contributes -kd*v/R. The outer velocity term must account for it; verify on the full plant."
+    },
+    "course_provenance": "Slower development curriculum: 12 s rise timeout instead of 6 s. Readiness, 1 s unassisted dwell, 0.3 s handoff, 10 s balance and all physical caps unchanged."
+  },
+  "reset_range": [
+    1.0,
+    1.0
+  ],
+  "seed": 559000,
+  "wall_s": 72.81992583899955,
+  "steps": 1326,
+  "rows": [
+    {
+      "index": 93,
+      "gains": [
+        14.0,
+        2.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 5.09002161026001,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.012027308344841003,
+      "speed_m_s": -0.13671068847179413,
+      "displacement_m": 0.20462830364704132
+    },
+    {
+      "index": 111,
+      "gains": [
+        18.0,
+        1.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 3.0399975776672363,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.012230604887008667,
+      "speed_m_s": -0.1351921558380127,
+      "displacement_m": 0.17563369870185852
+    },
+    {
+      "index": 101,
+      "gains": [
+        18.0,
+        0.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 2.509998083114624,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.006966754794120789,
+      "speed_m_s": -0.13138340413570404,
+      "displacement_m": 0.1479339897632599
+    },
+    {
+      "index": 102,
+      "gains": [
+        18.0,
+        0.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 2.4099981784820557,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.00814509391784668,
+      "speed_m_s": -0.1320255547761917,
+      "displacement_m": 0.14169512689113617
+    },
+    {
+      "index": 99,
+      "gains": [
+        18.0,
+        0.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 2.26999831199646,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.005405738949775696,
+      "speed_m_s": -0.13037917017936707,
+      "displacement_m": 0.15050385892391205
+    },
+    {
+      "index": 108,
+      "gains": [
+        18.0,
+        1.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 2.1799983978271484,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.005720540881156921,
+      "speed_m_s": -0.1304921656847,
+      "displacement_m": 0.14478740096092224
+    },
+    {
+      "index": 109,
+      "gains": [
+        18.0,
+        1.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "balance_state_out_of_spec",
+      "balance_s": 2.0999984741210938,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0060957372188568115,
+      "speed_m_s": -0.13061615824699402,
+      "displacement_m": 0.13493095338344574
+    },
+    {
+      "index": 75,
+      "gains": [
+        14.0,
+        1.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0016447603702545166,
+      "speed_m_s": -0.12633125483989716,
+      "displacement_m": 0.02356923557817936
+    },
+    {
+      "index": 107,
+      "gains": [
+        18.0,
+        1.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0021858662366867065,
+      "speed_m_s": -0.12588383257389069,
+      "displacement_m": 0.019640950486063957
+    },
+    {
+      "index": 106,
+      "gains": [
+        18.0,
+        1.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.002039283514022827,
+      "speed_m_s": -0.12621642649173737,
+      "displacement_m": 0.024332966655492783
+    },
+    {
+      "index": 100,
+      "gains": [
+        18.0,
+        0.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0024335384368896484,
+      "speed_m_s": -0.12591341137886047,
+      "displacement_m": 0.022811830043792725
+    },
+    {
+      "index": 97,
+      "gains": [
+        18.0,
+        0.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0021049827337265015,
+      "speed_m_s": -0.1263512521982193,
+      "displacement_m": 0.0242596622556448
+    },
+    {
+      "index": 67,
+      "gains": [
+        14.0,
+        0.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.002382636070251465,
+      "speed_m_s": -0.1260972023010254,
+      "displacement_m": 0.024213552474975586
+    },
+    {
+      "index": 68,
+      "gains": [
+        14.0,
+        0.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.002231031656265259,
+      "speed_m_s": -0.1263163536787033,
+      "displacement_m": 0.023692097514867783
+    },
+    {
+      "index": 66,
+      "gains": [
+        14.0,
+        0.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0026519447565078735,
+      "speed_m_s": -0.1262831687927246,
+      "displacement_m": 0.025527572259306908
+    },
+    {
+      "index": 98,
+      "gains": [
+        18.0,
+        0.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "handoff_unstable",
+      "balance_s": 0.0,
+      "stable_s": 0.9999993443489075,
+      "height_error_m": 0.0028068721294403076,
+      "speed_m_s": -0.12653926014900208,
+      "displacement_m": 0.024895116686820984
+    },
+    {
+      "index": 47,
+      "gains": [
+        10.0,
+        1.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1750633716583252,
+      "speed_m_s": 0.00015189882833510637,
+      "displacement_m": 0.04494258761405945
+    },
+    {
+      "index": 5,
+      "gains": [
+        8.0,
+        0.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17543268203735352,
+      "speed_m_s": 0.0003421981818974018,
+      "displacement_m": 0.5976138710975647
+    },
+    {
+      "index": 65,
+      "gains": [
+        14.0,
+        0.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17569100856781006,
+      "speed_m_s": 9.225052781403065e-05,
+      "displacement_m": 0.9673863649368286
+    },
+    {
+      "index": 15,
+      "gains": [
+        8.0,
+        1.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17506329715251923,
+      "speed_m_s": 0.0014375217724591494,
+      "displacement_m": 0.0449884794652462
+    },
+    {
+      "index": 59,
+      "gains": [
+        10.0,
+        2.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17521004378795624,
+      "speed_m_s": 0.001432124525308609,
+      "displacement_m": 1.4033890962600708
+    },
+    {
+      "index": 116,
+      "gains": [
+        18.0,
+        1.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17504730820655823,
+      "speed_m_s": 0.0022205160930752754,
+      "displacement_m": 0.11883880943059921
+    },
+    {
+      "index": 31,
+      "gains": [
+        8.0,
+        2.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1750633418560028,
+      "speed_m_s": 0.0027831795159727335,
+      "displacement_m": 0.04089703783392906
+    },
+    {
+      "index": 23,
+      "gains": [
+        8.0,
+        1.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1750633269548416,
+      "speed_m_s": 0.0049359495751559734,
+      "displacement_m": 0.04214343801140785
+    },
+    {
+      "index": 118,
+      "gains": [
+        18.0,
+        1.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18071439862251282,
+      "speed_m_s": 0.0,
+      "displacement_m": 0.3863930106163025
+    },
+    {
+      "index": 52,
+      "gains": [
+        10.0,
+        1.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1752622127532959,
+      "speed_m_s": 0.005649246275424957,
+      "displacement_m": 0.6479876637458801
+    },
+    {
+      "index": 56,
+      "gains": [
+        10.0,
+        2.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1750451624393463,
+      "speed_m_s": 0.006233897525817156,
+      "displacement_m": 1.101295828819275
+    },
+    {
+      "index": 9,
+      "gains": [
+        8.0,
+        1.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17490902543067932,
+      "speed_m_s": 0.00763033889234066,
+      "displacement_m": 0.4154168665409088
+    },
+    {
+      "index": 87,
+      "gains": [
+        14.0,
+        1.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17506341636180878,
+      "speed_m_s": 0.007644526194781065,
+      "displacement_m": 0.042679380625486374
+    },
+    {
+      "index": 95,
+      "gains": [
+        14.0,
+        2.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1750633269548416,
+      "speed_m_s": 0.009432697668671608,
+      "displacement_m": 0.04567684605717659
+    },
+    {
+      "index": 21,
+      "gains": [
+        8.0,
+        1.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1753389537334442,
+      "speed_m_s": -0.009804126806557178,
+      "displacement_m": 0.4545159935951233
+    },
+    {
+      "index": 124,
+      "gains": [
+        18.0,
+        2.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17511209845542908,
+      "speed_m_s": 0.011031842790544033,
+      "displacement_m": 3.206631660461426
+    },
+    {
+      "index": 13,
+      "gains": [
+        8.0,
+        1.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17527467012405396,
+      "speed_m_s": -0.011928874999284744,
+      "displacement_m": 0.038047485053539276
+    },
+    {
+      "index": 46,
+      "gains": [
+        10.0,
+        1.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17340102791786194,
+      "speed_m_s": -0.014586659148335457,
+      "displacement_m": 0.7978742122650146
+    },
+    {
+      "index": 83,
+      "gains": [
+        14.0,
+        1.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17534799873828888,
+      "speed_m_s": 0.01577901840209961,
+      "displacement_m": 1.155922770500183
+    },
+    {
+      "index": 117,
+      "gains": [
+        18.0,
+        1.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1733640730381012,
+      "speed_m_s": 0.018381252884864807,
+      "displacement_m": 3.8241209983825684
+    },
+    {
+      "index": 42,
+      "gains": [
+        10.0,
+        1.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17527639865875244,
+      "speed_m_s": -0.01705990545451641,
+      "displacement_m": 0.7702363729476929
+    },
+    {
+      "index": 27,
+      "gains": [
+        8.0,
+        2.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17531070113182068,
+      "speed_m_s": -0.017127498984336853,
+      "displacement_m": 0.0053382935002446175
+    },
+    {
+      "index": 12,
+      "gains": [
+        8.0,
+        1.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17544564604759216,
+      "speed_m_s": 0.017048131674528122,
+      "displacement_m": 0.548570454120636
+    },
+    {
+      "index": 58,
+      "gains": [
+        10.0,
+        2.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17517289519309998,
+      "speed_m_s": -0.01812422275543213,
+      "displacement_m": 0.9094129204750061
+    },
+    {
+      "index": 28,
+      "gains": [
+        8.0,
+        2.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17291361093521118,
+      "speed_m_s": 0.020421858876943588,
+      "displacement_m": 0.7837947607040405
+    },
+    {
+      "index": 71,
+      "gains": [
+        14.0,
+        0.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17545634508132935,
+      "speed_m_s": 0.0194218959659338,
+      "displacement_m": 0.05295443907380104
+    },
+    {
+      "index": 11,
+      "gains": [
+        8.0,
+        1.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.175179585814476,
+      "speed_m_s": -0.02055339328944683,
+      "displacement_m": 0.003101280890405178
+    },
+    {
+      "index": 85,
+      "gains": [
+        14.0,
+        1.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17535576224327087,
+      "speed_m_s": -0.02053367719054222,
+      "displacement_m": 0.397993803024292
+    },
+    {
+      "index": 14,
+      "gains": [
+        8.0,
+        1.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17536503076553345,
+      "speed_m_s": -0.021496152505278587,
+      "displacement_m": 0.02615625411272049
+    },
+    {
+      "index": 88,
+      "gains": [
+        14.0,
+        2.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17582005262374878,
+      "speed_m_s": -0.023349704220891,
+      "displacement_m": 5.946423530578613
+    },
+    {
+      "index": 86,
+      "gains": [
+        14.0,
+        1.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17420080304145813,
+      "speed_m_s": 0.025956371799111366,
+      "displacement_m": 0.10055658221244812
+    },
+    {
+      "index": 89,
+      "gains": [
+        14.0,
+        2.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17469507455825806,
+      "speed_m_s": -0.027332548052072525,
+      "displacement_m": 1.150987982749939
+    },
+    {
+      "index": 104,
+      "gains": [
+        18.0,
+        1.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17600005865097046,
+      "speed_m_s": -0.03193127363920212,
+      "displacement_m": 1.4176664352416992
+    },
+    {
+      "index": 50,
+      "gains": [
+        10.0,
+        1.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17224690318107605,
+      "speed_m_s": 0.03728886693716049,
+      "displacement_m": 0.9259268641471863
+    },
+    {
+      "index": 121,
+      "gains": [
+        18.0,
+        2.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.16764703392982483,
+      "speed_m_s": -0.0439639538526535,
+      "displacement_m": 3.4323782920837402
+    },
+    {
+      "index": 110,
+      "gains": [
+        18.0,
+        1.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17522847652435303,
+      "speed_m_s": 0.04237980768084526,
+      "displacement_m": 0.19502852857112885
+    },
+    {
+      "index": 61,
+      "gains": [
+        10.0,
+        2.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17424675822257996,
+      "speed_m_s": -0.04373513162136078,
+      "displacement_m": 0.713851809501648
+    },
+    {
+      "index": 39,
+      "gains": [
+        10.0,
+        0.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17777568101882935,
+      "speed_m_s": 0.04063791409134865,
+      "displacement_m": 0.04533685743808746
+    },
+    {
+      "index": 7,
+      "gains": [
+        8.0,
+        0.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1792757213115692,
+      "speed_m_s": 0.04139164835214615,
+      "displacement_m": 0.03273504599928856
+    },
+    {
+      "index": 63,
+      "gains": [
+        10.0,
+        2.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17778760194778442,
+      "speed_m_s": 0.044329751282930374,
+      "displacement_m": 0.04425807669758797
+    },
+    {
+      "index": 126,
+      "gains": [
+        18.0,
+        2.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17539861798286438,
+      "speed_m_s": 0.04799334332346916,
+      "displacement_m": 0.25347110629081726
+    },
+    {
+      "index": 37,
+      "gains": [
+        10.0,
+        0.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "getup_tilt_limit",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.15192174911499023,
+      "speed_m_s": -0.07149278372526169,
+      "displacement_m": 0.025697963312268257
+    },
+    {
+      "index": 48,
+      "gains": [
+        10.0,
+        1.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17472624778747559,
+      "speed_m_s": -0.05883760377764702,
+      "displacement_m": 0.781856894493103
+    },
+    {
+      "index": 38,
+      "gains": [
+        10.0,
+        0.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1784704327583313,
+      "speed_m_s": 0.05598137527704239,
+      "displacement_m": 0.24620364606380463
+    },
+    {
+      "index": 127,
+      "gains": [
+        18.0,
+        2.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17871910333633423,
+      "speed_m_s": 0.05761876329779625,
+      "displacement_m": 0.1741865873336792
+    },
+    {
+      "index": 25,
+      "gains": [
+        8.0,
+        2.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17308714985847473,
+      "speed_m_s": -0.06720246374607086,
+      "displacement_m": 4.341221332550049
+    },
+    {
+      "index": 6,
+      "gains": [
+        8.0,
+        0.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17871174216270447,
+      "speed_m_s": 0.062225744128227234,
+      "displacement_m": 0.07393945008516312
+    },
+    {
+      "index": 120,
+      "gains": [
+        18.0,
+        2.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17216980457305908,
+      "speed_m_s": -0.07016675174236298,
+      "displacement_m": 2.471517324447632
+    },
+    {
+      "index": 112,
+      "gains": [
+        18.0,
+        1.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1728852391242981,
+      "speed_m_s": -0.06968951225280762,
+      "displacement_m": 0.6596179604530334
+    },
+    {
+      "index": 64,
+      "gains": [
+        14.0,
+        0.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17587241530418396,
+      "speed_m_s": -0.07470433413982391,
+      "displacement_m": 1.072802186012268
+    },
+    {
+      "index": 81,
+      "gains": [
+        14.0,
+        1.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17307209968566895,
+      "speed_m_s": -0.08456220477819443,
+      "displacement_m": 3.2330658435821533
+    },
+    {
+      "index": 69,
+      "gains": [
+        14.0,
+        0.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1750173270702362,
+      "speed_m_s": 0.08325306326150894,
+      "displacement_m": 0.28875839710235596
+    },
+    {
+      "index": 29,
+      "gains": [
+        8.0,
+        2.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17680451273918152,
+      "speed_m_s": 0.08206581324338913,
+      "displacement_m": 0.5744578242301941
+    },
+    {
+      "index": 80,
+      "gains": [
+        14.0,
+        1.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17614349722862244,
+      "speed_m_s": -0.08936399221420288,
+      "displacement_m": 1.8740144968032837
+    },
+    {
+      "index": 4,
+      "gains": [
+        8.0,
+        0.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17553815245628357,
+      "speed_m_s": 0.09287810325622559,
+      "displacement_m": 0.5945902466773987
+    },
+    {
+      "index": 2,
+      "gains": [
+        8.0,
+        0.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1729700267314911,
+      "speed_m_s": -0.09921924769878387,
+      "displacement_m": 1.0249463319778442
+    },
+    {
+      "index": 30,
+      "gains": [
+        8.0,
+        2.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1779487431049347,
+      "speed_m_s": 0.09454398602247238,
+      "displacement_m": 3.9023990631103516
+    },
+    {
+      "index": 33,
+      "gains": [
+        10.0,
+        0.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.10543227195739746,
+      "speed_m_s": -0.16800060868263245,
+      "displacement_m": 0.8410127758979797
+    },
+    {
+      "index": 122,
+      "gains": [
+        18.0,
+        2.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.10393869876861572,
+      "speed_m_s": -0.16964103281497955,
+      "displacement_m": 2.979550361633301
+    },
+    {
+      "index": 26,
+      "gains": [
+        8.0,
+        2.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.176518976688385,
+      "speed_m_s": 0.09782776981592178,
+      "displacement_m": 0.8010430335998535
+    },
+    {
+      "index": 36,
+      "gains": [
+        10.0,
+        0.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18045634031295776,
+      "speed_m_s": 0.09423618763685226,
+      "displacement_m": 0.5238214135169983
+    },
+    {
+      "index": 1,
+      "gains": [
+        8.0,
+        0.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17281505465507507,
+      "speed_m_s": -0.1072283387184143,
+      "displacement_m": 1.021026611328125
+    },
+    {
+      "index": 74,
+      "gains": [
+        14.0,
+        1.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1721983253955841,
+      "speed_m_s": -0.10809708386659622,
+      "displacement_m": 0.85191410779953
+    },
+    {
+      "index": 0,
+      "gains": [
+        8.0,
+        0.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17282715439796448,
+      "speed_m_s": -0.11144112795591354,
+      "displacement_m": 1.2022805213928223
+    },
+    {
+      "index": 40,
+      "gains": [
+        10.0,
+        1.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17555886507034302,
+      "speed_m_s": 0.11021993309259415,
+      "displacement_m": 0.899450421333313
+    },
+    {
+      "index": 20,
+      "gains": [
+        8.0,
+        1.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17931604385375977,
+      "speed_m_s": 0.10647231340408325,
+      "displacement_m": 0.6471834778785706
+    },
+    {
+      "index": 35,
+      "gains": [
+        10.0,
+        0.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17953944206237793,
+      "speed_m_s": 0.10680738836526871,
+      "displacement_m": 0.40751808881759644
+    },
+    {
+      "index": 73,
+      "gains": [
+        14.0,
+        1.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1725974977016449,
+      "speed_m_s": -0.11922518908977509,
+      "displacement_m": 0.4828498363494873
+    },
+    {
+      "index": 24,
+      "gains": [
+        8.0,
+        2.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.11846545338630676,
+      "speed_m_s": -0.17669495940208435,
+      "displacement_m": 1.4299836158752441
+    },
+    {
+      "index": 18,
+      "gains": [
+        8.0,
+        1.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17817586660385132,
+      "speed_m_s": 0.11799564957618713,
+      "displacement_m": 0.4869590699672699
+    },
+    {
+      "index": 60,
+      "gains": [
+        10.0,
+        2.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17071446776390076,
+      "speed_m_s": -0.1283314973115921,
+      "displacement_m": 0.5582255125045776
+    },
+    {
+      "index": 115,
+      "gains": [
+        18.0,
+        1.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17852023243904114,
+      "speed_m_s": 0.12425055354833603,
+      "displacement_m": 0.24566292762756348
+    },
+    {
+      "index": 8,
+      "gains": [
+        8.0,
+        1.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17326045036315918,
+      "speed_m_s": -0.1388222575187683,
+      "displacement_m": 1.1823779344558716
+    },
+    {
+      "index": 57,
+      "gains": [
+        10.0,
+        2.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.14623534679412842,
+      "speed_m_s": -0.17015144228935242,
+      "displacement_m": 3.2467217445373535
+    },
+    {
+      "index": 70,
+      "gains": [
+        14.0,
+        0.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1333833634853363,
+      "speed_m_s": -0.18335700035095215,
+      "displacement_m": 0.7094343900680542
+    },
+    {
+      "index": 16,
+      "gains": [
+        8.0,
+        1.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1726711392402649,
+      "speed_m_s": -0.14446866512298584,
+      "displacement_m": 1.0340627431869507
+    },
+    {
+      "index": 49,
+      "gains": [
+        10.0,
+        1.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17907679080963135,
+      "speed_m_s": 0.14534761011600494,
+      "displacement_m": 0.4350939691066742
+    },
+    {
+      "index": 103,
+      "gains": [
+        18.0,
+        0.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.13448506593704224,
+      "speed_m_s": -0.19221855700016022,
+      "displacement_m": 0.33070242404937744
+    },
+    {
+      "index": 34,
+      "gains": [
+        10.0,
+        0.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17212262749671936,
+      "speed_m_s": -0.15603391826152802,
+      "displacement_m": 0.9879600405693054
+    },
+    {
+      "index": 125,
+      "gains": [
+        18.0,
+        2.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17260929942131042,
+      "speed_m_s": -0.15812456607818604,
+      "displacement_m": 6.0200581550598145
+    },
+    {
+      "index": 114,
+      "gains": [
+        18.0,
+        1.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1729755401611328,
+      "speed_m_s": -0.15903876721858978,
+      "displacement_m": 0.4125521779060364
+    },
+    {
+      "index": 105,
+      "gains": [
+        18.0,
+        1.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17264890670776367,
+      "speed_m_s": -0.1594049334526062,
+      "displacement_m": 1.1317414045333862
+    },
+    {
+      "index": 72,
+      "gains": [
+        14.0,
+        1.0,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1721789538860321,
+      "speed_m_s": -0.160018190741539,
+      "displacement_m": 0.5501342415809631
+    },
+    {
+      "index": 96,
+      "gains": [
+        18.0,
+        0.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1489596962928772,
+      "speed_m_s": -0.18328818678855896,
+      "displacement_m": 1.4284025430679321
+    },
+    {
+      "index": 32,
+      "gains": [
+        10.0,
+        0.5,
+        0.8
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1530798375606537,
+      "speed_m_s": -0.18301089107990265,
+      "displacement_m": 0.8385872840881348
+    },
+    {
+      "index": 90,
+      "gains": [
+        14.0,
+        2.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.15089458227157593,
+      "speed_m_s": -0.1870046854019165,
+      "displacement_m": 6.848349571228027
+    },
+    {
+      "index": 113,
+      "gains": [
+        18.0,
+        1.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.16898995637893677,
+      "speed_m_s": -0.17041227221488953,
+      "displacement_m": 0.4359019696712494
+    },
+    {
+      "index": 92,
+      "gains": [
+        14.0,
+        2.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.16680830717086792,
+      "speed_m_s": -0.1730843186378479,
+      "displacement_m": 3.8211536407470703
+    },
+    {
+      "index": 51,
+      "gains": [
+        10.0,
+        1.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1798570454120636,
+      "speed_m_s": 0.1622088998556137,
+      "displacement_m": 0.49665966629981995
+    },
+    {
+      "index": 123,
+      "gains": [
+        18.0,
+        2.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17989671230316162,
+      "speed_m_s": 0.16242161393165588,
+      "displacement_m": 0.06824396550655365
+    },
+    {
+      "index": 41,
+      "gains": [
+        10.0,
+        1.0,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1798613965511322,
+      "speed_m_s": 0.16584129631519318,
+      "displacement_m": 0.5522441864013672
+    },
+    {
+      "index": 17,
+      "gains": [
+        8.0,
+        1.5,
+        1.2
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18038678169250488,
+      "speed_m_s": 0.17126087844371796,
+      "displacement_m": 0.6267666220664978
+    },
+    {
+      "index": 84,
+      "gains": [
+        14.0,
+        1.5,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17166045308113098,
+      "speed_m_s": -0.18171492218971252,
+      "displacement_m": 6.525031566619873
+    },
+    {
+      "index": 79,
+      "gains": [
+        14.0,
+        1.0,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.171217679977417,
+      "speed_m_s": -0.1836896389722824,
+      "displacement_m": 8.459393501281738
+    },
+    {
+      "index": 76,
+      "gains": [
+        14.0,
+        1.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17970246076583862,
+      "speed_m_s": 0.17822463810443878,
+      "displacement_m": 0.253400593996048
+    },
+    {
+      "index": 91,
+      "gains": [
+        14.0,
+        2.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "getup_timeout",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17205095291137695,
+      "speed_m_s": -0.1876876950263977,
+      "displacement_m": 4.668896198272705
+    },
+    {
+      "index": 82,
+      "gains": [
+        14.0,
+        1.5,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18048417568206787,
+      "speed_m_s": 0.1811128854751587,
+      "displacement_m": 0.2845458388328552
+    },
+    {
+      "index": 55,
+      "gains": [
+        10.0,
+        1.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.17622879147529602,
+      "speed_m_s": 0.19137099385261536,
+      "displacement_m": 0.032988619059324265
+    },
+    {
+      "index": 43,
+      "gains": [
+        10.0,
+        1.0,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1803855001926422,
+      "speed_m_s": 0.19167864322662354,
+      "displacement_m": 0.5112103819847107
+    },
+    {
+      "index": 54,
+      "gains": [
+        10.0,
+        1.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18065935373306274,
+      "speed_m_s": 0.19200189411640167,
+      "displacement_m": 0.2389800101518631
+    },
+    {
+      "index": 94,
+      "gains": [
+        14.0,
+        2.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18094563484191895,
+      "speed_m_s": 0.19322165846824646,
+      "displacement_m": 0.2108515053987503
+    },
+    {
+      "index": 3,
+      "gains": [
+        8.0,
+        0.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.180655837059021,
+      "speed_m_s": 0.19473879039287567,
+      "displacement_m": 0.5203714966773987
+    },
+    {
+      "index": 22,
+      "gains": [
+        8.0,
+        1.5,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18044111132621765,
+      "speed_m_s": 0.19509491324424744,
+      "displacement_m": 0.23952671885490417
+    },
+    {
+      "index": 62,
+      "gains": [
+        10.0,
+        2.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18070435523986816,
+      "speed_m_s": 0.19561274349689484,
+      "displacement_m": 0.3455718755722046
+    },
+    {
+      "index": 77,
+      "gains": [
+        14.0,
+        1.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18063625693321228,
+      "speed_m_s": 0.19606779515743256,
+      "displacement_m": 0.2744593024253845
+    },
+    {
+      "index": 53,
+      "gains": [
+        10.0,
+        1.5,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18081128597259521,
+      "speed_m_s": 0.19625252485275269,
+      "displacement_m": 0.4269479215145111
+    },
+    {
+      "index": 10,
+      "gains": [
+        8.0,
+        1.0,
+        1.6
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1809271275997162,
+      "speed_m_s": 0.2024296373128891,
+      "displacement_m": 0.6824954748153687
+    },
+    {
+      "index": 45,
+      "gains": [
+        10.0,
+        1.0,
+        3.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.1804424226284027,
+      "speed_m_s": 0.2060491442680359,
+      "displacement_m": 0.2925134003162384
+    },
+    {
+      "index": 19,
+      "gains": [
+        8.0,
+        1.5,
+        2.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18107497692108154,
+      "speed_m_s": 0.211443692445755,
+      "displacement_m": 0.5588463544845581
+    },
+    {
+      "index": 119,
+      "gains": [
+        18.0,
+        1.5,
+        6.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18096217513084412,
+      "speed_m_s": 0.22220338881015778,
+      "displacement_m": 0.05215569585561752
+    },
+    {
+      "index": 44,
+      "gains": [
+        10.0,
+        1.0,
+        2.5
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18007159233093262,
+      "speed_m_s": 0.34131285548210144,
+      "displacement_m": 0.44107523560523987
+    },
+    {
+      "index": 78,
+      "gains": [
+        14.0,
+        1.0,
+        4.0
+      ],
+      "phase": 4,
+      "failure": "forbidden_floor_contact",
+      "balance_s": 0.0,
+      "stable_s": 0.0,
+      "height_error_m": 0.18012267351150513,
+      "speed_m_s": 0.39101487398147583,
+      "displacement_m": 0.05638695880770683
+    }
+  ]
+}

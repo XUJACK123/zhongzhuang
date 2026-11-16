@@ -1,0 +1,2929 @@
+{
+  "schema": "target_spring_limit_audit_v1",
+  "evidence_kind": "simulation_and_archived_configuration",
+  "limits": [
+    {
+      "joint": "rf1_Joint",
+      "current_limits_rad": [
+        -3.7238299526359953,
+        -2.55926835799367
+      ],
+      "target_spring_only_branch_interval_rad": [
+        -3.7238299526359944,
+        -1.5717963267948964
+      ],
+      "target_analysis": {
+        "geometric_min_length_m": 0.15218661647507928,
+        "geometric_max_length_m": 0.24928276797930607,
+        "compression_stop_reachable": true,
+        "branch_margin_rad": 0.001,
+        "feasible_intervals_rad": [
+          [
+            -3.7238299526359944,
+            -1.5717963267948964
+          ]
+        ],
+        "endpoint_lengths_m": [
+          0.17500000000000002,
+          0.24914577402702232
+        ],
+        "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop."
+      },
+      "inherited_source_spring_extension_m": 0.2280102299990911,
+      "source_spring_interval_rad": [
+        -4.296127953784042,
+        -2.5592683579936732
+      ],
+      "target_extension_m": 0.25
+    },
+    {
+      "joint": "lf1_Joint",
+      "current_limits_rad": [
+        2.55926835799368,
+        3.7246676914733845
+      ],
+      "target_spring_only_branch_interval_rad": [
+        1.5717963267948964,
+        3.724667691473384
+      ],
+      "target_analysis": {
+        "geometric_min_length_m": 0.15222881173158762,
+        "geometric_max_length_m": 0.24930853033641306,
+        "compression_stop_reachable": true,
+        "branch_margin_rad": 0.001,
+        "feasible_intervals_rad": [
+          [
+            1.5717963267948964,
+            3.724667691473384
+          ]
+        ],
+        "endpoint_lengths_m": [
+          0.24917155054821505,
+          0.17500000000000002
+        ],
+        "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop."
+      },
+      "inherited_source_spring_extension_m": 0.22803839560766062,
+      "source_spring_interval_rad": [
+        2.559268357993676,
+        4.296127953784042
+      ],
+      "target_extension_m": 0.25
+    }
+  ],
+  "passive_trials": [
+    {
+      "variant": "current",
+      "pose": "natural",
+      "time_s": 0.022500000000000017,
+      "failure": "joint_limit",
+      "limits_rad": [
+        [
+          -3.7238299526359953,
+          -2.55926835799367
+        ],
+        [
+          2.55926835799368,
+          3.7246676914733845
+        ]
+      ],
+      "trace": [
+        {
+          "time_s": 0.00025,
+          "knees_rad": [
+            -2.989425856059971,
+            2.9894398604741528
+          ],
+          "lengths_m": [
+            0.209762291444962,
+            0.2097929069328103
+          ],
+          "roll_pitch_deg": [
+            0.00012554700044516089,
+            -0.00019324055119380372
+          ],
+          "root_height_m": 0.30000116205114036,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.0022500000000000003,
+          "knees_rad": [
+            -2.9850269345225975,
+            2.9852911438367173
+          ],
+          "lengths_m": [
+            0.20993510404094448,
+            0.2099554816814923
+          ],
+          "roll_pitch_deg": [
+            -0.0003340467651687658,
+            9.774201594995178e-05
+          ],
+          "root_height_m": 0.30000056223295124,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.004250000000000002,
+          "knees_rad": [
+            -2.9752586716679876,
+            2.9759792157424867
+          ],
+          "lengths_m": [
+            0.21035553659494213,
+            0.21035587883343576
+          ],
+          "roll_pitch_deg": [
+            -0.0028162281259962126,
+            0.0037277047271280506
+          ],
+          "root_height_m": 0.2999938023442219,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.006250000000000004,
+          "knees_rad": [
+            -2.9600233920286887,
+            2.961363854599817
+          ],
+          "lengths_m": [
+            0.21102554307611504,
+            0.2109982799681701
+          ],
+          "roll_pitch_deg": [
+            -0.006713896201685076,
+            0.010793276320060484
+          ],
+          "root_height_m": 0.29998055500005316,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.008250000000000006,
+          "knees_rad": [
+            -2.9391290531524903,
+            2.9412239956008364
+          ],
+          "lengths_m": [
+            0.2119497930168723,
+            0.21188901800590787
+          ],
+          "roll_pitch_deg": [
+            -0.011631512136328535,
+            0.02132306368529293
+          ],
+          "root_height_m": 0.29996073745963864,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.010250000000000007,
+          "knees_rad": [
+            -2.912269737697789,
+            2.9152352944820312
+          ],
+          "lengths_m": [
+            0.21313605679370476,
+            0.21303712121365695
+          ],
+          "roll_pitch_deg": [
+            -0.017338888715056542,
+            0.035192739748499006
+          ],
+          "root_height_m": 0.2999346230719385,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.01225000000000001,
+          "knees_rad": [
+            -2.8790069530321896,
+            2.8829486094346892
+          ],
+          "lengths_m": [
+            0.21459522799783906,
+            0.21445450008510913
+          ],
+          "roll_pitch_deg": [
+            -0.023740666954143116,
+            0.05202385389239861
+          ],
+          "root_height_m": 0.29990297531623505,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.014250000000000011,
+          "knees_rad": [
+            -2.8387489100978023,
+            2.8436881023988745
+          ],
+          "lengths_m": [
+            0.21634079796338648,
+            0.21615576197107306
+          ],
+          "roll_pitch_deg": [
+            -0.030737166824528577,
+            0.07092169217402326
+          ],
+          "root_height_m": 0.29986738796677315,
+          "contacts": []
+        },
+        {
+          "time_s": 0.01625000000000001,
+          "knees_rad": [
+            -2.7878389819505163,
+            2.793886913970468
+          ],
+          "lengths_m": [
+            0.21849178419250057,
+            0.2182680567317333
+          ],
+          "roll_pitch_deg": [
+            -0.04179130580573042,
+            0.08158722817307895
+          ],
+          "root_height_m": 0.2998465320295128,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.018250000000000013,
+          "knees_rad": [
+            -2.727910026899994,
+            2.7353978464970363
+          ],
+          "lengths_m": [
+            0.22099313711675073,
+            0.22071621610845746
+          ],
+          "roll_pitch_deg": [
+            -0.05364799500729698,
+            0.09037022863623935
+          ],
+          "root_height_m": 0.29982824777985484,
+          "contacts": []
+        },
+        {
+          "time_s": 0.020250000000000015,
+          "knees_rad": [
+            -2.6553070628486,
+            2.665040050493989
+          ],
+          "lengths_m": [
+            0.22388772316485975,
+            0.2235386667100668
+          ],
+          "roll_pitch_deg": [
+            -0.06979195509773646,
+            0.08636913124314602
+          ],
+          "root_height_m": 0.29983117005439297,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.022250000000000016,
+          "knees_rad": [
+            -2.569543827974914,
+            2.5802382918957436
+          ],
+          "lengths_m": [
+            0.22718699233144393,
+            0.22681447186061018
+          ],
+          "roll_pitch_deg": [
+            -0.08624045390622817,
+            0.06417722333231324
+          ],
+          "root_height_m": 0.2998611189992843,
+          "contacts": []
+        },
+        {
+          "time_s": 0.022500000000000017,
+          "knees_rad": [
+            -2.5577378747934834,
+            2.5686682331336694
+          ],
+          "lengths_m": [
+            0.2276233260871087,
+            0.22724595007024856
+          ],
+          "roll_pitch_deg": [
+            -0.08852281908080227,
+            0.05990534038605583
+          ],
+          "root_height_m": 0.2998671045552772,
+          "contacts": []
+        }
+      ]
+    },
+    {
+      "variant": "current",
+      "pose": "default",
+      "time_s": 0.06550000000000004,
+      "failure": "joint_limit",
+      "limits_rad": [
+        [
+          -3.7238299526359953,
+          -2.55926835799367
+        ],
+        [
+          2.55926835799368,
+          3.7246676914733845
+        ]
+      ],
+      "trace": [
+        {
+          "time_s": 0.00025,
+          "knees_rad": [
+            -3.6604912464486867,
+            3.6605861393530565
+          ],
+          "lengths_m": [
+            0.17781501914481007,
+            0.17785113415592005
+          ],
+          "roll_pitch_deg": [
+            0.00011733778084862689,
+            -0.00047499289597412707
+          ],
+          "root_height_m": 0.2749768281375,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.0022500000000000003,
+          "knees_rad": [
+            -3.659226984964834,
+            3.6600462446623485
+          ],
+          "lengths_m": [
+            0.17786830567398879,
+            0.17787135709426305
+          ],
+          "roll_pitch_deg": [
+            -0.0013950936349527582,
+            -0.020044966245365562
+          ],
+          "root_height_m": 0.2750009647679926,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.004250000000000002,
+          "knees_rad": [
+            -3.6572995504893635,
+            3.658801982219052
+          ],
+          "lengths_m": [
+            0.17795178740562367,
+            0.17792373556531385
+          ],
+          "roll_pitch_deg": [
+            -0.006454110203123959,
+            -0.06760752232168063
+          ],
+          "root_height_m": 0.2750586087419506,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.006250000000000004,
+          "knees_rad": [
+            -3.654734006612297,
+            3.6568982174086995
+          ],
+          "lengths_m": [
+            0.17806434405604196,
+            0.17800617688993717
+          ],
+          "roll_pitch_deg": [
+            -0.014171564623256914,
+            -0.14302357281613057
+          ],
+          "root_height_m": 0.2751490694502355,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.008250000000000006,
+          "knees_rad": [
+            -3.651543367630279,
+            3.654362383950168
+          ],
+          "lengths_m": [
+            0.17820539961124884,
+            0.17811741814298848
+          ],
+          "roll_pitch_deg": [
+            -0.023898387174948223,
+            -0.24605497765843382
+          ],
+          "root_height_m": 0.27527158256510154,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.010250000000000007,
+          "knees_rad": [
+            -3.6477249898146784,
+            3.651206975327836
+          ],
+          "lengths_m": [
+            0.17837508426742849,
+            0.1782569006392588
+          ],
+          "roll_pitch_deg": [
+            -0.035151473234070946,
+            -0.376365095117669
+          ],
+          "root_height_m": 0.27542528105696856,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.01225000000000001,
+          "knees_rad": [
+            -3.643256170725585,
+            3.647430309690877
+          ],
+          "lengths_m": [
+            0.17857444096696842,
+            0.1784247272673651
+          ],
+          "roll_pitch_deg": [
+            -0.04757591431678656,
+            -0.5335186101841596
+          ],
+          "root_height_m": 0.27560918263670486,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.014250000000000011,
+          "knees_rad": [
+            -3.638095303108023,
+            3.6430157821324145
+          ],
+          "lengths_m": [
+            0.17880542524149365,
+            0.17862169209543988
+          ],
+          "roll_pitch_deg": [
+            -0.06091184078194805,
+            -0.716979719005507
+          ],
+          "root_height_m": 0.2758221759786885,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.01625000000000001,
+          "knees_rad": [
+            -3.632186413029037,
+            3.6379304647084822
+          ],
+          "lengths_m": [
+            0.1790707046173104,
+            0.17884934847098882
+          ],
+          "roll_pitch_deg": [
+            -0.07496421420332407,
+            -0.9261090264976017
+          ],
+          "root_height_m": 0.27606300624020425,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.018250000000000013,
+          "knees_rad": [
+            -3.6254613455863485,
+            3.6321236898357245
+          ],
+          "lengths_m": [
+            0.17937355491273088,
+            0.17911008356191838
+          ],
+          "roll_pitch_deg": [
+            -0.08958528640957328,
+            -1.1601603362887531
+          ],
+          "root_height_m": 0.2763302682871707,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.020250000000000015,
+          "knees_rad": [
+            -3.6178399978870366,
+            3.625527024961093
+          ],
+          "lengths_m": [
+            0.1797178522202607,
+            0.1794071427658337
+          ],
+          "roll_pitch_deg": [
+            -0.104661231145884,
+            -1.4182775035621575
+          ],
+          "root_height_m": 0.2766224033124372,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.022250000000000016,
+          "knees_rad": [
+            -3.6092293195848466,
+            3.6180554077552203
+          ],
+          "lengths_m": [
+            0.1801081250280828,
+            0.17974459207621213
+          ],
+          "roll_pitch_deg": [
+            -0.1200985048353352,
+            -1.6994911945546338
+          ],
+          "root_height_m": 0.2769376965042451,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.024250000000000018,
+          "knees_rad": [
+            -3.59952147413771,
+            3.609607635637552
+          ],
+          "lengths_m": [
+            0.18054965086158567,
+            0.18012730624219725
+          ],
+          "roll_pitch_deg": [
+            -0.13581750111428442,
+            -2.002715115907822
+          ],
+          "root_height_m": 0.27727427901375756,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.02625000000000002,
+          "knees_rad": [
+            -3.5885923871580885,
+            3.600065985180914
+          ],
+          "lengths_m": [
+            0.18104854477906743,
+            0.1805609986181166
+          ],
+          "roll_pitch_deg": [
+            -0.15175779455108654,
+            -2.326741165911482
+          ],
+          "root_height_m": 0.2776301346159977,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.02825000000000002,
+          "knees_rad": [
+            -3.5763016432707033,
+            3.589295062850399
+          ],
+          "lengths_m": [
+            0.1816117944797433,
+            0.18105229088392277
+          ],
+          "roll_pitch_deg": [
+            -0.16787963876372475,
+            -2.6702337610491207
+          ],
+          "root_height_m": 0.27800310452916566,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.030250000000000023,
+          "knees_rad": [
+            -3.5624940907250995,
+            3.5771411308472483
+          ],
+          "lengths_m": [
+            0.1822472009028457,
+            0.18160876980697613
+          ],
+          "roll_pitch_deg": [
+            -0.18414303034527363,
+            -3.03172400071028
+          ],
+          "root_height_m": 0.27839088269660117,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.03225000000000002,
+          "knees_rad": [
+            -3.5469690720728946,
+            3.563429744657269
+          ],
+          "lengths_m": [
+            0.18296427066983706,
+            0.18223908500459757
+          ],
+          "roll_pitch_deg": [
+            -0.20034962269939804,
+            -3.4096214437688666
+          ],
+          "root_height_m": 0.27879100034083487,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.034250000000000023,
+          "knees_rad": [
+            -3.529155417437182,
+            3.547895423452864
+          ],
+          "lengths_m": [
+            0.18378251549278365,
+            0.1829555647989162
+          ],
+          "roll_pitch_deg": [
+            -0.21547822270520262,
+            -3.8023322647723012
+          ],
+          "root_height_m": 0.2792009412341321,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.036250000000000025,
+          "knees_rad": [
+            -3.5076141406378527,
+            3.529730532375426
+          ],
+          "lengths_m": [
+            0.18478844542635978,
+            0.18378577183265318
+          ],
+          "roll_pitch_deg": [
+            -0.22946318304683425,
+            -4.208259951833145
+          ],
+          "root_height_m": 0.27961934240162595,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.03825000000000003,
+          "knees_rad": [
+            -3.4843458579846156,
+            3.5081118925454455
+          ],
+          "lengths_m": [
+            0.18588394341052022,
+            0.18479847532097984
+          ],
+          "roll_pitch_deg": [
+            -0.24112039453382497,
+            -4.624704556026499
+          ],
+          "root_height_m": 0.2800412781085607,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.04025000000000003,
+          "knees_rad": [
+            -3.4588974451426813,
+            3.4845078719169598
+          ],
+          "lengths_m": [
+            0.18708615581646962,
+            0.1859080661863351
+          ],
+          "roll_pitch_deg": [
+            -0.24982535474373857,
+            -5.049567635728754
+          ],
+          "root_height_m": 0.28046302016991165,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.04225000000000003,
+          "knees_rad": [
+            -3.429273942834174,
+            3.4582148955985326
+          ],
+          "lengths_m": [
+            0.1884807599648393,
+            0.18714071562089318
+          ],
+          "roll_pitch_deg": [
+            -0.2567813868404696,
+            -5.48117851481823
+          ],
+          "root_height_m": 0.28088408624345507,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.04425000000000003,
+          "knees_rad": [
+            -3.395969730580118,
+            3.4269323892119905
+          ],
+          "lengths_m": [
+            0.19006199005090538,
+            0.18862035769282792
+          ],
+          "roll_pitch_deg": [
+            -0.2619999213145375,
+            -5.916990197057193
+          ],
+          "root_height_m": 0.2813020307647947,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.046250000000000034,
+          "knees_rad": [
+            -3.3579325865709744,
+            3.3928901637084476
+          ],
+          "lengths_m": [
+            0.19187181345557572,
+            0.1902403038635272
+          ],
+          "roll_pitch_deg": [
+            -0.2647710400541059,
+            -6.354453836595503
+          ],
+          "root_height_m": 0.28171274487917947,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.048250000000000036,
+          "knees_rad": [
+            -3.3155755452690516,
+            3.3527948258455296
+          ],
+          "lengths_m": [
+            0.1938979427203244,
+            0.19214548824893105
+          ],
+          "roll_pitch_deg": [
+            -0.26529937232832174,
+            -6.791354857855931
+          ],
+          "root_height_m": 0.28211503608305627,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.05025000000000004,
+          "knees_rad": [
+            -3.266993526166409,
+            3.3085210162640712
+          ],
+          "lengths_m": [
+            0.19622090559546893,
+            0.19425875159585698
+          ],
+          "roll_pitch_deg": [
+            -0.26394610298719223,
+            -7.225319595929942
+          ],
+          "root_height_m": 0.2825062669030161,
+          "contacts": []
+        },
+        {
+          "time_s": 0.05225000000000004,
+          "knees_rad": [
+            -3.2116755630143468,
+            3.2570603856258904
+          ],
+          "lengths_m": [
+            0.19886369841878998,
+            0.1967214025805164
+          ],
+          "roll_pitch_deg": [
+            -0.2637945248727876,
+            -7.655116699404192
+          ],
+          "root_height_m": 0.2828881025802354,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.05425000000000004,
+          "knees_rad": [
+            -3.1482212069544255,
+            3.19942929909759
+          ],
+          "lengths_m": [
+            0.20186479909380461,
+            0.1994577848883403
+          ],
+          "roll_pitch_deg": [
+            -0.26411511873616283,
+            -8.078780437514947
+          ],
+          "root_height_m": 0.2832581811999479,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.05625000000000004,
+          "knees_rad": [
+            -3.0767332682153112,
+            3.1325632366088874
+          ],
+          "lengths_m": [
+            0.20522180924042902,
+            0.20263598612783337
+          ],
+          "roll_pitch_deg": [
+            -0.26317848223454204,
+            -8.495610585846537
+          ],
+          "root_height_m": 0.2836165095015108,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.058250000000000045,
+          "knees_rad": [
+            -2.9928514417472085,
+            3.0575621963309874
+          ],
+          "lengths_m": [
+            0.20910284302231577,
+            0.20613887207485532
+          ],
+          "roll_pitch_deg": [
+            -0.2656677745242958,
+            -8.907043497318051
+          ],
+          "root_height_m": 0.28396819211492397,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.06025000000000005,
+          "knees_rad": [
+            -2.897393015278837,
+            2.969363371673339
+          ],
+          "lengths_m": [
+            0.2133945625901402,
+            0.21018365503163391
+          ],
+          "roll_pitch_deg": [
+            -0.2706952742685126,
+            -9.315968161025221
+          ],
+          "root_height_m": 0.284317720056702,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06225000000000005,
+          "knees_rad": [
+            -2.7839942589773803,
+            2.866798613895454
+          ],
+          "lengths_m": [
+            0.21829972047834026,
+            0.21477193175722692
+          ],
+          "roll_pitch_deg": [
+            -0.28662479478195635,
+            -9.731517171672573
+          ],
+          "root_height_m": 0.2846812797520324,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06425000000000004,
+          "knees_rad": [
+            -2.6492182315392436,
+            2.749091100478546
+          ],
+          "lengths_m": [
+            0.22380304679020036,
+            0.2198009628665015
+          ],
+          "roll_pitch_deg": [
+            -0.3135528841053073,
+            -10.162014779143226
+          ],
+          "root_height_m": 0.28506770138649423,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06550000000000004,
+          "knees_rad": [
+            -2.5518279899322978,
+            2.6653169680468705
+          ],
+          "lengths_m": [
+            0.2275221772243771,
+            0.22321045523819374
+          ],
+          "roll_pitch_deg": [
+            -0.3369432107669639,
+            -10.447819858504973
+          ],
+          "root_height_m": 0.28533150236251636,
+          "contacts": []
+        }
+      ]
+    },
+    {
+      "variant": "target_spring_geometry_candidate",
+      "pose": "natural",
+      "time_s": 0.03375000000000002,
+      "failure": "joint_limit",
+      "limits_rad": [
+        [
+          -3.7238299526359944,
+          -1.5717963267948964
+        ],
+        [
+          1.5717963267948964,
+          3.724667691473384
+        ]
+      ],
+      "trace": [
+        {
+          "time_s": 0.00025,
+          "knees_rad": [
+            -2.989425856059971,
+            2.9894398604741528
+          ],
+          "lengths_m": [
+            0.209762291444962,
+            0.2097929069328103
+          ],
+          "roll_pitch_deg": [
+            0.00012554700044516089,
+            -0.00019324055119380372
+          ],
+          "root_height_m": 0.30000116205114036,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.0022500000000000003,
+          "knees_rad": [
+            -2.9850269345225975,
+            2.9852911438367173
+          ],
+          "lengths_m": [
+            0.20993510404094448,
+            0.2099554816814923
+          ],
+          "roll_pitch_deg": [
+            -0.0003340467651687658,
+            9.774201594995178e-05
+          ],
+          "root_height_m": 0.30000056223295124,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.004250000000000002,
+          "knees_rad": [
+            -2.9752586716679876,
+            2.9759792157424867
+          ],
+          "lengths_m": [
+            0.21035553659494213,
+            0.21035587883343576
+          ],
+          "roll_pitch_deg": [
+            -0.0028162281259962126,
+            0.0037277047271280506
+          ],
+          "root_height_m": 0.2999938023442219,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.006250000000000004,
+          "knees_rad": [
+            -2.9600233920286887,
+            2.961363854599817
+          ],
+          "lengths_m": [
+            0.21102554307611504,
+            0.2109982799681701
+          ],
+          "roll_pitch_deg": [
+            -0.006713896201685076,
+            0.010793276320060484
+          ],
+          "root_height_m": 0.29998055500005316,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.008250000000000006,
+          "knees_rad": [
+            -2.9391290531524903,
+            2.9412239956008364
+          ],
+          "lengths_m": [
+            0.2119497930168723,
+            0.21188901800590787
+          ],
+          "roll_pitch_deg": [
+            -0.011631512136328535,
+            0.02132306368529293
+          ],
+          "root_height_m": 0.29996073745963864,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.010250000000000007,
+          "knees_rad": [
+            -2.912269737697789,
+            2.9152352944820312
+          ],
+          "lengths_m": [
+            0.21313605679370476,
+            0.21303712121365695
+          ],
+          "roll_pitch_deg": [
+            -0.017338888715056542,
+            0.035192739748499006
+          ],
+          "root_height_m": 0.2999346230719385,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.01225000000000001,
+          "knees_rad": [
+            -2.8790069530321896,
+            2.8829486094346892
+          ],
+          "lengths_m": [
+            0.21459522799783906,
+            0.21445450008510913
+          ],
+          "roll_pitch_deg": [
+            -0.023740666954143116,
+            0.05202385389239861
+          ],
+          "root_height_m": 0.29990297531623505,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.014250000000000011,
+          "knees_rad": [
+            -2.8387489100978023,
+            2.8436881023988745
+          ],
+          "lengths_m": [
+            0.21634079796338648,
+            0.21615576197107306
+          ],
+          "roll_pitch_deg": [
+            -0.030737166824528577,
+            0.07092169217402326
+          ],
+          "root_height_m": 0.29986738796677315,
+          "contacts": []
+        },
+        {
+          "time_s": 0.01625000000000001,
+          "knees_rad": [
+            -2.7878389819505163,
+            2.793886913970468
+          ],
+          "lengths_m": [
+            0.21849178419250057,
+            0.2182680567317333
+          ],
+          "roll_pitch_deg": [
+            -0.04179130580573042,
+            0.08158722817307895
+          ],
+          "root_height_m": 0.2998465320295128,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.018250000000000013,
+          "knees_rad": [
+            -2.727910026899994,
+            2.7353978464970363
+          ],
+          "lengths_m": [
+            0.22099313711675073,
+            0.22071621610845746
+          ],
+          "roll_pitch_deg": [
+            -0.05364799500729698,
+            0.09037022863623935
+          ],
+          "root_height_m": 0.29982824777985484,
+          "contacts": []
+        },
+        {
+          "time_s": 0.020250000000000015,
+          "knees_rad": [
+            -2.6553070628486,
+            2.665040050493989
+          ],
+          "lengths_m": [
+            0.22388772316485975,
+            0.2235386667100668
+          ],
+          "roll_pitch_deg": [
+            -0.06979195509773646,
+            0.08636913124314602
+          ],
+          "root_height_m": 0.29983117005439297,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.022250000000000016,
+          "knees_rad": [
+            -2.569543827974914,
+            2.5802382918957436
+          ],
+          "lengths_m": [
+            0.22718699233144393,
+            0.22681447186061018
+          ],
+          "roll_pitch_deg": [
+            -0.08624045390622817,
+            0.06417722333231324
+          ],
+          "root_height_m": 0.2998611189992843,
+          "contacts": []
+        },
+        {
+          "time_s": 0.024250000000000018,
+          "knees_rad": [
+            -2.465989274505758,
+            2.479421124665353
+          ],
+          "lengths_m": [
+            0.23089407176619683,
+            0.23046112573537725
+          ],
+          "roll_pitch_deg": [
+            -0.10871677992582984,
+            0.012047569717024021
+          ],
+          "root_height_m": 0.299936687676913,
+          "contacts": []
+        },
+        {
+          "time_s": 0.02625000000000002,
+          "knees_rad": [
+            -2.338995873806481,
+            2.3576119673140274
+          ],
+          "lengths_m": [
+            0.23504324082870162,
+            0.2345025182381712
+          ],
+          "roll_pitch_deg": [
+            -0.14114613190320663,
+            -0.0917877997023578
+          ],
+          "root_height_m": 0.30008868914680537,
+          "contacts": []
+        },
+        {
+          "time_s": 0.02825000000000002,
+          "knees_rad": [
+            -2.182958064347296,
+            2.2104549266750078
+          ],
+          "lengths_m": [
+            0.23948438066105487,
+            0.23880192113315973
+          ],
+          "roll_pitch_deg": [
+            -0.1839206368970195,
+            -0.27143768331600143
+          ],
+          "root_height_m": 0.30034499121516306,
+          "contacts": []
+        },
+        {
+          "time_s": 0.030250000000000023,
+          "knees_rad": [
+            -1.990109906470715,
+            2.0321978083255448
+          ],
+          "lengths_m": [
+            0.24389161121845634,
+            0.24308610484457324
+          ],
+          "roll_pitch_deg": [
+            -0.2360467209801527,
+            -0.5649099999928208
+          ],
+          "root_height_m": 0.30074348752962937,
+          "contacts": []
+        },
+        {
+          "time_s": 0.03225000000000002,
+          "knees_rad": [
+            -1.7535912546356744,
+            1.8174673189713038
+          ],
+          "lengths_m": [
+            0.24756016779507323,
+            0.24681391471676298
+          ],
+          "roll_pitch_deg": [
+            -0.2894068354945371,
+            -1.0253469570490858
+          ],
+          "root_height_m": 0.3013184715971678,
+          "contacts": []
+        },
+        {
+          "time_s": 0.03375000000000002,
+          "knees_rad": [
+            -1.552557126119546,
+            1.6341189486877485
+          ],
+          "lengths_m": [
+            0.24909241694873402,
+            0.24869304637762119
+          ],
+          "roll_pitch_deg": [
+            -0.3145668135650243,
+            -1.504066750218179
+          ],
+          "root_height_m": 0.3018483275103663,
+          "contacts": []
+        }
+      ]
+    },
+    {
+      "variant": "target_spring_geometry_candidate",
+      "pose": "default",
+      "time_s": 0.07325000000000005,
+      "failure": "joint_limit",
+      "limits_rad": [
+        [
+          -3.7238299526359944,
+          -1.5717963267948964
+        ],
+        [
+          1.5717963267948964,
+          3.724667691473384
+        ]
+      ],
+      "trace": [
+        {
+          "time_s": 0.00025,
+          "knees_rad": [
+            -3.6604912464486867,
+            3.6605861393530565
+          ],
+          "lengths_m": [
+            0.17781501914481007,
+            0.17785113415592005
+          ],
+          "roll_pitch_deg": [
+            0.00011733778084862689,
+            -0.00047499289597412707
+          ],
+          "root_height_m": 0.2749768281375,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.0022500000000000003,
+          "knees_rad": [
+            -3.659226984964834,
+            3.6600462446623485
+          ],
+          "lengths_m": [
+            0.17786830567398879,
+            0.17787135709426305
+          ],
+          "roll_pitch_deg": [
+            -0.0013950936349527582,
+            -0.020044966245365562
+          ],
+          "root_height_m": 0.2750009647679926,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.004250000000000002,
+          "knees_rad": [
+            -3.6572995504893635,
+            3.658801982219052
+          ],
+          "lengths_m": [
+            0.17795178740562367,
+            0.17792373556531385
+          ],
+          "roll_pitch_deg": [
+            -0.006454110203123959,
+            -0.06760752232168063
+          ],
+          "root_height_m": 0.2750586087419506,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.006250000000000004,
+          "knees_rad": [
+            -3.654734006612297,
+            3.6568982174086995
+          ],
+          "lengths_m": [
+            0.17806434405604196,
+            0.17800617688993717
+          ],
+          "roll_pitch_deg": [
+            -0.014171564623256914,
+            -0.14302357281613057
+          ],
+          "root_height_m": 0.2751490694502355,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.008250000000000006,
+          "knees_rad": [
+            -3.651543367630279,
+            3.654362383950168
+          ],
+          "lengths_m": [
+            0.17820539961124884,
+            0.17811741814298848
+          ],
+          "roll_pitch_deg": [
+            -0.023898387174948223,
+            -0.24605497765843382
+          ],
+          "root_height_m": 0.27527158256510154,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.010250000000000007,
+          "knees_rad": [
+            -3.6477249898146784,
+            3.651206975327836
+          ],
+          "lengths_m": [
+            0.17837508426742849,
+            0.1782569006392588
+          ],
+          "roll_pitch_deg": [
+            -0.035151473234070946,
+            -0.376365095117669
+          ],
+          "root_height_m": 0.27542528105696856,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.01225000000000001,
+          "knees_rad": [
+            -3.643256170725585,
+            3.647430309690877
+          ],
+          "lengths_m": [
+            0.17857444096696842,
+            0.1784247272673651
+          ],
+          "roll_pitch_deg": [
+            -0.04757591431678656,
+            -0.5335186101841596
+          ],
+          "root_height_m": 0.27560918263670486,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.014250000000000011,
+          "knees_rad": [
+            -3.638095303108023,
+            3.6430157821324145
+          ],
+          "lengths_m": [
+            0.17880542524149365,
+            0.17862169209543988
+          ],
+          "roll_pitch_deg": [
+            -0.06091184078194805,
+            -0.716979719005507
+          ],
+          "root_height_m": 0.2758221759786885,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.01625000000000001,
+          "knees_rad": [
+            -3.632186413029037,
+            3.6379304647084822
+          ],
+          "lengths_m": [
+            0.1790707046173104,
+            0.17884934847098882
+          ],
+          "roll_pitch_deg": [
+            -0.07496421420332407,
+            -0.9261090264976017
+          ],
+          "root_height_m": 0.27606300624020425,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.018250000000000013,
+          "knees_rad": [
+            -3.6254613455863485,
+            3.6321236898357245
+          ],
+          "lengths_m": [
+            0.17937355491273088,
+            0.17911008356191838
+          ],
+          "roll_pitch_deg": [
+            -0.08958528640957328,
+            -1.1601603362887531
+          ],
+          "root_height_m": 0.2763302682871707,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.020250000000000015,
+          "knees_rad": [
+            -3.6178399978870366,
+            3.625527024961093
+          ],
+          "lengths_m": [
+            0.1797178522202607,
+            0.1794071427658337
+          ],
+          "roll_pitch_deg": [
+            -0.104661231145884,
+            -1.4182775035621575
+          ],
+          "root_height_m": 0.2766224033124372,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.022250000000000016,
+          "knees_rad": [
+            -3.6092293195848466,
+            3.6180554077552203
+          ],
+          "lengths_m": [
+            0.1801081250280828,
+            0.17974459207621213
+          ],
+          "roll_pitch_deg": [
+            -0.1200985048353352,
+            -1.6994911945546338
+          ],
+          "root_height_m": 0.2769376965042451,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.024250000000000018,
+          "knees_rad": [
+            -3.59952147413771,
+            3.609607635637552
+          ],
+          "lengths_m": [
+            0.18054965086158567,
+            0.18012730624219725
+          ],
+          "roll_pitch_deg": [
+            -0.13581750111428442,
+            -2.002715115907822
+          ],
+          "root_height_m": 0.27727427901375756,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.02625000000000002,
+          "knees_rad": [
+            -3.5885923871580885,
+            3.600065985180914
+          ],
+          "lengths_m": [
+            0.18104854477906743,
+            0.1805609986181166
+          ],
+          "roll_pitch_deg": [
+            -0.15175779455108654,
+            -2.326741165911482
+          ],
+          "root_height_m": 0.2776301346159977,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.02825000000000002,
+          "knees_rad": [
+            -3.5763016432707033,
+            3.589295062850399
+          ],
+          "lengths_m": [
+            0.1816117944797433,
+            0.18105229088392277
+          ],
+          "roll_pitch_deg": [
+            -0.16787963876372475,
+            -2.6702337610491207
+          ],
+          "root_height_m": 0.27800310452916566,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.030250000000000023,
+          "knees_rad": [
+            -3.5624940907250995,
+            3.5771411308472483
+          ],
+          "lengths_m": [
+            0.1822472009028457,
+            0.18160876980697613
+          ],
+          "roll_pitch_deg": [
+            -0.18414303034527363,
+            -3.03172400071028
+          ],
+          "root_height_m": 0.27839088269660117,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.03225000000000002,
+          "knees_rad": [
+            -3.5469690720728946,
+            3.563429744657269
+          ],
+          "lengths_m": [
+            0.18296427066983706,
+            0.18223908500459757
+          ],
+          "roll_pitch_deg": [
+            -0.20034962269939804,
+            -3.4096214437688666
+          ],
+          "root_height_m": 0.27879100034083487,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.034250000000000023,
+          "knees_rad": [
+            -3.529155417437182,
+            3.547895423452864
+          ],
+          "lengths_m": [
+            0.18378251549278365,
+            0.1829555647989162
+          ],
+          "roll_pitch_deg": [
+            -0.21547822270520262,
+            -3.8023322647723012
+          ],
+          "root_height_m": 0.2792009412341321,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.036250000000000025,
+          "knees_rad": [
+            -3.5076141406378527,
+            3.529730532375426
+          ],
+          "lengths_m": [
+            0.18478844542635978,
+            0.18378577183265318
+          ],
+          "roll_pitch_deg": [
+            -0.22946318304683425,
+            -4.208259951833145
+          ],
+          "root_height_m": 0.27961934240162595,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.03825000000000003,
+          "knees_rad": [
+            -3.4843458579846156,
+            3.5081118925454455
+          ],
+          "lengths_m": [
+            0.18588394341052022,
+            0.18479847532097984
+          ],
+          "roll_pitch_deg": [
+            -0.24112039453382497,
+            -4.624704556026499
+          ],
+          "root_height_m": 0.2800412781085607,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.04025000000000003,
+          "knees_rad": [
+            -3.4588974451426813,
+            3.4845078719169598
+          ],
+          "lengths_m": [
+            0.18708615581646962,
+            0.1859080661863351
+          ],
+          "roll_pitch_deg": [
+            -0.24982535474373857,
+            -5.049567635728754
+          ],
+          "root_height_m": 0.28046302016991165,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.04225000000000003,
+          "knees_rad": [
+            -3.429273942834174,
+            3.4582148955985326
+          ],
+          "lengths_m": [
+            0.1884807599648393,
+            0.18714071562089318
+          ],
+          "roll_pitch_deg": [
+            -0.2567813868404696,
+            -5.48117851481823
+          ],
+          "root_height_m": 0.28088408624345507,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.04425000000000003,
+          "knees_rad": [
+            -3.395969730580118,
+            3.4269323892119905
+          ],
+          "lengths_m": [
+            0.19006199005090538,
+            0.18862035769282792
+          ],
+          "roll_pitch_deg": [
+            -0.2619999213145375,
+            -5.916990197057193
+          ],
+          "root_height_m": 0.2813020307647947,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ],
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.046250000000000034,
+          "knees_rad": [
+            -3.3579325865709744,
+            3.3928901637084476
+          ],
+          "lengths_m": [
+            0.19187181345557572,
+            0.1902403038635272
+          ],
+          "roll_pitch_deg": [
+            -0.2647710400541059,
+            -6.354453836595503
+          ],
+          "root_height_m": 0.28171274487917947,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.048250000000000036,
+          "knees_rad": [
+            -3.3155755452690516,
+            3.3527948258455296
+          ],
+          "lengths_m": [
+            0.1938979427203244,
+            0.19214548824893105
+          ],
+          "roll_pitch_deg": [
+            -0.26529937232832174,
+            -6.791354857855931
+          ],
+          "root_height_m": 0.28211503608305627,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.05025000000000004,
+          "knees_rad": [
+            -3.266993526166409,
+            3.3085210162640712
+          ],
+          "lengths_m": [
+            0.19622090559546893,
+            0.19425875159585698
+          ],
+          "roll_pitch_deg": [
+            -0.26394610298719223,
+            -7.225319595929942
+          ],
+          "root_height_m": 0.2825062669030161,
+          "contacts": []
+        },
+        {
+          "time_s": 0.05225000000000004,
+          "knees_rad": [
+            -3.2116755630143468,
+            3.2570603856258904
+          ],
+          "lengths_m": [
+            0.19886369841878998,
+            0.1967214025805164
+          ],
+          "roll_pitch_deg": [
+            -0.2637945248727876,
+            -7.655116699404192
+          ],
+          "root_height_m": 0.2828881025802354,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.05425000000000004,
+          "knees_rad": [
+            -3.1482212069544255,
+            3.19942929909759
+          ],
+          "lengths_m": [
+            0.20186479909380461,
+            0.1994577848883403
+          ],
+          "roll_pitch_deg": [
+            -0.26411511873616283,
+            -8.078780437514947
+          ],
+          "root_height_m": 0.2832581811999479,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.05625000000000004,
+          "knees_rad": [
+            -3.0767332682153112,
+            3.1325632366088874
+          ],
+          "lengths_m": [
+            0.20522180924042902,
+            0.20263598612783337
+          ],
+          "roll_pitch_deg": [
+            -0.26317848223454204,
+            -8.495610585846537
+          ],
+          "root_height_m": 0.2836165095015108,
+          "contacts": [
+            [
+              "floor",
+              "left_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.058250000000000045,
+          "knees_rad": [
+            -2.9928514417472085,
+            3.0575621963309874
+          ],
+          "lengths_m": [
+            0.20910284302231577,
+            0.20613887207485532
+          ],
+          "roll_pitch_deg": [
+            -0.2656677745242958,
+            -8.907043497318051
+          ],
+          "root_height_m": 0.28396819211492397,
+          "contacts": [
+            [
+              "floor",
+              "right_wheel_collision_0"
+            ]
+          ]
+        },
+        {
+          "time_s": 0.06025000000000005,
+          "knees_rad": [
+            -2.897393015278837,
+            2.969363371673339
+          ],
+          "lengths_m": [
+            0.2133945625901402,
+            0.21018365503163391
+          ],
+          "roll_pitch_deg": [
+            -0.2706952742685126,
+            -9.315968161025221
+          ],
+          "root_height_m": 0.284317720056702,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06225000000000005,
+          "knees_rad": [
+            -2.7839942589773803,
+            2.866798613895454
+          ],
+          "lengths_m": [
+            0.21829972047834026,
+            0.21477193175722692
+          ],
+          "roll_pitch_deg": [
+            -0.28662479478195635,
+            -9.731517171672573
+          ],
+          "root_height_m": 0.2846812797520324,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06425000000000004,
+          "knees_rad": [
+            -2.6492182315392436,
+            2.749091100478546
+          ],
+          "lengths_m": [
+            0.22380304679020036,
+            0.2198009628665015
+          ],
+          "roll_pitch_deg": [
+            -0.3135528841053073,
+            -10.162014779143226
+          ],
+          "root_height_m": 0.28506770138649423,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06625000000000004,
+          "knees_rad": [
+            -2.4876664920662774,
+            2.6107209706427383
+          ],
+          "lengths_m": [
+            0.2298413492945752,
+            0.22534724416510576
+          ],
+          "roll_pitch_deg": [
+            -0.3534934053397638,
+            -10.628842908694349
+          ],
+          "root_height_m": 0.2855014262646897,
+          "contacts": []
+        },
+        {
+          "time_s": 0.06825000000000005,
+          "knees_rad": [
+            -2.291064836297255,
+            2.446426961484305
+          ],
+          "lengths_m": [
+            0.2362345863948532,
+            0.23132626542813303
+          ],
+          "roll_pitch_deg": [
+            -0.40665309280469536,
+            -11.165823978759464
+          ],
+          "root_height_m": 0.28601527160088286,
+          "contacts": []
+        },
+        {
+          "time_s": 0.07025000000000005,
+          "knees_rad": [
+            -2.046583417979441,
+            2.248069829423872
+          ],
+          "lengths_m": [
+            0.24253336508045512,
+            0.23753616916961076
+          ],
+          "roll_pitch_deg": [
+            -0.46851461189930055,
+            -11.836062897368224
+          ],
+          "root_height_m": 0.28666182491316544,
+          "contacts": []
+        },
+        {
+          "time_s": 0.07225000000000005,
+          "knees_rad": [
+            -1.7401757487495495,
+            2.003215084685266
+          ],
+          "lengths_m": [
+            0.24760149573422321,
+            0.2435003379559998
+          ],
+          "roll_pitch_deg": [
+            -0.5107188112390011,
+            -12.756819566044706
+          ],
+          "root_height_m": 0.2875104487536957,
+          "contacts": []
+        },
+        {
+          "time_s": 0.07325000000000005,
+          "knees_rad": [
+            -1.566756248233909,
+            1.8589309344140676
+          ],
+          "lengths_m": [
+            0.24898866047506876,
+            0.2460729666628769
+          ],
+          "roll_pitch_deg": [
+            -0.4971573421883751,
+            -13.361224322941668
+          ],
+          "root_height_m": 0.2880182323516284,
+          "contacts": []
+        }
+      ]
+    }
+  ],
+  "body_masses_kg": {
+    "base_link": 21.2113581068628,
+    "r0_link": 0.649917627348707,
+    "r1_link": 0.146779385778477,
+    "right_wheel": 0.22423279477235,
+    "l0_link": 0.618041120645009,
+    "l1_link": 0.185068685581945,
+    "left_wheel": 0.224232794577727
+  },
+  "joint_armature": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "candidate_promoted": false,
+  "production_limits_changed": false,
+  "interpretation": "The inherited extension stop comes from the archived ~228 mm installed spring, while the current 250 mm spring-only geometry allows a wider branch. This is a modeling discrepancy, not permission to widen hardware limits. The separate candidate still requires full component-contact and physical-stop validation."
+}

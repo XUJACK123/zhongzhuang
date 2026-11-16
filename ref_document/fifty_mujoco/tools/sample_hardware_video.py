@@ -21,6 +21,7 @@ PROJECT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(PROJECT/'src'))
 from fifty_mujoco.envs.sample_env31_hardware import SampleHardwareEnv31
 from fifty_mujoco.envs.sample_env31_hardware_guarded import GuardedHardwareEnv31
+from fifty_mujoco.envs.sample_env31_qualified import QualifiedHardwareEnv31, ENV_SCHEMA as QUALIFIED_SCHEMA
 from fifty_mujoco.learning.sample_ppo import SamplePolicy31
 from fifty_mujoco.transfer.sample_source import verified_artifact
 
@@ -35,8 +36,9 @@ def main():
     checkpoint=torch.load(a.checkpoint,map_location='cpu',weights_only=True)
     policy=SamplePolicy31(verified_artifact('model_3050.pt'));policy.load_state_dict(checkpoint['model'])
     kd=checkpoint['contract']['wheel_kd'] if a.wheel_kd is None else a.wheel_kd
-    guarded=checkpoint['contract']['environment']=='sample_commissioned_guarded_cpu31_v4'
-    cls=GuardedHardwareEnv31 if guarded else SampleHardwareEnv31
+    qualified=checkpoint['contract']['environment']==QUALIFIED_SCHEMA
+    guarded=qualified or checkpoint['contract']['environment']=='sample_commissioned_guarded_cpu31_v4'
+    cls=QualifiedHardwareEnv31 if qualified else GuardedHardwareEnv31 if guarded else SampleHardwareEnv31
     options={'knee_margin_rad':checkpoint['contract']['knee_margin_rad']} if guarded else {}
     env=cls(a.seconds,reset_mode='natural' if a.scenario=='natural_release' else 'default',wheel_kd=kd,**options)
     protocol=json.loads((PROJECT/'configs/sample_command_evaluation.json').read_text())
@@ -59,6 +61,7 @@ def main():
         elapsed=tick*env.source.policy_dt
         if a.scenario=='reversal':env.request([protocol['reversal_5s_segments'][min(7,int(elapsed/5))],0.,.1])
         if a.scenario=='turning':env.request([*protocol['turning_5s_segments'][min(7,int(elapsed/5))],.1])
+        if qualified:obs=env.observation()
         with torch.no_grad():action=policy.actor(torch.tensor(obs)[None])[0].numpy()
         observations.append(obs.copy());actions.append(action.copy())
         obs,_,d,t,info=env.step(action);states.append(env.data.qpos.copy())
@@ -88,7 +91,9 @@ def main():
         'trajectory':str(trajectory),'trajectory_sha256':hashlib.sha256(trajectory.read_bytes()).hexdigest(),
         'columns':['time_s','command_vx','command_wz','command_clearance','point_vx','point_vy','yaw_rate',
                    'clearance','roll_deg','pitch_deg','minimum_spring_margin','odometry_error_x','odometry_error_y','terminated','truncated'],
-        'real_robot_accepted':False,'visualization_changes_only':'geom RGBA/headlight/camera'}
+        'real_robot_accepted':False,'visualization_changes_only':'geom RGBA/headlight/camera',
+        'environment':checkpoint['contract']['environment'],
+        'qualified_scope':'Current C odometry quality/reference logic, ideal sensor inputs, already balancing reset' if qualified else None}
     a.out.with_suffix('.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report),flush=True)
 

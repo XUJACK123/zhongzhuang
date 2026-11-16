@@ -1,0 +1,423 @@
+{
+  "enabled": true,
+  "geometry_confirmed": false,
+  "model_label": "450-080 / BKB0.45-080-205",
+  "reported_dimensions": {
+    "thigh_attachment_to_joint1_m": 0.051,
+    "shin_attachment_to_joint2_m": 0.04863,
+    "joint1_joint2_definition": {
+      "joint1": "hip",
+      "joint2": "knee"
+    },
+    "nominal_force_n": 450.0,
+    "stroke_m": 0.08,
+    "free_length_m": 0.205,
+    "compressed_length_m": 0.125,
+    "nominal_force_reference_length_m": null,
+    "note": "BKB0.45-080-205: 450 N nominal, 80 mm stroke, 205/125 mm bare lengths. User identifies the depicted CAD pose as extended; interpreted as full extension for this revision. Hole-distance endpoints are derived from that pose and documented 3D assumptions.",
+    "length_definition": "bare nitrogen spring: base end to rod tip; excludes robot mounting adapters",
+    "nominal_force_reference": "Fully extended position; per-leg installed reference_length_m includes adapters."
+  },
+  "installation_measurements": {
+    "status": "Planar mounting dimensions transcribed from supplied CAD. Full-extension interpretation supplied by user. Lateral anchor offsets and mirror assumption remain unverified.",
+    "leg_side": null,
+    "measurement_frame": "Screenshot +Y downward, +Z left; planar mapping to training +X right, +Z up. Out-of-plane coordinate not supplied.",
+    "thigh_anchor_from_hip": {
+      "distance_m": 0.051,
+      "abs_delta_y_m": 0.03642,
+      "abs_delta_z_m": 0.03571,
+      "delta_x_m": null,
+      "source_image": "model-revisions/gas-spring-450-080/evidence/upper-anchor.jpg",
+      "signed_screenshot_dy_m": 0.03642,
+      "signed_screenshot_dz_m": -0.03571
+    },
+    "shin_anchor_from_knee": {
+      "distance_m": 0.04863,
+      "abs_delta_y_m": 0.04582,
+      "abs_delta_z_m": 0.0163,
+      "delta_x_m": null,
+      "source_image": "model-revisions/gas-spring-450-080/evidence/lower-anchor.jpg",
+      "signed_screenshot_dy_m": 0.04582,
+      "signed_screenshot_dz_m": -0.0163
+    },
+    "note": "Signed planar offsets follow the visible axes: +Y/-Z. Transform through each link rotation, never copy screenshot components into link frames. Zero lateral anchor offsets in separate link frames do not imply coplanar endpoints: current URDF yields 11.5/12.0455 mm lateral separation.",
+    "urdf_reference_vectors": {
+      "source": "solidwork_graph/fifty_version_with_meshes/urdf/fifty_version_with_meshes.urdf",
+      "frame": "source base_link; source URDF q=0 (exported assembly pose); not yet matched to screenshot measurement frame",
+      "vectors": {
+        "right": {
+          "hip_to_knee_base_mm": [
+            11.5,
+            -97.834122,
+            185.818418
+          ],
+          "knee_to_wheel_base_mm": [
+            -44.6,
+            120.699468,
+            218.932954
+          ]
+        },
+        "left": {
+          "hip_to_knee_base_mm": [
+            -12.045534,
+            -97.834122,
+            185.818418
+          ],
+          "knee_to_wheel_base_mm": [
+            52.55,
+            120.699468,
+            218.932954
+          ]
+        }
+      }
+    },
+    "planar_frame_mapping": {
+      "screenshot_positive_y": "source_base_positive_z",
+      "screenshot_positive_z": "source_base_negative_y",
+      "evidence_images": [
+        "model-revisions/gas-spring-450-080/evidence/thigh-dimensions.jpg",
+        "model-revisions/gas-spring-450-080/evidence/shin-dimensions.jpg"
+      ],
+      "note": "Inferred planar mapping; side and lateral mounting offsets remain unverified. No geometry derived from image pixel scale."
+    },
+    "training_link_anchor_candidates": {
+      "right": {
+        "parent_anchor_m_candidate": [
+          0.015589763279096669,
+          -0.048565211632419863,
+          1.271597503606669e-16
+        ],
+        "child_anchor_m_candidate": [
+          0.04799563714115221,
+          0.007847369968011586,
+          1.5997967494579236e-16
+        ],
+        "length_m_if_zero_anchor_lateral_offsets": 0.22801022999909107
+      },
+      "left": {
+        "parent_anchor_m_candidate": [
+          0.015589763279096103,
+          0.04856521163242004,
+          1.271597503606669e-16
+        ],
+        "child_anchor_m_candidate": [
+          0.04799563714115229,
+          -0.007847369968011051,
+          1.5997967494579236e-16
+        ],
+        "length_m_if_zero_anchor_lateral_offsets": 0.22803839560766062
+      }
+    },
+    "stroke_consistency": {
+      "reference_pose_state": "fully extended, per user clarification on 2026-10-28",
+      "planar_extended_hole_distance_m": 0.2277200364136602,
+      "planar_compressed_hole_distance_m": 0.14772003641366022,
+      "bare_extended_length_m": 0.205,
+      "bare_compressed_length_m": 0.125,
+      "status": "Installed hole distances include adapters. 3D values retain unmeasured lateral-offset assumptions.",
+      "per_leg_model": [
+        {
+          "joint": "rf1_Joint",
+          "parent_link": "r0_link",
+          "child_link": "r1_link",
+          "parent_anchor_world_m": [
+            0.035710000000000006,
+            -0.22769776695296415,
+            -0.03642
+          ],
+          "child_anchor_world_m": [
+            -0.08153412215609407,
+            -0.21619776695297793,
+            -0.23163841819891282
+          ],
+          "planar_extended_hole_distance_m": 0.2277200364136602,
+          "modeled_lateral_separation_m": 0.011499999999986216,
+          "modeled_extended_hole_distance_m": 0.2280102299990911,
+          "modeled_compressed_hole_distance_m": 0.14801022999909108,
+          "implied_adapter_axial_length_m": 0.02301022999909111,
+          "original_joint_limits_rad": [
+            -3.2592683579936743,
+            -1.8592683579936746
+          ],
+          "corrected_joint_limits_rad": [
+            -4.296127953784042,
+            -2.5592683579936732
+          ],
+          "stroke_analysis": {
+            "geometric_min_length_m": 0.15218661647507928,
+            "geometric_max_length_m": 0.24928276797930607,
+            "compression_stop_reachable": false,
+            "branch_margin_rad": 0.001,
+            "feasible_intervals_rad": [
+              [
+                -4.71138898038469,
+                -2.5592683579936732
+              ]
+            ],
+            "endpoint_lengths_m": [
+              0.15240021881113527,
+              0.22801022999909115
+            ],
+            "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop.",
+            "spring_only_joint_interval_rad": [
+              -4.71138898038469,
+              -2.5592683579936732
+            ],
+            "combined_joint_interval_rad": [
+              -4.296127953784042,
+              -2.5592683579936732
+            ],
+            "minimum_knee_included_angle_deg": 23.85,
+            "combined_endpoint_lengths_m": [
+              0.15567545323287355,
+              0.22801022999909115
+            ]
+          }
+        },
+        {
+          "joint": "lf1_Joint",
+          "parent_link": "l0_link",
+          "child_link": "l1_link",
+          "parent_anchor_world_m": [
+            0.03570999999999999,
+            0.22769776695296415,
+            -0.036419999999999994
+          ],
+          "child_anchor_world_m": [
+            -0.08153412215609435,
+            0.21565223304703152,
+            -0.23163841819890812
+          ],
+          "planar_extended_hole_distance_m": 0.22772003641365632,
+          "modeled_lateral_separation_m": 0.012045533905932632,
+          "modeled_extended_hole_distance_m": 0.22803839560766062,
+          "modeled_compressed_hole_distance_m": 0.14803839560766063,
+          "implied_adapter_axial_length_m": 0.023038395607660633,
+          "original_joint_limits_rad": [
+            1.859268357993675,
+            3.259268357993675
+          ],
+          "corrected_joint_limits_rad": [
+            2.559268357993676,
+            4.296127953784042
+          ],
+          "stroke_analysis": {
+            "geometric_min_length_m": 0.15222881173158762,
+            "geometric_max_length_m": 0.24930853033641306,
+            "compression_stop_reachable": false,
+            "branch_margin_rad": 0.001,
+            "feasible_intervals_rad": [
+              [
+                2.559268357993676,
+                4.71138898038469
+              ]
+            ],
+            "endpoint_lengths_m": [
+              0.22803839560766062,
+              0.1524423549436318
+            ],
+            "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop.",
+            "spring_only_joint_interval_rad": [
+              2.559268357993676,
+              4.71138898038469
+            ],
+            "combined_joint_interval_rad": [
+              2.559268357993676,
+              4.296127953784042
+            ],
+            "minimum_knee_included_angle_deg": 23.85,
+            "combined_endpoint_lengths_m": [
+              0.22803839560766062,
+              0.15571670310643865
+            ]
+          }
+        }
+      ]
+    },
+    "user_clarification": "2026-10-28: 气弹簧45.080，给的图是伸长状态。This revision interprets 伸长状态 as the full-extension stop."
+  },
+  "springs": [
+    {
+      "joint": "rf1_Joint",
+      "parent_anchor_m": [
+        0.015589763279096669,
+        -0.048565211632419863,
+        0.0
+      ],
+      "child_anchor_m": [
+        0.04799563714115221,
+        0.007847369968011586,
+        0.0
+      ],
+      "min_length_m": 0.14801022999909108,
+      "max_length_m": 0.2280102299990911,
+      "reference_length_m": 0.2280102299990911,
+      "reference_force_n": 450.0,
+      "rod_diameter_m": 0.006,
+      "reference_gas_volume_m3": null,
+      "polytropic_exponent": 1.0,
+      "ambient_pressure_pa": 101325.0,
+      "viscous_damping_ns_m": 0.0,
+      "force_model": "nominal_constant",
+      "joint_origin_m": [
+        0.209999999999999,
+        0.0,
+        0.0114999999999869
+      ],
+      "joint_yaw_rad": 1.5707963267949,
+      "stroke_m": 0.08,
+      "length_limit_tolerance_m": 0.002,
+      "pre_stroke_joint_limits_rad": [
+        -3.2592683579936743,
+        -1.8592683579936746
+      ],
+      "joint_stop_limits_rad": [
+        -4.296127953784042,
+        -2.5592683579936732
+      ],
+      "stroke_limit_analysis": {
+        "geometric_min_length_m": 0.15218661647507928,
+        "geometric_max_length_m": 0.24928276797930607,
+        "compression_stop_reachable": false,
+        "branch_margin_rad": 0.001,
+        "feasible_intervals_rad": [
+          [
+            -4.71138898038469,
+            -2.5592683579936732
+          ]
+        ],
+        "endpoint_lengths_m": [
+          0.15240021881113527,
+          0.22801022999909115
+        ],
+        "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop.",
+        "spring_only_joint_interval_rad": [
+          -4.71138898038469,
+          -2.5592683579936732
+        ],
+        "combined_joint_interval_rad": [
+          -4.296127953784042,
+          -2.5592683579936732
+        ],
+        "minimum_knee_included_angle_deg": 23.85,
+        "combined_endpoint_lengths_m": [
+          0.15567545323287355,
+          0.22801022999909115
+        ]
+      }
+    },
+    {
+      "joint": "lf1_Joint",
+      "parent_anchor_m": [
+        0.015589763279096103,
+        0.04856521163242004,
+        0.0
+      ],
+      "child_anchor_m": [
+        0.04799563714115229,
+        -0.007847369968011051,
+        0.0
+      ],
+      "min_length_m": 0.14803839560766063,
+      "max_length_m": 0.22803839560766062,
+      "reference_length_m": 0.22803839560766062,
+      "reference_force_n": 450.0,
+      "rod_diameter_m": 0.006,
+      "reference_gas_volume_m3": null,
+      "polytropic_exponent": 1.0,
+      "ambient_pressure_pa": 101325.0,
+      "viscous_damping_ns_m": 0.0,
+      "force_model": "nominal_constant",
+      "joint_origin_m": [
+        0.209999999999995,
+        0.0,
+        0.0120455339059333
+      ],
+      "joint_yaw_rad": -1.5707963267949,
+      "stroke_m": 0.08,
+      "length_limit_tolerance_m": 0.002,
+      "pre_stroke_joint_limits_rad": [
+        1.859268357993675,
+        3.259268357993675
+      ],
+      "joint_stop_limits_rad": [
+        2.559268357993676,
+        4.296127953784042
+      ],
+      "stroke_limit_analysis": {
+        "geometric_min_length_m": 0.15222881173158762,
+        "geometric_max_length_m": 0.24930853033641306,
+        "compression_stop_reachable": false,
+        "branch_margin_rad": 0.001,
+        "feasible_intervals_rad": [
+          [
+            2.559268357993676,
+            4.71138898038469
+          ]
+        ],
+        "endpoint_lengths_m": [
+          0.22803839560766062,
+          0.1524423549436318
+        ],
+        "note": "No linkage collision restriction. Unreachable compression endpoint does not impose a knee stop.",
+        "spring_only_joint_interval_rad": [
+          2.559268357993676,
+          4.71138898038469
+        ],
+        "combined_joint_interval_rad": [
+          2.559268357993676,
+          4.296127953784042
+        ],
+        "minimum_knee_included_angle_deg": 23.85,
+        "combined_endpoint_lengths_m": [
+          0.22803839560766062,
+          0.15571670310643865
+        ]
+      }
+    }
+  ],
+  "manufacturer_datasheet": {
+    "source_image": "model-revisions/gas-spring-450-080/evidence/datasheet.jpg",
+    "catalog_model": "BKB0.45-080-205",
+    "spring_type": "nitrogen die spring (rod insertion compresses sealed gas)",
+    "nominal_force_n": 450.0,
+    "rod_diameter_m": 0.006,
+    "body_outer_diameter_m": 0.012,
+    "stroke_m": 0.08,
+    "bare_extended_length_m": 0.205,
+    "bare_compressed_length_m": 0.125,
+    "mounting_adapter_total_axial_offset_m": null,
+    "force_curve": {
+      "pressure_labels_mpa": [
+        9,
+        12,
+        15
+      ],
+      "horizontal_axis_range": [
+        0,
+        100
+      ],
+      "horizontal_axis_unit": null,
+      "status": "Series chart retained; not fitted or used by the nominal_constant approximation."
+    },
+    "max_charging_pressure_pa": 18000000.0,
+    "min_charging_pressure_pa": 2500000.0,
+    "max_working_speed_m_s": 1.2,
+    "working_temperature_c": [
+      -20,
+      80
+    ],
+    "temperature_pressure_change_fraction_per_c": 0.003,
+    "recommended_cycles_per_min": [
+      6,
+      50
+    ]
+  },
+  "geometry_approximation": "Planar mounting directions inferred from supplied SW dimensions and source URDF pose; left/right mirrored, unmeasured anchor lateral offsets set to zero in each link frame. Requires hardware calibration.",
+  "simulation_fidelity": {
+    "force_model": "nominal_constant",
+    "description": "450 N push force with posture-dependent lever arm. Explicit approximation, not a calibrated gas pressure/progression model.",
+    "physical_stroke_enforced": true,
+    "reason": "Analytic stroke feasible interval intersected with red assembly branch and separately supplied mechanical angle minimum when configured. No new linkage collision detection. Unreachable compression stop is reported. 2 mm numerical spring-length tolerance; force progression uncalibrated."
+  }
+}

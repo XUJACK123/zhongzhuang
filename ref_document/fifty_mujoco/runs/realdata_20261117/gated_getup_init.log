@@ -1,0 +1,10 @@
+/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/tools/realdata_gated_teacher.py:50: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  if step%500==0:losses.append({'step':step,'mse':float(loss)});print(json.dumps(losses[-1]),flush=True)
+{"step": 0, "mse": 0.6267186403274536}
+{"step": 500, "mse": 0.000685129314661026}
+{"step": 1000, "mse": 0.0003883199533447623}
+{"step": 1500, "mse": 0.0003810396301560104}
+{"step": 2000, "mse": 0.000191361628822051}
+{"step": 2500, "mse": 0.00019246514420956373}
+[{"controller": "immediate_knee_compression", "actions": [-0.35789259980278787, -0.631364322931357, 0.0, 0.4154575985008435, 0.5692942206933355, 0.0], "requested_joint_nm": [-32.56167571445001, -57.55893460651257, 0.0, 33.31297568841114, 56.95683153937193, 0.0], "motor_request_nm": [16.54733995263959, -49.1090156670896, 0.0, 15.857335431490995, -49.17031111990214, 0.0], "motor_limited_nm": [16.54733995263959, -20.0, 0.0, 15.857335431490995, -20.0, 0.0], "delivered_joint_nm": [-3.4526600473604105, -22.32904768303364, 0.0, 4.142664568509005, 22.30121240891331, 0.0]}, {"controller": "hip_first_gate", "actions": [-0.3578925132751465, 1.021141529083252, -0.021347522735595703, 0.41545748710632324, -1.0348196029663086, -0.01769256591796875], "requested_joint_nm": [-32.561673983897194, -8.618004918571867, 0.0, 33.31297346052074, 9.878004918571861, 0.0], "motor_request_nm": [-24.842576384298162, -7.719097599599033, 0.0, -24.454257855781833, -8.858715604738903, 0.0], "motor_limited_nm": [-20.0, -7.719097599599033, 0.0, -20.0, -8.858715604738903, 0.0], "delivered_joint_nm": [-27.71909759959903, -8.618004918571867, 0.0, 28.858715604738904, 9.878004918571861, 0.0]}]

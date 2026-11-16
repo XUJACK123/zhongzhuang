@@ -1,0 +1,220 @@
+{
+  "tool": "sample-transfer-training",
+  "schema": 1,
+  "generated_at": "2026-11-15T17:42:57+00:00",
+  "status": "completed",
+  "training_schema": "sample_transfer_ppo31_v1",
+  "contract": {
+    "environment": "sample_qualified_odometry_cpu31_v1",
+    "reward": "sample_hardware_tracking_effort_reward_v2",
+    "actuator_backend": "scalar_float64",
+    "action_knee_limits": [
+      [
+        -3.6938299526359955,
+        -2.5592683579936732
+      ],
+      [
+        2.559268357993676,
+        3.6946676914733847
+      ]
+    ],
+    "knee_margin_rad": 0.03,
+    "model_xml": "ded3a6bf59272c97ff5d3204bb54b2810808d1f613c501282ba04d3427b620c8",
+    "code": {
+      "envs/sample_env31.py": "2dfd62c61283de504849d1fe94db04bae2ec309af5beebb3d1d3364590fdeda9",
+      "learning/sample_ppo.py": "013f6111c9affad295a44cb48b357388d8ebe9351b135edccd192975fed77807",
+      "contracts/sample_actor31.py": "4dc7d43acade252b05f3297dc821aad854b5c32cbc79e3669e9d76ed1a61be07",
+      "transfer/sample_source.py": "e734e6a0fb72c328dd6085b3ff27d4d1be8e7a276aa048807bca9210791c7a6a",
+      "transfer/sample_checkpoint.py": "0af8eb1ee4736cc5ee437513a12e2a4dcd292e49c8a9e98c892cd98ebf540c0e",
+      "envs/sample_env31_hardware.py": "81187e1ea4402713173c8fd812773828f66d539fb3b8282064800c8f6b471b06",
+      "envs/sample_env31_hardware_fast.py": "c16cad8a63ab2b687918506eb3ef15a878625ac20aea679c4eef83870af9e41b",
+      "envs/sample_env31_hardware_guarded.py": "36c28f63145656129433d7e13b1f37c2964817c236d032ef14018ec0db3fa64e",
+      "transfer/sample_target.py": "3fcd1c914d125657485d6ea53d75d40fcb895f1762a9a472633856fb11c1fd29",
+      "envs/sample_env31_target.py": "6df5d4d87182604499b6be7c218072f9712059ba51bf03dbc60440343801dfc1",
+      "tools/sample_qualified_train.py": "a57ef960b1269811ba4a6d5835f17d6a3953fae07eef4b2facc383f7fcd5f2a9",
+      "tools/sample_qualified_evaluate.py": "c2f0796e821c5ac5cb2226f5fae139e0be947a9791bad7021d690bb0f050dba5",
+      "src/fifty_mujoco/envs/sample_env31_qualified.py": "d94199770accad3b57ec1d90334e6dc25a1fb7c3584832df83b5091e8bd6b9ca",
+      "src/fifty_mujoco/transfer/firmware_runtime.py": "b5aa52fc0bc5072757471097ecd8e932efbb363acc8e7ae5fa8fc0e7a08aa66b"
+    },
+    "episode_steps": 2000,
+    "hardware_profile": {
+      "schema": "sample_commissioned_hardware_v1",
+      "date": "2026-11-15",
+      "wheel_radius_m": 0.055,
+      "wheel_ratio": 15.88,
+      "wheel_torque_cap_nm": 2.0,
+      "leg_torque_cap_nm": 20.0,
+      "external_pd_dt_s": 0.002,
+      "policy_dt_s": 0.01,
+      "natural_joint_pose_rad": [
+        3.1500981078,
+        -2.9896,
+        0,
+        -3.1500981078,
+        2.9896,
+        0
+      ],
+      "spring_force_n": 450.0,
+      "spring_stroke_m": 0.075,
+      "joint_effort_nm": [
+        40.0,
+        54.82787762486449,
+        2.4808354218880537,
+        40.0,
+        54.82787762486449,
+        2.4808354218880537
+      ],
+      "evidence": {
+        "wheel": "User confirmed 2026-11-15: 55 mm / 15.88 supersedes the older CAD-derived target profile.",
+        "control_and_caps": "chassis_ref_new/user/robot_config.h and user/algorithm/rl.c",
+        "natural_pose": "COMMISSIONING_LOG_20261113.md 23:55; surveyed supported pose, also near spring-driven resting position; not an unassisted equilibrium measurement.",
+        "motor_gain": "5.88/7.37 feedback-to-command suggests ~0.8; an uncertainty hypothesis, not calibrated torque.",
+        "spring": "progress.md 450 N nominal / 250 mm free / 75 mm stroke; force progression and friction unmeasured."
+      },
+      "limitations": [
+        "Wheel no-slip odometry and held 5 ms difference velocities ported from firmware; ideal encoder/gyro sensors, no transport delays/quantization or packet loss.",
+        "Serial equivalent linkage and archived inertias; no new inertia measurements.",
+        "Constant spring force, no measured breakaway or force-displacement curve.",
+        "Original Isaac/PhysX parity remains unavailable."
+      ],
+      "physics_dt_s": 0.001,
+      "estimator_dt_s": 0.005,
+      "firmware_target_knee_limits_rad": [
+        [
+          -4.296127953784042,
+          -2.5592683579936732
+        ],
+        [
+          2.559268357993676,
+          4.296127953784042
+        ]
+      ]
+    },
+    "reset_mode": "default",
+    "motor_gain": "episode_randomized",
+    "spring_scale": "episode_randomized",
+    "wheel_kd": 0.14,
+    "trainer_sha256": "ccc2793e6669f8dab8b6de03654b293171c5dc0f3a0683f3ebb4a722bcc7c69f",
+    "firmware_source": {
+      "user/state_estimator.c": "ab13c2050c398d737af0930d618bec016c182cd5a6c51b07a089049cf3837451",
+      "user/state_estimator.h": "63c81b12c25780d10d742a261fcf438646aeeaa1225890506eb13c80fe4518c3",
+      "user/robot_config.h": "d5e5d399a3987dde86143c537a89782062ed34f60fb78ca781fa44dc74898317",
+      "user/algorithm/rl.c": "c1018a1099f0fc379a7fb83676044c4c56175393f8c632d3e76da0cd4f99587c",
+      "user/algorithm/rl.h": "c71d677f5039955c0bf3488cc98705c9b09d7f18ace1af58f4fb743840f0e528",
+      "user/algorithm/model/model.c": "4aa8979a086afabd75ca21a96ee72d0bc6d42d97e216cb9b26f3ab1c4e931cf7",
+      "user/algorithm/model/model.h": "fe2d03efbaa0851431d8caa10c5a9c248dbe15630c7e7b628178b11e2d05102d"
+    },
+    "domain": "combined",
+    "startup_included": false,
+    "ideal_sensor_inputs": true,
+    "randomization": {
+      "nominal_fraction": 0.2,
+      "dm_gain": [
+        0.8,
+        1.0
+      ],
+      "friction": [
+        0.6,
+        0.9
+      ],
+      "spring_force_scale": [
+        0.9,
+        1.1
+      ]
+    }
+  },
+  "hyperparameters": {
+    "actor_lr": 1e-06,
+    "critic_lr": 0.0003,
+    "epochs": 2,
+    "batch_size": 128,
+    "warmup_updates": 1,
+    "envs": 2,
+    "steps": 16,
+    "episode_seconds": 20.0
+  },
+  "device": "cpu",
+  "gpu": null,
+  "physics_backend": "CPU_MuJoCo",
+  "start_update": 0,
+  "last_update": 3,
+  "transitions": 96,
+  "wall_seconds": 0.13420178000001215,
+  "stop_reason": "update_limit",
+  "source_checkpoint_sha256": "8cd2e3506fdbe3050991d58e990c64b8c087e157c1de04de1b71dad87c162a11",
+  "source_actor_initial_max_abs_error": 0.02683403342962265,
+  "checkpoint": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/qualified_smoke_20261116/update_000003.pt",
+  "checkpoint_sha256": "528da6df4310a838d3a6d7b1b7826858317b721b6984e9749fd7558c8ceadc58",
+  "checkpoint_inference_roundtrip_max_abs_error": 0.0,
+  "actor_max_parameter_delta": 4.0531158447265625e-06,
+  "episodes_ended": 0,
+  "failures": 0,
+  "evaluations": [],
+  "rows": [
+    {
+      "update": 1,
+      "value_loss": 0.0013584418047685176,
+      "policy_loss": -1.8728896975517273e-06,
+      "entropy": -15.193571090698242,
+      "kl": 0.0,
+      "critic_warmup": true,
+      "actor_kl_guard_skips": 0,
+      "actor_kl_rollbacks": 0,
+      "final_full_rollout_kl": 0.0,
+      "actor_learning_rate": 1e-06,
+      "episodes_ended": 0,
+      "window_episodes": 0,
+      "window_failures": 0,
+      "window_return_mean": null,
+      "window_length_mean": null,
+      "elapsed_s": 0.05037510399995426,
+      "segment_s": 0.049427028999957656,
+      "throughput_samples_per_s": 635.2344205587954
+    },
+    {
+      "update": 2,
+      "value_loss": 0.000753111278754659,
+      "policy_loss": -0.004136800765991211,
+      "entropy": -15.193571090698242,
+      "kl": 0.0005329912528395653,
+      "critic_warmup": false,
+      "actor_kl_guard_skips": 0,
+      "actor_kl_rollbacks": 0,
+      "final_full_rollout_kl": 0.0042374394834041595,
+      "actor_learning_rate": 1e-06,
+      "episodes_ended": 0,
+      "window_episodes": 0,
+      "window_failures": 0,
+      "window_return_mean": null,
+      "window_length_mean": null,
+      "elapsed_s": 0.0869580410000026,
+      "segment_s": 0.035710509999944406,
+      "throughput_samples_per_s": 735.9871412006405
+    },
+    {
+      "update": 3,
+      "value_loss": 0.00021327334980014712,
+      "policy_loss": -0.008833808358758688,
+      "entropy": -15.1935715675354,
+      "kl": 0.00042530661448836327,
+      "critic_warmup": false,
+      "actor_kl_guard_skips": 0,
+      "actor_kl_rollbacks": 0,
+      "final_full_rollout_kl": 0.0034878039732575417,
+      "actor_learning_rate": 1e-06,
+      "episodes_ended": 0,
+      "window_episodes": 0,
+      "window_failures": 0,
+      "window_return_mean": null,
+      "window_length_mean": null,
+      "elapsed_s": 0.1234556160000011,
+      "segment_s": 0.03527738900004351,
+      "throughput_samples_per_s": 777.6073953573659
+    }
+  ],
+  "randomization_enabled": true,
+  "target_model_accepted": false,
+  "scope": "Already balancing, current C odometry-quality/reference logic, ideal sensors; no startup or hardware acceptance.",
+  "resume": null,
+  "episode_parameters_log": "runs/qualified_smoke_20261116.episodes.jsonl"
+}

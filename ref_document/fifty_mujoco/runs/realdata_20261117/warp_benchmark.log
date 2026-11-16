@@ -1,0 +1,32 @@
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.2
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/xy/.cache/warp/1.12.0
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 51.46 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 5.60 ms  (cached)
+Module _nxn_broadphase__locals__kernel_c763f4cb c763f4c load on device 'cuda:0' took 5.57 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_fd6d26f2 fd6d26f load on device 'cuda:0' took 110534.84 ms  (compiled)
+Module ccd_kernel_builder__locals__ccd_kernel_a37284d0 a37284d load on device 'cuda:0' took 114126.22 ms  (compiled)
+Module _primitive_narrowphase__locals__primitive_narrowphase_42493a75 42493a7 load on device 'cuda:0' took 15.42 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 25.80 ms  (cached)
+Module _efc_contact_init__locals__kernel_c8a6d94d c8a6d94 load on device 'cuda:0' took 8.76 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_3ce537d5 8484a5a load on device 'cuda:0' took 6.61 ms  (cached)
+Module _efc_contact_update__locals__kernel_7bd789c7 7bd789c load on device 'cuda:0' took 10.06 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 14.31 ms  (cached)
+Module mujoco_warp._src.forward ab3b1a6 load on device 'cuda:0' took 18.52 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 6.04 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_d83d6ecc 23c3f6f load on device 'cuda:0' took 234.15 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 25.14 ms  (cached)
+Module solve_init_jaref__locals__kernel_d614c3c4 d614c3c load on device 'cuda:0' took 7.44 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_1ef9b850 1ef9b85 load on device 'cuda:0' took 7.36 ms  (cached)
+Module update_constraint_efc__locals__kernel_81015163 8101516 load on device 'cuda:0' took 5.86 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_cc0b8ce1 cc0b8ce load on device 'cuda:0' took 6.78 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_8af4086e f519906 load on device 'cuda:0' took 4067.36 ms  (compiled)
+Module update_gradient_cholesky__locals__kernel_68ba042b 3c7cbe3 load on device 'cuda:0' took 249.95 ms  (cached)
+Module linesearch_iterative__locals__kernel_f2a333a5 de36de8 load on device 'cuda:0' took 16.22 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 32.19 ms  (cached)
+Module mujoco_warp._src.derivative a753363 load on device 'cuda:0' took 10.69 ms  (cached)
+{"worlds": 256, "compile_s": 231.96086719100003, "one_step_qpos_max_error": 0.0001916615169088587, "physics_steps_per_s": 800531.4340420734, "fixed_force_policy_transition_ceiling_per_s": 40026.57170210367, "benchmark_s": 0.1279150270001992, "scope": "fixed-force physical integration only; no 31D observer, policy, contacts acceptance or reset task parity", "task_training_enabled": false}

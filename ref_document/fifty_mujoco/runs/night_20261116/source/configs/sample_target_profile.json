@@ -1,0 +1,78 @@
+{
+  "schema": "sample_target_profile_v1",
+  "status": "provisional_target_profile",
+  "created": "2026-11-12",
+  "notes": [
+    "Target-machine parameters layered on the frozen reconstructed source model.",
+    "Archive files under sample_weight_file/ are never modified; frozen hashes stay valid.",
+    "source wheel radius is read back from the generated MJCF and must match 0.055 m before patching.",
+    "Nothing here accepts the target robot; V5 regression and target training remain pending."
+  ],
+  "source_wheel_radius_m": 0.055,
+  "wheel": {
+    "radius_m": 0.06,
+    "diameter_m": 0.12,
+    "motor": "DJI M3508",
+    "builtin_reduction": {
+      "numerator": 3591,
+      "denominator": 187,
+      "ratio": 19.203208556149733
+    },
+    "chain": {
+      "driver_teeth": 16,
+      "driven_teeth": 19,
+      "motor_to_wheel_ratio": 1.1875
+    },
+    "total_rotor_to_wheel_fraction": {
+      "numerator": 68229,
+      "denominator": 2992
+    },
+    "note": "progress.md §2.5: M3508 built-in reducer drives a 16T->19T chain; Mk4 planetary is not in the power path.",
+    "evidence": {
+      "radius_m": "progress.md §2.7 user-accepted value (provisional)",
+      "chain": "progress.md §2.5 cad_extracted",
+      "builtin_reduction": "RoboMaster M3508 P19 nominal 3591/187"
+    }
+  },
+  "leg_motor": {
+    "model": "DAMIAO DM-J8009P-2EC (target label DM-8009)",
+    "profile": "archived output-shaft ratings retained: 20 Nm rated / 40 Nm peak / 100 rpm rated / 160 rpm no-load at 24 V, integrated 9:1",
+    "evidence": "sample_weight_file/artifacts/actuator_hardware.json + progress.md §2.5",
+    "changed": false
+  },
+  "spring": {
+    "model": "1BKB0.45-75",
+    "reference_force_n": 450.0,
+    "free_length_m": 0.25,
+    "stroke_m": 0.075,
+    "compressed_length_m": 0.175,
+    "min_length_m": 0.175,
+    "max_length_m": 0.25,
+    "reference_length_m": 0.227760939,
+    "force_model": "nominal_constant",
+    "length_limit_tolerance_m": 0.002,
+    "anchors": "archived resolved anchors in URDF link frames retained; local CAD assembly/nominal pin distances differ by <=0.25 mm",
+    "evidence": "progress.md §2.4 measured/user: 450 N nominal, free length ~250 mm, stroke 75 mm"
+  },
+  "environment": {
+    "spawn_height_delta_m": 0.005,
+    "expected_initial_clearance_m": 0.10500010658856573,
+    "note": "Wheel radius +5 mm; raise spawn z by 5 mm so wheels stay on the ground. Command clearance remains 0.10 m."
+  },
+  "knee_stop_note": "75 mm stroke bottoms out at 175 mm pin distance; the compression side is enforced as a knee joint stop. The extension end (250 mm) is unreachable at full extension (about 249.3 mm).",
+  "unchanged_from_source": [
+    "mass/inertia from the archived URDF (user convention)",
+    "low reset pose and joint conventions",
+    "PD gains 40/60/0 with damping 2/2/0.3",
+    "action scales position 0.5 / wheel velocity 20",
+    "frame timing: 5 ms external PD, 2.5 ms physics substep, 10 ms policy step",
+    "contact friction 0.75 sliding, 0 rolling/torsional (provisional)"
+  ],
+  "limitations": [
+    "Wheel inertia is not re-derived for the 0.055->0.060 m radius change.",
+    "M3508 torque-speed envelope is the P19 proxy scaled by the 19/16 chain ratio.",
+    "Spring force is a constant 450 N nominal model without progression.",
+    "Archived URDF effort/velocity limits remain source values; validate_hardware_asset is not run for this profile.",
+    "No domain randomization is enabled by this profile."
+  ]
+}

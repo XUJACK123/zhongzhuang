@@ -1,0 +1,396 @@
+{
+  "asset": {
+    "angular_damping": 0.0,
+    "armature": 0.0,
+    "collapse_fixed_joints": false,
+    "default_dof_drive_mode": 3,
+    "density": 0.001,
+    "disable_gravity": false,
+    "dof_armature": {
+      "f0": 0.0,
+      "f1": 0.0,
+      "wheel": 0.0
+    },
+    "file": "/home/rl/training-runs/jobs/20261030-163843_round45_yaw250_level30_16384/project/solidwork_graph/fifty_version_training/urdf/fifty_training.urdf",
+    "fix_base_link": false,
+    "flip_visual_attachments": false,
+    "foot_name": "wheel",
+    "l1": 0.2099999999999949,
+    "l2": 0.2500000000000073,
+    "linear_damping": 0.0,
+    "max_angular_velocity": 1000.0,
+    "max_linear_velocity": 1000.0,
+    "name": "fifty",
+    "offset": 0.0,
+    "penalize_contacts_on": [
+      "base_link",
+      "0_link",
+      "1_link"
+    ],
+    "recompute_inertia": false,
+    "replace_cylinder_with_capsule": false,
+    "self_collisions": 0,
+    "slices_per_cylinder": 32,
+    "terminate_after_contacts_on": [
+      "base_link"
+    ],
+    "thickness": 0.001
+  },
+  "commands": {
+    "advanced_max_curriculum": 1.5,
+    "basic_max_curriculum": 2.5,
+    "curriculum": false,
+    "curriculum_threshold": 0.7,
+    "heading_command": false,
+    "num_commands": 3,
+    "ranges": {
+      "ang_vel_yaw": [
+        -2.5,
+        2.5
+      ],
+      "heading": [
+        -3.14,
+        3.14
+      ],
+      "height": [
+        0.1,
+        0.1
+      ],
+      "lin_vel_x": [
+        0.1,
+        0.3
+      ]
+    },
+    "resampling_time": 5.0
+  },
+  "control": {
+    "action_scale": 0.5,
+    "control_type": "P",
+    "damping": {
+      "f0": 2.0,
+      "f1": 2.0,
+      "wheel": 0.3
+    },
+    "decimation": 2,
+    "hip_action_limit": 1.0,
+    "pos_action_scale": 0.5,
+    "stiffness": {
+      "f0": 40.0,
+      "f1": 60.0,
+      "wheel": 0.0
+    },
+    "vel_action_scale": 20.0,
+    "wheel_action_limit": 2.0
+  },
+  "domain_rand": {
+    "added_mass_range": [
+      -1.0,
+      2.0
+    ],
+    "com_nominal_stride": 0,
+    "delay_ms_range": [
+      0,
+      10
+    ],
+    "friction_range": [
+      0.6,
+      1.4
+    ],
+    "max_push_vel_xy": 2.0,
+    "push_interval": 701.0,
+    "push_interval_s": 7,
+    "push_robots": false,
+    "rand_com_vec": [
+      0.02,
+      0.02,
+      0.02
+    ],
+    "randomize_Kd": false,
+    "randomize_Kd_range": [
+      0.95,
+      1.05
+    ],
+    "randomize_Kp": false,
+    "randomize_Kp_range": [
+      0.95,
+      1.05
+    ],
+    "randomize_action_delay": false,
+    "randomize_base_com": false,
+    "randomize_base_mass": false,
+    "randomize_default_dof_pos": false,
+    "randomize_default_dof_pos_range": [
+      -0.03,
+      0.03
+    ],
+    "randomize_friction": false,
+    "randomize_inertia": false,
+    "randomize_inertia_range": [
+      0.9,
+      1.1
+    ],
+    "randomize_motor_torque": false,
+    "randomize_motor_torque_range": [
+      0.95,
+      1.05
+    ],
+    "randomize_restitution": false,
+    "restitution_range": [
+      0.0,
+      0.1
+    ]
+  },
+  "env": {
+    "clearance_box_center": [
+      0.0,
+      -0.0125477663569256,
+      0.0482748097777482
+    ],
+    "clearance_box_halfsize": [
+      0.310998857021332,
+      0.1964250057935715,
+      0.2232509031891825
+    ],
+    "clearance_control": true,
+    "command_endpoint_probability": 0.5,
+    "command_slew_rates": [
+      1.5,
+      6.283185307179586,
+      0.12
+    ],
+    "dof_vel_use_pos_diff": true,
+    "env_spacing": 3.0,
+    "episode_length_s": 40.0,
+    "fail_to_terminal_time_s": 0.1,
+    "initial_velocity_noise": 0.02,
+    "mixed_motion_holds": false,
+    "motion_hold_resamples": 3,
+    "motion_reference_offset_xy_m": [
+      -0.07828434314112345,
+      0.003702250000000018
+    ],
+    "native_contact_materials": {
+      "version": 1,
+      "combine": "average",
+      "robot_sliding_friction": 1.0,
+      "ground_sliding_friction": 0.5,
+      "source": "Imported nominal PhysX shape properties and configured plane; solver sliding test verified average"
+    },
+    "num_actions": 6,
+    "num_envs": 16384,
+    "num_observations": 31,
+    "num_privileged_obs": 147,
+    "obs_history_dec": 1,
+    "obs_history_length": 5,
+    "parameter_randomization": null,
+    "pose_feedback_reward": null,
+    "push_duration_s": 0.2,
+    "push_force_n": 0.0,
+    "push_interval_s": 5.0,
+    "push_yaw_torque_nm": 0.0,
+    "random_pulses": null,
+    "recovery_task": null,
+    "reference_observations": true,
+    "se2_reference": true,
+    "send_timeouts": true,
+    "standing_fraction": 0.2,
+    "straight_fraction": 0.1,
+    "training_command_slew": true,
+    "turn_fraction": 0.2,
+    "wheel_alignment": {
+      "scale_m": 0.02,
+      "settle_s": 0.5,
+      "definition": "Right minus left wheel center in chassis forward axis; squared normalized distance.",
+      "gating": "Zero yaw and nonnegative forward request unchanged for >=0.5 s; after first stable get-up if applicable."
+    }
+  },
+  "init_member_classes": {},
+  "init_state": {
+    "ang_vel": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "default_joint_angles": {
+      "rf0_Joint": 3.1063109024878943,
+      "rf1_Joint": -3.6606010515197696,
+      "r_wheel_Joint": 0.0,
+      "lf0_Joint": -3.1063109024878943,
+      "lf1_Joint": 3.6606010515197696,
+      "l_wheel_Joint": 0.0
+    },
+    "lin_vel": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pos": [
+      0.0,
+      0.0,
+      0.2749762
+    ],
+    "rot": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "noise": {
+    "add_noise": false,
+    "noise_level": 1.0,
+    "noise_scales": {
+      "ang_vel": 0.2,
+      "dof_pos": 0.02,
+      "dof_vel": 1.5,
+      "gravity": 0.05,
+      "height_measurements": 0.1,
+      "lin_vel": 0.1
+    }
+  },
+  "normalization": {
+    "clip_actions": 2.0,
+    "clip_observations": 100.0,
+    "obs_scales": {
+      "ang_vel": 0.25,
+      "dof_acc": 0.0025,
+      "dof_pos": 1.0,
+      "dof_vel": 0.05,
+      "height_measurements": 5.0,
+      "lin_vel": 2.0,
+      "torque": 0.05
+    }
+  },
+  "rewards": {
+    "base_height_target": 0.1,
+    "clip_single_reward": 10.0,
+    "height_tracking_dense_weight_m_inv": 10.0,
+    "height_tracking_variance_m2": 0.000225,
+    "max_contact_force": 100.0,
+    "moving_yaw_tracking_weight": 0.2,
+    "only_positive_rewards": false,
+    "reference_position_error_scale_m": 0.1,
+    "scales": {
+      "action_rate": -0.005,
+      "action_smooth": -0.005,
+      "alive": 1.5,
+      "ang_vel_xy": -0.1,
+      "base_height": 2.0,
+      "collision": -0.5,
+      "dof_acc": -1e-07,
+      "dof_pos_limits": -1.0,
+      "dof_vel": -1e-05,
+      "heading": 2.0,
+      "lin_vel_z": -0.1,
+      "nominal_state": 0.0,
+      "orientation": -30.0,
+      "reference_position": 1.5,
+      "reference_velocity": 1.5,
+      "termination": -10.0,
+      "torques": -1e-05,
+      "tracking_ang_vel": 0.0,
+      "tracking_ang_vel_enhance": 0.0,
+      "tracking_lin_vel": 0.0,
+      "tracking_lin_vel_enhance": 0.0,
+      "upright": 3.0,
+      "wheel_alignment": -0.5,
+      "yaw_rate": -10.0
+    },
+    "soft_dof_pos_limit": 0.97,
+    "soft_dof_vel_limit": 1.0,
+    "soft_torque_limit": 1.0,
+    "tracking_sigma": 0.25,
+    "upright_sharpness": 50.0
+  },
+  "seed": 1,
+  "sim": {
+    "dt": 0.005,
+    "gravity": [
+      0.0,
+      0.0,
+      -9.81
+    ],
+    "physx": {
+      "bounce_threshold_velocity": 0.5,
+      "contact_collection": 2,
+      "contact_offset": 0.002,
+      "default_buffer_size_multiplier": 5,
+      "max_depenetration_velocity": 1.0,
+      "max_gpu_contact_pairs": 8388608,
+      "num_position_iterations": 8,
+      "num_threads": 10,
+      "num_velocity_iterations": 1,
+      "rest_offset": 0.0,
+      "solver_type": 1
+    },
+    "substeps": 2,
+    "up_axis": 1
+  },
+  "termination": {
+    "contact_force_n": 10.0,
+    "max_tilt_deg": 60.0,
+    "min_base_height_m": 0.15
+  },
+  "terrain": {
+    "border_size": 25,
+    "curriculum": false,
+    "dynamic_friction": 0.5,
+    "horizontal_scale": 0.1,
+    "max_init_terrain_level": 5,
+    "measure_heights": true,
+    "measured_points_x": [
+      -0.5,
+      -0.4,
+      -0.3,
+      -0.2,
+      -0.1,
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ],
+    "measured_points_y": [
+      -0.3,
+      -0.2,
+      -0.1,
+      0.0,
+      0.1,
+      0.2,
+      0.3
+    ],
+    "mesh_type": "plane",
+    "num_cols": 20,
+    "num_rows": 10,
+    "restitution": 0.0,
+    "selected": false,
+    "slope_treshold": 0.75,
+    "static_friction": 0.5,
+    "terrain_kwargs": null,
+    "terrain_length": 8.0,
+    "terrain_proportions": [
+      0.2,
+      0.2,
+      0.2,
+      0.1,
+      0.2,
+      0.1
+    ],
+    "terrain_width": 8.0,
+    "vertical_scale": 0.005
+  },
+  "viewer": {
+    "lookat": [
+      0,
+      0,
+      0
+    ],
+    "pos": [
+      0,
+      -2,
+      1
+    ],
+    "ref_env": 0
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "schema": "qualified_balance_final_acceptance_v1",
+  "checks": {
+    "nominal": {
+      "passed": true,
+      "complete": true,
+      "provenance_matches": true,
+      "trials": 200,
+      "successes": 200,
+      "rate": 1.0,
+      "physical_failures": 0,
+      "wilson_95": [
+        0.9811546736227335,
+        1.0
+      ],
+      "classes": {
+        "stand": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "forward": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "backward": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "left": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        },
+        "right": {
+          "trials": 40,
+          "passed": 40,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9123783988027135,
+            1.0
+          ]
+        }
+      },
+      "metrics": {
+        "point_vx_rmse_m_s": 0.016409604085430227,
+        "yaw_rate_rmse_rad_s": 0.0005105771750016631,
+        "clearance_mae_m": 0.0023923325876675523
+      }
+    },
+    "combined": {
+      "passed": true,
+      "complete": true,
+      "provenance_matches": true,
+      "trials": 500,
+      "successes": 500,
+      "rate": 1.0,
+      "physical_failures": 0,
+      "wilson_95": [
+        0.9923756595384479,
+        1.0
+      ],
+      "classes": {
+        "stand": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "forward": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "backward": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "left": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        },
+        "right": {
+          "trials": 100,
+          "passed": 100,
+          "rate": 1.0,
+          "wilson_95": [
+            0.9630065017930143,
+            1.0
+          ]
+        }
+      },
+      "metrics": {
+        "point_vx_rmse_m_s": 0.013827925248378899,
+        "yaw_rate_rmse_rad_s": 0.005917456241379104,
+        "clearance_mae_m": 0.0037620004175650573
+      }
+    }
+  },
+  "passed_limited_simulation_scope": true,
+  "checkpoint_sha256": "1e7041f60fc411e4d0f46dea4d2d864fab4b0baa66ed4a9850630a149a18cb4b",
+  "scope": "already_balancing_reset_current_C_odometry_quality_reference_ideal_sensors",
+  "getup_accepted": false,
+  "real_robot_accepted": false,
+  "inputs_sha256": {
+    "runs/night_20261116/acceptance_protocol.json": "ba85a4feb101e43c9856aff04663fa1ac5ea2e3f2b8b739f5aded338bac0a82b",
+    "runs/night_20261116/candidate_freeze.json": "3c60e34a1141157c3abed3f5b61e0dc5920ca48c448d5bb557eac52f41162e5c",
+    "reports/sample_weight/qualified_final_nominal_20261116.json": "bb391923ac6ce1122db70ffd31095bd2e0c91bddba19e1bbfa03b74f6e44984f",
+    "reports/sample_weight/qualified_final_combined_20261116.json": "17fbf9a854d10abe2c6a8713e8a308e1a108b38fa9fb685d28d2ef21702dbeb4"
+  }
+}

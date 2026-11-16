@@ -1,0 +1,435 @@
+{
+  "schema": "realdata_parallel_ppo_v1",
+  "task": "balance",
+  "configuration": {
+    "schema": "realdata_supported_getup_v1",
+    "evidence_status": "simulation_candidate_with_unmeasured_dynamics",
+    "wheel_radius_m": 0.05570423008216337,
+    "mass_kg": 21.9,
+    "spring": {
+      "installed_model": "BG450-080",
+      "catalogue_proxy": "BKB0.45; exact model equivalence unverified",
+      "free_pin_distance_m": 0.25,
+      "stroke_m": 0.08,
+      "initial_force_n": 450.0,
+      "progression_at_full_stroke": 1.7,
+      "polytropic_exponent": 1.2,
+      "seal_friction_n": 15.0,
+      "viscous_damping_ns_m": 20.0,
+      "friction_smoothing_m_s": 0.01,
+      "provenance": "450 N/progression are catalogue-proxy assumptions, not this spring's measured force. 250 mm pin endpoint provisional; 080 interpreted as 80 mm stroke. Friction/damping are sensitivity hypotheses."
+    },
+    "reflected_inertia": {
+      "leg_motor_output_kg_m2": 0.01,
+      "wheel_output_kg_m2": 0.001,
+      "approximation": "Diagonal approximation to B(q)^T J B(q), evaluated at default pose; omits cross terms. J_output=81*0.5*0.2kg*(0.035m)^2=0.0099225 kg m2 is a geometric rotor hypothesis, not a measured rotor."
+    },
+    "joint_stop_solver": {
+      "time_constant_s": 0.001,
+      "damping_ratio": 1.0,
+      "impedance": [
+        0.99,
+        0.999,
+        0.0001,
+        0.5,
+        2.0
+      ],
+      "inward_contact_margin_rad": 0.04,
+      "provenance": "Numerical contact starts 0.04 rad inward so the stop decelerates before the original boundary; no angle boundary or violation tolerance enlarged."
+    },
+    "passive_drive": {
+      "damping_nms_rad": [
+        0.05,
+        0.05,
+        0.005,
+        0.05,
+        0.05,
+        0.005
+      ],
+      "frictionloss_nm": [
+        0.1,
+        0.1,
+        0.02,
+        0.1,
+        0.1,
+        0.02
+      ],
+      "provenance": "Unmeasured gear/bearing drag hypothesis, tested over 0.5x..2x. Prevents frictionless wheel spin from being treated as a real disabled rest."
+    },
+    "physics_dt_s": 0.0005,
+    "pd_dt_s": 0.002,
+    "policy_dt_s": 0.01,
+    "wheel_kd": 0.14,
+    "survey_pose_rad": [
+      1.2217304763960306,
+      -2.6179938779914944,
+      0.0,
+      -1.2217304763960306,
+      2.6179938779914944,
+      0.0
+    ],
+    "support": {
+      "position_kp_n_m": [
+        1500,
+        1500,
+        5000
+      ],
+      "position_kd_ns_m": [
+        200,
+        200,
+        400
+      ],
+      "rotation_kp_nm_rad": [
+        120,
+        120,
+        40
+      ],
+      "rotation_kd_nms_rad": [
+        15,
+        15,
+        5
+      ],
+      "force_cap_bodyweights": 2.0,
+      "moment_cap_nm": 80,
+      "release_after_s": [
+        0.6,
+        1.2
+      ],
+      "fade_s": [
+        0.5,
+        1.0
+      ],
+      "provenance": "Explicit virtual stand: supports translation and orientation. All forces/moments logged and exactly zero before readiness; not a measured cardboard/support stiffness."
+    },
+    "success": {
+      "stable_dwell_s": 1.0,
+      "blend_s": 0.3,
+      "balance_s": 10.0,
+      "getup_timeout_s": 6.0,
+      "tilt_deg": 8.0,
+      "angular_velocity_rad_s": 0.5,
+      "forward_velocity_m_s": 0.08,
+      "clearance_error_m": 0.02,
+      "leg_error_rad": 0.15,
+      "displacement_m": 0.3
+    },
+    "seed_ranges": {
+      "train": [
+        510000,
+        599999
+      ],
+      "development": [
+        610000,
+        619999
+      ],
+      "heldout": [
+        710000,
+        719999
+      ]
+    },
+    "limitations": [
+      "Physical zero references are inconsistent with the coarse surveyed pose; no firmware calibration changed.",
+      "Independent torque, pressure, hysteresis, rotor inertia and natural unsupported rest are unavailable.",
+      "Existing conservative knee boundaries retained; these are inherited source boundaries, not newly measured physical stops.",
+      "Ideal IMU attitude/gyro and encoder input to actual C odometry; real IMU filtering and CAN transport not reproduced.",
+      "Body inertia shape and serial equivalent mechanism inherited; only total mass adjusted.",
+      "Success is simulation-only and requires both wheels carrying force, no body contact, zero force AND moment assistance, 1 s dwell, 0.3 s handoff and 10 s balance.",
+      "New standing defaults and clearance command require a matching candidate firmware contract; existing low-stance actor acceptance does not transfer."
+    ],
+    "standing_default_rad": [
+      2.377877254033173,
+      -2.674835737031041,
+      0,
+      -2.377877254033173,
+      2.674835737031041,
+      0
+    ],
+    "standing_clearance_m": 0.26502390658856567,
+    "standing_provenance": "New simulation contract: 440 mm hip height, wheel x=-78.5237 mm matching archived base COM x; two-link CAD IK. Neither measured stable posture nor a replacement of production defaults."
+  },
+  "source_sha256": {
+    "tools/realdata_parallel_train.py": "8e90cb15d1105549a84ecc69c4abd848198aafb361716eba810c46fc6b24bd12",
+    "tools/realdata_sampler.py": "f799df26ad2a6cfd00745a1d12565b24ff1a3744ae57a1d68eb6d8758b06af74",
+    "tools/realdata_train.py": "6881eeb7bcefdad1cc3517e8651f29701bb7ef6aa0012724cbf51b3ce034bc94",
+    "src/fifty_mujoco/envs/sample_env31_realdata.py": "efcc8270795ac438ea7287d3f9bfdabd01384c5de875bf416306ec652b57fc20",
+    "src/fifty_mujoco/envs/sample_env31_supported.py": "f1cc7ac5cfbad1a2a3644e5a60068cde2db95cfb330dab40166d34a7151a732b",
+    "src/fifty_mujoco/learning/sample_ppo.py": "013f6111c9affad295a44cb48b357388d8ebe9351b135edccd192975fed77807",
+    "src/fifty_mujoco/contracts/getup31.py": "bd8f4614f79d66ae4d64b133c5f58e4ce8035ee996221a83102acda7425ca6c2",
+    "src/fifty_mujoco/contracts/sample_actor31.py": "4dc7d43acade252b05f3297dc821aad854b5c32cbc79e3669e9d76ed1a61be07",
+    "src/fifty_mujoco/transfer/firmware_runtime.py": "b5aa52fc0bc5072757471097ecd8e932efbb363acc8e7ae5fa8fc0e7a08aa66b"
+  },
+  "model": {
+    "configuration": {
+      "schema": "realdata_supported_getup_v1",
+      "evidence_status": "simulation_candidate_with_unmeasured_dynamics",
+      "wheel_radius_m": 0.05570423008216337,
+      "mass_kg": 21.9,
+      "spring": {
+        "installed_model": "BG450-080",
+        "catalogue_proxy": "BKB0.45; exact model equivalence unverified",
+        "free_pin_distance_m": 0.25,
+        "stroke_m": 0.08,
+        "initial_force_n": 450.0,
+        "progression_at_full_stroke": 1.7,
+        "polytropic_exponent": 1.2,
+        "seal_friction_n": 15.0,
+        "viscous_damping_ns_m": 20.0,
+        "friction_smoothing_m_s": 0.01,
+        "provenance": "450 N/progression are catalogue-proxy assumptions, not this spring's measured force. 250 mm pin endpoint provisional; 080 interpreted as 80 mm stroke. Friction/damping are sensitivity hypotheses."
+      },
+      "reflected_inertia": {
+        "leg_motor_output_kg_m2": 0.01,
+        "wheel_output_kg_m2": 0.001,
+        "approximation": "Diagonal approximation to B(q)^T J B(q), evaluated at default pose; omits cross terms. J_output=81*0.5*0.2kg*(0.035m)^2=0.0099225 kg m2 is a geometric rotor hypothesis, not a measured rotor."
+      },
+      "joint_stop_solver": {
+        "time_constant_s": 0.001,
+        "damping_ratio": 1.0,
+        "impedance": [
+          0.99,
+          0.999,
+          0.0001,
+          0.5,
+          2.0
+        ],
+        "inward_contact_margin_rad": 0.04,
+        "provenance": "Numerical contact starts 0.04 rad inward so the stop decelerates before the original boundary; no angle boundary or violation tolerance enlarged."
+      },
+      "passive_drive": {
+        "damping_nms_rad": [
+          0.05,
+          0.05,
+          0.005,
+          0.05,
+          0.05,
+          0.005
+        ],
+        "frictionloss_nm": [
+          0.1,
+          0.1,
+          0.02,
+          0.1,
+          0.1,
+          0.02
+        ],
+        "provenance": "Unmeasured gear/bearing drag hypothesis, tested over 0.5x..2x. Prevents frictionless wheel spin from being treated as a real disabled rest."
+      },
+      "physics_dt_s": 0.0005,
+      "pd_dt_s": 0.002,
+      "policy_dt_s": 0.01,
+      "wheel_kd": 0.14,
+      "survey_pose_rad": [
+        1.2217304763960306,
+        -2.6179938779914944,
+        0.0,
+        -1.2217304763960306,
+        2.6179938779914944,
+        0.0
+      ],
+      "support": {
+        "position_kp_n_m": [
+          1500,
+          1500,
+          5000
+        ],
+        "position_kd_ns_m": [
+          200,
+          200,
+          400
+        ],
+        "rotation_kp_nm_rad": [
+          120,
+          120,
+          40
+        ],
+        "rotation_kd_nms_rad": [
+          15,
+          15,
+          5
+        ],
+        "force_cap_bodyweights": 2.0,
+        "moment_cap_nm": 80,
+        "release_after_s": [
+          0.6,
+          1.2
+        ],
+        "fade_s": [
+          0.5,
+          1.0
+        ],
+        "provenance": "Explicit virtual stand: supports translation and orientation. All forces/moments logged and exactly zero before readiness; not a measured cardboard/support stiffness."
+      },
+      "success": {
+        "stable_dwell_s": 1.0,
+        "blend_s": 0.3,
+        "balance_s": 10.0,
+        "getup_timeout_s": 6.0,
+        "tilt_deg": 8.0,
+        "angular_velocity_rad_s": 0.5,
+        "forward_velocity_m_s": 0.08,
+        "clearance_error_m": 0.02,
+        "leg_error_rad": 0.15,
+        "displacement_m": 0.3
+      },
+      "seed_ranges": {
+        "train": [
+          510000,
+          599999
+        ],
+        "development": [
+          610000,
+          619999
+        ],
+        "heldout": [
+          710000,
+          719999
+        ]
+      },
+      "limitations": [
+        "Physical zero references are inconsistent with the coarse surveyed pose; no firmware calibration changed.",
+        "Independent torque, pressure, hysteresis, rotor inertia and natural unsupported rest are unavailable.",
+        "Existing conservative knee boundaries retained; these are inherited source boundaries, not newly measured physical stops.",
+        "Ideal IMU attitude/gyro and encoder input to actual C odometry; real IMU filtering and CAN transport not reproduced.",
+        "Body inertia shape and serial equivalent mechanism inherited; only total mass adjusted.",
+        "Success is simulation-only and requires both wheels carrying force, no body contact, zero force AND moment assistance, 1 s dwell, 0.3 s handoff and 10 s balance.",
+        "New standing defaults and clearance command require a matching candidate firmware contract; existing low-stance actor acceptance does not transfer."
+      ],
+      "standing_default_rad": [
+        2.377877254033173,
+        -2.674835737031041,
+        0,
+        -2.377877254033173,
+        2.674835737031041,
+        0
+      ],
+      "standing_clearance_m": 0.26502390658856567,
+      "standing_provenance": "New simulation contract: 440 mm hip height, wheel x=-78.5237 mm matching archived base COM x; two-link CAD IK. Neither measured stable posture nor a replacement of production defaults."
+    },
+    "mass_kg": 21.9,
+    "armature_kg_m2": [
+      0.02,
+      0.012534988396840122,
+      0.001,
+      0.02,
+      0.012534988396840122,
+      0.001
+    ],
+    "knee_limits_rad": [
+      [
+        -3.7238299526359953,
+        -2.55926835799367
+      ],
+      [
+        2.55926835799368,
+        3.7246676914733845
+      ]
+    ],
+    "action_limits_rad": [
+      [
+        -3.6938299526359955,
+        -2.5592683579936732
+      ],
+      [
+        2.559268357993676,
+        3.6946676914733847
+      ]
+    ],
+    "spring_geometry": [
+      {
+        "joint": "rf1_Joint",
+        "parent_anchor_m": [
+          0.015589763279096669,
+          -0.048565211632419863,
+          0.0
+        ],
+        "child_anchor_m": [
+          0.04799563714115221,
+          0.007847369968011586,
+          0.0
+        ],
+        "min_length_m": 0.175,
+        "max_length_m": 0.25,
+        "reference_length_m": 0.227760939,
+        "reference_force_n": 450.0,
+        "rod_diameter_m": 0.006,
+        "reference_gas_volume_m3": null,
+        "polytropic_exponent": 1.0,
+        "ambient_pressure_pa": 101325.0,
+        "viscous_damping_ns_m": 0.0,
+        "force_model": "nominal_constant",
+        "joint_origin_m": [
+          0.209999999999999,
+          0.0,
+          0.0114999999999869
+        ],
+        "joint_yaw_rad": 1.5707963267949,
+        "stroke_m": 0.075,
+        "length_limit_tolerance_m": 0.002
+      },
+      {
+        "joint": "lf1_Joint",
+        "parent_anchor_m": [
+          0.015589763279096103,
+          0.04856521163242004,
+          0.0
+        ],
+        "child_anchor_m": [
+          0.04799563714115229,
+          -0.007847369968011051,
+          0.0
+        ],
+        "min_length_m": 0.175,
+        "max_length_m": 0.25,
+        "reference_length_m": 0.227760939,
+        "reference_force_n": 450.0,
+        "rod_diameter_m": 0.006,
+        "reference_gas_volume_m3": null,
+        "polytropic_exponent": 1.0,
+        "ambient_pressure_pa": 101325.0,
+        "viscous_damping_ns_m": 0.0,
+        "force_model": "nominal_constant",
+        "joint_origin_m": [
+          0.209999999999995,
+          0.0,
+          0.0120455339059333
+        ],
+        "joint_yaw_rad": -1.5707963267949,
+        "stroke_m": 0.075,
+        "length_limit_tolerance_m": 0.002
+      }
+    ],
+    "physics_backend": "CPU MuJoCo; policy/optimizer can use CUDA"
+  },
+  "sampling": {
+    "task": "balance",
+    "episode_seconds": 12.0,
+    "seed": 510000,
+    "balance_checkpoint": null,
+    "reset_range": [
+      0.0,
+      0.0
+    ],
+    "settle_seconds": 0.0,
+    "domain": false,
+    "config": null
+  },
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+  "balance_checkpoint_sha256": null,
+  "initial_checkpoint_sha256": "197206f5fe9ddd7a1368ac6e081fab2fbf6bd28e0477dfe0ad05ed6986a70b37",
+  "teacher_initialization": false,
+  "static_teacher_action": [
+    -0.36467612826221213,
+    -0.4692552402418246,
+    0.0,
+    0.42309892929857645,
+    0.43079314981387395,
+    0.0
+  ],
+  "hyperparameters": {
+    "envs": 64,
+    "workers": 8,
+    "steps": 16,
+    "actor_lr": 3e-05
+  }
+}

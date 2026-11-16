@@ -1,0 +1,113 @@
+{
+  "start_epoch": 1794764130,
+  "hard_deadline_epoch": 1794785730,
+  "training_deadline_epoch": 1794785400,
+  "getup_training_started": false,
+  "getup_gate": "failed_reset_and_startup_feasibility",
+  "active_experiment": "qualified_combined_v1_20261116",
+  "frozen_baseline": "runs/hardware31_guarded_20261115/update_000100.pt",
+  "baseline_sha256": "9fc23553c3d3ad00960c16c80aad5ef5bccd3e6d19a047967aeadf5097e4f4c3",
+  "seed_policy": {
+    "train_base": 1000001,
+    "baseline_development": 2000000,
+    "training_development": 2100000,
+    "heldout_nominal_reserved": 30000000,
+    "heldout_combined_reserved": 40000000,
+    "class_stride": 1000,
+    "heldout_note": "Reserved beyond the existing runner seed formula for the full 2000-update budget; development/reset logs audited for exact overlap."
+  },
+  "snapshot_files": [
+    {
+      "path": "tools/sample_qualified_train.py",
+      "sha256": "a57ef960b1269811ba4a6d5835f17d6a3953fae07eef4b2facc383f7fcd5f2a9"
+    },
+    {
+      "path": "tools/sample_qualified_evaluate.py",
+      "sha256": "c2f0796e821c5ac5cb2226f5fae139e0be947a9791bad7021d690bb0f050dba5"
+    },
+    {
+      "path": "tools/sample_hardware_guarded_train.py",
+      "sha256": "ccc2793e6669f8dab8b6de03654b293171c5dc0f3a0683f3ebb4a722bcc7c69f"
+    },
+    {
+      "path": "src/fifty_mujoco/envs/sample_env31_qualified.py",
+      "sha256": "d94199770accad3b57ec1d90334e6dc25a1fb7c3584832df83b5091e8bd6b9ca"
+    },
+    {
+      "path": "src/fifty_mujoco/transfer/firmware_runtime.py",
+      "sha256": "b5aa52fc0bc5072757471097ecd8e932efbb363acc8e7ae5fa8fc0e7a08aa66b"
+    },
+    {
+      "path": "src/fifty_mujoco/envs/sample_env31_hardware_guarded.py",
+      "sha256": "36c28f63145656129433d7e13b1f37c2964817c236d032ef14018ec0db3fa64e"
+    },
+    {
+      "path": "src/fifty_mujoco/envs/sample_env31_hardware_fast.py",
+      "sha256": "c16cad8a63ab2b687918506eb3ef15a878625ac20aea679c4eef83870af9e41b"
+    },
+    {
+      "path": "src/fifty_mujoco/envs/sample_env31_hardware.py",
+      "sha256": "81187e1ea4402713173c8fd812773828f66d539fb3b8282064800c8f6b471b06"
+    },
+    {
+      "path": "src/fifty_mujoco/envs/sample_env31.py",
+      "sha256": "2dfd62c61283de504849d1fe94db04bae2ec309af5beebb3d1d3364590fdeda9"
+    },
+    {
+      "path": "src/fifty_mujoco/transfer/sample_target.py",
+      "sha256": "3fcd1c914d125657485d6ea53d75d40fcb895f1762a9a472633856fb11c1fd29"
+    },
+    {
+      "path": "src/fifty_mujoco/transfer/sample_source.py",
+      "sha256": "e734e6a0fb72c328dd6085b3ff27d4d1be8e7a276aa048807bca9210791c7a6a"
+    },
+    {
+      "path": "src/fifty_mujoco/contracts/sample_actor31.py",
+      "sha256": "4dc7d43acade252b05f3297dc821aad854b5c32cbc79e3669e9d76ed1a61be07"
+    },
+    {
+      "path": "src/fifty_mujoco/learning/sample_ppo.py",
+      "sha256": "013f6111c9affad295a44cb48b357388d8ebe9351b135edccd192975fed77807"
+    },
+    {
+      "path": "configs/sample_hardware_profile.json",
+      "sha256": "7e5b8f83a6bad59a76c281e0928e8c91f350ff118dc082dd5030223ab2d5ec45"
+    },
+    {
+      "path": "configs/sample_target_profile.json",
+      "sha256": "f45a6247f7c1370105cc48c3293433b20c063dc7fc53af360226069f84ea6ae8"
+    },
+    {
+      "path": "configs/sample_command_evaluation.json",
+      "sha256": "4e486c433eb216106396ac120fb9a0eaf79c923ec7fc776b30b6f83c3151e9d8"
+    },
+    {
+      "path": "firmware/user/state_estimator.c",
+      "sha256": "ab13c2050c398d737af0930d618bec016c182cd5a6c51b07a089049cf3837451"
+    },
+    {
+      "path": "firmware/user/state_estimator.h",
+      "sha256": "63c81b12c25780d10d742a261fcf438646aeeaa1225890506eb13c80fe4518c3"
+    },
+    {
+      "path": "firmware/user/robot_config.h",
+      "sha256": "d5e5d399a3987dde86143c537a89782062ed34f60fb78ca781fa44dc74898317"
+    },
+    {
+      "path": "firmware/user/algorithm/rl.c",
+      "sha256": "c1018a1099f0fc379a7fb83676044c4c56175393f8c632d3e76da0cd4f99587c"
+    },
+    {
+      "path": "firmware/user/algorithm/rl.h",
+      "sha256": "c71d677f5039955c0bf3488cc98705c9b09d7f18ace1af58f4fb743840f0e528"
+    },
+    {
+      "path": "firmware/user/algorithm/model/model.c",
+      "sha256": "4aa8979a086afabd75ca21a96ee72d0bc6d42d97e216cb9b26f3ab1c4e931cf7"
+    },
+    {
+      "path": "firmware/user/algorithm/model/model.h",
+      "sha256": "fe2d03efbaa0851431d8caa10c5a9c248dbe15630c7e7b628178b11e2d05102d"
+    }
+  ]
+}

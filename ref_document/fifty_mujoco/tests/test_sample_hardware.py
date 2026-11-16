@@ -146,6 +146,7 @@ def test_firmware_c_estimator_matches_port_on_moving_joint_trace(tmp_path):
         measurement.q[:]=q;measurement.qd[:]=qd
         assert lib.rl_torque_step(c.byref(ctrl),c.byref(measurement))
         error=target-q;error[[0,3]]=np.arctan2(np.sin(error[[0,3]]),np.cos(error[[0,3]]))
-        request=np.array([40,60,0]*2)*error+np.array([2,2,.3]*2)*(velocity-qd)
+        # Current exported firmware uses the accepted Kd=0.14 candidate.
+        request=np.array([40,60,0]*2)*error+np.array([2,2,.14]*2)*(velocity-qd)
         e.actuators.apply(torch.tensor(request)[None],torch.tensor(q)[None],torch.tensor(qd)[None])
         assert np.array(ctrl.motor_torque)==pytest.approx(e.actuators.motor_torque_applied[0].numpy(),abs=3e-4)

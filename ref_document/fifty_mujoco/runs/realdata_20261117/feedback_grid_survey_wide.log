@@ -1,0 +1,32 @@
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.2
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/xy/.cache/warp/1.12.0
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 35.27 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 3.41 ms  (cached)
+Module _nxn_broadphase__locals__kernel_c763f4cb c763f4c load on device 'cuda:0' took 3.46 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_fd6d26f2 fd6d26f load on device 'cuda:0' took 13.78 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_a37284d0 a37284d load on device 'cuda:0' took 12.84 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_42493a75 42493a7 load on device 'cuda:0' took 6.27 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 18.49 ms  (cached)
+Module _efc_contact_init__locals__kernel_c8a6d94d c8a6d94 load on device 'cuda:0' took 4.06 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_3ce537d5 8484a5a load on device 'cuda:0' took 5.26 ms  (cached)
+Module _efc_contact_update__locals__kernel_7bd789c7 7bd789c load on device 'cuda:0' took 4.03 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 8.71 ms  (cached)
+Module mujoco_warp._src.forward ab3b1a6 load on device 'cuda:0' took 16.20 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 3.84 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_d83d6ecc 23c3f6f load on device 'cuda:0' took 270.39 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 14.88 ms  (cached)
+Module solve_init_jaref__locals__kernel_d614c3c4 d614c3c load on device 'cuda:0' took 4.48 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_1ef9b850 1ef9b85 load on device 'cuda:0' took 4.21 ms  (cached)
+Module update_constraint_efc__locals__kernel_81015163 8101516 load on device 'cuda:0' took 3.84 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_cc0b8ce1 cc0b8ce load on device 'cuda:0' took 3.32 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_8af4086e f519906 load on device 'cuda:0' took 5.66 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_68ba042b 3c7cbe3 load on device 'cuda:0' took 269.76 ms  (cached)
+Module linesearch_iterative__locals__kernel_f2a333a5 de36de8 load on device 'cuda:0' took 6.19 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 19.64 ms  (cached)
+Module mujoco_warp._src.derivative a753363 load on device 'cuda:0' took 9.45 ms  (cached)
+{"wall_s": 33.672191388999636, "gpu_successes": 0, "top": [{"index": 29, "gains": [18.0, 0.5, 6.0, 1.0], "phase": 4, "failure": "balance_displacement", "balance_s": 8.150091171264648, "stable_s": 0.9999993443489075, "height_error_m": 0.011945903301239014, "speed_m_s": -0.0673072561621666, "displacement_m": 0.3003116250038147}, {"index": 46, "gains": [18.0, 1.0, 6.0, 3.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 5.750036716461182, "stable_s": 0.9999993443489075, "height_error_m": 0.020001232624053955, "speed_m_s": -0.0676114559173584, "displacement_m": 0.26725295186042786}, {"index": 163, "gains": [32.0, 1.0, 0.8, 6.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.7899978160858154, "stable_s": 0.9999993443489075, "height_error_m": 0.010372355580329895, "speed_m_s": -0.08008816093206406, "displacement_m": 0.16315947473049164}, {"index": 75, "gains": [24.0, 0.25, 3.0, 6.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.749997854232788, "stable_s": 0.9999993443489075, "height_error_m": 0.015140026807785034, "speed_m_s": -0.08028672635555267, "displacement_m": 0.14763343334197998}, {"index": 141, "gains": [32.0, 0.25, 6.0, 1.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.699997901916504, "stable_s": 0.9999993443489075, "height_error_m": 0.006599292159080505, "speed_m_s": -0.08001301437616348, "displacement_m": 0.14628855884075165}, {"index": 99, "gains": [24.0, 1.0, 0.8, 6.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.6599979400634766, "stable_s": 0.9999993443489075, "height_error_m": 0.012750521302223206, "speed_m_s": -0.08005785197019577, "displacement_m": 0.1533159613609314}, {"index": 156, "gains": [32.0, 0.5, 6.0, 0.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.639997959136963, "stable_s": 0.9999993443489075, "height_error_m": 0.00512927770614624, "speed_m_s": -0.08017142117023468, "displacement_m": 0.14787138998508453}, {"index": 9, "gains": [18.0, 0.25, 3.0, 1.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.4799981117248535, "stable_s": 0.9999993443489075, "height_error_m": 0.006474941968917847, "speed_m_s": -0.08001676946878433, "displacement_m": 0.15528737008571625}, {"index": 7, "gains": [18.0, 0.25, 1.5, 6.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.4799981117248535, "stable_s": 0.9999993443489075, "height_error_m": 0.01741217076778412, "speed_m_s": -0.08014672249555588, "displacement_m": 0.15620386600494385}, {"index": 91, "gains": [24.0, 0.5, 3.0, 6.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.4699981212615967, "stable_s": 0.9999993443489075, "height_error_m": 0.014531925320625305, "speed_m_s": -0.08030933886766434, "displacement_m": 0.14322611689567566}, {"index": 174, "gains": [32.0, 1.0, 6.0, 3.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.399998188018799, "stable_s": 0.9999993443489075, "height_error_m": 0.009242549538612366, "speed_m_s": -0.08027182519435883, "displacement_m": 0.143687903881073}, {"index": 142, "gains": [32.0, 0.25, 6.0, 3.0], "phase": 4, "failure": "balance_state_out_of_spec", "balance_s": 2.329998254776001, "stable_s": 0.9999993443489075, "height_error_m": 0.009362861514091492, "speed_m_s": -0.08015050739049911, "displacement_m": 0.14873720705509186}]}
