@@ -1,0 +1,94 @@
+{
+  "spring_assumptions": {
+    "pressure_mpa": 15,
+    "stroke_mm": 80,
+    "free_pin_distance_mm": 250,
+    "free_pin_status": "provisional accepted mapping",
+    "gravity_friction_support_load_included": false,
+    "transmission": "current firmware arm-to-motor 1:1"
+  },
+  "springRows": [
+    {
+      "label": "right actual",
+      "included_deg": 75.87501352329555,
+      "compression_mm": 59.37503024804798,
+      "force_n": 518.5688386267806,
+      "knee_spring_nm": 25.085815741685707,
+      "jacobian_k": 0.8148446596527543,
+      "each_motor_spring_balance_nm": 20.441042990145597
+    },
+    {
+      "label": "left actual",
+      "included_deg": 92.5970651399143,
+      "compression_mm": 45.27826331627165,
+      "force_n": 480.0039187932384,
+      "knee_spring_nm": 22.832929805717246,
+      "jacobian_k": 0.8581972845986162,
+      "each_motor_spring_balance_nm": 19.59515835869735
+    },
+    {
+      "label": "right target",
+      "included_deg": 58.35913000058125,
+      "compression_mm": 73.70674826813249,
+      "force_n": 566.6477539038264,
+      "knee_spring_nm": 25.21726939018279,
+      "jacobian_k": 0.7368334525098654,
+      "each_motor_spring_balance_nm": 18.580927667639735
+    },
+    {
+      "label": "left target",
+      "included_deg": 58.31114109147274,
+      "compression_mm": 73.74401445521701,
+      "force_n": 566.7789308823639,
+      "knee_spring_nm": 25.212862387296486,
+      "jacobian_k": 0.7365514105052297,
+      "each_motor_spring_balance_nm": 18.570569354237477
+    }
+  ],
+  "commands": [
+    {
+      "index": 0,
+      "id": 4,
+      "canonical_torque": -15.272697448730469,
+      "encoder_sign": -1,
+      "can_raw": 4832
+    },
+    {
+      "index": 1,
+      "id": 3,
+      "canonical_torque": -14.946361541748047,
+      "encoder_sign": 1,
+      "can_raw": -4729
+    },
+    {
+      "index": 2,
+      "id": 3,
+      "canonical_torque": 2,
+      "encoder_sign": -1,
+      "can_raw": -6604
+    },
+    {
+      "index": 3,
+      "id": 1,
+      "canonical_torque": 16.2403621673584,
+      "encoder_sign": 1,
+      "can_raw": 5138
+    },
+    {
+      "index": 4,
+      "id": 2,
+      "canonical_torque": -20,
+      "encoder_sign": 1,
+      "can_raw": -6328
+    },
+    {
+      "index": 5,
+      "id": 2,
+      "canonical_torque": 0.18876533210277557,
+      "encoder_sign": 1,
+      "can_raw": 623
+    }
+  ],
+  "hardware_sign_evidence": "docs/COMMISSIONING_LOG_20261113.md lines 54-98 and 188-194",
+  "conclusion": "Mirror signs are implemented at joint mapping and raw encoder/CAN layers; current observations do not establish a reversed motor. Left knee saturation is demonstrated, other leg motors below 20 Nm. Spring-only required opposing motor torques approach 20 Nm."
+}

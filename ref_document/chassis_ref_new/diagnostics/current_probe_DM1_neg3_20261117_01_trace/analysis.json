@@ -1,0 +1,118 @@
+{
+  "kind": "single DM electrical and raw-angle response",
+  "selected_index": 3,
+  "dm_id": 1,
+  "raw_nominal_target_nm": -3.0,
+  "target_current_a": -2.3779799060697937,
+  "active_samples": 75,
+  "raw_sample_intervals_ms": [
+    10
+  ],
+  "guard_reason": 3,
+  "max_abs_command_a": 1.7692171393167822,
+  "max_abs_feedback_a": 1.7280000448226929,
+  "plateau_samples": 0,
+  "plateau_feedback_mean_a": null,
+  "current_tracking_rmse_a": 0.02531872756716719,
+  "feedback_vs_command_slope": 0.9977222215426477,
+  "feedback_offset_a": 0.01649866738754935,
+  "max_abs_raw_output_delta_deg": [
+    0.0,
+    0.0,
+    0.0,
+    0.5712906825582065,
+    0.3515634969588963,
+    0.0
+  ],
+  "max_abs_raw_output_speed_rad_s": [
+    0.020943952724337578,
+    0.01780235953629017,
+    0.0,
+    0.10995575040578842,
+    0.1151917353272438,
+    0.0
+  ],
+  "max_abs_delta_including_recorded_post_stop_deg": [
+    0.0,
+    0.0,
+    0.0,
+    0.6591815567979306,
+    0.5273452454383445,
+    0.0
+  ],
+  "max_abs_speed_including_recorded_post_stop_rad_s": [
+    0.020943952724337578,
+    0.01780235953629017,
+    0.0,
+    0.10995575040578842,
+    0.154985249042511,
+    0.0
+  ],
+  "motion_threshold_deg": 0.3515625,
+  "motion_onsets": [
+    {
+      "index": 0,
+      "first_sustained_motion": null
+    },
+    {
+      "index": 1,
+      "first_sustained_motion": null
+    },
+    {
+      "index": 3,
+      "first_sustained_motion": {
+        "t_ms": 374,
+        "selected_command_a": -0.8893644682394349,
+        "selected_feedback_a": -0.8760000467300415,
+        "selected_nominal_command_nm": -1.121999979019165
+      }
+    },
+    {
+      "index": 4,
+      "first_sustained_motion": null
+    }
+  ],
+  "max_motor_feedback_age_ms": 2,
+  "nominal_kt_nm_a": 1.261575,
+  "measured_shaft_torque_nm": null,
+  "measured_force_n": null,
+  "independent_force_truth": false,
+  "absolute_joint_pose_used": false,
+  "interpretation": "Nm denotes nominal current conversion; lack of motion does not isolate friction, spring or gravity. Offset and lag affect current fit. Raw q is motor output-shaft angle, not anatomical knee angle.",
+  "source_trace": "D:/robomaster_material/electric_contol/zhongzhuang/ref_document/chassis_ref_new/diagnostics/current_probe_DM1_neg3_20261117_01_trace",
+  "source_trigger": "D:/robomaster_material/electric_contol/zhongzhuang/ref_document/chassis_ref_new/diagnostics/current_probe_DM1_neg3_20261117_01_trigger",
+  "raw_sha256": "f8a3750250d114d54ab09d5a9b232880d2c680e67db043acae53e144c6a1fee5",
+  "stop_event": {
+    "valid": 1,
+    "tick": 858712,
+    "fault": 6,
+    "reason": 3,
+    "inhibit": 0,
+    "duration_ms": 748,
+    "q": [
+      2.4704761505126953,
+      2.195126533508301,
+      0.17030277848243713,
+      1.8177672624588013,
+      3.6577773094177246,
+      0.04303453862667084
+    ],
+    "qd": [
+      0.0010471976129338145,
+      -0.002094395225867629,
+      0.0,
+      -0.15079645812511444,
+      -0.07016223669052124,
+      0.0
+    ],
+    "canonical_torque_before_stop": [
+      0.0,
+      0.0,
+      0.0,
+      -2.23799991607666,
+      0.0,
+      0.0
+    ],
+    "selected_raw_nominal_nm_before_stop": -2.23799991607666
+  }
+}

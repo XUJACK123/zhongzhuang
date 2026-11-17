@@ -1,0 +1,76 @@
+{
+  "kind": "offline diagnostic hypothesis, NOT a calibration change",
+  "hypothesis": "right knee encoder sign -1 instead of +1, retaining stored reference values",
+  "requires": "independent knee pose measurement at multiple poses and separate command direction verification",
+  "firmware_modified": false,
+  "rows": [
+    {
+      "snapshot": "diagnostics/training_side_identity_20261117_01_before",
+      "raw_counts": [
+        2433,
+        2075
+      ],
+      "current_knee_plus1": {
+        "valid_branch": true,
+        "included_angle_deg": 27.958090456091664,
+        "predicted_planar_hip_to_wheel_mm": 117.70501523842697
+      },
+      "hypothesis_knee_minus1": {
+        "valid_branch": true,
+        "included_angle_deg": 98.09878164268274,
+        "predicted_planar_hip_to_wheel_mm": 348.41414849062187
+      }
+    },
+    {
+      "snapshot": "diagnostics/training_side_identity_20261117_01_after",
+      "raw_counts": [
+        3248,
+        2887
+      ],
+      "current_knee_plus1": {
+        "valid_branch": true,
+        "included_angle_deg": 74.09120499221433,
+        "predicted_planar_hip_to_wheel_mm": 278.96017874336053
+      },
+      "hypothesis_knee_minus1": {
+        "valid_branch": true,
+        "included_angle_deg": 98.21327772063236,
+        "predicted_planar_hip_to_wheel_mm": 348.71208978011845
+      }
+    },
+    {
+      "snapshot": "diagnostics/training_right_wheel_identity_20261117_01_after",
+      "raw_counts": [
+        1975,
+        1616
+      ],
+      "current_knee_plus1": {
+        "valid_branch": true,
+        "included_angle_deg": 15.230352436681875,
+        "predicted_planar_hip_to_wheel_mm": 72.7177161478292
+      },
+      "hypothesis_knee_minus1": {
+        "valid_branch": true,
+        "included_angle_deg": 98.13694414103612,
+        "predicted_planar_hip_to_wheel_mm": 348.5134925835479
+      }
+    },
+    {
+      "snapshot": "diagnostics/training_left_wheel_identity_20261117_01_after",
+      "raw_counts": [
+        2723,
+        2365
+      ],
+      "current_knee_plus1": {
+        "valid_branch": true,
+        "included_angle_deg": 41.07338600061631,
+        "predicted_planar_hip_to_wheel_mm": 165.66167444229035
+      },
+      "hypothesis_knee_minus1": {
+        "valid_branch": true,
+        "included_angle_deg": 98.09878164268274,
+        "predicted_planar_hip_to_wheel_mm": 348.41414849062187
+      }
+    }
+  ]
+}

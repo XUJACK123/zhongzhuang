@@ -1,0 +1,180 @@
+{
+  "generated_at": "2026-11-17T13:44:29.992891+08:00",
+  "evidence_kind": "CAD and catalogue calculations; no new physical measurements",
+  "step": {
+    "path": "D:\\robomaster_material\\solidwork_graph\\26英雄整车总装2.0.STEP",
+    "sha256": "ffe77c10b183a47c44bb96d829f2a1356c3d644de409979af5ab5da6bd00a055",
+    "mass_field_keywords_present": {
+      "MASS_DENSITY": false,
+      "MASS_MEASURE": false,
+      "MOMENT_OF_INERTIA": false,
+      "CENTRE_OF_MASS": false
+    }
+  },
+  "accepted_inputs": {
+    "mass_kg": 21.9,
+    "rolling_radius_m": 0.05570423008216337,
+    "left_radius_is_symmetry_assumption": true,
+    "body_level_is_assumption": true
+  },
+  "geometry": {
+    "thigh_m": 0.21,
+    "shin_m": 0.25,
+    "pin_offset_m": 0.011,
+    "cad_pin_at_assembly_m": 0.19494962151452186,
+    "pin_m_from_coarse_120deg_included": 0.22573612566070186,
+    "reported_pin_m": 0.24,
+    "residual_m": 0.014263874339298127,
+    "included_knee_deg_implied_by_240mm_CAD_pins": 144.8759555419766,
+    "geometry_not_refit_to_inconsistent_coarse_readings": true,
+    "spatial_minus_planar_pin_distance_m": 0.0002681713339191538,
+    "axial_offset_does_not_explain_14_mm_residual": true,
+    "external_chain_ratio_CAD": 1.1875,
+    "installed_external_chain_identity_verified": false
+  },
+  "spring": {
+    "installed_model": "BG450-080",
+    "CAD_model": "1BKB0.45-75",
+    "catalogue_proxy": "BKB0.45",
+    "exact_model_match_verified": false,
+    "actual_charge_pressure_bar": null,
+    "conditional_area_pressure_calculations": [
+      {
+        "assumed_effective_rod_diameter_m": 0.006,
+        "ideal_force_n_at_150_bar": 424.11500823462205,
+        "pressure_bar_for_450_n": 159.15494309189535
+      },
+      {
+        "assumed_effective_rod_diameter_m": 0.01,
+        "ideal_force_n_at_150_bar": 1178.0972450961724,
+        "pressure_bar_for_450_n": 57.29577951308233
+      }
+    ],
+    "reported_10_mm_is_not_verified_effective_rod_diameter": true,
+    "actual_force_stroke_and_hysteresis_identifiable_from_STEP_alone": false,
+    "source_url": "https://www.bbkspring.com/standard-gas-spring/compact-nitrogen-spring"
+  },
+  "coupled_reflected_inertia": {
+    "equation": "M_add(q) = B(q)^T diag(J_h,J_k) B(q)",
+    "B_without_optional_external_chain": "s * [[1,0],[1,1/k(q)]]",
+    "assumed_equal_motor_output_inertia_kg_m2": 0.01,
+    "right": {
+      "knee_derivative": 0.834496611755345,
+      "matrix_kg_m2": [
+        [
+          0.02,
+          0.011983272141710946
+        ],
+        [
+          0.011983272141710946,
+          0.014359881122230564
+        ]
+      ],
+      "kinetic_energy_checks": [
+        {
+          "joint_velocity_rad_s": [
+            1.0,
+            1.0
+          ],
+          "motor_kinetic_energy_j": 0.02916321270282623,
+          "full_matrix_energy_j": 0.02916321270282623,
+          "diagonal_energy_j": 0.017179940561115284
+        },
+        {
+          "joint_velocity_rad_s": [
+            1.0,
+            -1.0
+          ],
+          "motor_kinetic_energy_j": 0.005196668419404336,
+          "full_matrix_energy_j": 0.005196668419404336,
+          "diagonal_energy_j": 0.017179940561115284
+        }
+      ]
+    },
+    "left": {
+      "knee_derivative": 0.834496611755345,
+      "matrix_kg_m2": [
+        [
+          0.02,
+          0.011983272141710946
+        ],
+        [
+          0.011983272141710946,
+          0.014359881122230564
+        ]
+      ],
+      "kinetic_energy_checks": [
+        {
+          "joint_velocity_rad_s": [
+            1.0,
+            1.0
+          ],
+          "motor_kinetic_energy_j": 0.02916321270282623,
+          "full_matrix_energy_j": 0.02916321270282623,
+          "diagonal_energy_j": 0.017179940561115284
+        },
+        {
+          "joint_velocity_rad_s": [
+            1.0,
+            -1.0
+          ],
+          "motor_kinetic_energy_j": 0.005196668419404336,
+          "full_matrix_energy_j": 0.005196668419404336,
+          "diagonal_energy_j": 0.017179940561115284
+        }
+      ]
+    },
+    "scope": "planar relative-joint submatrix; floating-base cross terms not included",
+    "if_CAD_chain_is_installed_matrix_multiplier": 1.41015625,
+    "status": "full cross terms computed; frozen training plant still uses diagonal-at-default approximation",
+    "true_rotor_inertia_identified": false
+  },
+  "motor_catalogue": {
+    "damiao": {
+      "family": "DM-J8009P-2EC",
+      "rated_torque_nm": 20,
+      "peak_torque_nm": 40,
+      "integrated_ratio": 9,
+      "output_encoder_must_not_be_divided_by_9_again": true,
+      "installed_variant_and_group_current_scale_fully_verified": false,
+      "source_url": "https://www.dmbot.cn/index.php?c=show&id=105"
+    },
+    "M3508_P19": {
+      "stock_ratio": 19.203208556149733,
+      "configured_ratio": 15.88,
+      "conditional_odometry_scale_error_if_stock_P19": 0.2092700602109403,
+      "rotor_vs_output_units_are_distinct": true,
+      "conditional_first_order_lumped_output_inertia_kg_m2": 0.00649882684291906,
+      "first_order_inertia_equation": "49 ms / (72 rpm/Nm converted to rad/s/Nm)",
+      "inertia_is_catalogue_proxy_not_measured_rotor": true,
+      "installed_ratio_not_overwritten": true,
+      "source_url": "https://rm-static.djicdn.com/robomasters/public/document/RoboMaster%20M3508%20P19%20Brushless%20DC%20Gear%20Motor%20V1.0.pdf"
+    }
+  },
+  "model_function_gaps": [
+    "Independent get-up qualification failed: near 7/8 in near starts, full 2/8 in full starts; sensitivity 0/18.",
+    "New 350 mm models are stationary rise/balance candidates, not qualified driving or reverse/turn controllers.",
+    "Physical support removal, contact and assistance-force evidence are not observable from the existing feedback alone.",
+    "Full coupled rotor inertia, measured drag, true spring loops and real IMU/CAN timing are absent from the frozen plant.",
+    "Encoder reference conflict and position_lost cause remain unresolved; no physical calibration changed."
+  ],
+  "can_compute_from_available_sources": [
+    "CAD link lengths, axes, spring geometric leverage and consistent inverse kinematics",
+    "catalogue ratings and conditional pressure-area force estimates",
+    "full reflected inertia matrix as a function of assumed rotor inertia and linkage pose"
+  ],
+  "cannot_uniquely_compute_from_available_sources": [
+    "actual installed spring pressure and hysteresis",
+    "actual shaft torque, friction/backlash and efficiency",
+    "true mass distribution/COM/inertia without material/component data",
+    "current encoder zero, transmission variant and transport/filter timing"
+  ],
+  "frozen_results_preserved": {
+    "all_scopes_passed": false,
+    "sensitivity_passed": 0,
+    "sensitivity_trials": 18
+  },
+  "hardware_accessed": false,
+  "new_training_started": false,
+  "physical_flags_promoted": false
+}

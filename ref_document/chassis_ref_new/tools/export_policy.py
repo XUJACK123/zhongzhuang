@@ -15,42 +15,154 @@ import math
 import os
 from pathlib import Path
 import pickle
+import re
 import struct
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT.parents[1] / "sample_weight_file" / "artifacts"
 SIZES = (31, 128, 64, 32, 6)
-CANDIDATE = ROOT.parent / "fifty_mujoco/runs/hardware31_guarded_20261115/deployment_candidate"
+TRAINING = ROOT.parent / "fifty_mujoco"
+REALDATA = TRAINING / "runs/realdata_20261117"
+PROFILES = ("realdata_full", "realdata_near", "qualified_u400", "legacy_u100")
 
 def active_checkpoint():
     manifest = json.loads((ROOT / "user/algorithm/model/manifest.json").read_text())
     return ROOT / manifest.get("checkpoint_path", "../../sample_weight_file/artifacts/model_3050.pt")
 
-def install_candidate(output):
-    """Install the frozen, previously evaluated export with its provenance."""
-    manifest = json.loads((CANDIDATE / "manifest.json").read_text())
-    newline_normalized = []
+def checked_export(folder):
+    """Check every frozen export asset before installing any file."""
+    manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8-sig"))
+    normalized = []
     for name, digest in manifest["generated_sha256"].items():
-        if sha(CANDIDATE / name) != digest:
-            raw = (CANDIDATE / name).read_bytes()
-            if Path(name).suffix not in (".c", ".h", ".patch") or hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest() != digest:
+        path = folder / name
+        if not path.resolve().is_relative_to(folder.resolve()):
+            raise ValueError("Export asset escapes its folder")
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != digest:
+            if path.suffix not in (".c", ".h", ".patch", ".py", ".json", ".md", ".xml") or hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest() != digest:
                 raise ValueError(f"Candidate asset changed: {name}")
-            newline_normalized.append(name)
-    training = CANDIDATE.parent / "update_000100.pt"
-    if sha(training) != manifest["source_training_checkpoint_sha256"]:
-        raise ValueError("Training checkpoint hash mismatch")
-    load_actor(CANDIDATE / "actor31.pt")
+            normalized.append(name)
+    if sha(folder / "actor31.pt") != manifest["sha256"]:
+        raise ValueError("Actor checkpoint hash mismatch")
+    load_actor(folder / "actor31.pt")
+    return manifest, normalized
+
+
+def install_candidate(output, profile="qualified_u400"):
+    """Install matching balance/get-up exports; never register or flash them."""
+    getup = None
+    if profile in ("realdata_near", "realdata_full"):
+        role = profile.removeprefix("realdata_")
+        folder = REALDATA / ("final_export_balance_" + role)
+        getup = REALDATA / ("final_export_" + role)
+        training = REALDATA / "frozen_candidates" / role / "balance.pt"
+        getup_training = training.with_name("getup.pt")
+        source_update = 25 if role == "near" else 20
+        version = 2026111700 + source_update
+        acceptance = json.loads((REALDATA / "final_summary.json").read_text(encoding="utf-8-sig"))
+        frozen = json.loads((REALDATA / "frozen_candidates/manifest.json").read_text(encoding="utf-8-sig"))
+        if sha(training) != frozen["candidates"][role]["balance_sha256"] or sha(getup_training) != frozen["candidates"][role]["getup_sha256"]:
+            raise ValueError("Frozen real-data checkpoint hash mismatch")
+        qualified = False
+    else:
+        current = profile == "qualified_u400"
+        run = TRAINING / ("runs/qualified_combined_v1_20261116" if current else "runs/hardware31_guarded_20261115")
+        folder = run / ("candidate_u400" if current else "deployment_candidate")
+        source_update = 400 if current else 100
+        training = run / f"update_{source_update:06d}.pt"
+        version = source_update
+        acceptance = {"scope": "limited standing locomotion simulation; hardware pending"}
+        qualified = current
+    manifest, normalized = checked_export(folder)
+    expected_training = manifest.get("source_training_checkpoint_sha256", manifest.get("source_checkpoint_sha256"))
+    if sha(training) != expected_training:
+        raise ValueError("Source training checkpoint hash mismatch")
+    assets = {name: (folder / name).read_bytes().replace(b"\r\n", b"\n") for name in ("model.c", "model.h")}
+    assets["actor31.pt"] = (folder / "actor31.pt").read_bytes()
+    assets["model.h"] = assets["model.h"].replace(b"#endif", b'#include "profile.h"\n#endif')
+    getup_metadata = None
+    if getup is not None:
+        gm, gn = checked_export(getup)
+        normalized += ["getup/" + name for name in gn]
+        physical_keys = ("wheel_radius_m", "spring", "reflected_inertia", "passive_drive",
+                         "standing_default_rad", "standing_clearance_m", "wheel_kd")
+        if gm["default_q"] != manifest["default_q"] or any(gm["configuration"][k] != manifest["configuration"][k] for k in physical_keys):
+            raise ValueError("Get-up and balance physical/control contracts differ")
+        manifest["balance_source_configuration"] = manifest["configuration"]
+        manifest["configuration"] = gm["configuration"]
+        if gm["source_checkpoint_sha256"] != sha(getup_training):
+            raise ValueError("Get-up training source mismatch")
+        for name in ("model.c", "model.h"):
+            text = (getup / name).read_text(encoding="utf-8-sig")
+            text = re.sub(r"\brl_", "rlg_", text)
+            text = text.replace('"model.h"', '"getup_model.h"').replace("RL_MODEL_H", "RL_GETUP_MODEL_H")
+            assets["getup_" + name] = text.encode("utf-8")
+        assets["getup_actor31.pt"] = (getup / "actor31.pt").read_bytes()
+        getup_metadata = {"sha256": gm["sha256"], "source_checkpoint_sha256": sha(getup_training),
+                          "source_training_update": source_update, "registered": False,
+                          "source_export_manifest_sha256": sha(getup / "manifest.json"),
+                          "source_export_host_c_parity": gm["host_c_parity"]}
+    else:
+        assets["getup_model.h"] = b"/* Generated: selected profile has no get-up actor. */\n#ifndef RL_GETUP_MODEL_H\n#define RL_GETUP_MODEL_H\n#endif\n"
+        assets["getup_model.c"] = b'#include "getup_model.h"\n'
+        # Keep the installed file set deterministic when switching profiles.
+        assets["getup_actor31.pt"] = b""
+    cfg = manifest.get("configuration", {})
+    radius = cfg.get("wheel_radius_m", 0.055)
+    height = cfg.get("standing_clearance_m", 0.10)
+    caps = 0.0 if getup else 0.15
+    yaw = 0.0 if getup else 0.30
+    constants = {"RL_PROFILE_MODEL_VERSION": str(version) + "U",
+                 "RL_PROFILE_HAS_GETUP": str(int(getup is not None)),
+                 "RL_PROFILE_ALLOW_REVERSE": str(int(qualified)),
+                 "RL_PROFILE_WHEEL_RADIUS_M": literal(radius),
+                 "RL_PROFILE_HEIGHT_COMMAND_M": literal(height),
+                 "RL_PROFILE_FORWARD_CAP_M_S": literal(caps),
+                 "RL_PROFILE_YAW_CAP_RAD_S": literal(yaw),
+                 "RL_PROFILE_GETUP_TIMEOUT_MS": str(round(cfg.get("success", {}).get("getup_timeout_s", 5.0)*1000)) + "U",
+                 "RL_PROFILE_HANDOFF_REANCHOR": str(int(cfg.get("handoff_reanchor_reference", False))),
+                 "RL_PROFILE_ENTRY_SPEED_M_S": literal(cfg.get("handoff_velocity_limit_m_s", 0.08)),
+                 "RL_PROFILE_BLEND_SPEED_M_S": literal(cfg.get("blend_velocity_limit_m_s", cfg.get("handoff_velocity_limit_m_s", 0.08)))}
+    header = ["/* Generated by make export-policy; do not edit. */", "#ifndef RL_PROFILE_H", "#define RL_PROFILE_H"]
+    header += [f"#define {key} {value}" for key, value in constants.items()]
+    header += ["#endif", ""]
+    assets["profile.h"] = "\n".join(header).encode("ascii")
+    manifest.update(schema="installed_actor_bundle_v2", profile=profile,
+                    checkpoint_path=Path(os.path.relpath(output / "actor31.pt", ROOT)).as_posix(),
+                    deployment_version=profile + "_20261117_source_only",
+                    source_newline_normalized_files=normalized,
+                    source_export_manifest_sha256=sha(folder / "manifest.json"),
+                    source_training_checkpoint=Path(os.path.relpath(training, ROOT)).as_posix(),
+                    source_training_checkpoint_sha256=sha(training),
+                    source_training_update=source_update if getup is None else None,
+                    firmware_control_version="model_profiles_20261117_hardware_pending",
+                    hardware_parity="source integration only; calibration and physical validation pending",
+                    runtime_parameters={"wheel_radius_m": radius, "height_command_m": height,
+                                        "forward_cap_m_s": caps, "yaw_cap_rad_s": yaw,
+                                        "model_version": version},
+                    getup=getup_metadata, startup_actor_auto_registered=False,
+                    source_evaluation={"model_status": acceptance.get("model_status", acceptance.get("scope")),
+                                       "all_scopes_passed": acceptance.get("all_scopes_passed"),
+                                       "heldout_groups": acceptance.get("heldout_groups", [])},
+                    real_robot_accepted=False, installed=True, flashed=False)
+    if getup_metadata:
+        getup_metadata["checkpoint_path"] = Path(os.path.relpath(output / "getup_actor31.pt", ROOT)).as_posix()
     output.mkdir(parents=True, exist_ok=True)
-    for name in ("model.c", "model.h"):
-        (output / name).write_bytes((CANDIDATE / name).read_bytes().replace(b"\r\n", b"\n"))
-    manifest["source_newline_normalized_files"] = newline_normalized
-    manifest["checkpoint_path"] = "../fifty_mujoco/runs/hardware31_guarded_20261115/deployment_candidate/actor31.pt"
-    manifest["deployment_version"] = "hardware31_guarded_20261115_u100"
-    manifest["firmware_control_version"] = "commissioned_v2_20261115_runtime_pending"
-    manifest["generated_sha256"] = {name: sha(output / name) for name in ("model.c", "model.h")}
-    manifest["hardware_parity"] = "source integrated; host verification required; physical validation pending"
-    manifest["source_training_checkpoint"] = "../fifty_mujoco/runs/hardware31_guarded_20261115/update_000100.pt"
+    changed = any(not (output / name).is_file() or (output / name).read_bytes() != raw
+                  for name, raw in assets.items())
+    for name, raw in assets.items():
+        (output / name).write_bytes(raw)
+    if changed and output.resolve() == (ROOT / "user/algorithm/model").resolve():
+        # Some Windows make builds compare timestamps at one-second resolution.
+        # A quick profile switch can otherwise reuse objects from another model.
+        # Only disposable object files under this checkout's build root are removed.
+        build = (ROOT / "build").resolve()
+        for obj in build.rglob("*.o"):
+            if not obj.resolve().is_relative_to(build):
+                raise ValueError("Build object escapes workspace")
+            obj.unlink()
+    manifest["generated_sha256"] = {name: sha(output / name) for name in assets}
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return manifest
 
@@ -213,12 +325,14 @@ def export(checkpoint, output):
 
 def main():
     p = argparse.ArgumentParser()
-    p.add_argument("--checkpoint", type=Path, help="Explicit legacy archive export; default installs evaluated candidate")
+    p.add_argument("--checkpoint", type=Path, help="Explicit legacy archive export")
+    p.add_argument("--profile", choices=PROFILES, default="qualified_u400",
+                   help="Matched model bundle; real-data profiles remain unqualified")
     p.add_argument("--output", type=Path, default=ROOT/"user/algorithm/model")
     p.add_argument("--torch-check", action="store_true")
     args = p.parse_args()
     if args.checkpoint is None:
-        manifest = install_candidate(args.output)
+        manifest = install_candidate(args.output, args.profile)
         print(json.dumps({key: manifest[key] for key in ("checkpoint", "sha256", "deployment_version")}))
         return
     actor, manifest = export(args.checkpoint, args.output)

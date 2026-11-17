@@ -1,0 +1,31 @@
+{
+  "dry_run": false,
+  "image": "build/rl/wheel_leg_rl.elf",
+  "binary_sha256": "4a78bb271b65e837a10c6da30c931f85bff62ddb8128e7f94ec14308fec2f10e",
+  "production_flags": {
+    "ENABLE_OUTPUT": 1,
+    "STAND_ENTRY_ONLY": 1,
+    "MOTOR_CALIBRATED": 1,
+    "IMU_FRAME_VERIFIED": 1,
+    "POLICY_CONTRACT_VERIFIED": 0,
+    "ODOMETRY_VERIFIED": 0
+  },
+  "command": [
+    "C:\\Users\\xuyue\\.eide\\tools\\openocd_7a1adfbec_mingw32\\bin\\openocd.exe",
+    "-s",
+    "C:\\Users\\xuyue\\.eide\\tools\\openocd_7a1adfbec_mingw32\\share\\openocd\\scripts",
+    "-f",
+    "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\openocd_dap.cfg",
+    "-c",
+    "gdb_port disabled",
+    "-c",
+    "tcl_port disabled",
+    "-c",
+    "telnet_port disabled",
+    "-c",
+    "program {D:/robomaster_material/electric_contol/zhongzhuang/ref_document/chassis_ref_new/build/rl/wheel_leg_rl.elf} verify reset",
+    "-c",
+    "shutdown"
+  ],
+  "exit_code": 0
+}

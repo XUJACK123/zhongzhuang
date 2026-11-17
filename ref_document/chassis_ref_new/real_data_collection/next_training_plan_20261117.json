@@ -1,0 +1,80 @@
+{
+  "status": "next_training_specification_not_executed",
+  "task": "supported manual standing pose -> real firmware entry and torque ramp -> independent balance -> forward backward yaw stop",
+  "initial_checkpoint": "qualified_u400",
+  "observation_contract": "31D, same order/units, C observer; do not insert privileged force/contact truth into actor",
+  "accepted_inputs": {
+    "mass_kg": 21.9,
+    "wheel_effective_radius_m": 0.05570423008216337,
+    "left_radius_symmetric": true,
+    "nominal_pressure_mpa": 15,
+    "spring_compression_unit": "mm",
+    "spring_stroke_mm": 80,
+    "geometry_source": "user selected STEP",
+    "spring_curve": "real_data_collection/spring_nominal_15mpa_mm_20261117.json"
+  },
+  "retain_as_assumptions": {
+    "free_pin_distance_mm": 250,
+    "spring_return_hysteresis": "unidentified",
+    "friction_efficiency": "unidentified",
+    "rotor_and_body_inertia": "provisional",
+    "supply_v": 24,
+    "motor_wheel_ratio": 15.88
+  },
+  "stages": [
+    "freeze new dataset and dynamics contract",
+    "CPU evaluate u400 on corrected plant and actual startup state machine before any learning",
+    "warm start stationary takeover PPO with supported-to-unassisted curriculum",
+    "train forward/reverse/yaw/braking and combined commands after takeover",
+    "freeze weights and evaluate new untouched seeds, failures retained",
+    "regenerate C model and matching profile, test and build before separate hardware validation"
+  ],
+  "training_changes": [
+    "piecewise linear 15MPa catalogue spring instead of constant450N or old1.7 progression",
+    "actual 21.9kg and accepted wheel radius in plant AND observer",
+    "CAD spring Jacobian and linkage kinematics; derive assembly end offsets separately from bare205mm catalogue length",
+    "2msPD/5msobserver/10mspolicy plus measured delays/quantization/dropout when available",
+    "500ms continuously sampled entry, 200ms output ramp and actual last-action/odometry reset",
+    "train bounded initial pose/velocity offsets, realistic support release and command timing",
+    "unmeasured friction/hysteresis/inertia/torque gain represented as explicitly labelled ranges; no fabricated measurement"
+  ],
+  "priority_remaining_physical_evidence": [
+    "paired raw encoders with a reliably matched CAD pose and installed transmission direction/ratio; not repeat ruler survey",
+    "continuous six-motor timestamps/raw counts/feedback, gyro DRDY and control timing including position_lost cause",
+    "small supported takeover logs: targets, requested/sent currents or torque, reported current, joint motion, IMU, battery sag and synchronized video/support release"
+  ],
+  "first_try_to_resolve_offline": [
+    "installed free pin distance and end fitting offset from CAD/assembly data; current250mm provisional",
+    "component mass and material properties for COM/inertia; total mass alone insufficient"
+  ],
+  "not_prerequisites_for_offline_training": [
+    "independent force meter",
+    "repeat accepted wheel700mm measurement",
+    "repeat coarse angle and pin ruler measurements",
+    "pressure measurement or supplier equivalence confirmation under user accepted assumptions"
+  ],
+  "evaluation_protocol_proposal": {
+    "per_class_independent_trials": 100,
+    "classes": [
+      "takeover_and_stand",
+      "forward",
+      "reverse",
+      "yaw_left",
+      "yaw_right",
+      "brake_and_combined_commands"
+    ],
+    "duration_s_after_assistance_removed": 30,
+    "development_and_heldout_seeds_disjoint": true,
+    "no_assistance_in_success_window": true,
+    "report_full_trajectories_and_failure_classes": true,
+    "suggested_release_goal": "zero physical-limit/NaN/timeout failures and >=95 percent task success per class within declared envelope; lock numeric tilt/clearance/tracking thresholds before learning; not achieved now"
+  },
+  "hardware_accessed": false,
+  "training_started": false,
+  "input_sha256": {
+    "real_data_collection/model_input_decisions_20261117.json": "88f027c7e50689cc5c86dac5c6057918aa92cc94a572cf83c08420e2b2963210",
+    "real_data_collection/spring_nominal_15mpa_mm_20261117.json": "11b73ae4aad7f1e7107d53872e3ab254c5f6acfc2257903a7997503d65869e8a",
+    "real_data_collection/standing_start_conditions_20261117.json": "71cb601f34e26e67abab9757834dcb589836b24b311fc64d4be63b0b5ce1a5bf",
+    "user/algorithm/model/manifest.json": "4b0ecc33f11856ca3308bea1c2882096dcafe76bfab40de15b53941aca0c4f6d"
+  }
+}

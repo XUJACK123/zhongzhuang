@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-17",
+  "record_kind": "user_confirmed_future_modeling_choices_not_new_measurements",
+  "geometry": {
+    "source": "D:\\robomaster_material\\solidwork_graph\\26英雄整车总装2.0.STEP",
+    "source_sha256": "ffe77c10b183a47c44bb96d829f2a1356c3d644de409979af5ab5da6bd00a055",
+    "cad_is_future_modeling_baseline": true,
+    "manual_angle_and_pin_distance_remeasurement_requested": false,
+    "cad_assembly_pose_is_not_current_physical_pose_or_encoder_calibration": true,
+    "retain_historical_measurements_and_discrepancies": true
+  },
+  "spring": {
+    "installed_nameplate_brand": "BBK-JINGBA / BeiBeiKang",
+    "installed_nameplate_model": "BG450-080",
+    "max_filling_pressure_bar": 150,
+    "actual_filling_pressure_bar": null,
+    "catalogue_proxy": "BKB0.45",
+    "proxy_equivalence_verified": false,
+    "manufacturer_url": "https://www.bbkspring.com/standard-gas-spring/compact-nitrogen-spring",
+    "preferred_next_source": "user supplied BKB450N catalogue curves accepted as installed spring model by assumption; seller clarification optional",
+    "request_fields": [
+      "force versus compression stroke with explicit units and zero reference",
+      "delivered charge pressure or nominal initial force and tolerance",
+      "free length, stroke and mounting-end dimensions for pin-distance conversion",
+      "compression and return branches if available, test speed and temperature"
+    ],
+    "user_supplied_catalogue_image": {
+      "source": "user supplied BKB series 450N catalogue page 18 in conversation, 2026-11-17; original attachment not stored locally",
+      "usable_as": "installed spring curve family for future modeling under explicit user assumption, not independent measurement",
+      "series": "BKB0.45",
+      "nominal_force_n": 450,
+      "pressure_curve_labels_mpa": [
+        9,
+        12,
+        15
+      ],
+      "rod_diameter_mm_from_drawing": 6,
+      "body_diameter_mm_from_drawing": 12,
+      "80mm_catalogue_row": {
+        "model": "BKB0.45-080-205",
+        "stroke_mm": 80,
+        "body_total_length_L_mm": 205,
+        "Lmin_mm": 125
+      },
+      "L_is_not_automatically_installed_pin_center_distance": true,
+      "graph_horizontal_axis_label": "行程",
+      "graph_horizontal_axis_unit_explicitly_readable": false,
+      "do_not_assign_horizontal_ticks_directly_to_mm_without_confirmation": false,
+      "compression_and_return_separate_branches_provided": false,
+      "BG450_080_equivalence_confirmed": false,
+      "installed_charge_pressure_confirmed": false,
+      "seller_confirmation_request": "BG450-080是否对应BKB0.45-080-205？本件出厂充气压力/初始推力是多少？曲线横轴0-100的单位是否为总行程百分比？",
+      "installed_equivalence_assumed_by_user": true,
+      "horizontal_axis_unit_accepted_from_user": "mm"
+    },
+    "catalogue_curve_treated_as_installed_by_user_assumption": true,
+    "curve_authority": "user instruction: 先默认它是本机弹簧的真实曲线",
+    "exact_model_confirmation_required_to_continue_offline_modeling": false,
+    "pressure_branches_retained_mpa": [
+      9,
+      12,
+      15
+    ],
+    "installed_pressure_branch_selected_this_update": 15,
+    "nominal_pressure_mpa": 15,
+    "nominal_pressure_bar": 150,
+    "nominal_pressure_source": "user instruction: 以15 MPa作为名义",
+    "horizontal_axis_unit_for_modeling": "mm",
+    "horizontal_axis_unit_source": "user clarification: 下面对应的是mm",
+    "horizontal_unit_confirmation_required_for_modeling": false
+  },
+  "motor_force_identification": {
+    "force_instrument_available": false,
+    "independent_measurement_deferred": true,
+    "offline_modeling_may_continue": true,
+    "use_matched_manufacturer_current_torque_definition_for_nominal_estimate": true,
+    "friction_and_efficiency_remain_unverified_parameters": true,
+    "movement_threshold_is_not_independent_torque_truth": true
+  },
+  "frozen_training_results_unchanged": true,
+  "firmware_calibration_unchanged": true,
+  "hardware_access_this_update": false
+}

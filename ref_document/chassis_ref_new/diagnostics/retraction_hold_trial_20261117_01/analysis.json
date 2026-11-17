@@ -1,0 +1,173 @@
+{
+  "active_samples": 375,
+  "record_samples": 512,
+  "record_span_ms": 10220,
+  "record_gaps_ms": [
+    20
+  ],
+  "start_tick": 69858,
+  "first_active_tick": 69858,
+  "last_active_tick": 77338,
+  "mode_transitions": [
+    [
+      69758,
+      2,
+      0
+    ],
+    [
+      69858,
+      3,
+      0
+    ],
+    [
+      77358,
+      4,
+      6
+    ]
+  ],
+  "max_abs_torque_nm": [
+    11.206535339355469,
+    9.29045581817627,
+    0.0,
+    17.273590087890625,
+    20.0,
+    0.0
+  ],
+  "max_abs_reported_feedback_current_a": [
+    8.836000442504883,
+    7.343000411987305,
+    0.2587890625,
+    13.7160005569458,
+    15.884000778198242,
+    0.59326171875
+  ],
+  "max_nominal_leg_current_command_a": {
+    "0": 8.882971951216115,
+    "1": 7.364172417950792,
+    "3": 13.692083378230091,
+    "4": 15.853199373798626
+  },
+  "min_delta_deg": [
+    0.0,
+    -4.678816185242135,
+    -0.002767080387501416,
+    -0.3515634969588963,
+    0.0,
+    0.0
+  ],
+  "max_delta_deg": [
+    2.241217293112964,
+    0.0,
+    0.0,
+    0.7031269939177927,
+    2.702897099870806,
+    0.0
+  ],
+  "max_abs_qd_rad_s": [
+    0.21781709790229797,
+    0.3536032438278198,
+    0.0,
+    0.09320058673620224,
+    0.14412277936935425,
+    0.0
+  ],
+  "last_delta_deg": [
+    2.7685625385513086,
+    -5.165180295660402,
+    -0.002767080387501416,
+    0.6152361196780686,
+    0.30528213514288993,
+    0.0
+  ],
+  "max_loop_us": 82,
+  "max_motor_age_ms": 2,
+  "end_of_hold_samples": [
+    [
+      6460,
+      2.702897099870806
+    ],
+    [
+      6480,
+      2.664921248085535
+    ]
+  ],
+  "physical_angle_truth": false,
+  "independent_torque_measurement": false,
+  "target_delta_deg": 5.000000000016245,
+  "position_baseline": "firmware-latched guard origin",
+  "parameters": {
+    "kind": "independent suspended bilateral knee fold and hold; no actor",
+    "control_version": "0xD2611172",
+    "elf": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\build\\retraction\\suspended_retraction.elf",
+    "bin_sha256": "b86b25e84eb56d572788098c084150d1b6bb9e234ae07088d8ce23412b5dfdcb",
+    "target_delta_deg": 5.000000000016245,
+    "active_legs": [
+      "right",
+      "left"
+    ],
+    "ramp_ms": 1500,
+    "hold_ms": 5000,
+    "release_ms": 1000,
+    "leg_motor_cap_nm": 20.0,
+    "wheel_torque_nm": 0,
+    "record_interval_ms": 20,
+    "flashed": false,
+    "physical_result": null,
+    "sources": {
+      "analyze.py": "d88b9bf1c07eac12e1664b89dc9da286a12bdefc98ed299d63d3cb86364b5a82",
+      "application.c": "b9bff3179931a51f85e8d5d062ea7a8fe788074ae6a621f22023a83e7349b235",
+      "build.py": "427b73cb73912b3b5fa6d998e91d395cd25ac15d80832648ddf77d602086ffce",
+      "controller.c": "48d2ca1075dddba58579f626d5ea89e95281d21c7fb68859eb302490aaf75ffb",
+      "controller.h": "450e233df8fe464374b2d35689744327c21dddfc19297450a7ed3b36ad0d87f2",
+      "operate.py": "db1671a4116b813e6c470575f83114ed770da5f53d1053727a24bab57d478bc7",
+      "test_application.c": "6501adea308cbb57d53acaf8c416799c017aacd8d8e5364bb500eda7cc6f583b",
+      "test_controller.c": "e066e07baed6675576c7b49339490c49bc9a5f1c64b7f8a54a63351128117193"
+    },
+    "total_active_ms": 7500
+  },
+  "order": [
+    "right_hip",
+    "right_knee",
+    "right_wheel",
+    "left_hip",
+    "left_knee",
+    "left_wheel"
+  ],
+  "hold_last_second": {
+    "samples": 50,
+    "complete": true,
+    "legs": {
+      "right": {
+        "mean_fold_deg": 4.164037395046346,
+        "max_target_error_deg": 0.8784999302904701,
+        "knee_peak_to_peak_deg": 0.0697498918041699,
+        "max_hip_error_deg": 1.5380902991951715,
+        "motor_cap_fraction": [
+          0.0,
+          0.0
+        ],
+        "mean_abs_reported_feedback_current_a": [
+          8.526200351715088,
+          6.967440347671509
+        ],
+        "encoder_hold_criterion_met": true
+      },
+      "left": {
+        "mean_fold_deg": 2.689985310263814,
+        "max_target_error_deg": 2.33507875193071,
+        "knee_peak_to_peak_deg": 0.037975851785271075,
+        "max_hip_error_deg": 0.3076317202173743,
+        "motor_cap_fraction": [
+          0.0,
+          1.0
+        ],
+        "mean_abs_reported_feedback_current_a": [
+          13.606820583343506,
+          15.845980701446534
+        ],
+        "encoder_hold_criterion_met": false
+      }
+    }
+  },
+  "bilateral_encoder_hold_pass": false
+}

@@ -31,9 +31,9 @@ static float stick(int16_t v) {
     return x>1 ? 1 : (x< -1 ? -1 : x);
 }
 void remote_request(const RemoteControl *r, float c[3]) {
-    /* This archived policy was not trained for reverse travel. */
+    /* Reverse is available only for a profile evaluated for that command. */
     float forward=stick(r->channel[1]);
-    c[0]=(forward>0 ? forward : 0)*ROBOT_REMOTE_MAX_FORWARD;
+    c[0]=(RL_PROFILE_ALLOW_REVERSE ? forward : (forward>0 ? forward : 0))*ROBOT_REMOTE_MAX_FORWARD;
     c[1]=-stick(r->channel[0])*ROBOT_REMOTE_MAX_YAW;
     c[2]=ROBOT_HEIGHT_COMMAND_M;
 }

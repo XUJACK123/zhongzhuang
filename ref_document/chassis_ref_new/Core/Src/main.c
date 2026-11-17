@@ -6,6 +6,7 @@
 #include "chassis.h"
 
 #define HSE_MHZ 24U
+volatile uint32_t g_boot_reset_flags;
 
 #if HSE_MHZ == 24
 /* 24 MHz / 3 = 8 MHz，VCO 8 x 68.75 = 550 MHz，FDCAN 12 x 16 / 2 = 96 MHz */
@@ -34,6 +35,8 @@ static void PeriphCommonClock_Config(void);
 
 int main(void)
 {
+    g_boot_reset_flags=RCC->RSR;
+    RCC->RSR|=RCC_RSR_RMVF; /* retain this boot's cause in RAM; next reset is unambiguous */
     SCB_EnableICache();
     HAL_Init();
     SystemClock_Config();

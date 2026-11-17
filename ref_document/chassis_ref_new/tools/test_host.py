@@ -49,9 +49,10 @@ def main():
                     "tests/test_can_tx_age.c","-o",str(queue_test)],cwd=ROOT,check=True)
     subprocess.run([str(queue_test)],cwd=ROOT,check=True)
     library=BUILD/("rl_host.dll" if os.name=="nt" else "rl_host.so")
-    sources=["user/algorithm/rl.c","user/algorithm/model/model.c","user/control_state.c",
+    sources=["user/algorithm/rl.c","user/algorithm/model/model.c","user/algorithm/model/getup_model.c","user/control_state.c",
              "user/motor_io.c","user/remote_control.c","user/state_estimator.c",
-             "user/imu_filter.c","user/startup_control.c","user/telemetry.c","tests/test_improvements.c","tests/test_logic.c"]
+             "user/imu_filter.c","user/startup_control.c","user/stand_entry.c","user/telemetry.c",
+             "user/trial_trace.c","user/supported_trial.c","tests/test_improvements.c","tests/test_logic.c"]
     cmd=[cc,"-std=c11","-O2","-Wall","-Wextra","-Wshadow","-Werror","-shared","-Iuser",
          "-Iuser/algorithm",*sources,"-o",str(library),"-lm"]
     if os.name!="nt": cmd.insert(1,"-fPIC")
@@ -79,12 +80,24 @@ def main():
     else: raise AssertionError('Truncated ring accepted')
     fake_sources=sources[:-1]+["user/chassis.c","tests/test_chassis.c"]
     integration=[]
-    for active in (False,True):
-        suffix="enabled_fake" if active else "default_fake"
+    for active, standing, guard, software in ((False, True, False, False), (True, False, False, False), (True, True, False, False), (True, True, True, False), (True, True, True, True)):
+        suffix="standing_fake" if standing and active else ("enabled_fake" if active else "default_fake")
+        if guard: suffix="supported_guard_fake"
+        if software: suffix="supported_session_fake"
         fake_library=BUILD/(suffix+(".dll" if os.name=="nt" else ".so"))
         # Both variants get their own fixture so the test never depends on the
         # production switch or on real calibration values.
         config=(ROOT/"user/robot_config.h").read_text()
+        config=re.sub(r"^#define ROBOT_SUPPORTED_TRIAL_MS .*$",
+                      f"#define ROBOT_SUPPORTED_TRIAL_MS {400 if guard else 0}U",config,flags=re.M)
+        config=re.sub(r"^#define ROBOT_SUPPORTED_SOFTWARE_TRIGGER .*$",
+                      f"#define ROBOT_SUPPORTED_SOFTWARE_TRIGGER {int(software)}",config,flags=re.M)
+        config=re.sub(r"^#define ROBOT_STAND_ENTRY_ONLY [01].*$",
+                      f"#define ROBOT_STAND_ENTRY_ONLY {int(standing)}",config,flags=re.M)
+        # The fake loop uses a short clock window; the production 500ms boundary
+        # is exercised separately in test_logic, including interruption and wrap.
+        config=re.sub(r"^#define ROBOT_STAND_ENTRY_DWELL_MS .*$",
+                      "#define ROBOT_STAND_ENTRY_DWELL_MS 10U",config,flags=re.M)
         extra=[]
         if active:
             for flag in ("ENABLE_OUTPUT","MOTOR_CALIBRATED","IMU_FRAME_VERIFIED","POLICY_CONTRACT_VERIFIED","ODOMETRY_VERIFIED"):
@@ -102,7 +115,7 @@ def main():
             config=re.sub(r"^#define ROBOT_ARM_REFERENCE_RAD \{.*\}$",replacement,config,flags=re.M)
         else:
             config=re.sub(r"^#define ROBOT_ENABLE_OUTPUT 1$","#define ROBOT_ENABLE_OUTPUT 0",config,flags=re.M)
-        fixture=BUILD/("fake_calibration.h" if active else "fake_disabled.h"); fixture.write_text(config)
+        fixture=BUILD/(suffix+".h"); fixture.write_text(config)
         extra=["-include",str(fixture)]
         fake_cmd=[cc,"-std=c11","-O2","-Wall","-Wextra","-Wshadow","-Werror","-shared",
                   "-Itests/fake","-Iuser","-Iuser/algorithm",*extra,*fake_sources,"-o",str(fake_library),"-lm"]
@@ -140,13 +153,40 @@ def main():
     bad=(C.c_float*31)(*([0]*31)); bad[2]=float("nan"); out=(C.c_float*6)()
     assert not lib.rl_actor(C.byref(net),bad,out) and list(out)==[0]*6
 
-    # Independent archived mathematical contract, compared on nonzero states.
+    # Also check the independently namespaced experimental actor, if installed.
+    lib.rl_getup_model_available.restype=C.c_bool
+    lib.rl_getup_actor.argtypes=[C.POINTER(Network),fp,fp];lib.rl_getup_actor.restype=C.c_bool
+    lib.rl_getup_selftest.argtypes=[C.POINTER(Network)];lib.rl_getup_selftest.restype=C.c_bool
+    getup_words=0; getup_worst=0
+    assert lib.rl_getup_model_available()==bool(manifest.get("getup"))
+    if manifest.get("getup"):
+        checkpoint=ROOT/manifest["getup"]["checkpoint_path"]
+        assert sha(checkpoint)==manifest["getup"]["sha256"]
+        getup=load_actor(checkpoint)
+        for i,layer in enumerate(getup):
+            for kind,values in zip(("w","b"),layer):
+                compiled=(C.c_float*len(values)).in_dll(lib,f"rlg_{kind}{i}")
+                assert bytes(compiled)==struct.pack(f"<{len(values)}f",*values)
+                getup_words+=len(values)
+        assert lib.rl_getup_selftest(C.byref(net))
+        for _ in range(1024):
+            obs=(C.c_float*31)(*[rng.uniform(-2,2) for _ in range(31)]);out=(C.c_float*6)()
+            assert lib.rl_getup_actor(C.byref(net),obs,out)
+            expected=reference(getup,list(obs))
+            getup_worst=max(getup_worst,max(abs(a-b) for a,b in zip(out,expected)))
+            assert all(abs(a-b)<=0.001+0.00003*abs(b) for a,b in zip(out,expected))
+        bad=(C.c_float*31)(*([0]*31));bad[0]=float("nan");out=(C.c_float*6)()
+        assert not lib.rl_getup_actor(C.byref(net),bad,out) and list(out)==[0]*6
+    else:
+        assert not lib.rl_getup_actor(C.byref(net),(C.c_float*31)(),(C.c_float*6)())
+
+    # Independent archived mathematical contract, with installed defaults.
     contract_path=ROOT.parent/"fifty_mujoco/src/fifty_mujoco/contracts/sample_actor31.py"
     spec=importlib.util.spec_from_file_location("contract",contract_path)
     contract=importlib.util.module_from_spec(spec); spec.loader.exec_module(contract)
     max_obs_error=0
     for _ in range(100):
-        m=Measurement(); m.q[:]=[a+rng.uniform(-.1,.1) for a in contract.SOURCE_DEFAULT_ANGLES]
+        m=Measurement(); m.q[:]=[a+rng.uniform(-.1,.1) for a in manifest["default_q"]]
         m.qd[:]=[rng.uniform(-2,2) for _ in range(6)]; m.omega[:]=[.1,-.2,.3]; m.gravity[:]=[.02,-.03,-.999]
         m.xy[:]=[.3,-.2]; m.yaw=.4; m.velocity[:]=[.2,-.05]
         c=Controller(); lib.rl_reset(C.byref(c),C.byref(m))
@@ -158,16 +198,18 @@ def main():
         expected=contract.build_observation(angular_velocity_body=list(m.omega),projected_gravity_body=list(m.gravity),
             applied_commands=applied,joint_position=list(m.q),joint_velocity=list(m.qd),
             previous_clipped_action=old,position_xy=list(m.xy),reference_xy=ref_xy,yaw=m.yaw,
-            reference_yaw=ref_yaw,body_velocity_xy=list(m.velocity))
+            reference_yaw=ref_yaw,body_velocity_xy=list(m.velocity),default_angles=manifest["default_q"])
         assert lib.rl_policy_step(C.byref(c),C.byref(m),(C.c_float*3)(*request),dt)
         error=max(abs(a-b) for a,b in zip(c.obs,expected)); max_obs_error=max(max_obs_error,error)
         assert error<3e-6,error
         ref_next,yaw_next=contract.advance_reference(ref_xy,ref_yaw,applied[0],applied[1],dt)
         assert max(abs(a-b) for a,b in zip(c.reference_xy,ref_next))<1e-6
         assert abs(c.reference_yaw-yaw_next)<1e-6
-        targets=contract.action_targets(list(c.action),manifest["target_knee_limits_rad"])
+        targets=contract.action_targets(list(c.action),manifest["target_knee_limits_rad"],manifest["default_q"])
         assert max(abs(a-b) for a,b in zip(c.target_q,targets["position"]))<1e-6
     report={"status":"pass","weight_float32_words_bit_exact":words,
+            "profile":manifest.get("profile"),"getup_weight_float32_words_bit_exact":getup_words,
+            "getup_reference_vectors":1024 if getup_words else 0,"getup_max_abs_error":getup_worst,
             "actor_vectors":len(vectors),"actor_max_absolute_error":worst,
             "observation_vectors":100,"observation_max_absolute_error":max_obs_error,
             "protocol_and_control_assertions":"passed", "physical_pose_conversion":"passed", "torch_forward_executed":False,

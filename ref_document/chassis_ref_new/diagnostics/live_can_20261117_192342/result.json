@@ -1,0 +1,483 @@
+{
+  "vector_fingerprint_matches": true,
+  "a": {
+    "received": 301896,
+    "other": 0,
+    "tx_error": 0,
+    "rx_error": 0,
+    "bus_off": 0,
+    "last_error": 0,
+    "tx_queued": 61588,
+    "nonzero_torque_frames": 4190,
+    "enable_commands": 4,
+    "status_samples": 52022,
+    "nodes": [
+      {
+        "label": "right_hip_DM4",
+        "feedback_id": "0x304",
+        "received": 49306,
+        "last_ms": 52230,
+        "encoder_counts": 3188,
+        "encoder_total_counts": 3188,
+        "temperature_c": 24,
+        "status_byte": 1,
+        "data": "0c 74 ff ff ff e9 18 01"
+      },
+      {
+        "label": "right_knee_DM3",
+        "feedback_id": "0x303",
+        "received": 49686,
+        "last_ms": 52238,
+        "encoder_counts": 2809,
+        "encoder_total_counts": 2809,
+        "temperature_c": 24,
+        "status_byte": 0,
+        "data": "0a f9 00 04 00 04 18 00"
+      },
+      {
+        "label": "right_wheel_M3508_3",
+        "feedback_id": "0x203",
+        "received": 50918,
+        "last_ms": 52246,
+        "encoder_counts": 3245,
+        "encoder_total_counts": 3245,
+        "temperature_c": 23,
+        "status_byte": 0,
+        "data": "0c ad 00 00 00 18 17 00"
+      },
+      {
+        "label": "left_hip_DM1",
+        "feedback_id": "0x301",
+        "received": 50895,
+        "last_ms": 52253,
+        "encoder_counts": 1737,
+        "encoder_total_counts": 1737,
+        "temperature_c": 23,
+        "status_byte": 1,
+        "data": "06 c9 00 00 ff f8 17 01"
+      },
+      {
+        "label": "left_knee_DM2",
+        "feedback_id": "0x302",
+        "received": 50471,
+        "last_ms": 52260,
+        "encoder_counts": 4125,
+        "encoder_total_counts": 4125,
+        "temperature_c": 24,
+        "status_byte": 1,
+        "data": "10 1d ff fd 00 0a 18 01"
+      },
+      {
+        "label": "left_wheel_M3508_2",
+        "feedback_id": "0x202",
+        "received": 50845,
+        "last_ms": 52270,
+        "encoder_counts": 7099,
+        "encoder_total_counts": 2593918,
+        "temperature_c": 24,
+        "status_byte": 0,
+        "data": "1b bb 00 00 ff eb 18 00"
+      }
+    ],
+    "chassis": {
+      "tick": 52341,
+      "inhibit": 292,
+      "fault": 0,
+      "cycles": 26072,
+      "policy_runs": 420,
+      "inference_us": 401,
+      "max_loop_us": 622,
+      "overruns": 0,
+      "mode": 0,
+      "actor_selftest": 1
+    },
+    "standing_entry": {
+      "since": 0,
+      "stable_ms": 0,
+      "tracking": 0,
+      "ready": 0,
+      "last_tick": 0
+    },
+    "remote": {
+      "channels": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "s1": 2,
+      "s2": 2,
+      "tick": 52664,
+      "valid_frames": 3748,
+      "rejected": 1,
+      "valid": true
+    },
+    "imu": {
+      "tick": 52429,
+      "samples": 52229,
+      "calibration_samples": 2000,
+      "errors": 0,
+      "initialized": true,
+      "calibrated": true,
+      "quaternion_wxyz": [
+        0.9995916485786438,
+        -0.0170064028352499,
+        -0.01770012639462948,
+        0.014634642750024796
+      ],
+      "omega_body_rad_s": [
+        -0.014082797802984715,
+        -0.0012884370516985655,
+        0.007360444404184818
+      ],
+      "accel_body_m_s2": [
+        0.36643800139427185,
+        -0.36643800139427185,
+        9.821974754333496
+      ],
+      "gravity_body": [
+        -0.03491804003715515,
+        0.03456076979637146,
+        -0.9987928867340088
+      ],
+      "yaw_rad": 0.02992394007742405,
+      "motion_resets": 0,
+      "cadence_resets": 0,
+      "max_gap_ms": 2,
+      "drdy_edges": 104364
+    },
+    "board_debug": {
+      "init_stage": 4,
+      "rx_starts": 3714,
+      "rx_start_failures": 0,
+      "rx_events": 3712,
+      "uart_errors": 1,
+      "irq_count": 70537,
+      "cr1": 5429,
+      "isr": 4329664,
+      "uart_clock": 1048576,
+      "rx_state": 34
+    },
+    "measurement": {
+      "joint_position_rad": [
+        3.3617873191833496,
+        -3.388120174407959,
+        0.017774075269699097,
+        -2.9706225395202637,
+        3.0962653160095215,
+        125.15617370605469
+      ],
+      "joint_velocity_rad_s": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        29.75311279296875
+      ],
+      "root_xy_m": [
+        0.26809319853782654,
+        0.0038162299897521734
+      ],
+      "body_velocity_xy_m_s": [
+        0.055855825543403625,
+        0.0047982437536120415
+      ]
+    },
+    "tx_failed": 0,
+    "fifo_overflow": 1,
+    "rl": {
+      "action": [
+        -1.0,
+        -0.12705765664577484,
+        1.163132667541504,
+        1.0,
+        0.21165339648723602,
+        1.5337045192718506
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.10000000149011612
+      ],
+      "reference_yaw": 0.0016654033679515123,
+      "target_q": [
+        2.6063108444213867,
+        -3.6938300132751465,
+        0.0,
+        -2.6063108444213867,
+        3.6946675777435303,
+        0.0
+      ],
+      "target_qd": [
+        0.0,
+        0.0,
+        23.262653350830078,
+        0.0,
+        0.0,
+        30.674091339111328
+      ],
+      "joint_torque": [
+        -30.219058990478516,
+        -18.34259033203125,
+        2.480835437774658,
+        14.572467803955078,
+        35.904136657714844,
+        0.1289369910955429
+      ],
+      "motor_torque": [
+        -15.272697448730469,
+        -14.946361541748047,
+        2.0,
+        16.2403621673584,
+        -20.0,
+        0.1289369910955429
+      ]
+    }
+  },
+  "b": {
+    "received": 320323,
+    "other": 0,
+    "tx_error": 0,
+    "rx_error": 0,
+    "bus_off": 0,
+    "last_error": 0,
+    "tx_queued": 65300,
+    "nonzero_torque_frames": 4190,
+    "enable_commands": 4,
+    "status_samples": 55113,
+    "nodes": [
+      {
+        "label": "right_hip_DM4",
+        "feedback_id": "0x304",
+        "received": 52243,
+        "last_ms": 55322,
+        "encoder_counts": 3188,
+        "encoder_total_counts": 3187,
+        "temperature_c": 24,
+        "status_byte": 1,
+        "data": "0c 74 00 07 ff fa 18 01"
+      },
+      {
+        "label": "right_knee_DM3",
+        "feedback_id": "0x303",
+        "received": 52774,
+        "last_ms": 55330,
+        "encoder_counts": 2809,
+        "encoder_total_counts": 2809,
+        "temperature_c": 24,
+        "status_byte": 0,
+        "data": "0a f9 ff fd ff f1 18 00"
+      },
+      {
+        "label": "right_wheel_M3508_3",
+        "feedback_id": "0x203",
+        "received": 54030,
+        "last_ms": 55342,
+        "encoder_counts": 3245,
+        "encoder_total_counts": 3245,
+        "temperature_c": 23,
+        "status_byte": 0,
+        "data": "0c ad 00 00 ff d4 17 00"
+      },
+      {
+        "label": "left_hip_DM1",
+        "feedback_id": "0x301",
+        "received": 53991,
+        "last_ms": 55349,
+        "encoder_counts": 1737,
+        "encoder_total_counts": 1737,
+        "temperature_c": 23,
+        "status_byte": 1,
+        "data": "06 c9 ff fa 00 0b 17 01"
+      },
+      {
+        "label": "left_knee_DM2",
+        "feedback_id": "0x302",
+        "received": 53567,
+        "last_ms": 55356,
+        "encoder_counts": 4125,
+        "encoder_total_counts": 4125,
+        "temperature_c": 24,
+        "status_byte": 1,
+        "data": "10 1d 00 05 ff f4 18 01"
+      },
+      {
+        "label": "left_wheel_M3508_2",
+        "feedback_id": "0x202",
+        "received": 53957,
+        "last_ms": 55366,
+        "encoder_counts": 7099,
+        "encoder_total_counts": 2593918,
+        "temperature_c": 24,
+        "status_byte": 0,
+        "data": "1b bb 00 00 ff e2 18 00"
+      }
+    ],
+    "chassis": {
+      "tick": 55437,
+      "inhibit": 292,
+      "fault": 0,
+      "cycles": 27620,
+      "policy_runs": 420,
+      "inference_us": 401,
+      "max_loop_us": 622,
+      "overruns": 0,
+      "mode": 0,
+      "actor_selftest": 1
+    },
+    "standing_entry": {
+      "since": 0,
+      "stable_ms": 0,
+      "tracking": 0,
+      "ready": 0,
+      "last_tick": 0
+    },
+    "remote": {
+      "channels": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "s1": 2,
+      "s2": 2,
+      "tick": 55730,
+      "valid_frames": 3966,
+      "rejected": 1,
+      "valid": true
+    },
+    "imu": {
+      "tick": 55516,
+      "samples": 55315,
+      "calibration_samples": 2000,
+      "errors": 0,
+      "initialized": true,
+      "calibrated": true,
+      "quaternion_wxyz": [
+        0.999583899974823,
+        -0.017338136211037636,
+        -0.017560912296175957,
+        0.014922505244612694
+      ],
+      "omega_body_rad_s": [
+        -0.003430154174566269,
+        0.012560000643134117,
+        0.012686766684055328
+      ],
+      "accel_body_m_s2": [
+        0.31614258885383606,
+        -0.33769774436950684,
+        9.71419906616211
+      ],
+      "gravity_body": [
+        -0.034576836973428726,
+        0.03517276421189308,
+        -0.998783528804779
+      ],
+      "yaw_rad": 0.030456142500042915,
+      "motion_resets": 0,
+      "cadence_resets": 0,
+      "max_gap_ms": 2,
+      "drdy_edges": 110529
+    },
+    "board_debug": {
+      "init_stage": 4,
+      "rx_starts": 3934,
+      "rx_start_failures": 0,
+      "rx_events": 3932,
+      "uart_errors": 1,
+      "irq_count": 74729,
+      "cr1": 5429,
+      "isr": 4329664,
+      "uart_clock": 1048576,
+      "rx_state": 34
+    },
+    "measurement": {
+      "joint_position_rad": [
+        3.3617873191833496,
+        -3.388120174407959,
+        0.017774075269699097,
+        -2.9706225395202637,
+        3.0962653160095215,
+        125.15617370605469
+      ],
+      "joint_velocity_rad_s": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        29.75311279296875
+      ],
+      "root_xy_m": [
+        0.26809319853782654,
+        0.0038162299897521734
+      ],
+      "body_velocity_xy_m_s": [
+        0.055855825543403625,
+        0.0047982437536120415
+      ]
+    },
+    "tx_failed": 0,
+    "fifo_overflow": 1,
+    "rl": {
+      "action": [
+        -1.0,
+        -0.12705765664577484,
+        1.163132667541504,
+        1.0,
+        0.21165339648723602,
+        1.5337045192718506
+      ],
+      "command": [
+        0.0,
+        0.0,
+        0.10000000149011612
+      ],
+      "reference_yaw": 0.0016654033679515123,
+      "target_q": [
+        2.6063108444213867,
+        -3.6938300132751465,
+        0.0,
+        -2.6063108444213867,
+        3.6946675777435303,
+        0.0
+      ],
+      "target_qd": [
+        0.0,
+        0.0,
+        23.262653350830078,
+        0.0,
+        0.0,
+        30.674091339111328
+      ],
+      "joint_torque": [
+        -30.219058990478516,
+        -18.34259033203125,
+        2.480835437774658,
+        14.572467803955078,
+        35.904136657714844,
+        0.1289369910955429
+      ],
+      "motor_torque": [
+        -15.272697448730469,
+        -14.946361541748047,
+        2.0,
+        16.2403621673584,
+        -20.0,
+        0.1289369910955429
+      ]
+    }
+  },
+  "live_ids": [
+    "0x304",
+    "0x303",
+    "0x203",
+    "0x301",
+    "0x302",
+    "0x202"
+  ]
+}

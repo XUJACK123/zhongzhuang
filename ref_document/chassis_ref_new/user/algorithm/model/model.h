@@ -16,6 +16,7 @@ extern const float rl_knee_limits[4];
 extern const float rl_joint_effort[6];
 extern const float rl_selftest_obs[31];
 extern const float rl_selftest_output[6];
+extern const float rl_physical_knee_limits[4];
 #define RL_LINK_RATIO 0x1.ae147ae147ae1p-1f
 #define RL_REFERENCE_X -0x1.40a71559478bap-4f
 #define RL_REFERENCE_Y 0x1.e542e557de100p-9f
@@ -25,5 +26,5 @@ extern const float rl_selftest_output[6];
 #define RL_WHEEL_RATED_TORQUE 0x1.3d8c03dde23f3p+1f
 #define RL_WHEEL_RATED_SPEED 0x1.db21ec3f57cdbp+5f
 #define RL_WHEEL_FREE_SPEED 0x1.e84d7056eeb4ep+5f
-extern const float rl_physical_knee_limits[4];
+#include "profile.h"
 #endif

@@ -34,12 +34,14 @@ def main():
     weights={}
     for line in nm.splitlines():
         parts=line.split()
-        if len(parts)==4 and re.fullmatch(r"rl_[wb][0-3]",parts[3]):
+        if len(parts)==4 and re.fullmatch(r"rlg?_[wb][0-3]",parts[3]):
             address,size=int(parts[0],16),int(parts[1],16)
             if not 0x08000000<=address<address+size<=0x08100000:
                 raise AssertionError(f"Weight {parts[3]} is not in FLASH")
             weights[parts[3]]={"address":hex(address),"bytes":size,"symbol_type":parts[2]}
-    if len(weights)!=8 or sum(v["bytes"] for v in weights.values())!=14630*4:
+    model=json.loads((ROOT/'user/algorithm/model/manifest.json').read_text(encoding='utf-8'))
+    actors=2 if model.get('getup') else 1
+    if len(weights)!=8*actors or sum(v["bytes"] for v in weights.values())!=14630*4*actors:
         raise AssertionError("Missing or wrong-sized actor weights in ELF")
     telemetry=[line.split() for line in nm.splitlines() if line.split()[-1:] == ['g_telemetry']]
     if len(telemetry)!=1 or int(telemetry[0][1],16)!=ctypes.sizeof(Ring):
@@ -52,7 +54,7 @@ def main():
                 fields=line.split("\t")
                 if len(fields)>=2: usage.append((int(fields[1]),fields[0]))
     warnings=[line for line in result.stdout.splitlines() if "warning:" in line]
-    flags={name:int(value) for name,value in re.findall(r"#define ROBOT_(ENABLE_OUTPUT|MOTOR_CALIBRATED|IMU_FRAME_VERIFIED|POLICY_CONTRACT_VERIFIED|ODOMETRY_VERIFIED) ([01])",(ROOT/"user/robot_config.h").read_text())}
+    flags={name:int(value) for name,value in re.findall(r"#define ROBOT_(ENABLE_OUTPUT|STAND_ENTRY_ONLY|MOTOR_CALIBRATED|IMU_FRAME_VERIFIED|POLICY_CONTRACT_VERIFIED|ODOMETRY_VERIFIED) ([01])",(ROOT/"user/robot_config.h").read_text())}
     report={"status":"pass","forced_rebuild":a.fresh,"production_commissioning_flags":flags,
             "arm_toolchain":subprocess.run(["arm-none-eabi-gcc","--version"],capture_output=True,text=True,check=True).stdout.splitlines()[0],
             "size":size,"weights_in_flash":weights,"max_single_user_function_stack_bytes":max(n for n,_ in usage),
@@ -60,6 +62,8 @@ def main():
     report['telemetry_ring_bytes']=ctypes.sizeof(Ring)
     (build/"build_report.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(size)
-    print(f"PASS: 14630 float32 weights in FLASH; largest single user-function stack {report['max_single_user_function_stack_bytes']} bytes")
+    report['model_profile']=model.get('profile');report['actors_in_flash']=actors
+    (build/"build_report.json").write_text(json.dumps(report,indent=2)+"\n",encoding="utf-8")
+    print(f"PASS: {actors} actors / {14630*actors} float32 weights in FLASH; largest single user-function stack {report['max_single_user_function_stack_bytes']} bytes")
     print(f"Warnings: {len(warnings)}; full build log: {build/'build.log'}")
 if __name__=="__main__": main()

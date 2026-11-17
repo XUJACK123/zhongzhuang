@@ -1,0 +1,52 @@
+{
+  "change": "switch to existing qualified_u400 balance/drive actor with continuous true-pose standing-entry gate",
+  "user_scope": "use existing balancing and forward/backward/turning model; operator supplies actual initial pose, skip getup",
+  "active_profile": "qualified_u400",
+  "checkpoint_sha256": "cb093496fe7d784f4375970e0beb5de61b57a4cced8f474956691759d0fc7c39",
+  "elf_sha256": "6fcfadb2394735935f2462821ed6437cb571b9c602de6bbfbf3e37cdfe17e996",
+  "build": {
+    "text": 105732,
+    "data": 256,
+    "bss": 37176,
+    "warnings": 0
+  },
+  "new_tests": [
+    "continuous 500ms dwell, interruption and tick wrap",
+    "invalid tilt denies FC and torque",
+    "wrong hip encoder pose denies FC and torque",
+    "displaced stick denies FC and torque",
+    "valid entry reaches BALANCE",
+    "driving sticks accepted after entry",
+    "stop resets entry readiness",
+    "existing remote/feedback/tilt/TX/timing fault behavior"
+  ],
+  "host_report": "host_report.json",
+  "arm_report": "arm_report.json",
+  "flash_check": "flash_dry_run.json",
+  "source_sha256": {
+    "Makefile": "a8423fd74dab99fc53678c42917345c3d2ed4fbd26368d9d64a6ce7edc2865ac",
+    "user/robot_config.h": "30c47b087b7907459f0ade4a5365f3023bc3010b7027eeb5734dfaadde258381",
+    "user/chassis.c": "5fd0d111b12e921471113d49936cfa1b2f59c78b6987a06e3c902fd23bea8c38",
+    "user/stand_entry.c": "abc6cfdcd9341cac543780f17203b7b3200b4d3f3a1602aff25dffac58669f0b",
+    "user/stand_entry.h": "6fe5c336213dd862ff0691bca22d58a930e60cf4100799565aa57499613b0c03",
+    "tools/export_policy.py": "e629094636fd3ec737d587f387118bb7c86cfb15bcd3afbfff97fbb223cf1a9f",
+    "tools/test_host.py": "ffe38587760439c4301ca023658b01524ea1c68d115c0957fa09580256643c12",
+    "tools/monitor_can.py": "a1ed801bac65d1360299fbfdf0dce2ae79dfbb1fc82f3ef6622a3edea2226c5d",
+    "tests/test_chassis.c": "86cc7a9e7928f82451e8ffb58488bda2db260381cb0babd2cddc15e10999f5da",
+    "tests/test_logic.c": "cf18ff1d424440d617dc024b684f41496175503a1bd90d4ca8a9025f22ab9151"
+  },
+  "output_enabled": false,
+  "getup_auto_registered": false,
+  "new_training_started": false,
+  "new_curve_physical_parity_established": false,
+  "existing_encoder_calibration_changed": false,
+  "hardware_accessed": false,
+  "flashed": false,
+  "motors_commanded": false,
+  "remaining_physical_checks": [
+    "real pose/raw encoder correspondence",
+    "continuous valid six-motor and IMU feedback, prior wheel position_lost unresolved live",
+    "supported balance takeover and drive response"
+  ],
+  "backup": "archive/before_standing_entry_20261117_160851.zip"
+}

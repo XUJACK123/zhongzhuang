@@ -23,6 +23,10 @@ typedef struct {
 float rl_clip(float x, float lo, float hi);
 float rl_wrap(float x);
 bool rl_actor(RlNetwork *net, const float obs[31], float action[6]);
+/* Experimental inference entry, not automatically authorized for actuation. */
+bool rl_getup_model_available(void);
+bool rl_getup_actor(RlNetwork *net, const float obs[31], float action[6]);
+bool rl_getup_selftest(RlNetwork *net);
 typedef bool (*RlActorFn)(RlNetwork *net, const float obs[31], float action[6]);
 bool rl_policy_step_actor(RlController *c, const RlMeasurement *m, const float request[3], float dt, RlActorFn actor);
 bool rl_set_action(RlController *c, const float action[6]);

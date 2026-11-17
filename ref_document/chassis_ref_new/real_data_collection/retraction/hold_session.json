@@ -1,0 +1,331 @@
+{
+  "flashed": true,
+  "active_manifest": "diagnostics/training_measurements_flash_20261117_01/session.json",
+  "motion_triggered": true,
+  "state": "Current measurement image 0xD2611174, STOP; collecting identification data",
+  "test_goal": "bilateral suspended folding and 5-second active hold, not ground balance",
+  "trial_1": {
+    "active_samples": 375,
+    "record_samples": 512,
+    "record_span_ms": 10220,
+    "record_gaps_ms": [
+      20
+    ],
+    "start_tick": 69858,
+    "first_active_tick": 69858,
+    "last_active_tick": 77338,
+    "mode_transitions": [
+      [
+        69758,
+        2,
+        0
+      ],
+      [
+        69858,
+        3,
+        0
+      ],
+      [
+        77358,
+        4,
+        6
+      ]
+    ],
+    "max_abs_torque_nm": [
+      11.206535339355469,
+      9.29045581817627,
+      0.0,
+      17.273590087890625,
+      20.0,
+      0.0
+    ],
+    "min_delta_deg": [
+      0.0,
+      -4.678816185242135,
+      -0.002767080387501416,
+      -0.3515634969588963,
+      0.0,
+      0.0
+    ],
+    "max_delta_deg": [
+      2.241217293112964,
+      0.0,
+      0.0,
+      0.7031269939177927,
+      2.702897099870806,
+      0.0
+    ],
+    "max_abs_qd_rad_s": [
+      0.21781709790229797,
+      0.3536032438278198,
+      0.0,
+      0.09320058673620224,
+      0.14412277936935425,
+      0.0
+    ],
+    "last_delta_deg": [
+      2.7685625385513086,
+      -5.165180295660402,
+      -0.002767080387501416,
+      0.6152361196780686,
+      0.30528213514288993,
+      0.0
+    ],
+    "max_loop_us": 82,
+    "max_motor_age_ms": 2,
+    "end_of_hold_samples": [
+      [
+        6460,
+        2.702897099870806
+      ],
+      [
+        6480,
+        2.664921248085535
+      ]
+    ],
+    "physical_angle_truth": false,
+    "independent_torque_measurement": false,
+    "target_delta_deg": 5.000000000016245,
+    "position_baseline": "firmware-latched guard origin",
+    "parameters": {
+      "kind": "independent suspended bilateral knee fold and hold; no actor",
+      "control_version": "0xD2611172",
+      "elf": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\build\\retraction\\suspended_retraction.elf",
+      "bin_sha256": "b86b25e84eb56d572788098c084150d1b6bb9e234ae07088d8ce23412b5dfdcb",
+      "target_delta_deg": 5.000000000016245,
+      "active_legs": [
+        "right",
+        "left"
+      ],
+      "ramp_ms": 1500,
+      "hold_ms": 5000,
+      "release_ms": 1000,
+      "leg_motor_cap_nm": 20.0,
+      "wheel_torque_nm": 0,
+      "record_interval_ms": 20,
+      "flashed": false,
+      "physical_result": null,
+      "sources": {
+        "analyze.py": "d88b9bf1c07eac12e1664b89dc9da286a12bdefc98ed299d63d3cb86364b5a82",
+        "application.c": "b9bff3179931a51f85e8d5d062ea7a8fe788074ae6a621f22023a83e7349b235",
+        "build.py": "427b73cb73912b3b5fa6d998e91d395cd25ac15d80832648ddf77d602086ffce",
+        "controller.c": "48d2ca1075dddba58579f626d5ea89e95281d21c7fb68859eb302490aaf75ffb",
+        "controller.h": "450e233df8fe464374b2d35689744327c21dddfc19297450a7ed3b36ad0d87f2",
+        "operate.py": "db1671a4116b813e6c470575f83114ed770da5f53d1053727a24bab57d478bc7",
+        "test_application.c": "6501adea308cbb57d53acaf8c416799c017aacd8d8e5364bb500eda7cc6f583b",
+        "test_controller.c": "e066e07baed6675576c7b49339490c49bc9a5f1c64b7f8a54a63351128117193"
+      },
+      "total_active_ms": 7500
+    },
+    "order": [
+      "right_hip",
+      "right_knee",
+      "right_wheel",
+      "left_hip",
+      "left_knee",
+      "left_wheel"
+    ],
+    "hold_last_second": {
+      "samples": 50,
+      "complete": true,
+      "legs": {
+        "right": {
+          "mean_fold_deg": 4.164037395046346,
+          "max_target_error_deg": 0.8784999302904701,
+          "knee_peak_to_peak_deg": 0.0697498918041699,
+          "max_hip_error_deg": 1.5380902991951715,
+          "motor_cap_fraction": [
+            0.0,
+            0.0
+          ],
+          "encoder_hold_criterion_met": true
+        },
+        "left": {
+          "mean_fold_deg": 2.689985310263814,
+          "max_target_error_deg": 2.33507875193071,
+          "knee_peak_to_peak_deg": 0.037975851785271075,
+          "max_hip_error_deg": 0.3076317202173743,
+          "motor_cap_fraction": [
+            0.0,
+            1.0
+          ],
+          "encoder_hold_criterion_met": false
+        }
+      }
+    },
+    "bilateral_encoder_hold_pass": false
+  },
+  "user_observation_trial_1": "Neither leg had an obvious visible response; user requests increased current and removal of nonessential limits",
+  "trial_1_stop_reason": "7500 ms duration, no early motion guard",
+  "trial_1_can_tx_failures": 0,
+  "trial_1_after_temperatures_c": [
+    25,
+    25,
+    23,
+    24,
+    24,
+    23
+  ],
+  "increased_current_authorized": true,
+  "candidate_left_cap_nm": 25,
+  "candidate_nominal_left_current_a": 19.816499217248282,
+  "candidate_right_cap_nm": 20,
+  "manufacturer_sources": [
+    "https://www.dmbot.cn/index.php?c=show&id=104",
+    "https://damiao.enactic.ai/en/assets/files/dm-j8009p-2ec-v1.0-zh-976b6fed966540041c0378bef48fb178.pdf"
+  ],
+  "manufacturer_nominal_peak_torque_nm": [
+    20,
+    40
+  ],
+  "manufacturer_peak_duration_not_specified": true,
+  "current_flashed_sha256": "7b2fd45f303d6fe2a59122588d797b8a7ca6e4152682f20c4359359384f993a9",
+  "increased_current_trial_triggered": false,
+  "trial_2": {
+    "active_samples": 269,
+    "record_samples": 512,
+    "record_span_ms": 10220,
+    "record_gaps_ms": [
+      20
+    ],
+    "start_tick": 81902,
+    "first_active_tick": 81918,
+    "last_active_tick": 87278,
+    "mode_transitions": [
+      [
+        81818,
+        2,
+        0
+      ],
+      [
+        81918,
+        3,
+        0
+      ],
+      [
+        87298,
+        4,
+        6
+      ]
+    ],
+    "max_abs_torque_nm": [
+      10.900930404663086,
+      10.3335599899292,
+      0.0,
+      20.718246459960938,
+      23.27391815185547,
+      0.0
+    ],
+    "max_abs_reported_feedback_current_a": [
+      8.621000289916992,
+      8.22800064086914,
+      0.13671875,
+      16.38300132751465,
+      18.44300079345703,
+      0.599365234375
+    ],
+    "max_nominal_leg_current_command_a": {
+      "0": 8.640731153251362,
+      "1": 8.190999338072807,
+      "3": 16.422524590262917,
+      "4": 18.44830323354178
+    },
+    "min_delta_deg": [
+      0.0,
+      -3.9347353770609454,
+      0.0,
+      -0.5273452454383445,
+      0.0,
+      0.0
+    ],
+    "max_delta_deg": [
+      1.8896401357757278,
+      0.0,
+      0.002767080387501416,
+      0.0,
+      4.329957443194563,
+      0.0
+    ],
+    "max_abs_qd_rad_s": [
+      0.235619455575943,
+      0.35803771018981934,
+      0.019783329218626022,
+      0.15079645812511444,
+      0.712598979473114,
+      0.0
+    ],
+    "last_delta_deg": [
+      3.383784997851037,
+      -5.1140904806687075,
+      0.002767080387501416,
+      3.164071472630067,
+      -0.6871989927733229,
+      -0.19094562221052272
+    ],
+    "max_loop_us": 20,
+    "max_motor_age_ms": 2,
+    "end_of_hold_samples": [],
+    "physical_angle_truth": false,
+    "independent_torque_measurement": false,
+    "target_delta_deg": 5.000000000016245,
+    "position_baseline": "firmware-latched guard origin",
+    "parameters": {
+      "kind": "independent suspended bilateral knee fold and hold; no actor",
+      "control_version": "0xD2611173",
+      "elf": "D:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\build\\retraction\\suspended_retraction.elf",
+      "bin_sha256": "7b2fd45f303d6fe2a59122588d797b8a7ca6e4152682f20c4359359384f993a9",
+      "target_delta_deg": 5.000000000016245,
+      "active_legs": [
+        "right",
+        "left"
+      ],
+      "ramp_ms": 1500,
+      "hold_ms": 5000,
+      "release_ms": 1000,
+      "leg_motor_cap_nm": 25.0,
+      "wheel_torque_nm": 0,
+      "record_interval_ms": 20,
+      "flashed": false,
+      "physical_result": null,
+      "sources": {
+        "analyze.py": "4f1d41dc605b8ee78f1b46e3a90c2f62f9365183aa89d5da6dcd6eb67397a383",
+        "application.c": "b9bff3179931a51f85e8d5d062ea7a8fe788074ae6a621f22023a83e7349b235",
+        "build.py": "ea23ffb79c449770cd229da02c48f538663922e5c475524d18bd40b3cceb2118",
+        "controller.c": "425b0bb343bb45a932b34b75a88d72836aade9e9de00cd475178712b49e150cd",
+        "controller.h": "7ae49c68f2dd4f9fe11c9362a5afd7512d53aa9251120b6d519fb60586d2605a",
+        "flash_stopped.py": "e21da8c2e24c588f4f03e7b00c63627dd8e5ecae45101a028f8977d1e0723c7a",
+        "motor_io_override.c": "d0cdf1c900598f945c30a37f4338cf01702ed8c3180c85e45c8da0fde2b4dd9e",
+        "operate.py": "db1671a4116b813e6c470575f83114ed770da5f53d1053727a24bab57d478bc7",
+        "test_application.c": "f5a14cc3c2a4b6372e193ee6ac0034b3ddf4f84aea5ab31ba9798b8841c1503e",
+        "test_controller.c": "00f378afb06f5ed5a9d12829aa471395cf925a44f159e9666eb1264d19ccec7c"
+      },
+      "total_active_ms": 7500,
+      "motor_caps_nm": [
+        20.0,
+        20.0,
+        0,
+        25.0,
+        25.0,
+        0
+      ],
+      "left_nominal_current_cap_a": 19.816499217248282
+    },
+    "order": [
+      "right_hip",
+      "right_knee",
+      "right_wheel",
+      "left_hip",
+      "left_knee",
+      "left_wheel"
+    ],
+    "hold_last_second": {
+      "samples": 0,
+      "complete": false,
+      "legs": {}
+    },
+    "bilateral_encoder_hold_pass": false
+  },
+  "trial_2_operator_report": "Robot-own RIGHT leg visibly folded or bounced; confirmed by operator.",
+  "trial_2_complete_hold_passed": false,
+  "physical_side_recheck": "training_measurements_20261117/right_leg_identity.json"
+}

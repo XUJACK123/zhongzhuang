@@ -1,4 +1,5 @@
 #include "startup_control.h"
+#include "robot_config.h"
 #include <string.h>
 void startup_step(StartupControl *s, uint32_t now, bool active, bool ready, bool balance_safe, bool actor_available) {
     if (!active) { memset(s,0,sizeof(*s)); return; }
@@ -10,7 +11,7 @@ void startup_step(StartupControl *s, uint32_t now, bool active, bool ready, bool
         else { s->failure=STARTUP_MODEL_MISSING; s->phase=STARTUP_FAILED; }
     }
     if (s->phase==STARTUP_GETUP) {
-        if (now-s->since>5000) { s->phase=STARTUP_FAILED; s->failure=STARTUP_TIMEOUT; }
+        if (now-s->since>RL_PROFILE_GETUP_TIMEOUT_MS) { s->phase=STARTUP_FAILED; s->failure=STARTUP_TIMEOUT; }
         else if (ready) {
             if (!s->stable) { s->stable=true; s->stable_since=now; }
             if (now-s->stable_since>=1000) { s->phase=STARTUP_HANDOFF; s->handoff_since=now; }

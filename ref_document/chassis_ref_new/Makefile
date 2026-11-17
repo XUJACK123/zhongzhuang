@@ -6,6 +6,7 @@ MAKEFLAGS += --no-builtin-rules
 TARGET := wheel_leg_rl
 BUILD_DIR ?= build/rl
 PYTHON ?= python
+POLICY_PROFILE ?= qualified_u400
 OPENOCD ?=
 OPENOCD_CONFIG ?= openocd_dap.cfg
 OPENOCD_ARG = $(if $(strip $(OPENOCD)),--openocd "$(OPENOCD)",)
@@ -42,9 +43,9 @@ C_SOURCES := \
   Core/Src/system_stm32h7xx.c \
   Core/Src/syscalls.c \
   user/board.c user/imu.c user/chassis.c user/control_state.c \
-  user/imu_filter.c user/startup_control.c user/telemetry.c \
+  user/imu_filter.c user/startup_control.c user/stand_entry.c user/telemetry.c user/trial_trace.c user/supported_trial.c \
   user/motor_io.c user/remote_control.c user/state_estimator.c \
-  user/algorithm/rl.c user/algorithm/model/model.c \
+  user/algorithm/rl.c user/algorithm/model/model.c user/algorithm/model/getup_model.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c \
   Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c \
@@ -108,7 +109,7 @@ size: $(BUILD_DIR)/$(TARGET).elf
 	$(SIZE) $<
 
 export-policy:
-	$(PYTHON) tools/export_policy.py
+	$(PYTHON) tools/export_policy.py --profile "$(POLICY_PROFILE)"
 
 test:
 	$(PYTHON) tools/test_host.py

@@ -1,0 +1,102 @@
+{
+  "status": "partial_measurements_in_progress",
+  "task": "natural-rest get-up identification, plus standing takeover",
+  "fixture": "Suspended, fixed body, wheels off ground; S1 down during this session",
+  "supply_static_v": 24,
+  "supply_source": "Operator reported static supply reading; instrument and precision unspecified",
+  "supply_under_load_v": null,
+  "independent_force_or_torque_instrument_available": false,
+  "accepted_inputs": {
+    "mass_kg": 21.9,
+    "wheel_effective_radius_m": 0.05570423008216337,
+    "left_radius_symmetric": true,
+    "nominal_pressure_mpa": 15,
+    "spring_compression_unit": "mm",
+    "spring_stroke_mm": 80,
+    "geometry_source": "user selected STEP",
+    "spring_curve": "real_data_collection/spring_nominal_15mpa_mm_20261117.json"
+  },
+  "assumptions": {
+    "free_pin_distance_mm": 250,
+    "spring_return_hysteresis": "unidentified",
+    "friction_efficiency": "unidentified",
+    "rotor_and_body_inertia": "provisional",
+    "supply_v": null,
+    "motor_wheel_ratio": 15.88
+  },
+  "normal_rl_firmware_modified": false,
+  "getup_training_started": false,
+  "static_result": "static_analysis.json",
+  "side_identity": "right_leg_identity.json",
+  "post_stop_result": "post_stop_endpoint_changes.json",
+  "wheel_manual_attempts": "wheel_manual_attempts.json",
+  "wheel_one_direction_resistance": "Operator reported mechanical repair; controller restarted, STOP and zero commands verified; specific mechanical fault unspecified.",
+  "spring_length_audit": "spring_length_provenance.json",
+  "stages": {
+    "T0": {
+      "status": "partial",
+      "measured": "60 s / 30000 online samples, 500 raw frames, ages and timing, zero TX/RX failures",
+      "missing": "60 s full 500 Hz raw stream and actual bus timestamp/latency"
+    },
+    "T1": {
+      "status": "needs_ground_fixture",
+      "measured": "suspended rest pose only",
+      "missing": "natural unassisted reset poses and which parts contact ground, repeatability"
+    },
+    "T2": {
+      "status": "partial",
+      "measured": "right leg DM4/DM3 passive identity, historical soft reset repeats; operator confirmed 412 mm hip-to-wheel centre distance on both sides, about 126.97 deg included knee under 210/250 mm planar model, inconsistent with present calibration; 385 raw frames over 46.08 s fixed-knee manual right-leg movement: DM4/DM3 raw slope 1.00255; current knee angle range 32.01 deg, candidate knee sign -1 range 0.267 deg assuming unchanged hip sign. No calibration applied",
+      "missing": "absolute hip direction/reference, full physical pose, applied sign/zero verification, power-cycle and approach repeatability"
+    },
+    "T3": {
+      "status": "partial_no_force_instrument",
+      "measured": "command/reported current/motion histories at 20 and 25 Nm command caps; nine new single-motor raw-current ramps, polarity/current response and mechanical coupling, final zero output verified",
+      "missing": "independent torque gain, friction/efficiency and pose-dependent load separation"
+    },
+    "T4": {
+      "status": "accepted_nominal_model",
+      "measured": "no new force measurement",
+      "missing": "installed free pin distance, hysteresis; nominal manufacturer curve retained"
+    },
+    "T5": {
+      "status": "partial",
+      "measured": "60 s suspended static noise, gravity, yaw range",
+      "missing": "known-angle dynamic truth and cold/warm repeatability"
+    },
+    "T6": {
+      "status": "partial",
+      "measured": "accepted wheel radius and symmetric left assumption; separately moved right ID3 and left ID2 confirmed; both reported-forward manual rotations give negative calibrated angles",
+      "missing": "resolve conflict with historical ground forward-push direction; loaded rolling/slip with external displacement"
+    },
+    "T7": {
+      "status": "partial",
+      "measured": "existing motion traces, fresh static feedback ages; right wheel ambiguity counter +2 during manual measurement, sticky position_lost; cached joint vector excluded, fresh raw leg feedback used offline",
+      "missing": "wheel unwrap-loss cause under motion and hardware command-response delay"
+    },
+    "T8": {
+      "status": "not_passed",
+      "measured": "bounded supported startup and suspended folding only",
+      "missing": "complete rise, support release, independent balance and load response"
+    }
+  },
+  "next_actions": [
+    "use STEP geometry and measured current-response constraints in model audit",
+    "resolve encoder direction/reference independently of force estimates",
+    "obtain independent force/load evidence or keep unknown dynamics as explicit uncertainty",
+    "perform later ground contact/get-up validation"
+  ],
+  "training_use": "Static noise/current-response evidence can constrain simulation. Unidentified physics remain labelled randomized ranges. Suspended poses must not be labelled natural ground resets or successful standing.",
+  "completion_claim": false,
+  "wheel_repair": "wheel_repair.json",
+  "isolated_wheel_identity": "isolated_wheel_identity.json",
+  "knee_distance_check": "knee_distance_check.json",
+  "passive_right_leg_analysis": "passive_right_leg_analysis.json",
+  "suspended_pose_measurements": "suspended_pose_measurements.json",
+  "pose_calibration_status": "not applied: operator confirms wheel axes 215 mm forward on both sides, but knee-behind/165 mm drop with 210/250 mm links is geometrically inconsistent under the planar model",
+  "workflow_override": {
+    "user_instruction": "Use selected STEP geometry and prioritize force-related measurements; stop repeated ruler survey",
+    "record": "real_data_collection/force_identification_20261117/session.json",
+    "manual_pose_values_applied_to_calibration": false,
+    "status": "Nine low-current probes completed and archived; STEP geometry retained, ruler survey paused"
+  }
+}

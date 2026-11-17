@@ -1,0 +1,77 @@
+{
+  "mode": "operator_places_actual_robot_in_model_standing_pose_then_balance_and_drive",
+  "active_profile": "qualified_u400",
+  "actor_checkpoint_sha256": "cb093496fe7d784f4375970e0beb5de61b57a4cced8f474956691759d0fc7c39",
+  "joint_order": [
+    "rf0_Joint",
+    "rf1_Joint",
+    "r_wheel_Joint",
+    "lf0_Joint",
+    "lf1_Joint",
+    "l_wheel_Joint"
+  ],
+  "default_joint_q_rad": [
+    3.1063109024878943,
+    -3.6606010515197696,
+    0.0,
+    -3.1063109024878943,
+    3.6606010515197696,
+    0.0
+  ],
+  "default_joint_q_deg": [
+    177.97850456803016,
+    -209.73699073323402,
+    0.0,
+    -177.97850456803016,
+    209.73699073323402,
+    0.0
+  ],
+  "mechanical_angles_under_existing_firmware_convention": {
+    "right_thigh_deg": 177.97850456803016,
+    "right_knee_included_deg": 60.26300926676598,
+    "left_thigh_deg": 177.97850456803016,
+    "left_knee_included_deg": 60.26300926676598,
+    "interpretation": "model target using existing commissioning convention; not an independently verified physical encoder calibration"
+  },
+  "nominal_bottom_clearance_m": 0.1,
+  "wheel_radius_m_in_frozen_model_contract": 0.055,
+  "accepted_field_rolling_radius_m": 0.05570423008216337,
+  "field_radius_not_silently_applied_to_frozen_model_contract": true,
+  "pose_error_tolerance_rad": 0.15,
+  "hip_error_is_wrapped": true,
+  "max_initial_body_tilt_deg": 8,
+  "max_initial_body_angular_speed_each_axis_rad_s": 0.5,
+  "max_initial_estimated_forward_speed_m_s": 0.08,
+  "minimum_odometry_confidence": 0.5,
+  "max_initial_leg_joint_speed_rad_s": 0.2,
+  "max_initial_wheel_joint_speed_rad_s": 0.5,
+  "neutral_stick_limit_counts": 30,
+  "continuous_entry_dwell_ms": 500,
+  "S1_down_must_be_seen_after_boot_loss_or_fault": true,
+  "manual_site_conditions": [
+    "both wheels contact the ground",
+    "physical anti-tip support and controlled assistance",
+    "actual joint/encoder correspondence must be correct"
+  ],
+  "no_fabricated_sensor_or_initial_state_assignment": true,
+  "no_automatic_getup": true,
+  "drive_limits": {
+    "forward_m_s": [
+      -0.15,
+      0.15
+    ],
+    "yaw_rad_s": [
+      -0.3,
+      0.3
+    ],
+    "sideways_translation": false
+  },
+  "body_clearance_and_contact_directly_sensed": false,
+  "new_15MPa_curve_retrained_or_evaluated_with_this_actor": false,
+  "physical_flags_promoted": false,
+  "hardware_accessed": false,
+  "output_master_switch": 0,
+  "max_entry_sample_gap_ms": 3,
+  "drive_requests_wait_for_full_initial_torque_ramp": true,
+  "initial_torque_ramp_ms": 200
+}

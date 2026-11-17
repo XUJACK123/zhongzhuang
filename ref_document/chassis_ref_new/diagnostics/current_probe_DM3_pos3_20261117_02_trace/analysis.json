@@ -1,0 +1,113 @@
+{
+  "kind": "single DM electrical and raw-angle response",
+  "selected_index": 1,
+  "dm_id": 3,
+  "raw_nominal_target_nm": 3.0,
+  "target_current_a": 2.3779799060697937,
+  "active_samples": 200,
+  "raw_sample_intervals_ms": [
+    10
+  ],
+  "guard_reason": 1,
+  "max_abs_command_a": 2.3779799060697937,
+  "max_abs_feedback_a": 2.4030001163482666,
+  "plateau_samples": 35,
+  "plateau_feedback_mean_a": 2.379857247216361,
+  "current_tracking_rmse_a": 0.019699038959821388,
+  "feedback_vs_command_slope": 1.0012823292628947,
+  "feedback_offset_a": -0.0030982227944482688,
+  "max_abs_raw_output_delta_deg": [
+    0.04394543711986204,
+    0.17578174847944816,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "max_abs_raw_output_speed_rad_s": [
+    0.02617993950843811,
+    0.021991150453686714,
+    0.0,
+    0.021991150453686714,
+    0.01780235953629017,
+    0.0
+  ],
+  "max_abs_delta_including_recorded_post_stop_deg": [
+    0.04394543711986204,
+    0.17578174847944816,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "max_abs_speed_including_recorded_post_stop_rad_s": [
+    0.02617993950843811,
+    0.021991150453686714,
+    0.0,
+    0.021991150453686714,
+    0.01780235953629017,
+    0.0
+  ],
+  "motion_threshold_deg": 0.3515625,
+  "motion_onsets": [
+    {
+      "index": 0,
+      "first_sustained_motion": null
+    },
+    {
+      "index": 1,
+      "first_sustained_motion": null
+    },
+    {
+      "index": 3,
+      "first_sustained_motion": null
+    },
+    {
+      "index": 4,
+      "first_sustained_motion": null
+    }
+  ],
+  "max_motor_feedback_age_ms": 2,
+  "nominal_kt_nm_a": 1.261575,
+  "measured_shaft_torque_nm": null,
+  "measured_force_n": null,
+  "independent_force_truth": false,
+  "absolute_joint_pose_used": false,
+  "interpretation": "Nm denotes nominal current conversion; lack of motion does not isolate friction, spring or gravity. Offset and lag affect current fit. Raw q is motor output-shaft angle, not anatomical knee angle.",
+  "source_trace": "D:/robomaster_material/electric_contol/zhongzhuang/ref_document/chassis_ref_new/diagnostics/current_probe_DM3_pos3_20261117_02_trace",
+  "source_trigger": "D:/robomaster_material/electric_contol/zhongzhuang/ref_document/chassis_ref_new/diagnostics/current_probe_DM3_pos3_20261117_02_trigger",
+  "raw_sha256": "5a7eec5871d9564e169a702a0649a234f1404094b54952279efb1a085e8a603e",
+  "stop_event": {
+    "valid": 1,
+    "tick": 1042906,
+    "fault": 6,
+    "reason": 1,
+    "inhibit": 0,
+    "duration_ms": 2000,
+    "q": [
+      2.4704761505126953,
+      2.1958935260772705,
+      0.17030277848243713,
+      1.8193012475967407,
+      3.6554763317108154,
+      0.04303453862667084
+    ],
+    "qd": [
+      -0.0062831854447722435,
+      0.0,
+      0.0,
+      -0.0010471976129338145,
+      0.010471976362168789,
+      0.0
+    ],
+    "canonical_torque_before_stop": [
+      0.0,
+      0.012000024318695068,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "selected_raw_nominal_nm_before_stop": 0.012000024318695068
+  }
+}

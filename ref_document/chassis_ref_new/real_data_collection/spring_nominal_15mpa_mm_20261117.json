@@ -1,0 +1,596 @@
+{
+  "kind": "offline_calculation_under_explicit_user_assumptions",
+  "nominal_pressure_mpa": 15,
+  "nominal_pressure_bar": 150,
+  "actual_charge_independently_measured": false,
+  "horizontal_axis_unit": "mm",
+  "stroke_mm": 80.0,
+  "catalogue_curve_accepted_as_installed_by_user": true,
+  "curve_source_sha256": "f06915c3b59fda713cafb9b1756294ac9a0a7a9a45a13f0a33148f22e25c6572",
+  "decisions_source_sha256": "88f027c7e50689cc5c86dac5c6057918aa92cc94a572cf83c08420e2b2963210",
+  "CAD_geometry_source_sha256": "f2a91125fb5b5c6ed6ebec767f120c634c7535c71d8a0a77ded6b2ce2f5f19c9",
+  "source_digitization_uncertainty_n_approx": 10,
+  "method": "piecewise linear interpolation of archived digitized 15 MPa curve; no extrapolation beyond 80 mm",
+  "source_points_beyond_80mm_not_used": [
+    [
+      85.0,
+      606.4
+    ]
+  ],
+  "source_digitization_noise_preserved": true,
+  "force_0mm_n": 430.0,
+  "force_80mm_n": 588.8,
+  "force_progression_80_over_0": 1.3693023255813952,
+  "compression_work_0_to_80mm_j_per_spring": 38.53,
+  "comparison_to_frozen_training_at_80mm": {
+    "training_force_n": 764.9999999999999,
+    "catalogue_minus_training_fraction": -0.2303267973856209
+  },
+  "conditional_pin_mapping": {
+    "free_pin_distance_mm": 250.0,
+    "status": "retained provisional training assumption, not proven by bare spring L=205mm",
+    "equation": "compression_mm = free_pin_distance_mm - installed_pin_distance_mm",
+    "torque_equation": "tau_flexion = force_n * d(pin_distance_m)/d(flexion_rad)",
+    "pose_rows": [
+      {
+        "knee_flexion_deg": 99.01576438058919,
+        "knee_included_deg": 80.98423561941081,
+        "pin_distance_mm": 194.94962151486237,
+        "compression_mm_if_free_pin_250mm": 55.05037848513763,
+        "within_stroke_under_provisional_free_pin": true,
+        "force_n": 505.8976089614533,
+        "geometric_lever_mm": 48.55354340723264,
+        "signed_torque_flexion_nm": -24.563121516325126
+      },
+      {
+        "knee_flexion_deg": 29.999999999999996,
+        "knee_included_deg": 150.0,
+        "pin_distance_mm": 242.19000325652203,
+        "compression_mm_if_free_pin_250mm": 7.809996743477967,
+        "within_stroke_under_provisional_free_pin": true,
+        "force_n": 427.2665011397827,
+        "geometric_lever_mm": 22.930402120399688,
+        "signed_torque_flexion_nm": -9.79739268371143
+      },
+      {
+        "knee_flexion_deg": 59.99999999999999,
+        "knee_included_deg": 120.0,
+        "pin_distance_mm": 225.73612566104214,
+        "compression_mm_if_free_pin_250mm": 24.263874338957862,
+        "within_stroke_under_provisional_free_pin": true,
+        "force_n": 441.0516439687743,
+        "geometric_lever_mm": 39.04287449468424,
+        "signed_torque_flexion_nm": -17.219923981147012
+      },
+      {
+        "knee_flexion_deg": 90.0,
+        "knee_included_deg": 90.0,
+        "pin_distance_mm": 202.55671608513373,
+        "compression_mm_if_free_pin_250mm": 47.44328391486627,
+        "within_stroke_under_provisional_free_pin": true,
+        "force_n": 485.0917171999358,
+        "geometric_lever_mm": 47.94568395793606,
+        "signed_torque_flexion_nm": -23.25805416348062
+      },
+      {
+        "knee_flexion_deg": 119.99999999999999,
+        "knee_included_deg": 60.000000000000014,
+        "pin_distance_mm": 177.57634370182137,
+        "compression_mm_if_free_pin_250mm": 72.42365629817863,
+        "within_stroke_under_provisional_free_pin": true,
+        "force_n": 562.1312701695888,
+        "geometric_lever_mm": 45.095003007139205,
+        "signed_torque_flexion_nm": -25.349311318704586
+      },
+      {
+        "knee_flexion_deg": 150.0,
+        "knee_included_deg": 30.0,
+        "pin_distance_mm": 158.15692120401383,
+        "compression_mm_if_free_pin_250mm": 91.84307879598617,
+        "within_stroke_under_provisional_free_pin": false,
+        "force_n": null,
+        "geometric_lever_mm": 26.2916481751588,
+        "signed_torque_flexion_nm": null
+      }
+    ]
+  },
+  "rows": [
+    {
+      "compression_mm": 0,
+      "force_n": 430.0,
+      "pin_distance_mm_if_free_pin_250mm": 250.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 450.0
+    },
+    {
+      "compression_mm": 1,
+      "force_n": 429.65,
+      "pin_distance_mm_if_free_pin_250mm": 249.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 452.4241754296905
+    },
+    {
+      "compression_mm": 2,
+      "force_n": 429.3,
+      "pin_distance_mm_if_free_pin_250mm": 248.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 454.8724006275402
+    },
+    {
+      "compression_mm": 3,
+      "force_n": 428.95,
+      "pin_distance_mm_if_free_pin_250mm": 247.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 457.3450242099003
+    },
+    {
+      "compression_mm": 4,
+      "force_n": 428.6,
+      "pin_distance_mm_if_free_pin_250mm": 246.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 459.84240145590337
+    },
+    {
+      "compression_mm": 5,
+      "force_n": 428.25,
+      "pin_distance_mm_if_free_pin_250mm": 245.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 462.36489446584176
+    },
+    {
+      "compression_mm": 6,
+      "force_n": 427.9,
+      "pin_distance_mm_if_free_pin_250mm": 244.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 464.91287232405705
+    },
+    {
+      "compression_mm": 7,
+      "force_n": 427.55,
+      "pin_distance_mm_if_free_pin_250mm": 243.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 467.4867112664871
+    },
+    {
+      "compression_mm": 8,
+      "force_n": 427.2,
+      "pin_distance_mm_if_free_pin_250mm": 242.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 470.086794853029
+    },
+    {
+      "compression_mm": 9,
+      "force_n": 426.85,
+      "pin_distance_mm_if_free_pin_250mm": 241.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 472.7135141448768
+    },
+    {
+      "compression_mm": 10,
+      "force_n": 426.5,
+      "pin_distance_mm_if_free_pin_250mm": 240.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 475.3672678870049
+    },
+    {
+      "compression_mm": 11,
+      "force_n": 427.29,
+      "pin_distance_mm_if_free_pin_250mm": 239.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 478.04846269596635
+    },
+    {
+      "compression_mm": 12,
+      "force_n": 428.08,
+      "pin_distance_mm_if_free_pin_250mm": 238.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 480.7575132531932
+    },
+    {
+      "compression_mm": 13,
+      "force_n": 428.87,
+      "pin_distance_mm_if_free_pin_250mm": 237.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 483.49484250397967
+    },
+    {
+      "compression_mm": 14,
+      "force_n": 429.65999999999997,
+      "pin_distance_mm_if_free_pin_250mm": 236.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 486.2608818623503
+    },
+    {
+      "compression_mm": 15,
+      "force_n": 430.45,
+      "pin_distance_mm_if_free_pin_250mm": 235.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 489.0560714220095
+    },
+    {
+      "compression_mm": 16,
+      "force_n": 431.24,
+      "pin_distance_mm_if_free_pin_250mm": 234.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 491.88086017358944
+    },
+    {
+      "compression_mm": 17,
+      "force_n": 432.03,
+      "pin_distance_mm_if_free_pin_250mm": 233.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 494.7357062284096
+    },
+    {
+      "compression_mm": 18,
+      "force_n": 432.82,
+      "pin_distance_mm_if_free_pin_250mm": 232.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 497.621077048981
+    },
+    {
+      "compression_mm": 19,
+      "force_n": 433.60999999999996,
+      "pin_distance_mm_if_free_pin_250mm": 231.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 500.5374496864891
+    },
+    {
+      "compression_mm": 20,
+      "force_n": 434.4,
+      "pin_distance_mm_if_free_pin_250mm": 230.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 503.4853110255028
+    },
+    {
+      "compression_mm": 21,
+      "force_n": 435.96,
+      "pin_distance_mm_if_free_pin_250mm": 229.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 506.4651580361669
+    },
+    {
+      "compression_mm": 22,
+      "force_n": 437.52,
+      "pin_distance_mm_if_free_pin_250mm": 228.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 509.477498034144
+    },
+    {
+      "compression_mm": 23,
+      "force_n": 439.08,
+      "pin_distance_mm_if_free_pin_250mm": 227.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 512.5228489485844
+    },
+    {
+      "compression_mm": 24,
+      "force_n": 440.64,
+      "pin_distance_mm_if_free_pin_250mm": 226.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 515.6017395984134
+    },
+    {
+      "compression_mm": 25,
+      "force_n": 442.2,
+      "pin_distance_mm_if_free_pin_250mm": 225.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 518.7147099772359
+    },
+    {
+      "compression_mm": 26,
+      "force_n": 443.76,
+      "pin_distance_mm_if_free_pin_250mm": 224.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 521.8623115471759
+    },
+    {
+      "compression_mm": 27,
+      "force_n": 445.32,
+      "pin_distance_mm_if_free_pin_250mm": 223.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 525.0451075419712
+    },
+    {
+      "compression_mm": 28,
+      "force_n": 446.88,
+      "pin_distance_mm_if_free_pin_250mm": 222.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 528.2636732796726
+    },
+    {
+      "compression_mm": 29,
+      "force_n": 448.44,
+      "pin_distance_mm_if_free_pin_250mm": 221.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 531.5185964852926
+    },
+    {
+      "compression_mm": 30,
+      "force_n": 450.0,
+      "pin_distance_mm_if_free_pin_250mm": 220.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 534.8104776237827
+    },
+    {
+      "compression_mm": 31,
+      "force_n": 451.76,
+      "pin_distance_mm_if_free_pin_250mm": 219.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 538.1399302437187
+    },
+    {
+      "compression_mm": 32,
+      "force_n": 453.52,
+      "pin_distance_mm_if_free_pin_250mm": 218.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 541.5075813320985
+    },
+    {
+      "compression_mm": 33,
+      "force_n": 455.28000000000003,
+      "pin_distance_mm_if_free_pin_250mm": 217.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 544.9140716806726
+    },
+    {
+      "compression_mm": 34,
+      "force_n": 457.04,
+      "pin_distance_mm_if_free_pin_250mm": 216.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 548.3600562642421
+    },
+    {
+      "compression_mm": 35,
+      "force_n": 458.8,
+      "pin_distance_mm_if_free_pin_250mm": 215.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 551.8462046313844
+    },
+    {
+      "compression_mm": 36,
+      "force_n": 460.56,
+      "pin_distance_mm_if_free_pin_250mm": 214.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 555.3732013080805
+    },
+    {
+      "compression_mm": 37,
+      "force_n": 462.32,
+      "pin_distance_mm_if_free_pin_250mm": 213.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 558.9417462147409
+    },
+    {
+      "compression_mm": 38,
+      "force_n": 464.08000000000004,
+      "pin_distance_mm_if_free_pin_250mm": 212.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 562.5525550971521
+    },
+    {
+      "compression_mm": 39,
+      "force_n": 465.84000000000003,
+      "pin_distance_mm_if_free_pin_250mm": 211.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 566.2063599718847
+    },
+    {
+      "compression_mm": 40,
+      "force_n": 467.6,
+      "pin_distance_mm_if_free_pin_250mm": 210.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 569.9039095867282
+    },
+    {
+      "compression_mm": 41,
+      "force_n": 469.95000000000005,
+      "pin_distance_mm_if_free_pin_250mm": 209.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 573.6459698967476
+    },
+    {
+      "compression_mm": 42,
+      "force_n": 472.3,
+      "pin_distance_mm_if_free_pin_250mm": 208.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 577.4333245565775
+    },
+    {
+      "compression_mm": 43,
+      "force_n": 474.65000000000003,
+      "pin_distance_mm_if_free_pin_250mm": 207.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 581.2667754296042
+    },
+    {
+      "compression_mm": 44,
+      "force_n": 477.0,
+      "pin_distance_mm_if_free_pin_250mm": 206.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 585.1471431147073
+    },
+    {
+      "compression_mm": 45,
+      "force_n": 479.35,
+      "pin_distance_mm_if_free_pin_250mm": 205.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 589.0752674912733
+    },
+    {
+      "compression_mm": 46,
+      "force_n": 481.70000000000005,
+      "pin_distance_mm_if_free_pin_250mm": 204.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 593.052008283217
+    },
+    {
+      "compression_mm": 47,
+      "force_n": 484.05,
+      "pin_distance_mm_if_free_pin_250mm": 203.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 597.078245642788
+    },
+    {
+      "compression_mm": 48,
+      "force_n": 486.40000000000003,
+      "pin_distance_mm_if_free_pin_250mm": 202.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 601.1548807549708
+    },
+    {
+      "compression_mm": 49,
+      "force_n": 488.75,
+      "pin_distance_mm_if_free_pin_250mm": 201.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 605.2828364633281
+    },
+    {
+      "compression_mm": 50,
+      "force_n": 491.1,
+      "pin_distance_mm_if_free_pin_250mm": 200.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 609.4630579181758
+    },
+    {
+      "compression_mm": 51,
+      "force_n": 494.03000000000003,
+      "pin_distance_mm_if_free_pin_250mm": 199.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 613.6965132480186
+    },
+    {
+      "compression_mm": 52,
+      "force_n": 496.96000000000004,
+      "pin_distance_mm_if_free_pin_250mm": 198.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 617.9841942552259
+    },
+    {
+      "compression_mm": 53,
+      "force_n": 499.89,
+      "pin_distance_mm_if_free_pin_250mm": 197.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 622.3271171369631
+    },
+    {
+      "compression_mm": 54,
+      "force_n": 502.82,
+      "pin_distance_mm_if_free_pin_250mm": 196.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 626.7263232324565
+    },
+    {
+      "compression_mm": 55,
+      "force_n": 505.75,
+      "pin_distance_mm_if_free_pin_250mm": 195.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 631.1828797977101
+    },
+    {
+      "compression_mm": 56,
+      "force_n": 508.68,
+      "pin_distance_mm_if_free_pin_250mm": 194.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 635.6978808088566
+    },
+    {
+      "compression_mm": 57,
+      "force_n": 511.61,
+      "pin_distance_mm_if_free_pin_250mm": 193.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 640.2724477953745
+    },
+    {
+      "compression_mm": 58,
+      "force_n": 514.54,
+      "pin_distance_mm_if_free_pin_250mm": 192.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 644.9077307044736
+    },
+    {
+      "compression_mm": 59,
+      "force_n": 517.47,
+      "pin_distance_mm_if_free_pin_250mm": 191.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 649.6049087980061
+    },
+    {
+      "compression_mm": 60,
+      "force_n": 520.4,
+      "pin_distance_mm_if_free_pin_250mm": 190.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 654.3651915833374
+    },
+    {
+      "compression_mm": 61,
+      "force_n": 523.72,
+      "pin_distance_mm_if_free_pin_250mm": 189.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 659.1898197796763
+    },
+    {
+      "compression_mm": 62,
+      "force_n": 527.04,
+      "pin_distance_mm_if_free_pin_250mm": 188.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 664.0800663214438
+    },
+    {
+      "compression_mm": 63,
+      "force_n": 530.36,
+      "pin_distance_mm_if_free_pin_250mm": 187.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 669.0372374003402
+    },
+    {
+      "compression_mm": 64,
+      "force_n": 533.68,
+      "pin_distance_mm_if_free_pin_250mm": 186.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 674.0626735478528
+    },
+    {
+      "compression_mm": 65,
+      "force_n": 537.0,
+      "pin_distance_mm_if_free_pin_250mm": 185.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 679.1577507600398
+    },
+    {
+      "compression_mm": 66,
+      "force_n": 540.32,
+      "pin_distance_mm_if_free_pin_250mm": 184.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 684.3238816665195
+    },
+    {
+      "compression_mm": 67,
+      "force_n": 543.64,
+      "pin_distance_mm_if_free_pin_250mm": 183.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 689.5625167456947
+    },
+    {
+      "compression_mm": 68,
+      "force_n": 546.96,
+      "pin_distance_mm_if_free_pin_250mm": 182.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 694.8751455883499
+    },
+    {
+      "compression_mm": 69,
+      "force_n": 550.28,
+      "pin_distance_mm_if_free_pin_250mm": 181.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 700.2632982118719
+    },
+    {
+      "compression_mm": 70,
+      "force_n": 553.6,
+      "pin_distance_mm_if_free_pin_250mm": 180.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 705.7285464274648
+    },
+    {
+      "compression_mm": 71,
+      "force_n": 557.12,
+      "pin_distance_mm_if_free_pin_250mm": 179.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 711.2725052628558
+    },
+    {
+      "compression_mm": 72,
+      "force_n": 560.64,
+      "pin_distance_mm_if_free_pin_250mm": 178.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 716.8968344431262
+    },
+    {
+      "compression_mm": 73,
+      "force_n": 564.16,
+      "pin_distance_mm_if_free_pin_250mm": 177.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 722.603239932442
+    },
+    {
+      "compression_mm": 74,
+      "force_n": 567.68,
+      "pin_distance_mm_if_free_pin_250mm": 176.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 728.3934755396142
+    },
+    {
+      "compression_mm": 75,
+      "force_n": 571.2,
+      "pin_distance_mm_if_free_pin_250mm": 175.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 734.2693445905749
+    },
+    {
+      "compression_mm": 76,
+      "force_n": 574.72,
+      "pin_distance_mm_if_free_pin_250mm": 174.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 740.2327016710344
+    },
+    {
+      "compression_mm": 77,
+      "force_n": 578.24,
+      "pin_distance_mm_if_free_pin_250mm": 173.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 746.2854544427577
+    },
+    {
+      "compression_mm": 78,
+      "force_n": 581.76,
+      "pin_distance_mm_if_free_pin_250mm": 172.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 752.4295655371
+    },
+    {
+      "compression_mm": 79,
+      "force_n": 585.28,
+      "pin_distance_mm_if_free_pin_250mm": 171.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 758.6670545296441
+    },
+    {
+      "compression_mm": 80,
+      "force_n": 588.8,
+      "pin_distance_mm_if_free_pin_250mm": 170.0,
+      "old_frozen_training_elastic_force_n_at_same_compression": 764.9999999999999
+    }
+  ],
+  "return_hysteresis_and_damping_identified": false,
+  "frozen_model_weights_or_results_changed": false,
+  "firmware_output_or_calibration_changed": false,
+  "hardware_accessed": false,
+  "checks": {
+    "catalogue_knots": "pass",
+    "stroke_bounds": "pass",
+    "CAD_assembly_distance": "pass",
+    "analytic_lever_vs_finite_difference": "pass",
+    "work_integral": "pass"
+  }
+}

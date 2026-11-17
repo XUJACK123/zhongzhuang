@@ -26,7 +26,7 @@ def main():
     if not 0x20000000<stack<=0x20020000 or not entry&1 or not 0x08000000<entry<0x08000000+len(payload):
         raise SystemExit('Invalid firmware stack/reset vector')
     config_text=(ROOT/'user/robot_config.h').read_text()
-    flags={k:int(v) for k,v in re.findall(r'#define ROBOT_(ENABLE_OUTPUT|MOTOR_CALIBRATED|IMU_FRAME_VERIFIED|POLICY_CONTRACT_VERIFIED|ODOMETRY_VERIFIED) ([01])',config_text)}
+    flags={k:int(v) for k,v in re.findall(r'#define ROBOT_(ENABLE_OUTPUT|STAND_ENTRY_ONLY|MOTOR_CALIBRATED|IMU_FRAME_VERIFIED|POLICY_CONTRACT_VERIFIED|ODOMETRY_VERIFIED) ([01])',config_text)}
     command=[str(exe),'-s',str(scripts),'-f',str(config),'-c','gdb_port disabled',
              '-c','tcl_port disabled','-c','telnet_port disabled',
              '-c',f'program {{{elf.as_posix()}}} verify reset','-c','shutdown']

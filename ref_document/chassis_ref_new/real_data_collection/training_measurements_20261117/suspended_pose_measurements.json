@@ -1,0 +1,42 @@
+{
+  "status": "inconsistent pose inputs; not used to overwrite calibration",
+  "operator_inputs": {
+    "hip_to_wheel_center_mm": {
+      "right": 412,
+      "left": 412,
+      "endpoints_confirmed": true
+    },
+    "hip_to_knee_center_mm": 210,
+    "knee_to_wheel_center_mm": 250,
+    "link_lengths_rechecked_by_operator": true,
+    "knee_below_hip_mm": {
+      "right": 165,
+      "left": 165
+    },
+    "knee_fore_aft": "behind hip on both sides",
+    "initial_wheel_alignment_statement": "wheel vertically below hip",
+    "later_wheel_horizontal_offset_mm": 215,
+    "later_offset_direction_and_side": "both wheel axes 215 mm forward of hip vertical line; explicitly confirmed by operator",
+    "later_wheel_forward_offset_mm": {
+      "right": 215,
+      "left": 215
+    }
+  },
+  "same_exact_pose_throughout_not_independently_verified": true,
+  "independent_measurement_uncertainty_mm": null,
+  "checks": {
+    "expected_knee_drop_if_412mm_wheel_vertical_mm": 183.66990291262135,
+    "implied_shin_length_if_210mm_thigh_165mm_knee_drop_and_412mm_wheel_vertical_mm": 279.07705029256704,
+    "knee_included_from_three_link_distances_deg": 126.96818225400143,
+    "planar_knee_behind_hip_mm_if_thigh_210_and_drop_165": 129.9038105676658,
+    "planar_horizontal_knee_to_wheel_mm_if_wheel_forward215": 344.9038105676658,
+    "planar_horizontal_separation_exceeds_250mm_shin": true
+  },
+  "paired_raw_snapshots": [
+    "diagnostics/training_suspended_pose_20261117_01_after",
+    "diagnostics/training_suspended_pose_20261117_02_after"
+  ],
+  "cached_joint_values_excluded_due_to_right_wheel_position_lost": true,
+  "firmware_calibration_changed": false,
+  "next_required_evidence": "One unchanged side view with hip, physical knee and wheel axis centres identified and robot-forward direction marked; reconcile measurement points before calibration."
+}

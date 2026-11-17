@@ -8,10 +8,30 @@
 #include "imu_filter.h"
 #include "startup_control.h"
 #include "telemetry.h"
+#include "stand_entry.h"
 #include <math.h>
 #include <string.h>
 #define CHECK(x) do { if (!(x)) return __LINE__; } while (0)
 int test_logic(void) {
+    /* Entry requires one continuous window, including across tick wrap. */
+    StandEntry entry={0};
+    stand_entry_step(&entry,100,false,true);
+    for (uint32_t t=101;t<100+ROBOT_STAND_ENTRY_DWELL_MS;++t)
+        stand_entry_step(&entry,t,false,true);
+    CHECK(!entry.ready);
+    stand_entry_step(&entry,100+ROBOT_STAND_ENTRY_DWELL_MS,false,true);
+    CHECK(entry.ready);
+    stand_entry_step(&entry,700,false,false);
+    CHECK(!entry.ready && !entry.tracking && !entry.stable_ms);
+    uint32_t start=UINT32_MAX-100;
+    stand_entry_step(&entry,start,false,true);
+    for (uint32_t t=1;t<=ROBOT_STAND_ENTRY_DWELL_MS;++t)
+        stand_entry_step(&entry,start+t,false,true);
+    CHECK(entry.ready);
+    stand_entry_step(&entry,900,true,false);
+    CHECK(entry.ready); /* driving is governed by the active control checks */
+    stand_entry_step(&entry,1000,false,true);
+    CHECK(!entry.ready && entry.stable_ms==0); /* unseen elapsed time is not stability */
     ControlState s={0};
     /* Only the lowest S1 position is zero current; anything else runs after one DOWN. */
     control_state_step(&s,0,true,1,3,true,true,true); CHECK(s.mode==CONTROL_STOP);
@@ -46,7 +66,15 @@ int test_logic(void) {
     CHECK(!remote_decode(&rc,frame,17,102)); CHECK(!remote_fresh(&rc,102));
     frame[5]=8; CHECK(!remote_decode(&rc,frame,18,103));
     rc.channel[1]=-660; rc.channel[0]=660;
-    float request[3]; remote_request(&rc,request); CHECK(request[0]==0 && fabsf(request[1]+0.30f)<1e-6f);
+    float request[3]; remote_request(&rc,request);
+    CHECK(fabsf(request[1]+ROBOT_REMOTE_MAX_YAW)<1e-6f);
+#if RL_PROFILE_ALLOW_REVERSE
+    CHECK(fabsf(request[0]+ROBOT_REMOTE_MAX_FORWARD)<1e-6f);
+#else
+    CHECK(request[0]==0);
+#endif
+    rc.channel[1]=660; remote_request(&rc,request);
+    CHECK(fabsf(request[0]-ROBOT_REMOTE_MAX_FORWARD)<1e-6f);
 
     /* Shared physical bus: DM3 must resolve to right KNEE, DJI3 to right WHEEL. */
     static const float cfg_signs[6]=ROBOT_ENCODER_SIGNS;
@@ -102,16 +130,16 @@ int test_logic(void) {
     float stationary_speed[6]={0,0,3,0,0,3},identity[4]={1,0,0,0},omega[3]={0};
     RlMeasurement rolling={0};
     CHECK(estimator_update(&estimator,&rolling,identity,arm,stationary_speed,omega,5,0.005f));
-    CHECK(fabsf(rolling.velocity[0]-0.165f)<1e-5f && fabsf(rolling.velocity[1])<1e-5f);
-    CHECK(fabsf(rolling.xy[0]-0.000825f)<1e-6f);
+    CHECK(fabsf(rolling.velocity[0]-3*ROBOT_WHEEL_RADIUS_M)<1e-5f && fabsf(rolling.velocity[1])<1e-5f);
+    CHECK(fabsf(rolling.xy[0]-3*ROBOT_WHEEL_RADIUS_M*0.005f)<1e-6f);
     CHECK(estimator_update(&estimator,&rolling,identity,arm,stationary_speed,omega,10,0.005f));
     CHECK(rolling.qd[0]==0); /* actual position differences override feedback speed */
     arm[1]=arm[0]; CHECK(!rl_motor_to_joint(arm,ms,qback,vback));
 
     RlMeasurement m={0}; memcpy(m.q,rl_default_q,sizeof(m.q)); m.gravity[2]=-1;
     RlController c; rl_reset(&c,&m);
-    float cmd[3]={0.3f,2.5f,0.1f}; CHECK(rl_policy_step(&c,&m,cmd,0.01f));
-    CHECK(fabsf(c.command[0]-0.015f)<1e-6f && c.obs[8]==0.5f);
+    float cmd[3]={0.3f,2.5f,ROBOT_HEIGHT_COMMAND_M}; CHECK(rl_policy_step(&c,&m,cmd,0.01f));
+    CHECK(fabsf(c.command[0]-0.015f)<1e-6f && fabsf(c.obs[8]-5*ROBOT_HEIGHT_COMMAND_M)<1e-6f);
     CHECK(c.obs[28]==0); CHECK(rl_torque_step(&c,&m));
     CHECK(fabsf(c.motor_torque[0])<=20 && fabsf(c.motor_torque[2])<=2);
     c.target_q[1]=NAN; CHECK(!rl_torque_step(&c,&m));

@@ -1,0 +1,272 @@
+{
+  "schema": "firmware_realdata_model_integration_20261117_v1",
+  "completed_at": "2026-11-17T14:21:36.336997+08:00",
+  "active_profile": "realdata_full",
+  "source_training_checkpoint_sha256": "8c85f761099d1f2b3c6b521046a53cf05b2cb6fb857c6a02f73dcec12b5f4dac",
+  "source_getup_update": 20,
+  "source_balance_sha256": "19431282eb94304c8508903af97fc5c4f9f8ce6114750a78b7dbfea9732db3ec",
+  "active_actor_sha256": "7b3e399df8ea4dd39886fa786551334eefeaae1c054d30ebd0fe6719fa8ae6a2",
+  "active_getup_actor_sha256": "d254d3414d09afe30218031b9893f7765d8a09d7752b8b338d282c9c11031991",
+  "parameters": {
+    "wheel_radius_m": 0.05570423008216337,
+    "height_command_m": 0.1750239065885657,
+    "forward_cap_m_s": 0.0,
+    "yaw_cap_rad_s": 0.0,
+    "model_version": 2026111720
+  },
+  "commissioning_flags": {
+    "ENABLE_OUTPUT": 0,
+    "MOTOR_CALIBRATED": 1,
+    "IMU_FRAME_VERIFIED": 1,
+    "POLICY_CONTRACT_VERIFIED": 0,
+    "ODOMETRY_VERIFIED": 0
+  },
+  "original_calibration": {
+    "ENCODER_SIGNS": "unchanged",
+    "ENCODER_REFERENCE_RAD": "unchanged",
+    "ARM_REFERENCE_RAD": "unchanged",
+    "IMU_ROTATION": "unchanged"
+  },
+  "getup_weights_linked_in_elf": true,
+  "getup_auto_registered": false,
+  "initialization_checks_balance_and_getup": true,
+  "profiles_validation": {
+    "profiles": [
+      {
+        "profile": "realdata_near",
+        "host": "pass",
+        "arm": "pass",
+        "weight_symbols_in_flash": 16,
+        "getup_present": true,
+        "entry_speed_m_s": 0.035,
+        "blend_speed_m_s": 0.035,
+        "runtime_parameters": {
+          "wheel_radius_m": 0.05570423008216337,
+          "height_command_m": 0.1750239065885657,
+          "forward_cap_m_s": 0.0,
+          "yaw_cap_rad_s": 0.0,
+          "model_version": 2026111725
+        }
+      },
+      {
+        "profile": "qualified_u400",
+        "host": "pass",
+        "arm": "pass",
+        "weight_symbols_in_flash": 8,
+        "getup_present": false,
+        "entry_speed_m_s": 0.08,
+        "blend_speed_m_s": 0.08,
+        "runtime_parameters": {
+          "wheel_radius_m": 0.055,
+          "height_command_m": 0.1,
+          "forward_cap_m_s": 0.15,
+          "yaw_cap_rad_s": 0.3,
+          "model_version": 400
+        }
+      },
+      {
+        "profile": "legacy_u100",
+        "host": "pass",
+        "arm": "pass",
+        "weight_symbols_in_flash": 8,
+        "getup_present": false,
+        "entry_speed_m_s": 0.08,
+        "blend_speed_m_s": 0.08,
+        "runtime_parameters": {
+          "wheel_radius_m": 0.055,
+          "height_command_m": 0.1,
+          "forward_cap_m_s": 0.15,
+          "yaw_cap_rad_s": 0.3,
+          "model_version": 100
+        }
+      },
+      {
+        "profile": "realdata_full",
+        "host": "pass",
+        "arm": "pass",
+        "weight_symbols_in_flash": 16,
+        "getup_present": true,
+        "entry_speed_m_s": 0.035,
+        "blend_speed_m_s": 0.08,
+        "runtime_parameters": {
+          "wheel_radius_m": 0.05570423008216337,
+          "height_command_m": 0.1750239065885657,
+          "forward_cap_m_s": 0.0,
+          "yaw_cap_rad_s": 0.0,
+          "model_version": 2026111720
+        }
+      }
+    ],
+    "active_profile": "realdata_full",
+    "hardware_accessed": false
+  },
+  "final_default_host_validation": {
+    "status": "pass",
+    "weight_float32_words_bit_exact": 14630,
+    "profile": "realdata_full",
+    "getup_weight_float32_words_bit_exact": 14630,
+    "getup_reference_vectors": 1024,
+    "getup_max_abs_error": 6.241253542782488e-05,
+    "actor_vectors": 273,
+    "actor_max_absolute_error": 0.00013975224646856077,
+    "observation_vectors": 100,
+    "observation_max_absolute_error": 6.476249048148475e-08,
+    "protocol_and_control_assertions": "passed",
+    "physical_pose_conversion": "passed",
+    "torch_forward_executed": false,
+    "pending_nonzero_tx_age": "4ms expiry, zero preservation, buffer reuse, tick wrap passed",
+    "fake_hal_control_loop": [
+      "default_fake passed",
+      "enabled_fake passed"
+    ],
+    "algorithm_improvements": "prediction_unwrap, odometry_quality, imu_weight, startup, reference, telemetry passed",
+    "arm_runtime_tested": false,
+    "hardware_tested": false,
+    "checkpoint_sha256": "7b3e399df8ea4dd39886fa786551334eefeaae1c054d30ebd0fe6719fa8ae6a2"
+  },
+  "final_default_arm_validation": {
+    "status": "pass",
+    "forced_rebuild": true,
+    "production_commissioning_flags": {
+      "ENABLE_OUTPUT": 0,
+      "MOTOR_CALIBRATED": 1,
+      "IMU_FRAME_VERIFIED": 1,
+      "POLICY_CONTRACT_VERIFIED": 0,
+      "ODOMETRY_VERIFIED": 0
+    },
+    "arm_toolchain": "arm-none-eabi-gcc (Arm GNU Toolchain 14.3.Rel1 (Build arm-14.174)) 14.3.1 20250623",
+    "size": "text\t   data\t    bss\t    dec\t    hex\tfilename\n 164532\t    256\t  37160\t 201948\t  314dc\tD:\\robomaster_material\\electric_contol\\zhongzhuang\\ref_document\\chassis_ref_new\\build\\rl\\wheel_leg_rl.elf",
+    "weights_in_flash": {
+      "rl_b0": {
+        "address": "0x8015bcc",
+        "bytes": 512,
+        "symbol_type": "R"
+      },
+      "rl_b1": {
+        "address": "0x800dacc",
+        "bytes": 256,
+        "symbol_type": "R"
+      },
+      "rl_b2": {
+        "address": "0x800ba4c",
+        "bytes": 128,
+        "symbol_type": "R"
+      },
+      "rl_b3": {
+        "address": "0x800b734",
+        "bytes": 24,
+        "symbol_type": "R"
+      },
+      "rl_w0": {
+        "address": "0x8015dcc",
+        "bytes": 15872,
+        "symbol_type": "R"
+      },
+      "rl_w1": {
+        "address": "0x800dbcc",
+        "bytes": 32768,
+        "symbol_type": "R"
+      },
+      "rl_w2": {
+        "address": "0x800bacc",
+        "bytes": 8192,
+        "symbol_type": "R"
+      },
+      "rl_w3": {
+        "address": "0x800b74c",
+        "bytes": 768,
+        "symbol_type": "R"
+      },
+      "rlg_b0": {
+        "address": "0x80240f8",
+        "bytes": 512,
+        "symbol_type": "R"
+      },
+      "rlg_b1": {
+        "address": "0x801bff8",
+        "bytes": 256,
+        "symbol_type": "R"
+      },
+      "rlg_b2": {
+        "address": "0x8019f78",
+        "bytes": 128,
+        "symbol_type": "R"
+      },
+      "rlg_b3": {
+        "address": "0x8019c60",
+        "bytes": 24,
+        "symbol_type": "R"
+      },
+      "rlg_w0": {
+        "address": "0x80242f8",
+        "bytes": 15872,
+        "symbol_type": "R"
+      },
+      "rlg_w1": {
+        "address": "0x801c0f8",
+        "bytes": 32768,
+        "symbol_type": "R"
+      },
+      "rlg_w2": {
+        "address": "0x8019ff8",
+        "bytes": 8192,
+        "symbol_type": "R"
+      },
+      "rlg_w3": {
+        "address": "0x8019c78",
+        "bytes": 768,
+        "symbol_type": "R"
+      }
+    },
+    "max_single_user_function_stack_bytes": 904,
+    "warnings": [],
+    "hardware_accessed": false,
+    "board_timing_measured": false,
+    "telemetry_ring_bytes": 20376,
+    "model_profile": "realdata_full",
+    "actors_in_flash": 2
+  },
+  "elf_sha256": "89b8242c1e1d74132df475b6d3751b677262d1d89e0daffbc63fd15611b728d4",
+  "bin_sha256": "a19467cb24fd423466cd2a1f6f4949c202da680ac06b3192354fc5c239432226",
+  "backup": "archive\\before_model_integration_20261117_130725.zip",
+  "bundle_paths": [
+    "model_bundles/realdata_full",
+    "model_bundles/realdata_near",
+    "model_bundles/qualified_u400"
+  ],
+  "source_training_overall_acceptance_passed": false,
+  "physical_hardware_accessed": false,
+  "flashed": false,
+  "new_training_started": false,
+  "new_measurements_collected": false,
+  "readiness_report": "docs/validation/model_readiness_20261117.json",
+  "startup_contact_support_observability_complete": false,
+  "artifacts": {
+    "tools\\export_policy.py": "716da67cb2d5ba06e8c1acc8ae00a41201ba18c4966abe040455ee491ce78f26",
+    "user\\algorithm\\rl.c": "9755bfeba2895b495fdde7fad28f7851e44d66ca7c2665594d9a4ade76330abf",
+    "user\\chassis.c": "001b5aacdbb8628e77857369b1bfba4b8c442412a9c0870d89337be417ee81f6",
+    "user\\robot_config.h": "e15e65416611d25f0f06c3153e29177905a12299bc62945ca5c7b690c39cea35",
+    "user\\algorithm\\model\\manifest.json": "de2b2b2ce3bee8a9227b52555e577f7419784a1591bffa589f0a65ede159a03c",
+    "Makefile": "46263f913438edefa4c386486470923de2d61298d5469f0f26bcd92b5808920b",
+    "tests\\test_chassis.c": "a086f11e1ced0047314a0642f73056b581672e36da6afb8f2fddcf905f4f579f"
+  },
+  "profile_handoff_speed_limits_m_s": {
+    "realdata_near": {
+      "entry": 0.035,
+      "blend": 0.035
+    },
+    "qualified_u400": {
+      "entry": 0.08,
+      "blend": 0.08
+    },
+    "legacy_u100": {
+      "entry": 0.08,
+      "blend": 0.08
+    },
+    "realdata_full": {
+      "entry": 0.035,
+      "blend": 0.08
+    }
+  },
+  "frozen_manifest_matches": true
+}

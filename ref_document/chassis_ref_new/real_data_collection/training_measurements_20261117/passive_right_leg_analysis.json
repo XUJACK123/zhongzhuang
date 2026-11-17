@@ -1,0 +1,5857 @@
+{
+  "kind": "zero-command manual right-leg movement",
+  "source": "diagnostics/training_passive_right_leg_20261117_01_trace",
+  "frames": 385,
+  "span_ms": 46080,
+  "raw_interval_ms": [
+    120
+  ],
+  "operator_action": "Raise whole robot-own right leg, hold about 2 s, return; keep knee angle fixed; left leg unchanged.",
+  "cached_joint_measurements_used": false,
+  "raw_leg_frames_max_age_ms": 2,
+  "counter_unwrap": "nearest raw-count delta at 120 ms during requested slow small manual motion; no claim of high-speed unwrap validation",
+  "raw_count_ranges": {
+    "0": {
+      "min": 2299,
+      "max": 2968,
+      "peak_to_peak": 669
+    },
+    "1": {
+      "min": 1941,
+      "max": 2611,
+      "peak_to_peak": 670
+    },
+    "3": {
+      "min": 2174,
+      "max": 2174,
+      "peak_to_peak": 0
+    },
+    "4": {
+      "min": 4565,
+      "max": 4565,
+      "peak_to_peak": 0
+    }
+  },
+  "knee_vs_hip_raw_slope": 1.0025544192610374,
+  "knee_vs_hip_raw_correlation": 0.999997052981204,
+  "angle_ranges": {
+    "right_hip_deg": {
+      "min": 207.68947506813947,
+      "max": 237.0888891306395,
+      "peak_to_peak": 29.39941406250003
+    },
+    "right_knee_current_deg": {
+      "min": 23.337939750123407,
+      "max": 55.34461741898045,
+      "peak_to_peak": 32.00667766885704
+    },
+    "right_knee_minus1_hypothesis_deg": {
+      "min": 97.90801218116067,
+      "max": 98.17510950131603,
+      "peak_to_peak": 0.2670973201553579
+    },
+    "left_knee_current_deg": {
+      "min": 98.67151831299543,
+      "max": 98.67151831299543,
+      "peak_to_peak": 0.0
+    }
+  },
+  "recorded_inhibit_values": [
+    36
+  ],
+  "nominal_link_lengths_mm": [
+    210,
+    250
+  ],
+  "operator_confirmed_hip_to_wheel_mm": [
+    412,
+    412
+  ],
+  "ruler_derived_knee_deg": 126.96818225400143,
+  "external_angle_uncertainty_deg": null,
+  "limitations": [
+    "manual fixed-knee assertion and ruler measurements are operator evidence, no synchronized external angle stream",
+    "common raw rotation constrains the two right encoder signs to agree under fixed knee; -1 knee hypothesis assumes existing -1 hip sign. This trace alone does not uniquely determine absolute hip sign",
+    "uses accepted planar 210/250 mm link lengths; lateral offsets and ruler error not identified",
+    "minus1 is an offline sign hypothesis; absolute hip reference and torque direction not recalibrated",
+    "raw gyro/static-statistics fields from this moving interval are not a stationary noise dataset"
+  ],
+  "firmware_or_calibration_modified": false,
+  "samples": [
+    {
+      "tick": 650452,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 650572,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 650692,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 650812,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 650932,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651052,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651172,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651292,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651412,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651532,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651652,
+      "raw": [
+        2773,
+        2415,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.2588110056395,
+      "right_knee_current_deg": 43.76421027113292,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651772,
+      "raw": [
+        2772,
+        2414,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.3027563181395,
+      "right_knee_current_deg": 43.709232828097136,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268274,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 651892,
+      "raw": [
+        2736,
+        2380,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 217.8847875681395,
+      "right_knee_current_deg": 41.814749681850884,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652012,
+      "raw": [
+        2564,
+        2206,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 225.44338131813947,
+      "right_knee_current_deg": 33.34418541721645,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652132,
+      "raw": [
+        2364,
+        2004,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 234.23244381813947,
+      "right_knee_current_deg": 25.437130758682397,
+      "right_knee_minus1_hypothesis_deg": 98.17510950131603,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652252,
+      "raw": [
+        2300,
+        1941,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.353608935971693,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103612,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652612,
+      "raw": [
+        2299,
+        1941,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.0888891306395,
+      "right_knee_current_deg": 23.337939750123407,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652732,
+      "raw": [
+        2299,
+        1941,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.0888891306395,
+      "right_knee_current_deg": 23.337939750123407,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 652972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653092,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653212,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653332,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653452,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653572,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653692,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653812,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 653932,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654052,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654172,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654292,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654412,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654532,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654652,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654772,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 654892,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655012,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655132,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655252,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655612,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655732,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 655972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656092,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656212,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656332,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656452,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656572,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656692,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656812,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 656932,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657052,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657172,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657292,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657412,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657532,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657652,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657772,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 657892,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658012,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658132,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658252,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658612,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658732,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 658972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659092,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659212,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659332,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659452,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659572,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659692,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659812,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 659932,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660052,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660172,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660292,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660412,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660532,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660652,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660772,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 660892,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661012,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661132,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661252,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661612,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661732,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 661972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662092,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662212,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662332,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662452,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662572,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662692,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662812,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 662932,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663052,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663172,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663292,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663412,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663532,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663652,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663772,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 663892,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664012,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664132,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664252,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664612,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664732,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 664972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665092,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665212,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665332,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665452,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665572,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665692,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665812,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 665932,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666052,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666172,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666292,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666412,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666532,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666652,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666772,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 666892,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667012,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667132,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667252,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667612,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667732,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 667972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668092,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668212,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668332,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668452,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668572,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668692,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668812,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 668932,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669052,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669172,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669292,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669412,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669532,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669652,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669772,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 669892,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670012,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670132,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670252,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670372,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670492,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670612,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670732,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670852,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 670972,
+      "raw": [
+        2300,
+        1942,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 237.04494381813947,
+      "right_knee_current_deg": 23.369289376790647,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671092,
+      "raw": [
+        2308,
+        1955,
+        4767,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.69338131813947,
+      "right_knee_current_deg": 23.701189537087313,
+      "right_knee_minus1_hypothesis_deg": 97.90801218116067,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671212,
+      "raw": [
+        2349,
+        1994,
+        4765,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 234.89162350563947,
+      "right_knee_current_deg": 25.012061426400855,
+      "right_knee_minus1_hypothesis_deg": 97.98431134812377,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671332,
+      "raw": [
+        2434,
+        2078,
+        4766,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 231.1562719431395,
+      "right_knee_current_deg": 28.033695786635747,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332946,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671452,
+      "raw": [
+        2536,
+        2180,
+        4771,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 226.6738500681395,
+      "right_knee_current_deg": 32.161254870031364,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671572,
+      "raw": [
+        2631,
+        2275,
+        4773,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 222.4990453806395,
+      "right_knee_current_deg": 36.49155651693183,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671692,
+      "raw": [
+        2716,
+        2360,
+        4773,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 218.76369381813947,
+      "right_knee_current_deg": 40.75857733016831,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671812,
+      "raw": [
+        2800,
+        2443,
+        4773,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 215.0722875681395,
+      "right_knee_current_deg": 45.29420283119488,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 671932,
+      "raw": [
+        2873,
+        2518,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 211.8642797556395,
+      "right_knee_current_deg": 49.578480929632015,
+      "right_knee_minus1_hypothesis_deg": 97.98431134812375,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672052,
+      "raw": [
+        2937,
+        2582,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 209.05177975563947,
+      "right_knee_current_deg": 53.46744505888015,
+      "right_knee_minus1_hypothesis_deg": 97.98431134812377,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672172,
+      "raw": [
+        2968,
+        2611,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.68947506813947,
+      "right_knee_current_deg": 55.34461741898045,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672292,
+      "raw": [
+        2968,
+        2611,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.68947506813947,
+      "right_knee_current_deg": 55.34461741898045,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672412,
+      "raw": [
+        2968,
+        2610,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.68947506813947,
+      "right_knee_current_deg": 55.31306072052147,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268274,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672532,
+      "raw": [
+        2968,
+        2610,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.68947506813947,
+      "right_knee_current_deg": 55.31306072052147,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268274,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672652,
+      "raw": [
+        2967,
+        2610,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.7334203806395,
+      "right_knee_current_deg": 55.28151305323346,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672772,
+      "raw": [
+        2964,
+        2608,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 672892,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673012,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673132,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673252,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673372,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673492,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673612,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673732,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673852,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 673972,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674092,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674212,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674332,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674452,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674572,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674692,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674812,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 674932,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675052,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675172,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675292,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675412,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675532,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675652,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675772,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 675892,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676012,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676132,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676252,
+      "raw": [
+        2964,
+        2608,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.86525631813947,
+      "right_knee_current_deg": 55.123910434127914,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676372,
+      "raw": [
+        2961,
+        2606,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.9970922556395,
+      "right_knee_current_deg": 54.96653466488876,
+      "right_knee_minus1_hypothesis_deg": 97.98431134812375,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676492,
+      "raw": [
+        2961,
+        2606,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.9970922556395,
+      "right_knee_current_deg": 54.96653466488876,
+      "right_knee_minus1_hypothesis_deg": 97.98431134812375,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676612,
+      "raw": [
+        2961,
+        2605,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 207.9970922556395,
+      "right_knee_current_deg": 54.935086811558364,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676732,
+      "raw": [
+        2949,
+        2591,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 208.5244360056395,
+      "right_knee_current_deg": 54.12066352819485,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676852,
+      "raw": [
+        2914,
+        2557,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 210.06252194313947,
+      "right_knee_current_deg": 51.99013407343063,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 676972,
+      "raw": [
+        2848,
+        2492,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 212.96291256813947,
+      "right_knee_current_deg": 48.07541837717639,
+      "right_knee_minus1_hypothesis_deg": 98.02246524332952,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677092,
+      "raw": [
+        2770,
+        2412,
+        4776,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 216.39064694313947,
+      "right_knee_current_deg": 43.599418030420246,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268274,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677212,
+      "raw": [
+        2688,
+        2331,
+        4773,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 219.99416256813947,
+      "right_knee_current_deg": 39.287444644943484,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914869,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677332,
+      "raw": [
+        2610,
+        2253,
+        4772,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 223.42189694313947,
+      "right_knee_current_deg": 35.47051099667917,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677452,
+      "raw": [
+        2536,
+        2177,
+        4773,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 226.6738500681395,
+      "right_knee_current_deg": 32.096651608077,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103612,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677572,
+      "raw": [
+        2465,
+        2106,
+        4773,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 229.7939672556395,
+      "right_knee_current_deg": 29.172439886978268,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103612,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677692,
+      "raw": [
+        2422,
+        2064,
+        4775,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 231.68361569313947,
+      "right_knee_current_deg": 27.54585990660084,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268275,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677812,
+      "raw": [
+        2402,
+        2042,
+        4785,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 232.5625219431395,
+      "right_knee_current_deg": 26.775669327206415,
+      "right_knee_minus1_hypothesis_deg": 98.17510950131597,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 677932,
+      "raw": [
+        2362,
+        2003,
+        4789,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 234.32033444313947,
+      "right_knee_current_deg": 25.385728508483613,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103612,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678052,
+      "raw": [
+        2323,
+        1964,
+        4787,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.0342016306395,
+      "right_knee_current_deg": 24.086658187333253,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103612,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678172,
+      "raw": [
+        2320,
+        1961,
+        4785,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.16603756813947,
+      "right_knee_current_deg": 23.989671352679004,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103612,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678652,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678772,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 678892,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679012,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679132,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679252,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679372,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679492,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679612,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679732,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679852,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 679972,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680092,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680212,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680332,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680452,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680572,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680692,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680812,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 680932,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681052,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681172,
+      "raw": [
+        2321,
+        1963,
+        4777,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681652,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681772,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 681892,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682012,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682132,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682252,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682372,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682492,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682612,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682732,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682852,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 682972,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683092,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683212,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683332,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683452,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683572,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683692,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683812,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 683932,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684052,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684172,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684652,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684772,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 684892,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685012,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685132,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685252,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685372,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685492,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685612,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685732,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685852,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 685972,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686092,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686212,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686332,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686452,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686572,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686692,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686812,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 686932,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687052,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687172,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687652,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687772,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 687892,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688012,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688132,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688252,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688372,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688492,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688612,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688732,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688852,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 688972,
+      "raw": [
+        2321,
+        1964,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.06062200914864,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689092,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689212,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689332,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689452,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689572,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689692,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689812,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 689932,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690052,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690172,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690652,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690772,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 690892,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691012,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691132,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691252,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691372,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691492,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691612,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691732,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691852,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 691972,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692092,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692212,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692332,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692452,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692572,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692692,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692812,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 692932,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693052,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693172,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693652,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693772,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 693892,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694012,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694132,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694252,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694372,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694492,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694612,
+      "raw": [
+        2322,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.07814694313953,
+      "right_knee_current_deg": 24.054283165404396,
+      "right_knee_minus1_hypothesis_deg": 98.13694414103608,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694732,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694852,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 694972,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695092,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695212,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695332,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695452,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695572,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695692,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695812,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 695932,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 696052,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 696172,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 696292,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 696412,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    },
+    {
+      "tick": 696532,
+      "raw": [
+        2321,
+        1963,
+        4778,
+        2174,
+        4565,
+        2847
+      ],
+      "right_hip_deg": 236.1220922556395,
+      "right_knee_current_deg": 24.038112942240886,
+      "right_knee_minus1_hypothesis_deg": 98.09878164268272,
+      "left_knee_current_deg": 98.67151831299543
+    }
+  ]
+}

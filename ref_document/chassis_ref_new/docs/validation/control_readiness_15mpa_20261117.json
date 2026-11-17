@@ -1,0 +1,49 @@
+{
+  "scope": "source inspection and offline spring calculation; not live board inspection",
+  "direct_RL_getup_and_remote_drive_ready": false,
+  "output_enabled": false,
+  "current_profile_model_version": "2026111720U",
+  "forward_cap_macro": "0x0.0p+0f",
+  "yaw_cap_macro": "0x0.0p+0f",
+  "getup_weights_linked": true,
+  "getup_actor_initialized_to_null": true,
+  "getup_registration_calls_in_production": 0,
+  "registration_occurrences": [
+    {
+      "path": "user\\chassis.c",
+      "line": 47,
+      "text": "bool chassis_register_getup_actor(RlActorFn actor, uint32_t model_version) {"
+    }
+  ],
+  "policy_contract_verified_flag": "0",
+  "odometry_verified_flag": "0",
+  "model_asset_manifest_checks": {
+    "model.c": true,
+    "model.h": true,
+    "actor31.pt": true,
+    "getup_model.c": true,
+    "getup_model.h": true,
+    "getup_actor31.pt": true,
+    "profile.h": true
+  },
+  "latest_recorded_qualification": {
+    "full_starts_successes": 2,
+    "full_starts_trials": 8,
+    "sensitivity_successes": 0,
+    "sensitivity_trials": 18,
+    "new_trials_this_update": 0
+  },
+  "latest_recorded_position_lost": "both wheels true in Nov16 diagnostic; current physical state not sampled",
+  "new_spring_calculation": "real_data_collection\\spring_nominal_15mpa_mm_20261117.json",
+  "new_spring_curve_applied_to_frozen_training_or_weights": false,
+  "remaining_before_integrated_physical_trial": [
+    "paired CAD-pose and raw-encoder reference consistency, transmission mapping",
+    "continuous valid motor/IMU feedback and timing",
+    "offline re-evaluation with accepted spring curve",
+    "explicit source integration and bench validation of getup controller; qualified driving model for remote travel"
+  ],
+  "hardware_accessed": false,
+  "flashed": false,
+  "motors_commanded": false,
+  "control_sources_changed": false
+}

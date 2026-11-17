@@ -3,6 +3,9 @@
 #include "rl.h"
 #include "model/model.h"
 #include "robot_config.h"
+#if RL_PROFILE_HAS_GETUP
+#include "model/getup_model.h"
+#endif
 #include <math.h>
 #include <string.h>
 
@@ -36,6 +39,32 @@ bool rl_actor(RlNetwork *n, const float obs[31], float action[6]) {
         memset(action,0,6*sizeof(float)); return false;
     }
     return true;
+}
+bool rl_getup_model_available(void) { return RL_PROFILE_HAS_GETUP != 0; }
+bool rl_getup_actor(RlNetwork *n, const float obs[31], float action[6]) {
+#if RL_PROFILE_HAS_GETUP
+    if (!finite_array(obs,31) ||
+        !dense(obs,31,n->hidden1,128,rlg_w0,rlg_b0,true) ||
+        !dense(n->hidden1,128,n->hidden2,64,rlg_w1,rlg_b1,true) ||
+        !dense(n->hidden2,64,n->hidden3,32,rlg_w2,rlg_b2,true) ||
+        !dense(n->hidden3,32,action,6,rlg_w3,rlg_b3,false)) {
+        memset(action,0,6*sizeof(float)); return false;
+    }
+    return true;
+#else
+    (void)n; (void)obs;
+    memset(action,0,6*sizeof(float)); return false;
+#endif
+}
+bool rl_getup_selftest(RlNetwork *n) {
+#if RL_PROFILE_HAS_GETUP
+    float action[6];
+    if (!rl_getup_actor(n,rlg_selftest_obs,action)) return false;
+    for (unsigned i=0;i<6;++i) if (fabsf(action[i]-rlg_selftest_output[i])>0.001f) return false;
+    return true;
+#else
+    (void)n; return false;
+#endif
 }
 static float knee_ratio(float alpha) {
     const float r=RL_LINK_RATIO, s=sinf(alpha*0.5f);

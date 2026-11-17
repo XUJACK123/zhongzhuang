@@ -7,13 +7,15 @@ rejected by its vector fingerprint. Motor output authorization stays in source.
 import argparse
 import datetime
 import json
+import math
+import re
 from pathlib import Path
 import struct
 import subprocess
 ROOT=Path(__file__).resolve().parents[1]
 DEFAULT_OPENOCD=Path.home()/'.eide/tools/openocd_7a1adfbec_mingw32/bin/openocd.exe'
 SYMBOLS=('g_can_monitor','g_chassis','g_remote','g_imu','g_measurement',
-         'g_motor_snapshot','g_board_debug','g_can_tx_fail','g_can_rx_overflow','g_rl')
+         'g_motor_snapshot','g_board_debug','g_can_tx_fail','g_can_rx_overflow','g_rl','g_stand_entry')
 NODE_LABELS=('right_hip_DM4','right_knee_DM3','right_wheel_M3508_3',
              'left_hip_DM1','left_knee_DM2','left_wheel_M3508_2')
 
@@ -66,6 +68,7 @@ def decode(out,tag):
                                 'encoder_total_counts':struct.unpack_from('<q',bank,i*40+8)[0],
                                 'temperature_c':raw[6],'status_byte':raw[7],'data':raw.hex(' ')})
     result['chassis']=dict(zip(('tick','inhibit','fault','cycles','policy_runs','inference_us','max_loop_us','overruns','mode','actor_selftest'),struct.unpack('<10I',read('g_chassis'))))
+    result['standing_entry']=dict(zip(('since','stable_ms','tracking','ready','last_tick'),struct.unpack('<5I',read('g_stand_entry'))))
     remote=read('g_remote')
     result['remote']={'channels':list(struct.unpack_from('<5h',remote)),'s1':remote[10],'s2':remote[11],
                       'tick':struct.unpack_from('<I',remote,12)[0],'valid_frames':struct.unpack_from('<I',remote,16)[0],
@@ -114,15 +117,28 @@ def snapshot(out,interval=2.0,openocd=DEFAULT_OPENOCD,elf=None):
 
 def brief(out,report):
     """One-screen summary for bench operation."""
+    defaults=json.loads((ROOT/'user/algorithm/model/manifest.json').read_text())['default_q']
+    config=(ROOT/'user/robot_config.h').read_text()
+    tolerance=re.search(r'^#define ROBOT_STAND_ENTRY_JOINT_TOL_RAD ([0-9.]+)f',config,re.M)
+    tolerance_deg=math.degrees(float(tolerance.group(1)))
     for tag in ('a','b') if 'b' in report else ('a',):
         v=report[tag]; c=v['chassis']; rl=v['rl']
+        entry=v['standing_entry']
+        print(f"[{tag}] standing_entry ready={entry['ready']} stable_ms={entry['stable_ms']} (500ms required)")
+        errors=[]
+        for i in (0,1,3,4):
+            delta=v['measurement']['joint_position_rad'][i]-defaults[i]
+            if i in (0,3): delta=math.atan2(math.sin(delta),math.cos(delta))
+            errors.append(round(math.degrees(delta),2))
+        print(f"     initial pose errors RH/RK/LH/LK {errors} deg (within +/-{tolerance_deg:.2f} deg)")
         print(f"[{tag}] tick={c['tick']} mode={c['mode']} inhibit={c['inhibit']} fault={c['fault']} "
               f"policy_runs={c['policy_runs']} inference_us={c['inference_us']} max_loop_us={c['max_loop_us']} overruns={c['overruns']}")
         print(f"     nonzero_torque_frames={v['nonzero_torque_frames']} enable_commands={v['enable_commands']} "
               f"tx_failed={v['tx_failed']} rx_overflow={v['fifo_overflow']}")
         print(f"     action      {[round(x,3) for x in rl['action']]}")
         print(f"     target_q    {[round(x,3) for x in rl['target_q']]}")
-        print(f"     motor_torque{[round(x,3) for x in rl['motor_torque']]} Nm")
+        print(f"     motor_torque{[round(x,3) for x in rl['motor_torque']]} Nm"+
+              (" (last computed; NOT current output while stopped)" if c['mode']!=3 else ""))
         print(f"     q           {[round(x,3) for x in v['measurement']['joint_position_rad']]}")
         print(f"     qd          {[round(x,3) for x in v['measurement']['joint_velocity_rad_s']]}")
         print(f"     root_xy     {[round(x,3) for x in v['measurement']['root_xy_m']]} m  yaw={v['imu']['yaw_rad']:+.3f} rad")

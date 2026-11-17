@@ -1,0 +1,30 @@
+{
+  "scope": "standing entry, balance, forward/reverse/yaw and stop source review",
+  "fixed": [
+    "unobserved sampling gap counted toward continuous entry dwell",
+    "final remote stop/loss check did not cover ENABLING",
+    "driving accepted during initial torque ramp",
+    "entry readiness comparisons did not explicitly reject nonfinite values"
+  ],
+  "tests": "make test and make passed; ARM validation zero compiler warnings; fake HAL including late stop/loss/stick, NaN confidence, gap/wrap, ramp, reverse/yaw/release passed",
+  "source_sha256": {
+    "user/chassis.c": "f10032327274d32341327a5d33f1a32c8620c1fd2c11c498f98ad58e11db6717",
+    "user/stand_entry.c": "bcc6de8cee10523b4714b67d655b679797856e663a9654e76699343a4bbe5605",
+    "user/stand_entry.h": "ff1e289b65d1ff543acb66bf57d6d4c1b15968dd0f8f9cadb0f34298ec503bef",
+    "user/robot_config.h": "c32479f86006a8f0615d2b6e153996d74081f5ba85e9cd3d5302e923069e9612",
+    "tools/monitor_can.py": "88adcd9a4f244ae62c8f90c771f729db16175ec39495119f2b1f73813aabb7ba",
+    "tests/test_chassis.c": "77bd4f18a4c581cba18dd82d12fff86a23c6d2d5203bdc4c8a395596018502bc",
+    "tests/test_logic.c": "12b05d02a2ac392e9264831808f1bb5b8f2eccf23c3c8fe077c00c72e28f9205"
+  },
+  "elf_sha256": "518f4121687fb0a36e359195fb2eaaceeebcd9eedd78bf3b6c4fdb821ff55bd4",
+  "hardware_accessed": false,
+  "model_changed": false,
+  "output_enabled": false,
+  "limitations": [
+    "physical encoder pose correspondence remains unresolved",
+    "site contact/assistance not measured by entry gate",
+    "u400 is not revalidated on accepted 15MPa curve or 21.9kg plant",
+    "motor_all_enabled is group command readiness, not FC acknowledgement",
+    "support release and torque ramp not covered by historic ideal already-balanced acceptance"
+  ]
+}

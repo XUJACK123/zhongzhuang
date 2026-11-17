@@ -105,6 +105,20 @@ SECTIONS
     __bss_end__ = _ebss;
   } >DTCMRAM
 
+  .TRACE_RETAIN (NOLOAD) :
+  {
+    . = ALIGN(32);
+    *(.TRACE_RETAIN)
+    . = ALIGN(32);
+  } >AXIRAM
+
+  .FAULT_RETAIN (NOLOAD) :
+  {
+    . = ALIGN(4);
+    *(.FAULT_RETAIN)
+    . = ALIGN(4);
+  } >DTCMRAM
+
   .AXI_SRAM (NOLOAD) :
   {
     . = ALIGN(32);

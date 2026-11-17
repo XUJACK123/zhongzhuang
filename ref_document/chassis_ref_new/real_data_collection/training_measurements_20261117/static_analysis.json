@@ -1,0 +1,50 @@
+{
+  "duration_ms": 60000,
+  "online_statistics_samples": 30000,
+  "invalid_samples": 0,
+  "statistics_interval_ms": 2,
+  "raw_frames": 500,
+  "raw_interval_ms": 120,
+  "raw_span_ms": 59880,
+  "raw_stream_500_hz": false,
+  "max_control_step_ms": 2,
+  "control_step_gaps": 0,
+  "max_motor_age_ms": 3,
+  "max_imu_age_ms": 2,
+  "max_remote_age_ms": 14,
+  "tx_fail_delta": 0,
+  "rx_overflow_delta": 0,
+  "gyro_std_rad_s": [
+    0.00848873839560166,
+    0.009897581735556523,
+    0.010559778190972896
+  ],
+  "yaw_peak_to_peak_deg": 0.5314192398348455,
+  "yaw_net_drift_deg": null,
+  "tilt_range_deg": [
+    5.5727433728752835,
+    5.6879949696908385
+  ],
+  "accel_norm_mean_m_s2": 9.819168090820312,
+  "joint_position_peak_to_peak_deg": [
+    0.0,
+    0.0,
+    0.0,
+    0.04394543711986204,
+    0.03820807821705133,
+    0.0
+  ],
+  "knee_internal_angle_deg": [
+    27.958094608637907,
+    98.78613177329464
+  ],
+  "right_knee_below_configured_q_min_deg": 28.682165480918325,
+  "physical_angle_truth": false,
+  "inhibit_or": 32,
+  "imu_drdy_edges": 119848,
+  "imu_unconsumed_edges": 59849,
+  "imu_note": "DRDY about 2 kHz; imu_service permits at most one read per HAL millisecond. Unconsumed edge counter is not a count of stale control frames. Static run max IMU age 2 ms; no IMU freshness inhibit.",
+  "online_statistics_precision": "float32 Welford; encoder quantization and adaptive gyro bias retained",
+  "source_statistics": "diagnostics/training_static_20261117_01_complete",
+  "source_raw": "diagnostics/training_static_20261117_01_trace"
+}
