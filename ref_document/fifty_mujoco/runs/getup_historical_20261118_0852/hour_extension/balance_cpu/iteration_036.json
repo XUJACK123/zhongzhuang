@@ -1,0 +1,2322 @@
+[
+  {
+    "score": 620.35,
+    "values": [
+      1.0004040541532726,
+      1.0067056452711867,
+      1.1084050829475491,
+      0.0005930771561778773,
+      0.0011175441946635843,
+      0.004736428387690016
+    ],
+    "passed": 4,
+    "perturbed": 4,
+    "perturbed_wins": 1,
+    "rows": [
+      {
+        "success": false,
+        "failure": "handoff_unstable",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 18
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 101.02147541019029,
+          "left_wheel_collision_0": 114.2660821155881
+        },
+        "episode_parameters": {
+          "seed": 864245,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9969035051653351,
+            0.9892178301980893,
+            1.0,
+            0.9840644042113104,
+            0.976599141878811,
+            1.0
+          ],
+          "spring_scale": 0.999426103447092,
+          "friction": 0.804639843138715,
+          "armature_scale": 1.0994926640537976,
+          "damping_scale": 1.1056442537677649,
+          "friction_loss_scale": 1.0846769999320143,
+          "reset_index": 13,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919856733506,
+            -0.3828431125110371
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.128656305489269,
+            "left_wheel_collision_0": 4.316184501464367
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08623213118716046,
+          -1.4118005997199932
+        ],
+        "final_clearance_m": 0.16571952282354968,
+        "final_joint_position_rad": [
+          2.7259215058238997,
+          -3.3156539839891934,
+          8.354971497363076,
+          -2.8674106804351833,
+          3.2330092862253856,
+          4.306080385156443
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.02002716064453125,
+          -0.000667572021484375,
+          1.6048431396484375,
+          0.014162063598632812,
+          -0.00057220458984375,
+          1.5313148498535156
+        ],
+        "final_forward_velocity_m_s": 0.08335752040147781,
+        "final_body_contact": false,
+        "final_displacement_m": 0.14374681199234307,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864245
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.26939125820263,
+          "left_wheel_collision_0": 115.58837333404831
+        },
+        "episode_parameters": {
+          "seed": 864246,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 6,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919232573504,
+            -0.38284311331518583
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.131367485920325,
+            "left_wheel_collision_0": 4.3160754063425
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.004129008248762352,
+          0.3005270871673529
+        ],
+        "final_clearance_m": 0.17248039759131614,
+        "final_joint_position_rad": [
+          2.7789688324859103,
+          -3.2751826275174514,
+          7.437276335883332,
+          -2.779358790809664,
+          3.27491829891139,
+          2.940877390717576
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.0018596649169921875,
+          -0.0006198883056640625,
+          -0.021076202392578125,
+          0.0019550323486328125,
+          0.00209808349609375,
+          -0.011444091796875
+        ],
+        "final_forward_velocity_m_s": -0.0007054049638099968,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04867542345107781,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864246
+      },
+      {
+        "success": false,
+        "failure": "getup_displacement_limit",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 253
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.86944766231352,
+          "left_wheel_collision_0": 114.96612871822711
+        },
+        "episode_parameters": {
+          "seed": 864247,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9962486125259555,
+            0.9733261622818474,
+            1.0,
+            0.9873609563050054,
+            0.9730732437267665,
+            1.0
+          ],
+          "spring_scale": 1.0000292886672342,
+          "friction": 0.7583648416009459,
+          "armature_scale": 0.9017807475885318,
+          "damping_scale": 0.9156182248158585,
+          "friction_loss_scale": 1.0712393714630826,
+          "reset_index": 7,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828391945761341,
+            -0.3828431151858002
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.130454643322305,
+            "left_wheel_collision_0": 4.315306100705392
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.06938375670683401,
+          -4.62169292675821
+        ],
+        "final_clearance_m": 0.1496636171039571,
+        "final_joint_position_rad": [
+          2.7771347969393156,
+          -3.312377571581017,
+          12.7440506320154,
+          -2.906260880914041,
+          3.2421932825422632,
+          6.896370021360025
+        ],
+        "final_joint_velocity_rad_s": [
+          0.016880035400390625,
+          -0.01621246337890625,
+          3.697967529296875,
+          -0.06427765637636185,
+          0.003719329833984375,
+          3.382396697998047
+        ],
+        "final_forward_velocity_m_s": 0.17720916867256165,
+        "final_body_contact": false,
+        "final_displacement_m": 0.3013923308840504,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864247
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.71275094991192,
+          "left_wheel_collision_0": 115.02543490988299
+        },
+        "episode_parameters": {
+          "seed": 864248,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 25,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922917928337,
+            -0.38284311249132696
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116435342655993,
+            "left_wheel_collision_0": 4.316210614670204
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.0016496048353449085,
+          0.1981855843049463
+        ],
+        "final_clearance_m": 0.17313860965557482,
+        "final_joint_position_rad": [
+          2.780468476940469,
+          -3.274651268239342,
+          2.9952672994289373,
+          -2.7784768216074913,
+          3.2757810241333463,
+          3.0647718592051882
+        ],
+        "final_joint_velocity_rad_s": [
+          0.0006198883056640625,
+          0.0022411346435546875,
+          -0.3646373748779297,
+          -0.0036716461181640625,
+          -0.0018596649169921875,
+          -0.3810405731201172
+        ],
+        "final_forward_velocity_m_s": -0.01168843824416399,
+        "final_body_contact": false,
+        "final_displacement_m": 0.05856915369303179,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864248
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.50952581753921,
+          "left_wheel_collision_0": 115.30750881764277
+        },
+        "episode_parameters": {
+          "seed": 864249,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9695216498011263,
+            0.988929341240091,
+            1.0,
+            0.9845854409272005,
+            0.9976577945083098,
+            1.0
+          ],
+          "spring_scale": 1.017411324257569,
+          "friction": 0.7727915121290706,
+          "armature_scale": 0.8940950256153024,
+          "damping_scale": 1.0106026197251814,
+          "friction_loss_scale": 0.9254024527744127,
+          "reset_index": 11,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283921595923903,
+            -0.38284312676534843
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1273522028928475,
+            "left_wheel_collision_0": 4.3160790162127665
+          }
+        },
+        "final_roll_pitch_deg": [
+          -1.2527967315693065e-05,
+          0.12931050234527877
+        ],
+        "final_clearance_m": 0.17443551688398468,
+        "final_joint_position_rad": [
+          2.7843329917272954,
+          -3.2649958691286516,
+          5.691204311567877,
+          -2.773938696452638,
+          3.271731566388813,
+          2.8735926844913156
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.0037670135498046875,
+          -0.00095367431640625,
+          0.2105712890625,
+          0.00247955322265625,
+          0.002384185791015625,
+          0.22249221801757812
+        ],
+        "final_forward_velocity_m_s": 0.008118819445371628,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04811037883929234,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864249
+      },
+      {
+        "success": false,
+        "failure": "balance_state_out_of_spec",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 208,
+          "HANDOFF": 30,
+          "BALANCE": 35
+        },
+        "balance_ticks": 35,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 100.69974442819456,
+          "left_wheel_collision_0": 114.10449420613932
+        },
+        "episode_parameters": {
+          "seed": 864250,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9845093094234655,
+            0.9987320370577296,
+            1.0,
+            0.9755360355928849,
+            0.9698372723297091,
+            1.0
+          ],
+          "spring_scale": 0.9845728173841308,
+          "friction": 0.7707647162765874,
+          "armature_scale": 1.0767309596746768,
+          "damping_scale": 1.0453514490489955,
+          "friction_loss_scale": 0.9475036506441845,
+          "reset_index": 18,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828392165307713,
+            -0.38284310143311484
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116623483734774,
+            "left_wheel_collision_0": 4.315805704973383
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08657935893067312,
+          -0.6460029273003254
+        ],
+        "final_clearance_m": 0.1678426418308748,
+        "final_joint_position_rad": [
+          2.686087756039105,
+          -3.336108904613333,
+          7.03440374856861,
+          -2.88263214158762,
+          3.21981772673944,
+          3.818129776291863
+        ],
+        "final_joint_velocity_rad_s": [
+          0.004291534423828125,
+          0.004100799560546875,
+          1.4512062072753906,
+          0.005340576171875,
+          0.00324249267578125,
+          1.4653205871582031
+        ],
+        "final_forward_velocity_m_s": 0.08487284183502197,
+        "final_body_contact": false,
+        "final_displacement_m": 0.13482877935631749,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864250
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.8402333814969,
+          "left_wheel_collision_0": 115.13754916485135
+        },
+        "episode_parameters": {
+          "seed": 864251,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 38,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922990079944,
+            -0.38284311251646946
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1161427788190466,
+            "left_wheel_collision_0": 4.316196351577841
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.002224233514384473,
+          0.3081027022835782
+        ],
+        "final_clearance_m": 0.17246932352137995,
+        "final_joint_position_rad": [
+          2.778691544092856,
+          -3.27514481128793,
+          2.951079266592376,
+          -2.778811374223967,
+          3.2749218636214485,
+          2.9305240334380076
+        ],
+        "final_joint_velocity_rad_s": [
+          0.00095367431640625,
+          -0.000858306884765625,
+          0.46744346618652344,
+          -0.0002384185791015625,
+          -0.001430511474609375,
+          0.46601295471191406
+        ],
+        "final_forward_velocity_m_s": 0.02272394299507141,
+        "final_body_contact": false,
+        "final_displacement_m": 0.05202083411665728,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864251
+      }
+    ]
+  },
+  {
+    "score": 620.35,
+    "values": [
+      0.9999683017448959,
+      1.009669512199794,
+      1.079013661872211,
+      -0.0008379014170973383,
+      -0.0002661287925673549,
+      0.0009295171396418614
+    ],
+    "passed": 4,
+    "perturbed": 4,
+    "perturbed_wins": 1,
+    "rows": [
+      {
+        "success": false,
+        "failure": "handoff_unstable",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 18
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 101.06862612232092,
+          "left_wheel_collision_0": 114.32820723691006
+        },
+        "episode_parameters": {
+          "seed": 864245,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9969035051653351,
+            0.9892178301980893,
+            1.0,
+            0.9840644042113104,
+            0.976599141878811,
+            1.0
+          ],
+          "spring_scale": 0.999426103447092,
+          "friction": 0.804639843138715,
+          "armature_scale": 1.0994926640537976,
+          "damping_scale": 1.1056442537677649,
+          "friction_loss_scale": 1.0846769999320143,
+          "reset_index": 13,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919856733506,
+            -0.3828431125110371
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.128656305489269,
+            "left_wheel_collision_0": 4.316184501464367
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08622403726941574,
+          -1.3951468206364417
+        ],
+        "final_clearance_m": 0.16578051122266563,
+        "final_joint_position_rad": [
+          2.7257009805946306,
+          -3.315827005497453,
+          8.355556601657787,
+          -2.8672512561996286,
+          3.233157911363457,
+          4.30643257709442
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.023221969604492188,
+          -0.0023365020751953125,
+          1.6117095947265625,
+          0.016736984252929688,
+          0.0006198883056640625,
+          1.5354156494140625
+        ],
+        "final_forward_velocity_m_s": 0.08353814482688904,
+        "final_body_contact": false,
+        "final_displacement_m": 0.14376432139948855,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864245
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.23924042866535,
+          "left_wheel_collision_0": 115.57896102315996
+        },
+        "episode_parameters": {
+          "seed": 864246,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 6,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919232573504,
+            -0.38284311331518583
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.131367485920325,
+            "left_wheel_collision_0": 4.3160754063425
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.005115109127547984,
+          0.43875001919912415
+        ],
+        "final_clearance_m": 0.171503310230707,
+        "final_joint_position_rad": [
+          2.777392649590308,
+          -3.2765056105961348,
+          7.364234034319854,
+          -2.7791457429772595,
+          3.2753995431883385,
+          2.8528643782607213
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.002288818359375,
+          -0.00095367431640625,
+          0.06361007690429688,
+          0.001811981201171875,
+          0.002193450927734375,
+          0.06184577941894531
+        ],
+        "final_forward_velocity_m_s": 0.003294202033430338,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04449646818071865,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864246
+      },
+      {
+        "success": false,
+        "failure": "getup_displacement_limit",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 253
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.86944766231352,
+          "left_wheel_collision_0": 114.96612871822711
+        },
+        "episode_parameters": {
+          "seed": 864247,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9962486125259555,
+            0.9733261622818474,
+            1.0,
+            0.9873609563050054,
+            0.9730732437267665,
+            1.0
+          ],
+          "spring_scale": 1.0000292886672342,
+          "friction": 0.7583648416009459,
+          "armature_scale": 0.9017807475885318,
+          "damping_scale": 0.9156182248158585,
+          "friction_loss_scale": 1.0712393714630826,
+          "reset_index": 7,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828391945761341,
+            -0.3828431151858002
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.130454643322305,
+            "left_wheel_collision_0": 4.315306100705392
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.06938375670683401,
+          -4.62169292675821
+        ],
+        "final_clearance_m": 0.1496636171039571,
+        "final_joint_position_rad": [
+          2.7771347969393156,
+          -3.312377571581017,
+          12.7440506320154,
+          -2.906260880914041,
+          3.2421932825422632,
+          6.896370021360025
+        ],
+        "final_joint_velocity_rad_s": [
+          0.016880035400390625,
+          -0.01621246337890625,
+          3.697967529296875,
+          -0.06427765637636185,
+          0.003719329833984375,
+          3.382396697998047
+        ],
+        "final_forward_velocity_m_s": 0.17720916867256165,
+        "final_body_contact": false,
+        "final_displacement_m": 0.3013923308840504,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864247
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.73020745583241,
+          "left_wheel_collision_0": 115.03217231569317
+        },
+        "episode_parameters": {
+          "seed": 864248,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 25,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922917928337,
+            -0.38284311249132696
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116435342655993,
+            "left_wheel_collision_0": 4.316210614670204
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.002328096883417952,
+          0.3252238620506199
+        ],
+        "final_clearance_m": 0.1722380407450703,
+        "final_joint_position_rad": [
+          2.7788095460998434,
+          -3.276037584136714,
+          2.93240002884491,
+          -2.778332198346251,
+          3.27621605232587,
+          2.9862088734448613
+        ],
+        "final_joint_velocity_rad_s": [
+          0.000667572021484375,
+          0.002193450927734375,
+          -0.32939910888671875,
+          -0.003337860107421875,
+          -0.0017642974853515625,
+          -0.3433704376220703
+        ],
+        "final_forward_velocity_m_s": -0.009998492896556854,
+        "final_body_contact": false,
+        "final_displacement_m": 0.054853066541558436,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864248
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.43960801172787,
+          "left_wheel_collision_0": 115.30144324886976
+        },
+        "episode_parameters": {
+          "seed": 864249,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9695216498011263,
+            0.988929341240091,
+            1.0,
+            0.9845854409272005,
+            0.9976577945083098,
+            1.0
+          ],
+          "spring_scale": 1.017411324257569,
+          "friction": 0.7727915121290706,
+          "armature_scale": 0.8940950256153024,
+          "damping_scale": 1.0106026197251814,
+          "friction_loss_scale": 0.9254024527744127,
+          "reset_index": 11,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283921595923903,
+            -0.38284312676534843
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1273522028928475,
+            "left_wheel_collision_0": 4.3160790162127665
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.0007863587716167406,
+          0.28849522636245317
+        ],
+        "final_clearance_m": 0.17332981531412572,
+        "final_joint_position_rad": [
+          2.782464413954488,
+          -3.2664129397639874,
+          5.606944573178208,
+          -2.7735489016670396,
+          3.272232740234869,
+          2.771444122481108
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.0026226043701171875,
+          -0.0004291534423828125,
+          0.2783775329589844,
+          0.0018596649169921875,
+          0.0019073486328125,
+          0.28977394104003906
+        ],
+        "final_forward_velocity_m_s": 0.011621790006756783,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04326013221117358,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864249
+      },
+      {
+        "success": false,
+        "failure": "balance_state_out_of_spec",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 208,
+          "HANDOFF": 30,
+          "BALANCE": 35
+        },
+        "balance_ticks": 35,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 100.68565977396209,
+          "left_wheel_collision_0": 114.13674344001353
+        },
+        "episode_parameters": {
+          "seed": 864250,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9845093094234655,
+            0.9987320370577296,
+            1.0,
+            0.9755360355928849,
+            0.9698372723297091,
+            1.0
+          ],
+          "spring_scale": 0.9845728173841308,
+          "friction": 0.7707647162765874,
+          "armature_scale": 1.0767309596746768,
+          "damping_scale": 1.0453514490489955,
+          "friction_loss_scale": 0.9475036506441845,
+          "reset_index": 18,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828392165307713,
+            -0.38284310143311484
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116623483734774,
+            "left_wheel_collision_0": 4.315805704973383
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08693504056758626,
+          -0.5528398828263333
+        ],
+        "final_clearance_m": 0.16816569399956638,
+        "final_joint_position_rad": [
+          2.685410911955739,
+          -3.3370505634997074,
+          7.027921627095709,
+          -2.881911553524722,
+          3.2206869407125445,
+          3.8128911064936943
+        ],
+        "final_joint_velocity_rad_s": [
+          0.0038623809814453125,
+          0.0037670135498046875,
+          1.4256477355957031,
+          0.0055789947509765625,
+          0.003147125244140625,
+          1.4381885528564453
+        ],
+        "final_forward_velocity_m_s": 0.08357560634613037,
+        "final_body_contact": false,
+        "final_displacement_m": 0.13458353795597583,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864250
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.85043264488337,
+          "left_wheel_collision_0": 115.12452876073006
+        },
+        "episode_parameters": {
+          "seed": 864251,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 38,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922990079944,
+            -0.38284311251646946
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1161427788190466,
+            "left_wheel_collision_0": 4.316196351577841
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.002971038777742877,
+          0.4309979429748241
+        ],
+        "final_clearance_m": 0.1716001477790249,
+        "final_joint_position_rad": [
+          2.7770938467871407,
+          -3.2764638410967684,
+          2.9028925660484797,
+          -2.778556149468014,
+          3.2753987572718932,
+          2.8681138195612292
+        ],
+        "final_joint_velocity_rad_s": [
+          0.00095367431640625,
+          -0.0010013580322265625,
+          0.5688667297363281,
+          -0.00019073486328125,
+          -0.00133514404296875,
+          0.5677223205566406
+        ],
+        "final_forward_velocity_m_s": 0.02780945971608162,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04911954813549461,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864251
+      }
+    ]
+  },
+  {
+    "score": 620.35,
+    "values": [
+      1.0034986896273403,
+      1.0045936643509827,
+      1.116142128709456,
+      0.0006041405522149852,
+      0.0006935068548977916,
+      0.004628425101355905
+    ],
+    "passed": 4,
+    "perturbed": 4,
+    "perturbed_wins": 1,
+    "rows": [
+      {
+        "success": false,
+        "failure": "handoff_unstable",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 18
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 101.03313642680894,
+          "left_wheel_collision_0": 114.30901109469849
+        },
+        "episode_parameters": {
+          "seed": 864245,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9969035051653351,
+            0.9892178301980893,
+            1.0,
+            0.9840644042113104,
+            0.976599141878811,
+            1.0
+          ],
+          "spring_scale": 0.999426103447092,
+          "friction": 0.804639843138715,
+          "armature_scale": 1.0994926640537976,
+          "damping_scale": 1.1056442537677649,
+          "friction_loss_scale": 1.0846769999320143,
+          "reset_index": 13,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919856733506,
+            -0.3828431125110371
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.128656305489269,
+            "left_wheel_collision_0": 4.316184501464367
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08612071627931747,
+          -1.4104411688253737
+        ],
+        "final_clearance_m": 0.16573667733330213,
+        "final_joint_position_rad": [
+          2.7257703255523995,
+          -3.3156317087587155,
+          8.355624097704894,
+          -2.8672997949946906,
+          3.2329991890493184,
+          4.306587632273717
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.022268295288085938,
+          -0.000476837158203125,
+          1.6132354736328125,
+          0.016307830810546875,
+          -0.00057220458984375,
+          1.5399932861328125
+        ],
+        "final_forward_velocity_m_s": 0.08335533738136292,
+        "final_body_contact": false,
+        "final_displacement_m": 0.14374597836380035,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864245
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.26331470019599,
+          "left_wheel_collision_0": 115.59105141491534
+        },
+        "episode_parameters": {
+          "seed": 864246,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 6,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919232573504,
+            -0.38284311331518583
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.131367485920325,
+            "left_wheel_collision_0": 4.3160754063425
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.003752682134718088,
+          0.33246333550016943
+        ],
+        "final_clearance_m": 0.1723356675849352,
+        "final_joint_position_rad": [
+          2.7788157457708036,
+          -3.2746980571200393,
+          7.4103690975694745,
+          -2.778414260709833,
+          3.2749345931513454,
+          2.921390548886603
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.002002716064453125,
+          -0.0008106231689453125,
+          0.009250640869140625,
+          0.0017642974853515625,
+          0.002002716064453125,
+          0.009202957153320312
+        ],
+        "final_forward_velocity_m_s": 0.0007790710078552365,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04745846593537825,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864246
+      },
+      {
+        "success": false,
+        "failure": "getup_displacement_limit",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 253
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.86944766231352,
+          "left_wheel_collision_0": 114.96612871822711
+        },
+        "episode_parameters": {
+          "seed": 864247,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9962486125259555,
+            0.9733261622818474,
+            1.0,
+            0.9873609563050054,
+            0.9730732437267665,
+            1.0
+          ],
+          "spring_scale": 1.0000292886672342,
+          "friction": 0.7583648416009459,
+          "armature_scale": 0.9017807475885318,
+          "damping_scale": 0.9156182248158585,
+          "friction_loss_scale": 1.0712393714630826,
+          "reset_index": 7,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828391945761341,
+            -0.3828431151858002
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.130454643322305,
+            "left_wheel_collision_0": 4.315306100705392
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.06938375670683401,
+          -4.62169292675821
+        ],
+        "final_clearance_m": 0.1496636171039571,
+        "final_joint_position_rad": [
+          2.7771347969393156,
+          -3.312377571581017,
+          12.7440506320154,
+          -2.906260880914041,
+          3.2421932825422632,
+          6.896370021360025
+        ],
+        "final_joint_velocity_rad_s": [
+          0.016880035400390625,
+          -0.01621246337890625,
+          3.697967529296875,
+          -0.06427765637636185,
+          0.003719329833984375,
+          3.382396697998047
+        ],
+        "final_forward_velocity_m_s": 0.17720916867256165,
+        "final_body_contact": false,
+        "final_displacement_m": 0.3013923308840504,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864247
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.70693649359694,
+          "left_wheel_collision_0": 115.03585407463989
+        },
+        "episode_parameters": {
+          "seed": 864248,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 25,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922917928337,
+            -0.38284311249132696
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116435342655993,
+            "left_wheel_collision_0": 4.316210614670204
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.0012372144609683728,
+          0.22588344154364678
+        ],
+        "final_clearance_m": 0.1730256477556634,
+        "final_joint_position_rad": [
+          2.7802692255609935,
+          -3.274172973381984,
+          2.9734304875224122,
+          -2.777554938608856,
+          3.2757514503649405,
+          3.0494641610517332
+        ],
+        "final_joint_velocity_rad_s": [
+          0.0006198883056640625,
+          0.0022411346435546875,
+          -0.334930419921875,
+          -0.003719329833984375,
+          -0.001811981201171875,
+          -0.3512382507324219
+        ],
+        "final_forward_velocity_m_s": -0.010231508873403072,
+        "final_body_contact": false,
+        "final_displacement_m": 0.05757882795042046,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864248
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.48005889580543,
+          "left_wheel_collision_0": 115.31052392727945
+        },
+        "episode_parameters": {
+          "seed": 864249,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9695216498011263,
+            0.988929341240091,
+            1.0,
+            0.9845854409272005,
+            0.9976577945083098,
+            1.0
+          ],
+          "spring_scale": 1.017411324257569,
+          "friction": 0.7727915121290706,
+          "armature_scale": 0.8940950256153024,
+          "damping_scale": 1.0106026197251814,
+          "friction_loss_scale": 0.9254024527744127,
+          "reset_index": 11,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283921595923903,
+            -0.38284312676534843
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1273522028928475,
+            "left_wheel_collision_0": 4.3160790162127665
+          }
+        },
+        "final_roll_pitch_deg": [
+          0.0007067923319888978,
+          0.15686478396105905
+        ],
+        "final_clearance_m": 0.1743172077819225,
+        "final_joint_position_rad": [
+          2.7842490386667604,
+          -3.26444997603306,
+          5.670061942817268,
+          -2.772850643269175,
+          3.2718149401658687,
+          2.8609069997285594
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.0033855438232421875,
+          -0.00095367431640625,
+          0.220489501953125,
+          0.0023365020751953125,
+          0.0024318695068359375,
+          0.23374557495117188
+        ],
+        "final_forward_velocity_m_s": 0.008592371828854084,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04720354966814952,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864249
+      },
+      {
+        "success": false,
+        "failure": "balance_state_out_of_spec",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 208,
+          "HANDOFF": 30,
+          "BALANCE": 35
+        },
+        "balance_ticks": 35,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 100.70681745617594,
+          "left_wheel_collision_0": 114.11089818574587
+        },
+        "episode_parameters": {
+          "seed": 864250,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9845093094234655,
+            0.9987320370577296,
+            1.0,
+            0.9755360355928849,
+            0.9698372723297091,
+            1.0
+          ],
+          "spring_scale": 0.9845728173841308,
+          "friction": 0.7707647162765874,
+          "armature_scale": 1.0767309596746768,
+          "damping_scale": 1.0453514490489955,
+          "friction_loss_scale": 0.9475036506441845,
+          "reset_index": 18,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828392165307713,
+            -0.38284310143311484
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116623483734774,
+            "left_wheel_collision_0": 4.315805704973383
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08601526411075597,
+          -0.6308255394415759
+        ],
+        "final_clearance_m": 0.16797854419165575,
+        "final_joint_position_rad": [
+          2.68573113752931,
+          -3.3358055962836715,
+          7.030362337527439,
+          -2.881986243273032,
+          3.2196967400888417,
+          3.815998602681739
+        ],
+        "final_joint_velocity_rad_s": [
+          0.004482269287109375,
+          0.0042438507080078125,
+          1.4326095581054688,
+          0.0056743621826171875,
+          0.003147125244140625,
+          1.4494895935058594
+        ],
+        "final_forward_velocity_m_s": 0.08399052172899246,
+        "final_body_contact": false,
+        "final_displacement_m": 0.13463426205498258,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864250
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.83429584302507,
+          "left_wheel_collision_0": 115.145388086198
+        },
+        "episode_parameters": {
+          "seed": 864251,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 38,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922990079944,
+            -0.38284311251646946
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1161427788190466,
+            "left_wheel_collision_0": 4.316196351577841
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.0017095449342685526,
+          0.33799366754463767
+        ],
+        "final_clearance_m": 0.1723424146715222,
+        "final_joint_position_rad": [
+          2.7785146034344583,
+          -3.274652269834265,
+          2.9239527305140283,
+          -2.7778161009971507,
+          3.274936655486114,
+          2.91146826932703
+        ],
+        "final_joint_velocity_rad_s": [
+          0.00095367431640625,
+          -0.0009059906005859375,
+          0.4761695861816406,
+          -0.0002384185791015625,
+          -0.001430511474609375,
+          0.47478675842285156
+        ],
+        "final_forward_velocity_m_s": 0.023200342431664467,
+        "final_body_contact": false,
+        "final_displacement_m": 0.05078268152647702,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864251
+      }
+    ]
+  },
+  {
+    "score": 620.35,
+    "values": [
+      1.0035417689411505,
+      1.0064859260918892,
+      1.0530238767115605,
+      -0.0019533540371416314,
+      0.0021676122693428464,
+      0.0002520149119293637
+    ],
+    "passed": 4,
+    "perturbed": 4,
+    "perturbed_wins": 1,
+    "rows": [
+      {
+        "success": false,
+        "failure": "handoff_unstable",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 18
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 101.06280767242215,
+          "left_wheel_collision_0": 114.3768569902175
+        },
+        "episode_parameters": {
+          "seed": 864245,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9969035051653351,
+            0.9892178301980893,
+            1.0,
+            0.9840644042113104,
+            0.976599141878811,
+            1.0
+          ],
+          "spring_scale": 0.999426103447092,
+          "friction": 0.804639843138715,
+          "armature_scale": 1.0994926640537976,
+          "damping_scale": 1.1056442537677649,
+          "friction_loss_scale": 1.0846769999320143,
+          "reset_index": 13,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919856733506,
+            -0.3828431125110371
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.128656305489269,
+            "left_wheel_collision_0": 4.316184501464367
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08695722123519806,
+          -1.3863012168228588
+        ],
+        "final_clearance_m": 0.16586011759276104,
+        "final_joint_position_rad": [
+          2.725336363232638,
+          -3.3156297789075464,
+          8.356017091870747,
+          -2.866989504726966,
+          3.232947314544652,
+          4.306368090249075
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.029468536376953125,
+          -0.0003814697265625,
+          1.628875732421875,
+          0.02269744873046875,
+          -0.00095367431640625,
+          1.5526771545410156
+        ],
+        "final_forward_velocity_m_s": 0.08375260978937149,
+        "final_body_contact": false,
+        "final_displacement_m": 0.14377546231512925,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864245
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 206,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.23884658198511,
+          "left_wheel_collision_0": 115.58306117273915
+        },
+        "episode_parameters": {
+          "seed": 864246,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 6,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283919232573504,
+            -0.38284311331518583
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.131367485920325,
+            "left_wheel_collision_0": 4.3160754063425
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.004488493854102685,
+          0.45079890446121196
+        ],
+        "final_clearance_m": 0.17169923215118266,
+        "final_joint_position_rad": [
+          2.7767616637496966,
+          -3.2746132634606178,
+          7.335892969029623,
+          -2.7775485121335075,
+          3.274106931894589,
+          2.8320101988208033
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.0021457672119140625,
+          -0.00095367431640625,
+          0.0476837158203125,
+          0.001811981201171875,
+          0.00209808349609375,
+          0.045680999755859375
+        ],
+        "final_forward_velocity_m_s": 0.0028141625225543976,
+        "final_body_contact": false,
+        "final_displacement_m": 0.0432666225773707,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864246
+      },
+      {
+        "success": false,
+        "failure": "getup_displacement_limit",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 253
+        },
+        "balance_ticks": 0,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.86944766231352,
+          "left_wheel_collision_0": 114.96612871822711
+        },
+        "episode_parameters": {
+          "seed": 864247,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9962486125259555,
+            0.9733261622818474,
+            1.0,
+            0.9873609563050054,
+            0.9730732437267665,
+            1.0
+          ],
+          "spring_scale": 1.0000292886672342,
+          "friction": 0.7583648416009459,
+          "armature_scale": 0.9017807475885318,
+          "damping_scale": 0.9156182248158585,
+          "friction_loss_scale": 1.0712393714630826,
+          "reset_index": 7,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828391945761341,
+            -0.3828431151858002
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.130454643322305,
+            "left_wheel_collision_0": 4.315306100705392
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.06938375670683401,
+          -4.62169292675821
+        ],
+        "final_clearance_m": 0.1496636171039571,
+        "final_joint_position_rad": [
+          2.7771347969393156,
+          -3.312377571581017,
+          12.7440506320154,
+          -2.906260880914041,
+          3.2421932825422632,
+          6.896370021360025
+        ],
+        "final_joint_velocity_rad_s": [
+          0.016880035400390625,
+          -0.01621246337890625,
+          3.697967529296875,
+          -0.06427765637636185,
+          0.003719329833984375,
+          3.382396697998047
+        ],
+        "final_forward_velocity_m_s": 0.17720916867256165,
+        "final_body_contact": false,
+        "final_displacement_m": 0.3013923308840504,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864247
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.71871721508492,
+          "left_wheel_collision_0": 115.04236908933758
+        },
+        "episode_parameters": {
+          "seed": 864248,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 25,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922917928337,
+            -0.38284311249132696
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116435342655993,
+            "left_wheel_collision_0": 4.316210614670204
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.0016591635563508354,
+          0.3288888947931326
+        ],
+        "final_clearance_m": 0.17248595592347968,
+        "final_joint_position_rad": [
+          2.778198523097879,
+          -3.2741763172291236,
+          2.9163578632396994,
+          -2.776736550410435,
+          3.2749592850180345,
+          2.9768956790609993
+        ],
+        "final_joint_velocity_rad_s": [
+          0.000667572021484375,
+          0.002384185791015625,
+          -0.3749847412109375,
+          -0.0031948089599609375,
+          -0.001811981201171875,
+          -0.38704872131347656
+        ],
+        "final_forward_velocity_m_s": -0.012229169718921185,
+        "final_body_contact": false,
+        "final_displacement_m": 0.0542244201042827,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864248
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.4350671517269,
+          "left_wheel_collision_0": 115.30740194343903
+        },
+        "episode_parameters": {
+          "seed": 864249,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9695216498011263,
+            0.988929341240091,
+            1.0,
+            0.9845854409272005,
+            0.9976577945083098,
+            1.0
+          ],
+          "spring_scale": 1.017411324257569,
+          "friction": 0.7727915121290706,
+          "armature_scale": 0.8940950256153024,
+          "damping_scale": 1.0106026197251814,
+          "friction_loss_scale": 0.9254024527744127,
+          "reset_index": 11,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283921595923903,
+            -0.38284312676534843
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1273522028928475,
+            "left_wheel_collision_0": 4.3160790162127665
+          }
+        },
+        "final_roll_pitch_deg": [
+          0.0002155095974614333,
+          0.32217819942864534
+        ],
+        "final_clearance_m": 0.17338368937390206,
+        "final_joint_position_rad": [
+          2.781839218448772,
+          -3.2644408666111557,
+          5.55337313451147,
+          -2.771765870582962,
+          3.270999198538028,
+          2.725834831440129
+        ],
+        "final_joint_velocity_rad_s": [
+          -0.002574920654296875,
+          -0.000476837158203125,
+          0.28629302978515625,
+          0.0018596649169921875,
+          0.002002716064453125,
+          0.2960681915283203
+        ],
+        "final_forward_velocity_m_s": 0.012116321362555027,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04075110527555801,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864249
+      },
+      {
+        "success": false,
+        "failure": "balance_state_out_of_spec",
+        "phase": "FAILED",
+        "phase_counts": {
+          "GETUP": 208,
+          "HANDOFF": 30,
+          "BALANCE": 35
+        },
+        "balance_ticks": 35,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 100.72035183170566,
+          "left_wheel_collision_0": 114.14089220491456
+        },
+        "episode_parameters": {
+          "seed": 864250,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            0.9845093094234655,
+            0.9987320370577296,
+            1.0,
+            0.9755360355928849,
+            0.9698372723297091,
+            1.0
+          ],
+          "spring_scale": 0.9845728173841308,
+          "friction": 0.7707647162765874,
+          "armature_scale": 1.0767309596746768,
+          "damping_scale": 1.0453514490489955,
+          "friction_loss_scale": 0.9475036506441845,
+          "reset_index": 18,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.3828392165307713,
+            -0.38284310143311484
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.116623483734774,
+            "left_wheel_collision_0": 4.315805704973383
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.08798215064632262,
+          -0.5407791472288449
+        ],
+        "final_clearance_m": 0.16849080631330438,
+        "final_joint_position_rad": [
+          2.684488760415381,
+          -3.335461409825759,
+          7.026661441079327,
+          -2.8805848422955944,
+          3.219190247763611,
+          3.8136512445381396
+        ],
+        "final_joint_velocity_rad_s": [
+          0.003910064697265625,
+          0.0041484832763671875,
+          1.4322280883789062,
+          0.0053882598876953125,
+          0.00286102294921875,
+          1.4453887939453125
+        ],
+        "final_forward_velocity_m_s": 0.0839637890458107,
+        "final_body_contact": false,
+        "final_displacement_m": 0.1346699284630366,
+        "odometry_confidence": 1.0,
+        "ready_at_end": false,
+        "seed": 864250
+      },
+      {
+        "success": true,
+        "failure": null,
+        "phase": "BALANCE",
+        "phase_counts": {
+          "GETUP": 205,
+          "HANDOFF": 30,
+          "BALANCE": 1000
+        },
+        "balance_ticks": 1000,
+        "support_peak_n": 0.0,
+        "support_peak_nm": 0.0,
+        "support_wrench": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "wheel_load_n": {
+          "right_wheel_collision_0": 99.83834443430734,
+          "left_wheel_collision_0": 115.13104233689094
+        },
+        "episode_parameters": {
+          "seed": 864251,
+          "reset_fraction": 0.0,
+          "domain": true,
+          "settle_s": 1.0,
+          "motor_gain": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "spring_scale": 1.0,
+          "friction": 0.75,
+          "armature_scale": 1.0,
+          "damping_scale": 1.0,
+          "friction_loss_scale": 1.0,
+          "reset_index": 38,
+          "reset_class": "seated",
+          "settled_wheel_offset_m": [
+            -0.38283922990079944,
+            -0.38284311251646946
+          ],
+          "settled_wheel_load_n": {
+            "right_wheel_collision_0": 4.1161427788190466,
+            "left_wheel_collision_0": 4.316196351577841
+          }
+        },
+        "final_roll_pitch_deg": [
+          -0.0025232408106805096,
+          0.4383377210909431
+        ],
+        "final_clearance_m": 0.171829657169729,
+        "final_joint_position_rad": [
+          2.776448150158911,
+          -3.2745565865328117,
+          2.8919552639277493,
+          -2.776934624082026,
+          3.2741101359456604,
+          2.8635815160864784
+        ],
+        "final_joint_velocity_rad_s": [
+          0.00095367431640625,
+          -0.001049041748046875,
+          0.6026744842529297,
+          -0.0001430511474609375,
+          -0.0012874603271484375,
+          0.601959228515625
+        ],
+        "final_forward_velocity_m_s": 0.029470179229974747,
+        "final_body_contact": false,
+        "final_displacement_m": 0.04877705062174617,
+        "odometry_confidence": 1.0,
+        "ready_at_end": true,
+        "seed": 864251
+      }
+    ]
+  }
+]

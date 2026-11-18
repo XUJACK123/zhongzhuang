@@ -1,0 +1,53 @@
+{
+  "frozen_at": "2026-11-18T05:05:47.304573+08:00",
+  "weights": {
+    "primary": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/primary.pt",
+      "sha256": "b83bcadeffa7f36164b0e57a17072260bbaf86989564a6f7632847cf52c6c539"
+    },
+    "standard_mlp": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/standard_mlp.pt",
+      "sha256": "b6deba17f3ab15f408c951b492c7115de9338c4d1fbd706b0d88a56bf473229f"
+    },
+    "balance": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/balance.pt",
+      "sha256": "1a212b063e2fd6fc007855c333be60efeed16a6f88203df181eba99324e9277d"
+    },
+    "standard_balance": {
+      "path": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/standard_balance.pt",
+      "sha256": "1a212b063e2fd6fc007855c333be60efeed16a6f88203df181eba99324e9277d"
+    }
+  },
+  "originals": {
+    "primary": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/contact_snapshot_medium_final.pt",
+    "standard_mlp": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/fit_smooth_gain/fit_16000.pt",
+    "balance": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "standard_balance": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt"
+  },
+  "configuration_sha256": "f83c6ba0b43ee5e83ed8d971b057950103ab17ecf8464a9d871383c6896bc4ea",
+  "input_manifest_sha256": "b5d9cc285c1a9810240443c2e52e909505c57096fe5b572d2d4c161a9a3d481c",
+  "sources": {
+    "src/fifty_mujoco/envs/sample_env31_realdata.py": "552392af980952c8d670f8bd57bec733397db3cb4de42504102acca8372b5993",
+    "src/fifty_mujoco/envs/sample_env31_supported.py": "a59f3b044612f7f10f8d401b4be033aae63fb19c18b2fa5c95b360ca3a584768",
+    "src/fifty_mujoco/envs/sample_env31_qualified.py": "079ec77f36e746142f10b4f85492613d6ca31baaa3dbced2d7b92310bc163105",
+    "src/fifty_mujoco/contracts/getup31.py": "bd8f4614f79d66ae4d64b133c5f58e4ce8035ee996221a83102acda7425ca6c2",
+    "src/fifty_mujoco/transfer/firmware_runtime.py": "c538924b66fb54135d966925b2a2c940c77d348fe0916cb92108ceadc37c2114",
+    "tools/realdata_train.py": "4f0fc1b7f99be09425c8317077eda839b5c378e5b2996047f3938547a3337153",
+    "tools/realdata_evaluate.py": "84fa95a9cd13c30f52efea15adc40066d68d7cfd3b31d4f4c0b714638f7a86e1",
+    "tools/realdata_parallel_train.py": "19357ab37e0d35e26c42b2a078b9cce49ac8d7ba0fcbc0bd0d79075a816ed521",
+    "tools/realdata_sampler.py": "f799df26ad2a6cfd00745a1d12565b24ff1a3744ae57a1d68eb6d8758b06af74",
+    "tools/realdata_batch_evaluate.py": "67a40c7877a5752383a83d06d853240959d8218647d62d205640923ca73e85ec",
+    "tools/realdata_seated_state_teacher.py": "d4b0f821f60a9f2b3f051b90e8b69d917ead04c25701a82a57b9c28357ae7a00",
+    "tools/realdata_seated_progress_fit.py": "5f2e75b9eb3489a1adeaf2a31111cb446832a6dde15a35d47e1298af4574dff3",
+    "firmware/user/state_estimator.c": "ab13c2050c398d737af0930d618bec016c182cd5a6c51b07a089049cf3837451",
+    "firmware/user/state_estimator.h": "63c81b12c25780d10d742a261fcf438646aeeaa1225890506eb13c80fe4518c3",
+    "firmware/user/robot_config.h": "b624602a3c2b46a62671a979b4ed61ada7a59998e287db941e6e311de60bc287",
+    "firmware/user/algorithm/rl.c": "9755bfeba2895b495fdde7fad28f7851e44d66ca7c2665594d9a4ade76330abf",
+    "firmware/user/algorithm/rl.h": "d0179d305170d145bf3f04a6601660ef720678f7673a33c658e6e6ae7932c434",
+    "firmware/user/algorithm/model/model.c": "78e696e984e9c4a961af025dd51285fa18a5be52db0d534feb85fb9b6d5e7ecf",
+    "firmware/user/algorithm/model/model.h": "866073c795a5eb3c0dba71add6125f99f3f3e87da8c5c202f92b7d5f94a25d0b",
+    "firmware/user/algorithm/model/profile.h": "edcb96be27df58a2e329df537aa10f470f83300736afc8ca54625f9f6898cbbc"
+  },
+  "heldout_spec_sha256": "9a298e70730ab00cb4ed01c150a7f8b830199d323341c35840cb7fb1dea71c31",
+  "preferred_primary_schema": "seated_contact_sequence_v1"
+}

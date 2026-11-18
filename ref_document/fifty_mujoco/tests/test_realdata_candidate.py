@@ -76,6 +76,33 @@ def test_supported_zero_output_settle_and_force_release(cfg):
     np.testing.assert_equal(e.env.data.xfrc_applied,np.zeros_like(e.env.data.xfrc_applied))
 
 
+def test_catalogue_curve_uses_knots_instead_of_polytropic_proxy(cfg):
+    spring = copy.deepcopy(cfg['spring'])
+    spring['curve'] = {'compression_m': [0., .04, .08], 'force_n': [430., 470., 588.8]}
+    assert spring_force(.25, 0., spring) == pytest.approx(430.)
+    assert spring_force(.19, 0., spring) == pytest.approx(529.4)
+    assert spring_force(.17, 0., spring) == pytest.approx(588.8)
+    with pytest.raises(ValueError, match='stroke'):
+        spring_force(.169, 0., spring)
+
+
+def test_seated_back_starts_in_contact_at_zero_motor_and_support_force(cfg):
+    configuration = copy.deepcopy(cfg)
+    configuration['seated_back'] = {'reset_bank': [{
+        'qpos': [0., 0., .1751, 1., 0., 0., 0., 3.403, -2.5993, 0., -3.403, 2.5993, 0.],
+        'qvel': [0.]*12,
+    }]}
+    env = SupportedGetupEnv31(ConstantActor(), config=configuration, settle_seconds=1.)
+    obs = env.reset(910060)
+    assert obs.shape == (31,)
+    assert env.failed_reset is None and env.decision.phase == Phase.GETUP
+    assert env.last_sample.body_contact and not env.controller.ready(env.last_sample)
+    assert max(env.parameters['settled_wheel_offset_m']) < -.35
+    assert min(env.wheel_load_n.values()) > 1.
+    assert env.support_peak_n == env.support_peak_nm == 0.
+    np.testing.assert_array_equal(env.env.fast_actuators.command, np.zeros(6))
+
+
 def test_actor_observation_uses_new_defaults(cfg):
     e=RealDataHardwareEnv31(config=cfg);obs=e.reset()
     np.testing.assert_allclose(obs[9:13],0,atol=1e-7)

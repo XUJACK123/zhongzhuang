@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image,ImageDraw
 import torch
 
-from realdata_train import SamplePolicy31,verified_artifact,digest
+from realdata_train import SamplePolicy31,verified_artifact,digest,evaluation_policy
 from realdata_allocator import AllocatorActor
 from fifty_mujoco.envs.sample_env31_supported import SupportedGetupEnv31
 
@@ -29,7 +29,7 @@ def main():
     args=ap.parse_args();torch.set_num_threads(1)
     saved=torch.load(args.checkpoint,map_location='cpu',weights_only=True)
     cfg=json.loads(args.config.read_text()) if args.config else saved.get('configuration',saved.get('contract',{}).get('configuration'))
-    policy=SamplePolicy31(verified_artifact('model_3050.pt'),'cpu');policy.load_state_dict(saved['model'])
+    policy=evaluation_policy(saved)
     balanced=SamplePolicy31(verified_artifact('model_3050.pt'),'cpu')
     balanced.load_state_dict(torch.load(args.balance,map_location='cpu',weights_only=True)['model'])
     if args.allocator:policy.actor=AllocatorActor(policy.actor,cfg)

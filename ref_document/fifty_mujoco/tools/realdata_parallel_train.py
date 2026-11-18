@@ -45,7 +45,7 @@ def getup_evaluate(policy, settings, count=8, seed_base=611000):
     for j in range(count):
         if trace_root:trace={k:[] for k in ('metrics','phase','qpos','action','motor_command','physical_truth')}
         obs=env.reset(seed_base+j)
-        for _ in range(2100):
+        for _ in range(env.max_steps + 1):
             with torch.no_grad():action=policy.actor(torch.tensor(obs,device=next(policy.parameters()).device)[None])[0].cpu().numpy()
             obs,_,terminated,truncated,info=env.step(action)
             if terminated or truncated:break

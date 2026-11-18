@@ -22,6 +22,10 @@ from ..paths import PROJECT_ROOT
 from ..transfer.firmware_runtime import Estimator, Quality, Measurement, Controller
 
 
+DOMAIN_DEFAULTS = {'nominal_fraction': .2, 'motor_gain': [.8, 1.], 'spring_scale': [.8, 1.2],
+                   'friction': [.6, .9], 'armature_scale': [.5, 2.], 'drag_scale': [.5, 2.]}
+
+
 class CandidateController(GetupController):
     def __init__(self, plan, default):
         self.default = default
@@ -32,6 +36,8 @@ class CandidateController(GetupController):
         failure=super()._failure(sample)
         if max(abs(x) for x in sample.roll_pitch_deg)>40:
             return failure or 'getup_tilt_limit'
+        if self.spec.get('seated_back') and sample.displacement_m > self.criteria['horizontal_displacement_m_max']:
+            return failure or 'getup_displacement_limit'
         if self.phase==Phase.BALANCE and not self.ready(sample):
             return failure or 'balance_state_out_of_spec'
         return failure
@@ -60,10 +66,15 @@ class SupportedGetupEnv31:
         self.balance_actor = balance_actor.requires_grad_(False).eval()
         self.reset_range, self.settle_seconds, self.domain = reset_range, settle_seconds, domain
         self.candidate = self.env.candidate
+        self.seated = self.candidate.get('seated_back')
+        if self.seated and settle_seconds < 1. and any(
+                item.get('class', 'seated') == 'seated' for item in self.seated['reset_bank']):
+            raise ValueError('seated initial states require at least one second of zero-output settle')
         self.source, self.model, self.data = self.env.source, self.env.model, self.env.data
         self.plan = json.loads((PROJECT_ROOT/"configs/hardware31_next_training_20261115.json").read_text())
         spec, cfg = self.plan["getup"], self.candidate
         spec["actor_commands"][2] = cfg["standing_clearance_m"]
+        spec['seated_back'] = bool(self.seated)
         for key in ("stable_dwell_s","getup_timeout_s"):
             spec[key] = cfg["success"][key]
         spec["post_handoff_balance_s"] = cfg["success"]["balance_s"]
@@ -93,6 +104,10 @@ class SupportedGetupEnv31:
 
     def _support(self):
         cfg, e = self.candidate["support"], self.env
+        if self.seated:
+            self.support_wrench.fill(0.)
+            e.data.xfrc_applied.fill(0.)
+            return
         t = self.enabled_time
         fraction = max(0., 1-max(0.,t-self.release_after_s)/self.fade_s)
         desired = self.support_start.copy()
@@ -131,7 +146,7 @@ class SupportedGetupEnv31:
             if 'floor' in names:
                 other=next(n for n in names if n!='floor')
                 if other in wheel_load:wheel_load[other]+=abs(float(f[0]))
-                elif other=='base_link_collision_0':body_contact |= magnitude>10
+                elif other=='base_link_collision_0':body_contact |= magnitude>(1e-3 if self.seated else 10)
                 else:forbidden=True
             else:forbidden=True
         self.wheel_load_n=wheel_load
@@ -166,30 +181,44 @@ class SupportedGetupEnv31:
                          'domain':self.domain,'settle_s':self.settle_seconds}
         self.model.dof_armature[:]=self.armature_nominal
         self.model.dof_damping[:],self.model.dof_frictionloss[:]=self.drag_nominal
+        ranges = DOMAIN_DEFAULTS | self.candidate.get('domain_ranges', {})
         gain=np.ones(6);e.spring_scale=1.
-        if self.domain and rng.random()>=.2:
-            gain[[0,1,3,4]]=rng.uniform(.8,1.,4)
-            e.spring_scale=float(rng.uniform(.8,1.2))
-            self.model.geom_friction[:,0]=rng.uniform(.6,.9)
-            self.model.dof_armature[:]=self.armature_nominal*rng.uniform(.5,2.)
-            self.model.dof_damping[:]=self.drag_nominal[0]*rng.uniform(.5,2.)
-            self.model.dof_frictionloss[:]=self.drag_nominal[1]*rng.uniform(.5,2.)
-        else:self.model.geom_friction[:,0]=.75
+        friction, armature, damping, friction_loss = .75, 1., 1., 1.
+        if self.domain and rng.random()>=ranges['nominal_fraction']:
+            gain[[0,1,3,4]]=rng.uniform(*ranges['motor_gain'],4)
+            e.spring_scale=float(rng.uniform(*ranges['spring_scale']))
+            friction = float(rng.uniform(*ranges['friction']))
+            armature = float(rng.uniform(*ranges['armature_scale']))
+            damping, friction_loss = rng.uniform(*ranges['drag_scale'], 2).tolist()
+        self.model.geom_friction[:,0] = friction
+        self.model.dof_armature[:] *= armature
+        self.model.dof_damping[:] *= damping
+        self.model.dof_frictionloss[:] *= friction_loss
         e.fast_actuators.gain[:]=gain
-        self.parameters.update(motor_gain=gain.tolist(),spring_scale=e.spring_scale)
+        self.parameters.update(motor_gain=gain.tolist(),spring_scale=e.spring_scale,friction=friction,
+                               armature_scale=armature,damping_scale=damping,friction_loss_scale=friction_loss)
         obs=e.reset(seed)
         fraction=self.parameters['reset_fraction']
         pose=e.source.defaults+fraction*(np.asarray(self.candidate['survey_pose_rad'])-e.source.defaults)
         pose[[0,1,3,4]]+=rng.uniform(-.005,.005,4)
-        self.data.qpos[e.source.qpos_ids]=pose
-        self.data.qvel[:]=0
-        mujoco.mj_forward(self.model,self.data)
-        bottoms=[]
-        for name in ('right_wheel_collision_0','left_wheel_collision_0'):
-            g=self.model.geom(name).id;az=self.data.geom_xmat[g].reshape(3,3)[2,2]
-            extent=self.model.geom_size[g,0]*math.sqrt(max(0,1-az*az))+self.model.geom_size[g,1]*abs(az)
-            bottoms.append(self.data.geom_xpos[g,2]-extent)
-        self.data.qpos[2]-=min(bottoms)
+        if self.seated:
+            bank = self.seated['reset_bank']
+            index = int(rng.integers(len(bank)))
+            entry = bank[index]
+            self.parameters.update(reset_index=index, reset_class=entry.get('class', 'seated'))
+            self.data.qpos[:] = entry['qpos']
+            self.data.qvel[:] = entry['qvel']
+            pose = self.data.qpos[e.source.qpos_ids].copy()
+        else:
+            self.data.qpos[e.source.qpos_ids]=pose
+            self.data.qvel[:]=0
+            mujoco.mj_forward(self.model,self.data)
+            bottoms=[]
+            for name in ('right_wheel_collision_0','left_wheel_collision_0'):
+                g=self.model.geom(name).id;az=self.data.geom_xmat[g].reshape(3,3)[2,2]
+                extent=self.model.geom_size[g,0]*math.sqrt(max(0,1-az*az))+self.model.geom_size[g,1]*abs(az)
+                bottoms.append(self.data.geom_xpos[g,2]-extent)
+            self.data.qpos[2]-=min(bottoms)
         mujoco.mj_forward(self.model,self.data)
         e.c_estimator.last_q[:]=pose
         e.c_estimator.held_qd[:]=[0.]*6
@@ -197,7 +226,8 @@ class SupportedGetupEnv31:
         e.c_measurement.q[:]=pose
         e.joint_velocity=np.zeros(6)
         self.controller=CandidateController(self.plan,self.source.defaults)
-        self.controller.ramp_s=float(rng.uniform(.2,.5))
+        ramp = self.candidate.get('getup_ramp_range_s', [.2, .5])
+        self.controller.ramp_s=float(rng.uniform(*ramp))
         self.enabled_time=0.;self.release_after_s=float(rng.uniform(*self.candidate['support']['release_after_s']))
         self.fade_s=float(rng.uniform(*self.candidate['support']['fade_s']))
         self.vertical_release_after_s=float(rng.uniform(*self.candidate['support'].get('vertical_release_after_s',[self.release_after_s]*2)))
@@ -206,10 +236,21 @@ class SupportedGetupEnv31:
         self.bodyweight=float(self.model.body_mass.sum()*9.81)
         self.support_wrench=np.zeros(6);self.support_peak_n=self.support_peak_nm=0.
         self.phase_counts={};self.balance_ticks=0;self.failed_reset=None;self.tick=0
+        self.ready_reference_aligned = False
         for _ in range(round(self.settle_seconds/.01)):
             obs,info,s=self._advance([0.]*6,0.)
             if self.controller._failure(s):
-                self.failed_reset='invalid_supported_zero_torque_settle:'+self.controller._failure(s);break
+                self.failed_reset='invalid_zero_torque_settle:'+self.controller._failure(s);break
+        if self.seated and not self.failed_reset and entry.get('class', 'seated') == 'seated':
+            forward = e._rotation()[:2, 0]
+            wheel_centres = [self.data.geom_xpos[self.model.geom(n).id, :2]
+                             for n in ('right_wheel_collision_0', 'left_wheel_collision_0')]
+            offsets = [(pos-self.data.qpos[:2])@forward for pos in wheel_centres]
+            self.parameters['settled_wheel_offset_m'] = [float(x) for x in offsets]
+            self.parameters['settled_wheel_load_n'] = dict(self.wheel_load_n)
+            if (max(offsets) >= -.01 or not s.body_contact or min(self.wheel_load_n.values()) < .005*self.bodyweight
+                    or np.max(np.abs(self.data.qvel)) > .2):
+                self.failed_reset = 'seated_reset_shape_or_rest_lost'
         if self.failed_reset:
             self.decision=Decision(Phase.FAILED,0.,0.,False,False,self.failed_reset)
             self.start_time=float(self.data.time)
@@ -240,14 +281,26 @@ class SupportedGetupEnv31:
             before=self.decision
             if before.failure is not None or self.failed_reset:
                 self.finished=True
-                last_info={'time_s':self.enabled_time,'failure':self.failed_reset or before.failure}
+                last_info=dict(self.env.last_info, time_s=self.enabled_time, failure=self.failed_reset or before.failure)
                 total_reward-=5.;break
             applied=blended_targets(before,action,self._balance_action(),self.env.target_limits)['clipped_action']
             # Mapping into target positions happens once in the candidate plant.
             previous=np.asarray(self.env.last_action).copy()
             self.enabled_time=float(self.data.time)-self.start_time
             obs,info,state=self._advance(applied,before.torque_scale)
-            self.decision=self.controller.update(state,True)
+            physical_failure = self.controller._failure(state)
+            if physical_failure and state.time_s <= self.controller.previous_time:
+                # Mechanical checks may stop before any physical time advances.
+                self.controller.phase, self.controller.failure = Phase.FAILED, physical_failure
+                self.decision = Decision(Phase.FAILED, 0., 0., False, False, physical_failure)
+            else:
+                self.decision=self.controller.update(state,True)
+            if (self.candidate.get('getup_ready_reanchor_reference', False)
+                    and not self.ready_reference_aligned and before.phase == Phase.GETUP
+                    and self.controller.ready(state)):
+                self.env.reference = self.env.estimated_xy.tolist()
+                self.env.heading = float(rpy_from_wxyz(self.data.qpos[3:7])[2])
+                self.ready_reference_aligned = True
             if (self.candidate.get('handoff_reanchor_reference',False)
                     and before.phase==Phase.GETUP and self.decision.phase==Phase.HANDOFF):
                 self.env.reference=self.env.estimated_xy.tolist()
@@ -269,8 +322,18 @@ class SupportedGetupEnv31:
                 saturation=sum(info['saturation_counts'])/(6*max(1,info['controls']))
                 total_reward+=(.01*(potential+height+posture+quiet+position-4.-.0001*power-.1*saturation)
                                +2*progress-.002*np.square(np.asarray(applied)-previous).sum())
+                if self.seated:
+                    height_goal = self.candidate['standing_clearance_m']
+                    last_height = np.clip(self.previous_sample.clearance_m, 0., height_goal)
+                    new_height = np.clip(state.clearance_m, 0., height_goal)
+                    total_reward += 12*(new_height-last_height) + .02*float(self.controller.ready(state))
+                    if self.seated.get('braking_reward', False):
+                        total_reward -= .04*max(0., state.displacement_m-.1)/.2
+                        if new_height > .05:
+                            total_reward -= .025*min(2., max(0., abs(state.forward_velocity_m_s)-.08)/.3)
             else:
                 total_reward+=.01*self.candidate.get('balance_duration_reward_per_s',0.)
+            self.previous_sample = state
             self.finished=self.decision.success or self.decision.failure is not None
             last_info=info
             if self.finished or self.decision.phase!=Phase.BALANCE:break
@@ -294,5 +357,5 @@ class SupportedGetupEnv31:
         return self.env.observation(),float(total_reward),bool(self.finished),False,last_info
 
     def snapshot(self):
-        return {**self.env.snapshot(),'task':'supported_getup_release_handoff','reset_range':list(self.reset_range),
+        return {**self.env.snapshot(),'task':'seated_back_getup' if self.seated else 'supported_getup_release_handoff','reset_range':list(self.reset_range),
                 'zero_torque_settle_s':self.settle_seconds,'domain_randomization':self.domain,'plan':self.plan}

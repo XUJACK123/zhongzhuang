@@ -44,7 +44,7 @@ class QualifiedHardwareEnv31(GuardedHardwareEnv31):
             return True
         q, qd = self.data.qpos[self.source.qpos_ids], self.data.qvel[self.source.qvel_ids]
         arms, speeds = self._motor_coordinates(q, qd)
-        rotation, omega = self._rotation(), self._velocity6()[:3]
+        rotation, omega = self._rotation(), self._gyro_sample()
         # Ideal specific force at the free-joint root, with no sensor noise.
         acceleration = rotation.T @ (self.data.qacc[:3] - self.model.opt.gravity)
         now = round(float(self.data.time)*1000)
@@ -58,6 +58,9 @@ class QualifiedHardwareEnv31(GuardedHardwareEnv31):
             self.estimated_xy = np.array(self.c_measurement.xy)
             self.estimated_velocity = np.r_[np.array(self.c_measurement.velocity), 0.]
         return bool(valid)
+
+    def _gyro_sample(self):
+        return self._velocity6()[:3]
 
     def reset(self, seed=0, command=(0., 0., .1)):
         self.c_estimator, self.c_quality = Estimator(), Quality()

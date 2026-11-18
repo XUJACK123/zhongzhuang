@@ -38,12 +38,16 @@ class Controller(c.Structure):
                 ("joint_torque", c.c_float*6), ("motor_torque", c.c_float*6)]
 
 
+RUNTIME_SOURCES = (
+    "user/state_estimator.c", "user/state_estimator.h", "user/robot_config.h",
+    "user/algorithm/rl.c", "user/algorithm/rl.h", "user/algorithm/model/model.c",
+    "user/algorithm/model/model.h", "user/algorithm/model/profile.h",
+)
+
+
 def source_fingerprint():
     firmware = PROJECT_ROOT.parent / "chassis_ref_new"
-    names = ["user/state_estimator.c", "user/state_estimator.h", "user/robot_config.h",
-             "user/algorithm/rl.c", "user/algorithm/rl.h", "user/algorithm/model/model.c",
-             "user/algorithm/model/model.h"]
-    return {name: hashlib.sha256((firmware/name).read_bytes()).hexdigest() for name in names}
+    return {name: hashlib.sha256((firmware/name).read_bytes()).hexdigest() for name in RUNTIME_SOURCES}
 
 
 def load_runtime():

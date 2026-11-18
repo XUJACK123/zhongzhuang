@@ -23,7 +23,7 @@ from .sample_env31_hardware import rpy_from_wxyz
 from ..contracts.sample_actor31 import (action_targets, advance_reference, bottom_clearance,
                                         clip_actions, ramp_commands)
 from ..paths import PROJECT_ROOT
-from ..transfer.firmware_runtime import load_runtime
+from ..transfer.firmware_runtime import RUNTIME_SOURCES, load_runtime
 
 
 CONFIG = PROJECT_ROOT / "configs/realdata_20261117.json"
@@ -34,13 +34,19 @@ def configuration():
 
 
 def spring_force(length, rate, cfg):
-    """Polytropic proxy; seal/viscous terms always dissipate mechanical energy."""
-    stroke, exponent = cfg["stroke_m"], cfg["polytropic_exponent"]
-    dead_length = stroke / (1 - cfg["progression_at_full_stroke"] ** (-1 / exponent))
+    """Candidate force curve with dissipative seal friction and damping."""
     compression = cfg["free_pin_distance_m"] - length
-    if dead_length <= compression:
-        raise ValueError("nonpositive candidate gas volume")
-    elastic = cfg["initial_force_n"] * (dead_length / (dead_length - compression)) ** exponent
+    if "curve" in cfg:
+        if not -.0001 <= compression <= cfg["stroke_m"] + .0001:
+            raise ValueError("candidate spring stroke exceeded")
+        curve = cfg["curve"]
+        elastic = np.interp(compression, curve["compression_m"], curve["force_n"])
+    else:
+        stroke, exponent = cfg["stroke_m"], cfg["polytropic_exponent"]
+        dead_length = stroke / (1 - cfg["progression_at_full_stroke"] ** (-1 / exponent))
+        if dead_length <= compression:
+            raise ValueError("nonpositive candidate gas volume")
+        elastic = cfg["initial_force_n"] * (dead_length / (dead_length - compression)) ** exponent
     dissipative = (-cfg["seal_friction_n"] * math.tanh(rate / cfg["friction_smoothing_m_s"])
                    - cfg["viscous_damping_ns_m"] * rate)
     return max(0., elastic + dissipative)
@@ -49,10 +55,7 @@ def spring_force(length, rate, cfg):
 def candidate_runtime(radius):
     """Build actual C estimator with the candidate wheel scale in a temp copy."""
     firmware = PROJECT_ROOT.parent / "chassis_ref_new"
-    paths = ["user/state_estimator.c", "user/state_estimator.h", "user/robot_config.h",
-             "user/algorithm/rl.c", "user/algorithm/rl.h", "user/algorithm/model/model.c",
-             "user/algorithm/model/model.h"]
-    raw = {name: (firmware/name).read_bytes() for name in paths}
+    raw = {name: (firmware/name).read_bytes() for name in RUNTIME_SOURCES}
     text = raw["user/robot_config.h"].decode()
     text, count = re.subn(r"(#define ROBOT_WHEEL_RADIUS_M) [^\n]+",
                          rf"\g<1> {radius:.12f}f /* offline candidate */", text)
@@ -85,6 +88,8 @@ class RealDataHardwareEnv31(QualifiedHardwareEnv31):
         self.candidate = config or configuration()
         self.support_callback = None
         self.candidate_ready = False
+        self.gyro_error = np.zeros(3)
+        self.last_spring_forces = []
         kwargs.setdefault("wheel_kd", self.candidate["wheel_kd"])
         super().__init__(*args, **kwargs)
         cfg, model = self.candidate, self.model
@@ -138,18 +143,40 @@ class RealDataHardwareEnv31(QualifiedHardwareEnv31):
         return result, lengths
 
     def reset(self, seed=0, command=(0., 0., .1)):
+        self.gyro_error.fill(0)
+        self.sensor_rng = np.random.default_rng(np.random.SeedSequence([seed, 5]))
         if self.candidate_ready and command == (0., 0., .1):
             command = (0., 0., self.candidate["standing_clearance_m"])
         result = super().reset(seed, command)
         if self.candidate_ready:
             self.data.xfrc_applied[:] = 0
             self.applied[2] = self.requested[2]
+            bank = self.candidate.get('balance_reset_bank')
+            if bank:
+                pose = bank[int(np.random.default_rng(seed).integers(len(bank)))]
+                self.data.qpos[:] = pose['qpos']
+                self.data.qvel[:] = pose['qvel']
+                mujoco.mj_forward(self.model, self.data)
+                self.reference = list(pose['reference_error_xy_m'])
+                self.heading = float(rpy_from_wxyz(self.data.qpos[3:7])[2])
+                self.c_estimator.last_q[:] = self.data.qpos[self.source.qpos_ids]
+                self.c_estimator.held_qd[:] = self.data.qvel[self.source.qvel_ids]
+                self.joint_velocity = np.array(self.c_estimator.held_qd)
+                self.c_measurement.q[:] = self.c_estimator.last_q
+                self.estimated_velocity = self._rotation().T @ self.data.qvel[:3]
+                self.reference_managed_tick = None
             result = self.observation()
         return result
+
+    def _gyro_sample(self):
+        if self.candidate_ready and "gyro_std_rad_s" in self.candidate:
+            self.gyro_error = self.sensor_rng.normal(0, self.candidate["gyro_std_rad_s"])
+        return super()._gyro_sample() + self.gyro_error
 
     def observation(self):
         result = super().observation()
         if self.candidate_ready:
+            result[:3] += self.gyro_error * .25
             q = self.data.qpos[self.source.qpos_ids]
             offset = q - self.source.defaults
             offset[[0, 3]] = np.arctan2(np.sin(offset[[0, 3]]), np.cos(offset[[0, 3]]))

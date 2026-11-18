@@ -25,6 +25,7 @@ def main():
     p.add_argument('--actor-lr',type=float,default=3e-6);p.add_argument('--save-every',type=int,default=50)
     p.add_argument('--eval-every',type=int,default=100);p.add_argument('--warmup',type=int,default=10)
     p.add_argument('--anchor-coefficient',type=float,default=0.)
+    p.add_argument('--eval-seed-base',type=int,default=613000)
     p.add_argument('--seed',type=int,default=515000);args=p.parse_args()
     torch.set_num_threads(1);torch.manual_seed(args.seed);torch.cuda.manual_seed_all(args.seed)
     args.out.mkdir(parents=True,exist_ok=False);cfg=json.loads(args.config.read_text())
@@ -66,7 +67,7 @@ def main():
         evaluation_log=(args.out/f'cpu_development_{update:06d}.log').open('w')
         evaluation_process=subprocess.Popen([sys.executable,'-u',str(PROJECT/'tools/realdata_evaluate.py'),
               '--checkpoint',str(checkpoint.resolve()),'--out',str(output.resolve()),'--seeds','4',
-              '--seed-base','613000','--seconds','20'],stdout=evaluation_log,stderr=subprocess.STDOUT)
+              '--seed-base',str(args.eval_seed_base),'--seconds','20'],stdout=evaluation_log,stderr=subprocess.STDOUT)
     checkpoint=save('update_000000.pt');start_evaluation(checkpoint)
     start=time.monotonic()
     try:

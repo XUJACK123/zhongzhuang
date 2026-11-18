@@ -1,0 +1,272 @@
+[
+  {
+    "label": "state_mild_previous_nominal",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_2.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/seated_200ms_continuous.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": false,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_mild_previous_nominal.json"
+  },
+  {
+    "label": "state_mild_previous_mild",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_2.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_mild.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_mild_previous_mild.json"
+  },
+  {
+    "label": "state_mild_previous_medium",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_2.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_medium.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_mild_previous_medium.json"
+  },
+  {
+    "label": "state_mild_last_nominal",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_final_mild.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/seated_200ms_continuous.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": false,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_mild_last_nominal.json"
+  },
+  {
+    "label": "state_mild_last_mild",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_final_mild.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_mild.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_mild_last_mild.json"
+  },
+  {
+    "label": "state_mild_last_medium",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_final_mild.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_medium.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_mild_last_medium.json"
+  },
+  {
+    "label": "state_medium_gpu_nominal",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_medium_early.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/seated_200ms_continuous.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": false,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_medium_gpu_nominal.json"
+  },
+  {
+    "label": "state_medium_gpu_mild",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_medium_early.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_mild.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_medium_gpu_mild.json"
+  },
+  {
+    "label": "state_medium_gpu_medium",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_medium_early.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_medium.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_medium_gpu_medium.json"
+  },
+  {
+    "label": "state_medium_cpu_nominal",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_cpu_medium/iteration_006_rank0.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/seated_200ms_continuous.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": false,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_medium_cpu_nominal.json"
+  },
+  {
+    "label": "state_medium_cpu_mild",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_cpu_medium/iteration_006_rank0.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_mild.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_medium_cpu_mild.json"
+  },
+  {
+    "label": "state_medium_cpu_medium",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_cpu_medium/iteration_006_rank0.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_medium.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_medium_cpu_medium.json"
+  },
+  {
+    "label": "state_broad_gpu_nominal",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_broad_early.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/seated_200ms_continuous.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": false,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_broad_gpu_nominal.json"
+  },
+  {
+    "label": "state_broad_gpu_mild",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_broad_early.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_mild.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_broad_gpu_mild.json"
+  },
+  {
+    "label": "state_broad_gpu_medium",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/contact_snapshot_broad_early.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_medium.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/state_broad_gpu_medium.json"
+  },
+  {
+    "label": "mlp_gain_nominal",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/fit_smooth_gain/fit_16000.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/seated_200ms_continuous.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": false,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/mlp_gain_nominal.json"
+  },
+  {
+    "label": "mlp_gain_mild",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/fit_smooth_gain/fit_16000.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_mild.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/mlp_gain_mild.json"
+  },
+  {
+    "label": "mlp_gain_medium",
+    "split": "development",
+    "checkpoint": "runs/getup_seated_20261118_035341/fit_smooth_gain/fit_16000.pt",
+    "balance": "runs/getup_seated_20261118_035341/cpu_leg_feedback/rank24.pt",
+    "config": "runs/getup_seated_20261118_035341/contact_domain_medium.json",
+    "reset_range": [
+      0,
+      0
+    ],
+    "seed_base": 911300,
+    "count": 16,
+    "domain": true,
+    "out": "runs/getup_seated_20261118_035341/dev_refinement/mlp_gain_medium.json"
+  }
+]

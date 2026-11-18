@@ -21,33 +21,62 @@ from fifty_mujoco.learning.realdata_ppo import RealDataPPO
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--out',type=Path,required=True);p.add_argument('--config',type=Path,required=True)
-    p.add_argument('--init',type=Path,required=True);p.add_argument('--balance',type=Path,required=True)
+    initial = p.add_mutually_exclusive_group(required=True)
+    initial.add_argument('--init',type=Path);initial.add_argument('--resume',type=Path)
+    p.add_argument('--balance',type=Path,required=True)
     p.add_argument('--envs',type=int,default=256);p.add_argument('--reset-range',nargs=2,type=float,default=[0,0])
     p.add_argument('--settle-seconds',type=float,default=1.);p.add_argument('--domain',action='store_true')
     p.add_argument('--seconds',type=float,default=1800);p.add_argument('--updates',type=int,default=100000)
     p.add_argument('--actor-lr',type=float,default=1e-6);p.add_argument('--warmup',type=int,default=3)
+    p.add_argument('--anchor-coefficient',type=float,default=0.)
     p.add_argument('--save-every',type=int,default=5);p.add_argument('--eval-every',type=int,default=5)
     p.add_argument('--seed',type=int,default=550000);p.add_argument('--initial-std',type=float)
+    p.add_argument('--eval-seed-base',type=int);p.add_argument('--eval-seeds',type=int,default=8)
+    p.add_argument('--deadline-monotonic',type=float,default=float('inf'))
     args=p.parse_args();torch.set_num_threads(1);torch.manual_seed(args.seed);torch.cuda.manual_seed_all(args.seed)
-    args.out.mkdir(parents=True,exist_ok=False);cfg=json.loads(args.config.read_text())
+    cfg=json.loads(args.config.read_text())
+    if args.eval_seed_base is None:
+        args.eval_seed_base = cfg.get('seed_ranges', {}).get('development', [615000])[0]
+    initial_path = args.resume or args.init
+    initial_state = torch.load(initial_path,map_location='cuda',weights_only=True)
+    if args.resume:
+        previous = initial_state['contract']
+        for name, value in {'configuration':cfg, 'balance_sha256':digest(args.balance),
+                            'reset_range':args.reset_range, 'settle_seconds':args.settle_seconds,
+                            'envs':args.envs, 'seed':args.seed, 'domain':args.domain, 'actor_lr':args.actor_lr,
+                            'warmup':args.warmup, 'anchor_coefficient':args.anchor_coefficient}.items():
+            if previous.get(name) != value:
+                p.error(f'resume differs in {name}')
+        if args.initial_std is not None:
+            p.error('initial std is incompatible with resume')
+    args.out.mkdir(parents=True,exist_ok=False)
     policy=SamplePolicy31(verified_artifact('model_3050.pt'),'cuda')
-    policy.load_state_dict(torch.load(args.init,map_location='cuda',weights_only=True)['model'])
+    policy.load_state_dict(initial_state['model'])
     if args.initial_std:
         with torch.no_grad():policy.log_std.fill_(torch.log(torch.tensor(args.initial_std,device='cuda')))
     frozen=SamplePolicy31(verified_artifact('model_3050.pt'),'cuda')
     frozen.load_state_dict(torch.load(args.balance,map_location='cuda',weights_only=True)['model'])
-    optimizer=RealDataPPO(policy,actor_lr=args.actor_lr,critic_lr=3e-4)
+    optimizer=RealDataPPO(policy,actor_lr=args.actor_lr,critic_lr=3e-4,anchor_coefficient=args.anchor_coefficient)
     env=WarpSupportedGetup(frozen.actor,args.envs,config=cfg,reset_range=args.reset_range,
                           settle_seconds=args.settle_seconds,domain=args.domain)
+    if args.resume:
+        optimizer.actor_optimizer.load_state_dict(initial_state['actor_optimizer'])
+        optimizer.critic_optimizer.load_state_dict(initial_state['critic_optimizer'])
+        torch.set_rng_state(initial_state['torch_rng'].cpu())
+        torch.cuda.set_rng_state_all([value.cpu() for value in initial_state['cuda_rng']])
+        if 'anchor' in initial_state:
+            optimizer.anchor.load_state_dict(initial_state['anchor'])
+            optimizer.anchor_std.copy_(initial_state['anchor_std'])
     files=['tools/realdata_gpu_getup_train.py','src/fifty_mujoco/envs/realdata_warp_getup.py',
            'src/fifty_mujoco/envs/realdata_warp.py','src/fifty_mujoco/learning/realdata_ppo.py',
            'src/fifty_mujoco/envs/sample_env31_supported.py','src/fifty_mujoco/envs/sample_env31_realdata.py',
            'tools/realdata_evaluate.py','src/fifty_mujoco/contracts/getup31.py']
     contract={'schema':'realdata_gpu_supported_getup31_v1','configuration':cfg,
               'balance_checkpoint':str(args.balance.resolve()),'balance_sha256':digest(args.balance),
-              'initial_checkpoint_sha256':digest(args.init),'reset_range':args.reset_range,
+              'initial_checkpoint_sha256':digest(initial_path),'reset_range':args.reset_range,
               'settle_seconds':args.settle_seconds,'domain':args.domain,'source_sha256':{n:digest(PROJECT/n) for n in files},
-              'seed':args.seed,'envs':args.envs,'actor_lr':args.actor_lr,
+              'seed':args.seed,'envs':args.envs,'actor_lr':args.actor_lr,'warmup':args.warmup,
+              'anchor_coefficient':args.anchor_coefficient,
               'learner_phases':['GETUP','HANDOFF'],'excluded_phases':['STOP','BALANCE'],
               'balance_transition':'coalesce frozen 10 s outcome onto final learner transition',
               'physics_backend':'GPU MuJoCo Warp; CPU C-observer evaluation required',
@@ -56,6 +85,9 @@ def main():
         target=args.out/'source'/name;target.parent.mkdir(exist_ok=True,parents=True);shutil.copy2(PROJECT/name,target)
     (args.out/'contract.json').write_text(json.dumps(contract,indent=2))
     update=transitions=physical_ticks=0;stopped=False;start=time.monotonic()
+    if args.resume:
+        update, transitions, physical_ticks = (initial_state[key] for key in ('update','transitions','physical_policy_ticks'))
+    deadline = min(start + args.seconds, args.deadline_monotonic)
     def stop(*_):
         nonlocal stopped
         stopped=True
@@ -64,6 +96,7 @@ def main():
         path=args.out/name
         save_checkpoint(path,{'schema':'realdata_gpu_supported_getup31_v1','contract':contract,'model':policy.state_dict(),
                 'actor_optimizer':optimizer.actor_optimizer.state_dict(),'critic_optimizer':optimizer.critic_optimizer.state_dict(),
+                'anchor':optimizer.anchor.state_dict(),'anchor_std':optimizer.anchor_std,
                 'torch_rng':torch.get_rng_state(),'cuda_rng':torch.cuda.get_rng_state_all(),
                 'update':update,'transitions':transitions,'physical_policy_ticks':physical_ticks})
         return path
@@ -76,10 +109,10 @@ def main():
         command=[sys.executable,'-u',str(PROJECT/'tools/realdata_evaluate.py'),'--checkpoint',str(path.resolve()),
                  '--out',str((args.out/f'cpu_development_{update:06d}.json').resolve()),'--task','getup',
                  '--balance-checkpoint',str(args.balance.resolve()),'--reset-range',*map(str,args.reset_range),
-                 '--settle-seconds',str(args.settle_seconds),'--seeds','8','--seed-base','615000']
+                 '--settle-seconds',str(args.settle_seconds),'--seeds',str(args.eval_seeds),'--seed-base',str(args.eval_seed_base)]
         if args.domain:command.append('--domain')
         evaluator=subprocess.Popen(command,stdout=eval_log,stderr=subprocess.STDOUT)
-    start_evaluation(save('update_000000.pt'))
+    start_evaluation(save(f'update_{update:06d}.pt'))
     T=math.ceil((cfg['success']['getup_timeout_s']+cfg['success']['blend_s'])/.01)+20
     max_ticks=math.ceil((args.settle_seconds+cfg['success']['getup_timeout_s']
                          +cfg['success']['blend_s']+cfg['success']['balance_s']+1.)/.01)
@@ -87,7 +120,7 @@ def main():
     try:
         with (args.out/'rows.jsonl').open('a') as log:
             for _ in range(args.updates):
-                if stopped or time.monotonic()-start>=args.seconds:break
+                if stopped or time.monotonic()>=deadline:break
                 env.reset();count=torch.zeros(N,device=device,dtype=torch.long)
                 shapes={'observation':(31,),'action':(6,),'mean':(6,),'std':(6,),
                         'log_prob':(),'value':(),'reward':(),'next_value':()}
@@ -113,6 +146,8 @@ def main():
                         rollout['terminated'][index,indices]=torch.where(active,False,rollout['terminated'][index,indices])
                         count+=active.long();steps=step+1
                         if step%25==0 and bool((env.phase>=4).all()):break
+                        if step%25==0 and (stopped or time.monotonic()>=deadline):break
+                if stopped or time.monotonic()>=deadline:break
                 unfinished=env.phase<4
                 env.first_failure[unfinished]=14
                 env.phase[unfinished]=4
@@ -138,6 +173,7 @@ def main():
                      'sampling_s':sample_s,'optimization_s':optimization_s,'learner_steps_per_s':valid_count/sample_s,
                      'cohort_steps':steps,'cohort_successes':int((env.phase==5).sum()),'cohort_trials':N,
                      'failures':dict(failure_counts),'minimum_balance_ticks':float(env.balance_time.min()/.01),
+                     'maximum_balance_ticks':float(env.balance_time.max()/.01),
                      'support_peak_force_n':float(env.support_peak[:,0].max()),'support_peak_moment_nm':float(env.support_peak[:,1].max()),**metrics}
                 log.write(json.dumps(row,allow_nan=False)+'\n');log.flush();print(json.dumps(row,allow_nan=False),flush=True)
                 if update%args.save_every==0:

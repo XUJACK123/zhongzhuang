@@ -30,6 +30,26 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def evaluation_policy(saved, device='cpu'):
+    policy = SamplePolicy31(verified_artifact('model_3050.pt'), device)
+    schema = saved.get('schema')
+    if schema == 'seated_contact_sequence_v1':
+        from realdata_seated_state_teacher import ContactSequenceActor
+
+        policy.actor = ContactSequenceActor(policy.actor, saved['motion'], saved['thresholds']).to(device)
+        policy.actor.load_state_dict(saved['model'])
+    elif schema == 'seated_observation_progress_v1':
+        from realdata_seated_progress_fit import ProgressActor
+
+        model = saved['architecture']
+        policy.actor = ProgressActor(policy.actor, model['motion'], model['center'], model['scale'],
+                                     model['coefficients'], saved['thresholds']).to(device)
+        policy.actor.load_state_dict(saved['model'])
+    else:
+        policy.load_state_dict(saved['model'])
+    return policy.eval()
+
+
 def equilibrium_action(env):
     env.reset(610000)
     env.data.qvel[:] = 0

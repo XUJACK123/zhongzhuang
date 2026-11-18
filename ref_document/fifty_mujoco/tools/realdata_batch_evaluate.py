@@ -9,11 +9,9 @@ import torch
 
 
 def evaluate(task):
-    from realdata_train import SamplePolicy31,verified_artifact,digest
+    from realdata_train import digest,evaluation_policy
     from realdata_parallel_train import getup_evaluate
     torch.set_num_threads(1)
-    low,high=(710000,719999) if task['split']=='heldout' else (610000,619999)
-    if not low<=task['seed_base']<=high-task['count']+1:raise ValueError('seed split mismatch')
     checkpoint=Path(task['checkpoint']);saved=torch.load(checkpoint,map_location='cpu',weights_only=True)
     if task.get('expected_checkpoint_sha256') and digest(checkpoint)!=task['expected_checkpoint_sha256']:
         raise ValueError('frozen get-up weight hash mismatch')
@@ -21,11 +19,15 @@ def evaluate(task):
         raise ValueError('frozen balance weight hash mismatch')
     cfg=saved.get('configuration',saved.get('contract',{}).get('configuration'))
     if task.get('config'):cfg=json.loads(Path(task['config']).read_text())
+    defaults = {'development': [610000, 619999], 'heldout': [710000, 719999]}
+    low, high = cfg.get('seed_ranges', defaults)[task['split']]
+    if task['count'] < 1 or not low <= task['seed_base'] <= high - task['count'] + 1:
+        raise ValueError('seed split mismatch')
     if task.get('configuration_overrides'):cfg.update(task['configuration_overrides'])
     if task.get('balance_s'):cfg['success']['balance_s']=task['balance_s']
-    policy=SamplePolicy31(verified_artifact('model_3050.pt'),'cpu');policy.load_state_dict(saved['model'])
+    policy=evaluation_policy(saved)
     settings={'task':'getup','balance_checkpoint':task['balance'],'config':cfg,
-              'reset_range':task['reset_range'],'settle_seconds':1.,'domain':task.get('domain',False),
+              'reset_range':task['reset_range'],'settle_seconds':task.get('settle_seconds', 1.),'domain':task.get('domain',False),
               'incremental_results_path':str(Path(task['out']).with_suffix('.rows.jsonl'))}
     if task.get('record_traces'):
         settings['trajectory_directory']=str(Path(task['out']).parent/'trajectories'/task['label'])

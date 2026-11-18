@@ -1,0 +1,32 @@
+Warp 1.12.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.2
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA GeForce RTX 5060 Laptop GPU" (8 GiB, sm_120, mempool enabled)
+   Kernel cache:
+     /home/xy/.cache/warp/1.12.0
+Module mujoco_warp._src.smooth 95a0b8b load on device 'cuda:0' took 3.23 ms  (cached)
+Module mujoco_warp._src.collision_driver 88f7770 load on device 'cuda:0' took 0.30 ms  (cached)
+Module _nxn_broadphase__locals__kernel_c763f4cb c763f4c load on device 'cuda:0' took 0.32 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_fd6d26f2 fd6d26f load on device 'cuda:0' took 1.03 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_a37284d0 a37284d load on device 'cuda:0' took 1.10 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_42493a75 42493a7 load on device 'cuda:0' took 0.56 ms  (cached)
+Module mujoco_warp._src.constraint 27c5750 load on device 'cuda:0' took 1.47 ms  (cached)
+Module _efc_contact_init__locals__kernel_c8a6d94d c8a6d94 load on device 'cuda:0' took 0.33 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_3ce537d5 8484a5a load on device 'cuda:0' took 0.34 ms  (cached)
+Module _efc_contact_update__locals__kernel_7bd789c7 7bd789c load on device 'cuda:0' took 0.31 ms  (cached)
+Module mujoco_warp._src.passive 1a5e55c load on device 'cuda:0' took 0.72 ms  (cached)
+Module mujoco_warp._src.forward ab3b1a6 load on device 'cuda:0' took 1.30 ms  (cached)
+Module mujoco_warp._src.support dd3f924 load on device 'cuda:0' took 0.28 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_d83d6ecc 23c3f6f load on device 'cuda:0' took 22.98 ms  (cached)
+Module mujoco_warp._src.solver b116efb load on device 'cuda:0' took 1.31 ms  (cached)
+Module solve_init_jaref__locals__kernel_d614c3c4 d614c3c load on device 'cuda:0' took 0.33 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_1ef9b850 1ef9b85 load on device 'cuda:0' took 0.33 ms  (cached)
+Module update_constraint_efc__locals__kernel_81015163 8101516 load on device 'cuda:0' took 0.30 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_cc0b8ce1 cc0b8ce load on device 'cuda:0' took 0.26 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_8af4086e f519906 load on device 'cuda:0' took 0.45 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_68ba042b 3c7cbe3 load on device 'cuda:0' took 23.18 ms  (cached)
+Module linesearch_iterative__locals__kernel_f2a333a5 de36de8 load on device 'cuda:0' took 0.57 ms  (cached)
+Module mujoco_warp._src.sensor 7fc0378 load on device 'cuda:0' took 1.65 ms  (cached)
+Module mujoco_warp._src.derivative a753363 load on device 'cuda:0' took 0.84 ms  (cached)
+{"update": 1, "transitions": 19232, "physical_policy_ticks": 21216, "wall_s": 19.802419403000158, "sampling_s": 19.609613953999997, "optimization_s": 0.1853094460000193, "learner_steps_per_s": 980.7434274389185, "cohort_steps": 1326, "cohort_successes": 0, "cohort_trials": 16, "failures": {"getup_timeout": 16}, "minimum_balance_ticks": 0.0, "support_peak_force_n": 0.0, "support_peak_moment_nm": 0.0, "value_loss": 0.2805530900756518, "policy_loss": -0.0004889569827355444, "entropy": -19.563676834106445, "kl": 5.885153579280692e-08, "anchor_loss": 2.731630551385441e-09, "valid_transitions": 19232, "critic_warmup": true, "actor_kl_rollbacks": 0, "actor_kl_guard_skips": 0, "final_full_rollout_kl": 6.647876205079228e-08, "actor_learning_rate": 1e-06}

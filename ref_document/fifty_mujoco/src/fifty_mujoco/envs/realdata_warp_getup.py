@@ -10,12 +10,14 @@ import torch
 import warp as wp
 
 from .realdata_warp import RealDataWarpEnv,angles,rotation,wrap
+from .sample_env31_supported import DOMAIN_DEFAULTS
 
 
 FAILURES={0:None,1:'nonfinite_state',2:'joint_limit',3:'spring_stroke',4:'getup_tilt_limit',
           6:'invalid_telemetry',7:'forbidden_floor_contact',8:'forbidden_self_contact',
           9:'getup_timeout',10:'handoff_unstable',11:'balance_displacement',
-          12:'balance_support_invalid',13:'balance_body_contact',14:'cohort_timeout',15:'balance_state_out_of_spec'}
+          12:'balance_support_invalid',13:'balance_body_contact',14:'cohort_timeout',15:'balance_state_out_of_spec',
+          16:'seated_reset_shape_or_rest_lost',17:'getup_displacement_limit'}
 
 
 class WarpSupportedGetup:
@@ -42,6 +44,7 @@ class WarpSupportedGetup:
         self.wheel_load=torch.zeros((num_envs,2),device=self.device)
         self.reward=torch.zeros(num_envs,device=self.device)
         self.just_finished=torch.zeros(num_envs,device=self.device,dtype=torch.bool)
+        self.ready_reference_aligned=torch.zeros_like(self.just_finished)
         self.terminal_metrics=torch.zeros((num_envs,6),device=self.device)
         self.reset_fraction=torch.zeros(num_envs,device=self.device)
         self.previous_leg_error=torch.zeros(num_envs,device=self.device)
@@ -54,6 +57,25 @@ class WarpSupportedGetup:
         self.kr=tensor(support['rotation_kp_nm_rad']);self.dr=tensor(support['rotation_kd_nms_rad'])
         self.default=tensor(self.cfg['standing_default_rad']);self.survey=tensor(self.cfg['survey_pose_rad'])
         self.leg_idx=self.plant.leg_idx
+        self.seated = self.cfg.get('seated_back')
+        self.domain_ranges = DOMAIN_DEFAULTS | self.cfg.get('domain_ranges', {})
+        self.domain_tensors = {}
+        if self.seated and self.domain:
+            model = self.plant.model
+            for field in ('geom_friction', 'dof_armature', 'dof_damping', 'dof_frictionloss'):
+                array = getattr(model, field)
+                nominal = wp.to_torch(array).clone()
+                data = nominal.expand(num_envs, *nominal.shape[1:]).clone().contiguous()
+                self.domain_tensors[field] = data, nominal
+                setattr(model, field, wp.from_torch(data, dtype=array.dtype))
+        if self.seated:
+            bank = self.seated['reset_bank']
+            self.positions = tensor([entry['qpos'] for entry in bank])
+            self.velocities = tensor([entry['qvel'] for entry in bank])
+            self.seated_class = torch.tensor([entry.get('class', 'seated') == 'seated' for entry in bank], device=self.device)
+            self.require_seated = torch.zeros(num_envs, device=self.device, dtype=torch.bool)
+            self.geom_xpos = wp.to_torch(self.plant.data.geom_xpos)
+            self.wheel_geom_ids = torch.tensor(self.wheel_geoms, device=self.device)
         self.reset()
         self.plant.support_callback=self._support
         self.stream=wp.stream_to_torch(wp.get_stream());self.event=torch.cuda.Event()
@@ -66,6 +88,22 @@ class WarpSupportedGetup:
     @property
     def observation(self):return self.plant.obs
 
+    def repeat_initial_cohort(self, replicates):
+        """Use the same reset and physics draws for each candidate in a search."""
+        if replicates < 1 or self.num_envs % replicates:
+            raise ValueError('replicates must divide the number of worlds')
+        p = self.plant
+        index = torch.arange(self.num_envs, device=self.device) % replicates
+        tensors = [p.qpos, p.qvel, p.observer.last_q, p.reference, p.heading, p.motor_gain, p.spring_scale,
+                   self.origin, self.support_start, self.ramp, self.release_after, self.fade,
+                   self.vertical_release_after, self.vertical_fade, self.previous_leg_error, self.reset_fraction]
+        if self.seated:
+            tensors.append(self.require_seated)
+        tensors += [values for values, _ in self.domain_tensors.values()]
+        for tensor in tensors:
+            tensor.copy_(tensor.index_select(0, index))
+        p._observation()
+
     def reset(self):
         p=self.plant;p.reset();n=self.num_envs
         self.reset_fraction.uniform_(*self.reset_range)
@@ -77,27 +115,49 @@ class WarpSupportedGetup:
             a=sign*pose[:,h];b=sign*(pose[:,h]+pose[:,k])+math.pi/2
             heights.append(.21*torch.sin(a)+.25*torch.sin(b)+self.cfg['wheel_radius_m'])
         p.qpos[:,2]=torch.maximum(*heights)
-        p.qvel.zero_();p.warmstart.zero_();p.observer.last_q.copy_(pose)
+        p.qvel.zero_();p.warmstart.zero_()
+        if self.seated:
+            index = torch.randint(len(self.positions), (n,), device=self.device)
+            p.qpos.copy_(self.positions[index])
+            p.qvel.copy_(self.velocities[index])
+            self.require_seated.copy_(self.seated_class[index])
+            pose = p.qpos[:, p.qp]
+        p.observer.last_q.copy_(pose)
+        p.gyro_noise.zero_()
         self.previous_leg_error.copy_(torch.linalg.vector_norm(pose[:,self.leg_idx]-self.default[self.leg_idx],dim=-1))
         self.support_start.copy_(p.qpos[:,:3]);self.origin.copy_(p.qpos[:,:2])
-        self.ramp.uniform_(.2,.5);self.release_after.uniform_(*self.cfg['support']['release_after_s'])
+        self.ramp.uniform_(*self.cfg.get('getup_ramp_range_s', [.2, .5]));self.release_after.uniform_(*self.cfg['support']['release_after_s'])
         self.fade.uniform_(*self.cfg['support']['fade_s'])
         self.vertical_release_after.uniform_(*self.cfg['support'].get('vertical_release_after_s',self.cfg['support']['release_after_s']))
         self.vertical_fade.uniform_(*self.cfg['support'].get('vertical_fade_s',self.cfg['support']['fade_s']))
         for value in (self.phase,self.first_failure,self.stable,self.handoff_time,self.balance_time,self.enabled_time,
                       self.phase_counts,self.support_peak,self.support_wrench,self.wheel_load,self.reward):value.zero_()
-        self.just_finished.zero_();self.terminal_metrics.zero_();p.torque_scale.zero_()
+        self.just_finished.zero_();self.ready_reference_aligned.zero_();self.terminal_metrics.zero_();p.torque_scale.zero_()
         p.motor_gain.fill_(1);p.spring_scale.fill_(1)
         if self.domain:
-            nominal=torch.rand(n,device=self.device)<.2
-            gain=torch.empty_like(p.motor_gain).uniform_(.8,1.);gain[:,2]=1;gain[:,5]=1
+            ranges = self.domain_ranges
+            nominal=torch.rand(n,device=self.device)<ranges['nominal_fraction']
+            gain=torch.empty_like(p.motor_gain).uniform_(*ranges['motor_gain']);gain[:,2]=1;gain[:,5]=1
             p.motor_gain.copy_(torch.where(nominal[:,None],1,gain))
-            p.spring_scale.copy_(torch.where(nominal,1,torch.empty_like(p.spring_scale).uniform_(.8,1.2)))
+            p.spring_scale.copy_(torch.where(nominal,1,torch.empty_like(p.spring_scale).uniform_(*ranges['spring_scale'])))
+            for field, (value, original) in self.domain_tensors.items():
+                if field == 'geom_friction':
+                    value.copy_(original)
+                    friction = torch.empty_like(p.spring_scale).uniform_(*ranges['friction'])
+                    value[:, :, 0] = torch.where(nominal, .75, friction)[:, None]
+                else:
+                    key = 'armature_scale' if field == 'dof_armature' else 'drag_scale'
+                    scale = torch.empty_like(p.spring_scale).uniform_(*ranges[key])
+                    value.copy_(original*torch.where(nominal, 1., scale)[:, None])
         torch.cuda.synchronize();self.plant._observation()
         return p.obs
 
     def _support(self):
         p=self.plant;c=self.cfg['support'];t=self.enabled_time
+        if self.seated:
+            self.support_wrench.zero_()
+            p.xfrc.zero_()
+            return
         fraction=(1-(t-self.release_after).clamp(min=0)/self.fade).clamp(min=0)
         progress=(t/self.release_after.clamp(min=.2)).clamp(0,1);progress=progress*progress*(3-2*progress)
         target=self.support_start.clone()
@@ -133,11 +193,12 @@ class WarpSupportedGetup:
         body_force.index_add_(0,world,torch.where(valid&floor&body,normal,0))
         forbidden_floor.index_add_(0,world,(valid&floor&~allowed).float())
         forbidden_self.index_add_(0,world,(valid&~floor).float())
-        return body_force>10,forbidden_floor>0,forbidden_self>0
+        return body_force>(1e-3 if self.seated else 10),forbidden_floor>0,forbidden_self>0
 
     def _core(self):
         p=self.plant;before=self.phase.clone();ended=before>=4
         old_qpos=p.qpos.clone();old_qvel=p.qvel.clone();previous=p.last_action.clone()
+        old_clearance = p.clearance.clone()
         self.enabled_time.copy_((p.ticks.float()*.01-self.settle_seconds).clamp(min=0))
         self._support()
         p.torque_scale.copy_((self.enabled_time/self.ramp).clamp(0,1)*((before>0)&(before<4)).float())
@@ -170,6 +231,15 @@ class WarpSupportedGetup:
         self.handoff_time.copy_(torch.where(before==2,self.handoff_time+.01,self.handoff_time))
         self.balance_time.copy_(torch.where(before==3,self.balance_time+.01,self.balance_time))
         failure=self.first_failure
+        if self.seated:
+            forward = rotation(p.qpos[:, 3:7])[:, :2, 0]
+            wheel_xy = self.geom_xpos.index_select(1, self.wheel_geom_ids)[:, :, :2]
+            offsets = ((wheel_xy - p.qpos[:, None, :2]) * forward[:, None]).sum(-1)
+            seated_valid = ((offsets.amax(-1) < -.01) & body_contact
+                            & (self.wheel_load >= .005*self.bodyweight).all(-1) & (p.qvel.abs().amax(-1) <= .2))
+            ready_to_enable = (before == 0) & (p.ticks.float()*.01 >= self.settle_seconds)
+            failure = torch.where((failure == 0) & ready_to_enable & self.require_seated & ~seated_valid, 16, failure)
+            failure = torch.where((failure == 0) & (before < 4) & (displacement > .3), 17, failure)
         failure=torch.where((failure==0)&(before==1)&(self.enabled_time>self.cfg['success']['getup_timeout_s']+.001),9,failure)
         failure=torch.where((failure==0)&(before==2)&~ready,10,failure)
         failure=torch.where((failure==0)&(before==3)&(displacement>.3),11,failure)
@@ -200,12 +270,23 @@ class WarpSupportedGetup:
         power=(p.motor_torque*p.motor_velocity).abs().sum(-1)
         self.reward.copy_(.01*(potential+height+posture+quiet+position-4.-.0001*power-.1*p.saturation)
                           +2*progress-.002*(p.last_action-previous).square().sum(-1))
+        if self.seated:
+            height_goal = self.cfg['standing_clearance_m']
+            self.reward.add_(12*(p.clearance.clamp(0, height_goal)-old_clearance.clamp(0, height_goal)) + .02*ready)
+            if self.seated.get('braking_reward', False):
+                self.reward.sub_(.04*(displacement-.1).clamp(min=0)/.2)
+                self.reward.sub_(.025*(p.clearance>.05)*((p.observer.velocity[:,0].abs()-.08)/.3).clamp(0,2.))
         self.reward.copy_(torch.where((before==1)|(before==2),self.reward,0))
         # Freeze completed worlds; they never contribute later learner samples.
         p.qpos.copy_(torch.where(ended[:,None],old_qpos,p.qpos))
         p.qvel.copy_(torch.where(ended[:,None],old_qvel*0,p.qvel))
         # On enable, align the estimator reference without resetting physics.
         enable=(before==0)&(phase==1)
+        if self.cfg.get('getup_ready_reanchor_reference', False):
+            reanchor = (before == 1) & ready & ~self.ready_reference_aligned
+            p.reference.copy_(torch.where(reanchor[:, None], p.observer.xy, p.reference))
+            p.heading.copy_(torch.where(reanchor, p.rpy[:, 2], p.heading))
+            self.ready_reference_aligned.logical_or_(reanchor)
         if self.cfg.get('handoff_reanchor_reference',False):
             reanchor=(before==1)&(phase==2)
             p.reference.copy_(torch.where(reanchor[:,None],p.observer.xy,p.reference))
@@ -217,6 +298,8 @@ class WarpSupportedGetup:
     def step(self,actions):
         self.stream.wait_stream(torch.cuda.current_stream())
         with torch.cuda.stream(self.stream):
+            if 'gyro_std_rad_s' in self.cfg:
+                self.plant.gyro_noise.normal_().mul_(self.plant.gyro_std)
             self.action_in.copy_(actions);wp.capture_launch(self.graph)
         self.event.record(self.stream);torch.cuda.current_stream().wait_event(self.event)
         return self.plant.obs,self.reward,self.phase,self.first_failure

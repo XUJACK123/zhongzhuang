@@ -125,6 +125,10 @@ class RealDataWarpEnv:
             a=(f(0)+f(math.pi))/2;b=(f(0)-f(math.pi))/2;c=f(math.pi/2)-a
             coefficients.append([a,b,c])
         self.spring_coeff=tensor(coefficients)
+        curve = self.cfg['spring'].get('curve')
+        self.spring_curve = None if curve is None else (tensor(curve['compression_m']), tensor(curve['force_n']))
+        self.gyro_std = tensor(self.cfg.get('gyro_std_rad_s', [0., 0., 0.]))
+        self.gyro_noise = torch.zeros((2, num_envs, 3), device=self.device)
         self.action_in=torch.zeros((num_envs,6),device=self.device)
         self.torque_scale=torch.ones(num_envs,device=self.device)
         self.motor_gain=torch.ones((num_envs,6),device=self.device)
@@ -148,6 +152,15 @@ class RealDataWarpEnv:
         self.rpy=torch.zeros((num_envs,3),device=self.device)
         self.point_velocity=torch.zeros((num_envs,2),device=self.device)
         self.spawn=tensor(self.cpu.data.qpos);self.spawn_velocity=torch.zeros_like(self.qvel)
+        self.balance_bank = self.cfg.get('balance_reset_bank')
+        if self.balance_bank:
+            entries = [self.balance_bank[i % len(self.balance_bank)] for i in range(num_envs)]
+            self.bank_qpos = tensor([entry['qpos'] for entry in entries])
+            self.bank_qvel = tensor([entry['qvel'] for entry in entries])
+            self.bank_reference = tensor([entry['reference_error_xy_m'] for entry in entries])
+            self.bank_heading = angles(self.bank_qpos[:, 3:7])[:, 2].contiguous()
+            self.bank_velocity_body = torch.bmm(rotation(self.bank_qpos[:, 3:7]).transpose(1, 2),
+                                               self.bank_qvel[:, :3, None]).squeeze(-1)
         self.reset_velocity=torch.zeros_like(self.qvel)
         self.reset_velocity[:,:2]=torch.empty((num_envs,2),device=self.device).uniform_(-.02,.02)
         self.reset_velocity[:,3:6]=torch.empty((num_envs,3),device=self.device).uniform_(-.02,.02)
@@ -169,6 +182,9 @@ class RealDataWarpEnv:
         self.observer.xy.zero_();self.observer.velocity.zero_();self.observer.predicted.zero_();self.observer.qd.zero_()
         self.observer.last_q[:]=self.qpos[:,self.qp];self.observer.confidence.fill_(1);self.observer.degraded.zero_()
         self.observer.realign.zero_();self.observer.valid.fill_(True)
+        self.gyro_noise.zero_()
+        if self.balance_bank:
+            self._apply_balance_bank(torch.ones(self.num_envs, device=self.device, dtype=torch.bool))
         torch.cuda.synchronize();mjw.forward(self.model,self.data);wp.synchronize();self._observation()
         return self.obs
 
@@ -201,9 +217,19 @@ class RealDataWarpEnv:
         knees=q[:,self.knee_idx];a,b,c=self.spring_coeff.unbind(-1)
         length=torch.sqrt((a+b*torch.cos(knees)+c*torch.sin(knees)).clamp(min=1e-12))
         jac=(-b*torch.sin(knees)+c*torch.cos(knees))/(2*length)
-        cfg=self.cfg['spring'];dead=cfg['stroke_m']/(1-cfg['progression_at_full_stroke']**(-1/cfg['polytropic_exponent']))
+        cfg=self.cfg['spring']
         rate=jac*qd[:,self.knee_idx]
-        force=cfg['initial_force_n']*(dead/(dead-cfg['free_pin_distance_m']+length).clamp(min=1e-6))**cfg['polytropic_exponent']
+        compression = cfg['free_pin_distance_m'] - length
+        if self.spring_curve is None:
+            dead=cfg['stroke_m']/(1-cfg['progression_at_full_stroke']**(-1/cfg['polytropic_exponent']))
+            force=cfg['initial_force_n']*(dead/(dead-compression).clamp(min=1e-6))**cfg['polytropic_exponent']
+        else:
+            knots, forces = self.spring_curve
+            compression = compression.clamp(0, cfg['stroke_m'])
+            upper = torch.searchsorted(knots, compression.contiguous()).clamp(1, len(knots) - 1)
+            lower = upper - 1
+            fraction = (compression - knots[lower]) / (knots[upper] - knots[lower])
+            force = torch.lerp(forces[lower], forces[upper], fraction)
         force=(force-cfg['seal_friction_n']*torch.tanh(rate/cfg['friction_smoothing_m_s'])-cfg['viscous_damping_ns_m']*rate).clamp(min=0)
         force*=self.spring_scale[:,None]
         passive=jac*force
@@ -226,7 +252,7 @@ class RealDataWarpEnv:
                                (5*(-si*delta[:,0]+co*delta[:,1])).clamp(-2,2),torch.sin(yawerr),torch.cos(yawerr)-1,
                                2*self.observer.velocity[:,0],2*self.observer.velocity[:,1]),-1)
         command=q[:,:3]*0;command[:,2]=5*self.cfg['standing_clearance_m']
-        self.obs.copy_(torch.cat((self.qvel[:,3:6]*.25,-r[:,2,:],command,leg,self.observer.qd*.05,self.last_action,reference),-1).clamp(-100,100))
+        self.obs.copy_(torch.cat(((self.qvel[:,3:6]+self.gyro_noise[-1])*.25,-r[:,2,:],command,leg,self.observer.qd*.05,self.last_action,reference),-1).clamp(-100,100))
 
     def _core(self):
         action=torch.maximum(torch.minimum(self.action_in,self.bound),-self.bound)
@@ -239,7 +265,8 @@ class RealDataWarpEnv:
                 self._controls(action)
             mjw.step(self.model,self.data);mjw.forward(self.model,self.data)
             if substep in (9,19):
-                self.observer.update(self.qpos[:,self.qp],self.qvel[:,self.qv],self.qpos[:,3:7],self.qvel[:,3:6],self.qacc[:,:3])
+                self.observer.update(self.qpos[:,self.qp],self.qvel[:,self.qv],self.qpos[:,3:7],
+                                     self.qvel[:,3:6]+self.gyro_noise[substep//10],self.qacc[:,:3])
                 self.failure.copy_(torch.where((self.failure==0)&~self.observer.valid,6,self.failure))
             if substep%4==3:
                 knees=self.qpos[:,self.knee_qp]
@@ -286,6 +313,8 @@ class RealDataWarpEnv:
         wp.synchronize();self.graph=captured.graph;self.reset()
 
     def step(self,actions):
+        if 'gyro_std_rad_s' in self.cfg:
+            self.gyro_noise.normal_().mul_(self.gyro_std)
         if self.graph is None:
             self.action_in.copy_(actions);self._core()
         else:
@@ -304,5 +333,18 @@ class RealDataWarpEnv:
         for value in (o.xy,o.velocity,o.predicted,o.qd):value.copy_(torch.where(mask,0,value))
         o.last_q.copy_(torch.where(mask,self.qpos[:,self.qp],o.last_q));o.confidence.copy_(torch.where(done,1,o.confidence))
         o.degraded.copy_(torch.where(done,0,o.degraded));o.realign.copy_(torch.where(done,False,o.realign));o.valid.copy_(torch.where(done,True,o.valid))
+        if self.balance_bank:
+            self._apply_balance_bank(done)
         self._observation()
         return self.obs
+
+    def _apply_balance_bank(self, mask):
+        selected = mask[:, None]
+        self.qpos.copy_(torch.where(selected, self.bank_qpos, self.qpos))
+        self.qvel.copy_(torch.where(selected, self.bank_qvel, self.qvel))
+        self.reference.copy_(torch.where(selected, self.bank_reference, self.reference))
+        self.heading.copy_(torch.where(mask, self.bank_heading, self.heading))
+        self.observer.last_q.copy_(torch.where(selected, self.bank_qpos[:, self.qp], self.observer.last_q))
+        self.observer.qd.copy_(torch.where(selected, self.bank_qvel[:, self.qv], self.observer.qd))
+        self.observer.velocity.copy_(torch.where(selected, self.bank_velocity_body, self.observer.velocity))
+        self.observer.predicted.copy_(torch.where(selected, self.bank_qvel[:, :3], self.observer.predicted))

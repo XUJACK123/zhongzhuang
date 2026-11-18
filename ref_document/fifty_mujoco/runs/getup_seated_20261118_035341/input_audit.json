@@ -1,0 +1,48 @@
+{
+  "gyro": {
+    "std_rad_s": [
+      0.00848873839560166,
+      0.009897581735556523,
+      0.010559778190972896
+    ],
+    "mode": "independent process noise with measured standard deviations",
+    "longitudinal_raw_period_ms": 120,
+    "statistics_period_ms": 2,
+    "feedback_age_ms_max": {
+      "max_motor_age_ms": 3,
+      "max_imu_age_ms": 2,
+      "max_remote_age_ms": 14
+    }
+  },
+  "spring": {
+    "pressure_mpa": 15,
+    "force_n_0_and_80mm": [
+      430.0,
+      588.8
+    ],
+    "installed_free_pin_m": 0.25,
+    "free_pin_evidence": "provisional CAD installation assumption",
+    "sample_interpolation": "piecewise linear, both backends",
+    "compression_stroke_m": 0.08
+  },
+  "electrical": {
+    "trials": 9,
+    "tracking_rmse_a_min_max": [
+      0.014268994247997987,
+      0.03842681725695683
+    ],
+    "feedback_slope_min_max": [
+      0.9451533650185308,
+      1.005638354494181
+    ],
+    "use": "Current-loop tracking evidence only; no independent shaft-torque or spring-force labels.",
+    "kt_nominal_nm_a": 1.261575
+  },
+  "pose": "CAD geometry and zero-output settling given the selected rear-wheel, body-grounded topology. No same-pose external joint angles or contact labelling.",
+  "limits": {
+    "leg_nm": 20,
+    "wheel_nm": 2,
+    "wheel_radius_m": 0.05570423008216337,
+    "mass_kg": 21.9
+  }
+}

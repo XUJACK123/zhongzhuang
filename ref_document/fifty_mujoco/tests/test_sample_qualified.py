@@ -1,4 +1,6 @@
 import ctypes as c
+import hashlib
+import json
 import numpy as np
 import pytest
 import torch
@@ -15,8 +17,11 @@ def test_qualified_trajectory_observations_match_current_c_actor():
     torch.set_num_threads(1)
     e = QualifiedHardwareEnv31(wheel_kd=.14, episode_seconds=4)
     p = SamplePolicy31(verified_artifact("model_3050.pt"))
-    p.load_state_dict(torch.load(PROJECT_ROOT/"runs/hardware31_guarded_20261115/update_000100.pt",
-                                 map_location="cpu", weights_only=True)["model"])
+    firmware = PROJECT_ROOT.parent / "chassis_ref_new"
+    manifest = json.loads((firmware / "user/algorithm/model/manifest.json").read_text())
+    checkpoint = firmware / manifest["source_training_checkpoint"]
+    assert hashlib.sha256(checkpoint.read_bytes()).hexdigest() == manifest["source_training_checkpoint_sha256"]
+    p.load_state_dict(torch.load(checkpoint, map_location="cpu", weights_only=True)["model"])
     obs = e.reset(2000000, (.15, .3, .1))
     for _ in range(300):
         m, ctrl = Measurement(), Controller()

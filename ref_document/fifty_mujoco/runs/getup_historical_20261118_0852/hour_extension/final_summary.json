@@ -1,0 +1,484 @@
+{
+  "frozen": {
+    "chosen_on": "CPU development only",
+    "historical_hour": "warm",
+    "original_pose_control": "cpucontrol",
+    "development_score": {
+      "baseline": [
+        true,
+        9,
+        30,
+        15
+      ],
+      "shortcpu": [
+        true,
+        10,
+        30,
+        14
+      ],
+      "cpucontrol": [
+        true,
+        19,
+        30,
+        20
+      ],
+      "gpucontrol": [
+        true,
+        16,
+        29,
+        18
+      ],
+      "warm": [
+        true,
+        18,
+        29,
+        20
+      ],
+      "warmlate": [
+        true,
+        18,
+        29,
+        20
+      ],
+      "medium": [
+        true,
+        17,
+        30,
+        17
+      ],
+      "mediumlate": [
+        false,
+        17,
+        25,
+        16
+      ],
+      "wide": [
+        false,
+        13,
+        12,
+        13
+      ],
+      "widelate": [
+        false,
+        13,
+        12,
+        13
+      ],
+      "cpujoint1": [
+        true,
+        10,
+        29,
+        15
+      ],
+      "cpujoint2": [
+        true,
+        10,
+        29,
+        15
+      ],
+      "mediumjoint": [
+        true,
+        17,
+        30,
+        18
+      ]
+    },
+    "models": {
+      "hourcandidate": {
+        "source_rise": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_historical_20261118_0852/hour_extension/warm/best_rank0.pt",
+        "source_balance": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/balance.pt",
+        "rise_sha256": "00f2165ca914b1665b0471953d863e816efb4a3e0f3988c27f3dcd0e2e0b6e6e",
+        "balance_sha256": "1a212b063e2fd6fc007855c333be60efeed16a6f88203df181eba99324e9277d"
+      },
+      "control": {
+        "source_rise": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_historical_20261118_0852/cpu_control/iteration_006_rank0.pt",
+        "source_balance": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/balance.pt",
+        "rise_sha256": "351c3246366036604059c7a1b7e6031f407a2e03f7a594699eefa4f161b73917",
+        "balance_sha256": "1a212b063e2fd6fc007855c333be60efeed16a6f88203df181eba99324e9277d"
+      },
+      "shortcpu": {
+        "source_rise": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_historical_20261118_0852/cpu_refit/iteration_003_rank0.pt",
+        "source_balance": "/home/xy/Desktop/zhongzhuang/zhongzhuang/ref_document/fifty_mujoco/runs/getup_seated_20261118_035341/frozen/balance.pt",
+        "rise_sha256": "610ce08dcb5855a115ff4b7c675a69b2d401f1c020640cd1d89681971308db01",
+        "balance_sha256": "1a212b063e2fd6fc007855c333be60efeed16a6f88203df181eba99324e9277d"
+      }
+    }
+  },
+  "comparison": {
+    "baseline": {
+      "original_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_mild": {
+        "success": 23,
+        "trials": 32,
+        "perturbed_success": 8,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "handoff_unstable": 1,
+          "getup_displacement_limit": 3,
+          "balance_state_out_of_spec": 5
+        }
+      },
+      "historical_205441_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_205441_mild": {
+        "success": 24,
+        "trials": 32,
+        "perturbed_success": 9,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_displacement_limit": 5,
+          "balance_state_out_of_spec": 3
+        }
+      },
+      "historical_medium": {
+        "success": 11,
+        "trials": 32,
+        "perturbed_success": 4,
+        "perturbed_trials": 25,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_displacement_limit": 16,
+          "handoff_unstable": 3,
+          "balance_state_out_of_spec": 2
+        }
+      },
+      "historical_wide": {
+        "success": 12,
+        "trials": 32,
+        "perturbed_success": 1,
+        "perturbed_trials": 21,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_displacement_limit": 14,
+          "balance_state_out_of_spec": 4,
+          "getup_timeout": 2
+        }
+      },
+      "original_broad": {
+        "success": 8,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 24,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_timeout": 20,
+          "getup_displacement_limit": 4
+        }
+      }
+    },
+    "hourcandidate": {
+      "original_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_mild": {
+        "success": 23,
+        "trials": 32,
+        "perturbed_success": 8,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 3,
+        "losses_vs_baseline": 3,
+        "failure": {
+          "getup_displacement_limit": 2,
+          "balance_state_out_of_spec": 6,
+          "handoff_unstable": 1
+        }
+      },
+      "historical_205441_nominal": {
+        "success": 31,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 1,
+        "failure": {
+          "balance_state_out_of_spec": 1
+        }
+      },
+      "historical_205441_mild": {
+        "success": 25,
+        "trials": 32,
+        "perturbed_success": 10,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 2,
+        "losses_vs_baseline": 1,
+        "failure": {
+          "balance_state_out_of_spec": 2,
+          "getup_displacement_limit": 4,
+          "handoff_unstable": 1
+        }
+      },
+      "historical_medium": {
+        "success": 11,
+        "trials": 32,
+        "perturbed_success": 4,
+        "perturbed_trials": 25,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_displacement_limit": 14,
+          "handoff_unstable": 3,
+          "getup_timeout": 1,
+          "balance_state_out_of_spec": 3
+        }
+      },
+      "historical_wide": {
+        "success": 10,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 21,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 2,
+        "failure": {
+          "getup_displacement_limit": 13,
+          "balance_state_out_of_spec": 5,
+          "getup_timeout": 3,
+          "handoff_unstable": 1
+        }
+      },
+      "original_broad": {
+        "success": 8,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 24,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_timeout": 23,
+          "forbidden_contact": 1
+        }
+      }
+    },
+    "control": {
+      "original_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_mild": {
+        "success": 22,
+        "trials": 32,
+        "perturbed_success": 7,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 1,
+        "failure": {
+          "getup_displacement_limit": 2,
+          "balance_state_out_of_spec": 8
+        }
+      },
+      "historical_205441_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_205441_mild": {
+        "success": 22,
+        "trials": 32,
+        "perturbed_success": 7,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 1,
+        "losses_vs_baseline": 3,
+        "failure": {
+          "balance_state_out_of_spec": 4,
+          "getup_displacement_limit": 5,
+          "handoff_unstable": 1
+        }
+      },
+      "historical_medium": {
+        "success": 10,
+        "trials": 32,
+        "perturbed_success": 3,
+        "perturbed_trials": 25,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 1,
+        "failure": {
+          "getup_displacement_limit": 14,
+          "balance_state_out_of_spec": 4,
+          "handoff_unstable": 4
+        }
+      },
+      "historical_wide": {
+        "success": 12,
+        "trials": 32,
+        "perturbed_success": 1,
+        "perturbed_trials": 21,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_displacement_limit": 12,
+          "balance_state_out_of_spec": 4,
+          "getup_timeout": 4
+        }
+      },
+      "original_broad": {
+        "success": 8,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 24,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_timeout": 23,
+          "getup_displacement_limit": 1
+        }
+      }
+    },
+    "shortcpu": {
+      "original_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_173944_mild": {
+        "success": 24,
+        "trials": 32,
+        "perturbed_success": 9,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 2,
+        "losses_vs_baseline": 1,
+        "failure": {
+          "getup_displacement_limit": 3,
+          "balance_state_out_of_spec": 4,
+          "handoff_unstable": 1
+        }
+      },
+      "historical_205441_nominal": {
+        "success": 32,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 0,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {}
+      },
+      "historical_205441_mild": {
+        "success": 25,
+        "trials": 32,
+        "perturbed_success": 10,
+        "perturbed_trials": 17,
+        "wins_vs_baseline": 3,
+        "losses_vs_baseline": 2,
+        "failure": {
+          "getup_displacement_limit": 4,
+          "balance_state_out_of_spec": 2,
+          "handoff_unstable": 1
+        }
+      },
+      "historical_medium": {
+        "success": 10,
+        "trials": 32,
+        "perturbed_success": 3,
+        "perturbed_trials": 25,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 1,
+        "failure": {
+          "getup_displacement_limit": 14,
+          "balance_state_out_of_spec": 4,
+          "handoff_unstable": 4
+        }
+      },
+      "historical_wide": {
+        "success": 12,
+        "trials": 32,
+        "perturbed_success": 1,
+        "perturbed_trials": 21,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_displacement_limit": 13,
+          "balance_state_out_of_spec": 3,
+          "getup_timeout": 3,
+          "handoff_unstable": 1
+        }
+      },
+      "original_broad": {
+        "success": 8,
+        "trials": 32,
+        "perturbed_success": 0,
+        "perturbed_trials": 24,
+        "wins_vs_baseline": 0,
+        "losses_vs_baseline": 0,
+        "failure": {
+          "getup_timeout": 21,
+          "getup_displacement_limit": 3
+        }
+      }
+    }
+  }
+}

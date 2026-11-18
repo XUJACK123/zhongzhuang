@@ -6,7 +6,7 @@ from pathlib import Path
 
 import torch
 
-from realdata_train import SamplePolicy31,verified_artifact,RealDataHardwareEnv31,evaluate,digest
+from realdata_train import RealDataHardwareEnv31,evaluate,digest,evaluation_policy
 from realdata_parallel_train import getup_evaluate
 
 
@@ -18,12 +18,14 @@ def main():
     p.add_argument('--seeds',type=int,default=4);p.add_argument('--seed-base',type=int,default=613000)
     p.add_argument('--seconds',type=float,default=20.);p.add_argument('--split',choices=['development','heldout'],default='development')
     args=p.parse_args();torch.set_num_threads(1)
-    if args.split=='development' and not 610000<=args.seed_base<=619999-args.seeds:p.error('development seed range')
-    if args.split=='heldout' and not 710000<=args.seed_base<=719999-args.seeds:p.error('heldout seed range')
     saved=torch.load(args.checkpoint,map_location='cpu',weights_only=True)
     config=json.loads(args.config.read_text()) if args.config else saved.get('configuration',saved.get('contract',{}).get('configuration'))
     if not config:raise ValueError('candidate configuration required')
-    policy=SamplePolicy31(verified_artifact('model_3050.pt'),'cpu');policy.load_state_dict(saved['model'])
+    defaults = {'development': [610000, 619999], 'heldout': [710000, 719999]}
+    low, high = config.get('seed_ranges', defaults)[args.split]
+    if args.seeds < 1 or not low <= args.seed_base <= high - args.seeds + 1:
+        p.error(f'{args.split} seed range is {low}..{high}')
+    policy=evaluation_policy(saved)
     if args.task=='balance':
         import realdata_train
         original=realdata_train.RealDataHardwareEnv31
